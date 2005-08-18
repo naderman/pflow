@@ -30,7 +30,7 @@
  * while( $file->upload() ) {
  *      $progress->advance();
  * }
- *
+ * $progress->finish();
  * $out->outputText("Successfully uploaded $myFilename.\n", 'success');
  *
  * </code>
@@ -129,6 +129,16 @@ class ezcConsoleProgressbar
      * @param bool Whether to redraw the bar immediatelly.
      */
     public function advance( $redraw = true ) {
+        
+    }
+
+    /**
+     * Finish the progress bar.
+     * Finishes the bar (jump to 100% if not happened yet,...) and jumps
+     * to the next line to allow new output. Also resets the values of the
+     * output handler used, if changed.
+     */
+    public function finish() {
         
     }
 }

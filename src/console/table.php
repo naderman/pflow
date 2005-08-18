@@ -19,7 +19,7 @@
  *  'lineColorHead' => 'red',  // Make header rows surrounded by red lines
  * );
  * 
- * $table = new ezcConsoleTable($out, array('width' => 60, 'cols' = 3));
+ * $table = new ezcConsoleTable($out, array('width' => 60, 'cols' = 3), $options);
  * // Generate a header row:
  * $table->addRowHead(array('First col', 'Second col', 'Third col'));
  * // Right column will be the largest

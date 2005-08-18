@@ -242,11 +242,8 @@ class ezcConsoleParameter
      *
      * @param string $short The parameter shortcut
      *
-     * @return mixed String value of the parameter or false if not set.
-     *
-     * @throws ezcConsoleParameterException 
-     *         If requesting a nonexistant parameter 
-     *         {@link ezcConsoleParameterException::CODE_EXISTANCE}.
+     * @return mixed String value of the parameter, true if set without 
+     *               value or false on not set.
      */
     public function getParam( $short ) {
         
