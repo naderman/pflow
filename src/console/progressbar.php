@@ -85,6 +85,13 @@ class ezcConsoleProgressbar
         'formatString'  => '[%bar%] %percent% %',   // Format string
         'width'         => 100,     // Maximum width of the progressbar
     );
+
+    /**
+     * The ezcConsoleOutput object to use.
+     *
+     * @var ezcConsoleOutput
+     */
+    protected $outputHandler;
    
     /**
      * Creates a new progress bar.

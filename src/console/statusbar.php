@@ -54,6 +54,13 @@ class ezcConsoleStatusbar
         'successChar' => '+',     // Char to indicate success
         'failureChar' => '-',     // Char to indicate failure
     );
+
+    /**
+     * The ezcConsoleOutput object to use.
+     *
+     * @var ezcConsoleOutput
+     */
+    protected $outputHandler;
    
     /**
      * Creates a new status bar.

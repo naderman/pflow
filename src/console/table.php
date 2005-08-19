@@ -93,6 +93,13 @@ class ezcConsoleTable
     );
 
     /**
+     * The ezcConsoleOutput object to use.
+     *
+     * @var ezcConsoleOutput
+     */
+    protected $outputHandler;
+
+    /**
      * Creates a new table.
      *
      * @param ezcConsoleOutput $outHandler Output handler to utilize
