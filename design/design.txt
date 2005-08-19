@@ -86,3 +86,23 @@ Following functionality will be included:
 All parts should be as independant as possible. Some parts depend quite hardly
 on the output itself, this is ok. Option parsing and handling should _not_
 depend on the output class.
+
+Design
+======
+
+The design for this package has been splitted into 3 categories of classes:
+
+Output
+    This type of classes provide low level output functionality for console
+    based applications (like styling text, line breaking,...).
+Generation
+    This type of classes provide more advanced outputing features (like
+    generating structures of text automatically, providing advances
+    tools,...). This type of classes depends on the Output classes described
+    above, since they output data.
+Handling
+    This type of classes is independant of both above shown categories and
+    provides features for handling common functions in console based
+    applications. Since they do not have to output directly, there is no need
+    to depend on output functionality.
+
