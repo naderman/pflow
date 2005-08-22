@@ -1,5 +1,5 @@
 <?xml version="1.0"  encoding="windows-1252"?>
-<XMI xmi.version="1.1" xmlns:UML="omg.org/UML1.3" timestamp="2005-08-19 12:01:55">
+<XMI xmi.version="1.1" xmlns:UML="omg.org/UML1.3" timestamp="2005-08-22 11:12:54">
 	<XMI.header>
 		<XMI.documentation>
 			<XMI.exporter>Enterprise Architect</XMI.exporter>
@@ -12,15 +12,17 @@
 				<UML:Class name="EARootClass" xmi.id="EAID_11111111_5487_4080_A7F4_41526CB0AA00" isRoot="true" isLeaf="false" isAbstract="false"/>
 				<UML:Package name="ConsoleTools" xmi.id="EAPK_4B0C57B6_268B_4109_8909_F7FD1E17C16A" isRoot="false" isLeaf="false" isAbstract="false" visibility="public">
 					<UML:ModelElement.stereotype>
-						<UML:Stereotype xmi.idref="EAID_543D0862_82CA_47e0_B252_1AE298CC4E3B"/>
+						<UML:Stereotype xmi.idref="EAID_1D64E7C3_A572_4044_9F13_82E10C926C05"/>
 					</UML:ModelElement.stereotype>
 					<UML:ModelElement.taggedValue>
+						<UML:TaggedValue tag="documentation" value="Provides functionality for working on the console. This means the
+ability to parse options to scripts and output to consoles."/>
 						<UML:TaggedValue tag="created" value="2005-08-12 00:00:00"/>
 						<UML:TaggedValue tag="modified" value="2005-08-12 00:00:00"/>
 						<UML:TaggedValue tag="iscontrolled" value="TRUE"/>
 						<UML:TaggedValue tag="xmlpath" value="E:\src\ezcomponents\packages\ConsoleTools\trunk\design\console.xml"/>
 						<UML:TaggedValue tag="lastloaddate" value="2005-08-18 14:20:20"/>
-						<UML:TaggedValue tag="lastsavedate" value="2005-08-19 12:01:55"/>
+						<UML:TaggedValue tag="lastsavedate" value="2005-08-22 11:12:54"/>
 						<UML:TaggedValue tag="isprotected" value="FALSE"/>
 						<UML:TaggedValue tag="usedtd" value="FALSE"/>
 						<UML:TaggedValue tag="owner" value="Jan Borsodi"/>
@@ -33,7 +35,7 @@
 						<UML:TaggedValue tag="batchload" value="0"/>
 						<UML:TaggedValue tag="phase" value="1.0"/>
 						<UML:TaggedValue tag="status" value="Proposed"/>
-						<UML:TaggedValue tag="author" value="Jan Borsodi"/>
+						<UML:TaggedValue tag="author" value="Tobias Schlitt"/>
 						<UML:TaggedValue tag="complexity" value="1"/>
 						<UML:TaggedValue tag="stereotype" value="ezcomponent"/>
 						<UML:TaggedValue tag="ea_stype" value="Public"/>
@@ -173,6 +175,10 @@
 &lt;/code&gt; 
 @var array(string)"/>
 												<UML:TaggedValue tag="type" value="var"/>
+												<UML:TaggedValue tag="length" value="0"/>
+												<UML:TaggedValue tag="ordered" value="0"/>
+												<UML:TaggedValue tag="precision" value="0"/>
+												<UML:TaggedValue tag="scale" value="0"/>
 												<UML:TaggedValue tag="collection" value="false"/>
 												<UML:TaggedValue tag="position" value="0"/>
 												<UML:TaggedValue tag="lowerBound" value="1"/>
@@ -192,6 +198,10 @@
 												<UML:TaggedValue tag="description" value="The ezcConsoleOutput object to use. 
 @var ezcConsoleOutput"/>
 												<UML:TaggedValue tag="type" value="ezcConsoleOutput"/>
+												<UML:TaggedValue tag="length" value="0"/>
+												<UML:TaggedValue tag="ordered" value="0"/>
+												<UML:TaggedValue tag="precision" value="0"/>
+												<UML:TaggedValue tag="scale" value="0"/>
 												<UML:TaggedValue tag="collection" value="false"/>
 												<UML:TaggedValue tag="position" value="1"/>
 												<UML:TaggedValue tag="lowerBound" value="1"/>
@@ -470,6 +480,7 @@
 @var array(string)"/>
 												<UML:TaggedValue tag="type" value="var"/>
 												<UML:TaggedValue tag="length" value="0"/>
+												<UML:TaggedValue tag="ordered" value="0"/>
 												<UML:TaggedValue tag="precision" value="0"/>
 												<UML:TaggedValue tag="scale" value="0"/>
 												<UML:TaggedValue tag="collection" value="false"/>
@@ -522,6 +533,7 @@
 @var array(string =&gt; string)"/>
 												<UML:TaggedValue tag="type" value="var"/>
 												<UML:TaggedValue tag="length" value="0"/>
+												<UML:TaggedValue tag="ordered" value="0"/>
 												<UML:TaggedValue tag="precision" value="0"/>
 												<UML:TaggedValue tag="scale" value="0"/>
 												<UML:TaggedValue tag="collection" value="false"/>
@@ -996,6 +1008,7 @@
 											<UML:ModelElement.taggedValue>
 												<UML:TaggedValue tag="type" value="var"/>
 												<UML:TaggedValue tag="length" value="0"/>
+												<UML:TaggedValue tag="ordered" value="0"/>
 												<UML:TaggedValue tag="precision" value="0"/>
 												<UML:TaggedValue tag="scale" value="0"/>
 												<UML:TaggedValue tag="collection" value="false"/>
@@ -1016,6 +1029,7 @@
 											<UML:ModelElement.taggedValue>
 												<UML:TaggedValue tag="type" value="var"/>
 												<UML:TaggedValue tag="length" value="0"/>
+												<UML:TaggedValue tag="ordered" value="0"/>
 												<UML:TaggedValue tag="precision" value="0"/>
 												<UML:TaggedValue tag="scale" value="0"/>
 												<UML:TaggedValue tag="collection" value="false"/>
@@ -1036,6 +1050,7 @@
 											<UML:ModelElement.taggedValue>
 												<UML:TaggedValue tag="type" value="var"/>
 												<UML:TaggedValue tag="length" value="0"/>
+												<UML:TaggedValue tag="ordered" value="0"/>
 												<UML:TaggedValue tag="precision" value="0"/>
 												<UML:TaggedValue tag="scale" value="0"/>
 												<UML:TaggedValue tag="collection" value="false"/>
@@ -1056,6 +1071,7 @@
 											<UML:ModelElement.taggedValue>
 												<UML:TaggedValue tag="type" value="var"/>
 												<UML:TaggedValue tag="length" value="0"/>
+												<UML:TaggedValue tag="ordered" value="0"/>
 												<UML:TaggedValue tag="precision" value="0"/>
 												<UML:TaggedValue tag="scale" value="0"/>
 												<UML:TaggedValue tag="collection" value="false"/>
@@ -1076,6 +1092,7 @@
 											<UML:ModelElement.taggedValue>
 												<UML:TaggedValue tag="type" value="var"/>
 												<UML:TaggedValue tag="length" value="0"/>
+												<UML:TaggedValue tag="ordered" value="0"/>
 												<UML:TaggedValue tag="precision" value="0"/>
 												<UML:TaggedValue tag="scale" value="0"/>
 												<UML:TaggedValue tag="collection" value="false"/>
@@ -1721,6 +1738,7 @@
 @see ezcConsoleTable::$options"/>
 												<UML:TaggedValue tag="type" value="var"/>
 												<UML:TaggedValue tag="length" value="0"/>
+												<UML:TaggedValue tag="ordered" value="0"/>
 												<UML:TaggedValue tag="precision" value="0"/>
 												<UML:TaggedValue tag="scale" value="0"/>
 												<UML:TaggedValue tag="collection" value="false"/>
@@ -1743,6 +1761,7 @@
 @see ezcConsoleTable::$options"/>
 												<UML:TaggedValue tag="type" value="var"/>
 												<UML:TaggedValue tag="length" value="0"/>
+												<UML:TaggedValue tag="ordered" value="0"/>
 												<UML:TaggedValue tag="precision" value="0"/>
 												<UML:TaggedValue tag="scale" value="0"/>
 												<UML:TaggedValue tag="collection" value="false"/>
@@ -1765,6 +1784,7 @@
 @see ezcConsoleTable::$options"/>
 												<UML:TaggedValue tag="type" value="var"/>
 												<UML:TaggedValue tag="length" value="0"/>
+												<UML:TaggedValue tag="ordered" value="0"/>
 												<UML:TaggedValue tag="precision" value="0"/>
 												<UML:TaggedValue tag="scale" value="0"/>
 												<UML:TaggedValue tag="collection" value="false"/>
@@ -1789,6 +1809,7 @@
 @var array(string)"/>
 												<UML:TaggedValue tag="type" value="var"/>
 												<UML:TaggedValue tag="length" value="0"/>
+												<UML:TaggedValue tag="ordered" value="0"/>
 												<UML:TaggedValue tag="precision" value="0"/>
 												<UML:TaggedValue tag="scale" value="0"/>
 												<UML:TaggedValue tag="collection" value="false"/>
@@ -1828,6 +1849,7 @@
 @var array(string)"/>
 												<UML:TaggedValue tag="type" value="var"/>
 												<UML:TaggedValue tag="length" value="0"/>
+												<UML:TaggedValue tag="ordered" value="0"/>
 												<UML:TaggedValue tag="precision" value="0"/>
 												<UML:TaggedValue tag="scale" value="0"/>
 												<UML:TaggedValue tag="collection" value="false"/>
@@ -1849,6 +1871,10 @@
 												<UML:TaggedValue tag="description" value="The ezcConsoleOutput object to use. 
 @var ezcConsoleOutput"/>
 												<UML:TaggedValue tag="type" value="ezcConsoleOutput"/>
+												<UML:TaggedValue tag="length" value="0"/>
+												<UML:TaggedValue tag="ordered" value="0"/>
+												<UML:TaggedValue tag="precision" value="0"/>
+												<UML:TaggedValue tag="scale" value="0"/>
 												<UML:TaggedValue tag="collection" value="false"/>
 												<UML:TaggedValue tag="position" value="5"/>
 												<UML:TaggedValue tag="lowerBound" value="1"/>
@@ -2420,6 +2446,7 @@
 @var array(string)"/>
 												<UML:TaggedValue tag="type" value="var"/>
 												<UML:TaggedValue tag="length" value="0"/>
+												<UML:TaggedValue tag="ordered" value="0"/>
 												<UML:TaggedValue tag="precision" value="0"/>
 												<UML:TaggedValue tag="scale" value="0"/>
 												<UML:TaggedValue tag="collection" value="false"/>
@@ -2450,6 +2477,7 @@
 @var array(string)"/>
 												<UML:TaggedValue tag="type" value="var"/>
 												<UML:TaggedValue tag="length" value="0"/>
+												<UML:TaggedValue tag="ordered" value="0"/>
 												<UML:TaggedValue tag="precision" value="0"/>
 												<UML:TaggedValue tag="scale" value="0"/>
 												<UML:TaggedValue tag="collection" value="false"/>
@@ -2471,6 +2499,10 @@
 												<UML:TaggedValue tag="description" value="The ezcConsoleOutput object to use. 
 @var ezcConsoleOutput"/>
 												<UML:TaggedValue tag="type" value="ezcConsoleOutput"/>
+												<UML:TaggedValue tag="length" value="0"/>
+												<UML:TaggedValue tag="ordered" value="0"/>
+												<UML:TaggedValue tag="precision" value="0"/>
+												<UML:TaggedValue tag="scale" value="0"/>
 												<UML:TaggedValue tag="collection" value="false"/>
 												<UML:TaggedValue tag="position" value="2"/>
 												<UML:TaggedValue tag="lowerBound" value="1"/>
@@ -2819,6 +2851,7 @@
 														<UML:TaggedValue tag="description" value="Required parameter/alias does not exist."/>
 														<UML:TaggedValue tag="type" value="var"/>
 														<UML:TaggedValue tag="length" value="0"/>
+														<UML:TaggedValue tag="ordered" value="0"/>
 														<UML:TaggedValue tag="precision" value="0"/>
 														<UML:TaggedValue tag="scale" value="0"/>
 														<UML:TaggedValue tag="collection" value="false"/>
@@ -2840,6 +2873,7 @@
 														<UML:TaggedValue tag="description" value="Exclusion rule defined for parameter not met."/>
 														<UML:TaggedValue tag="type" value="var"/>
 														<UML:TaggedValue tag="length" value="0"/>
+														<UML:TaggedValue tag="ordered" value="0"/>
 														<UML:TaggedValue tag="precision" value="0"/>
 														<UML:TaggedValue tag="scale" value="0"/>
 														<UML:TaggedValue tag="collection" value="false"/>
@@ -2861,6 +2895,7 @@
 														<UML:TaggedValue tag="description" value="Dependency rule defined for parameter not met."/>
 														<UML:TaggedValue tag="type" value="var"/>
 														<UML:TaggedValue tag="length" value="0"/>
+														<UML:TaggedValue tag="ordered" value="0"/>
 														<UML:TaggedValue tag="precision" value="0"/>
 														<UML:TaggedValue tag="scale" value="0"/>
 														<UML:TaggedValue tag="collection" value="false"/>
@@ -2882,6 +2917,7 @@
 														<UML:TaggedValue tag="description" value="Type rule defined for parameter not met."/>
 														<UML:TaggedValue tag="type" value="var"/>
 														<UML:TaggedValue tag="length" value="0"/>
+														<UML:TaggedValue tag="ordered" value="0"/>
 														<UML:TaggedValue tag="precision" value="0"/>
 														<UML:TaggedValue tag="scale" value="0"/>
 														<UML:TaggedValue tag="collection" value="false"/>
@@ -2905,6 +2941,7 @@
 @var string"/>
 														<UML:TaggedValue tag="type" value="var"/>
 														<UML:TaggedValue tag="length" value="0"/>
+														<UML:TaggedValue tag="ordered" value="0"/>
 														<UML:TaggedValue tag="precision" value="0"/>
 														<UML:TaggedValue tag="scale" value="0"/>
 														<UML:TaggedValue tag="collection" value="false"/>
@@ -3022,7 +3059,7 @@
 						</UML:Package>
 					</UML:Namespace.ownedElement>
 				</UML:Package>
-				<UML:Stereotype xmi.id="EAID_543D0862_82CA_47e0_B252_1AE298CC4E3B" name="ezcomponent" isRoot="false" isLeaf="false" isAbstract="false">
+				<UML:Stereotype xmi.id="EAID_1D64E7C3_A572_4044_9F13_82E10C926C05" name="ezcomponent" isRoot="false" isLeaf="false" isAbstract="false">
 					<UML:Stereotype.baseClass>Package</UML:Stereotype.baseClass>
 				</UML:Stereotype>
 				<UML:DataType xmi.id="eaxmiid0" name="var" visibility="private" isRoot="false" isLeaf="false" isAbstract="false"/>
@@ -3038,7 +3075,7 @@
 				<UML:TaggedValue tag="type" value="Logical"/>
 				<UML:TaggedValue tag="swimlanes" value="locked=false;orientation=0;width=0;inbar=false;names=false;color=0;bold=false;fcol=0;;cls=0;"/>
 				<UML:TaggedValue tag="EAStyle" value="ShowPrivate=1;ShowProtected=1;ShowPublic=1;HideRelationships=0;Locked=0;Border=1;HighlightForeign=1;PackageContents=1;SequenceNotes=0;ScalePrintImage=0;PPgs.cx=1;PPgs.cy=1;DocSize.cx=1118;DocSize.cy=783;ShowDetails=0;Orientation=L;Zoom=100;ShowTags=0;OpParams=3;ShowIcons=1;CollabNums=0;HideProps=0;ShowReqs=0;ShowCons=0;PaperSize=9;HideParents=0;UseAlias=0;HideAtts=0;HideOps=0;HideStereo=0;HideElemStereo=0;ShowTests=0;ShowMaint=0;"/>
-				<UML:TaggedValue tag="styleex" value="ExcludeRTF=0;DocAll=0;HideQuals=0;AttPkg=1;ShowTests=0;ShowMaint=0;SuppressFOC=0;TDurLow=0;TDurHigh=100;TDurUnit=;TDurHide=0;"/>
+				<UML:TaggedValue tag="styleex" value="ExcludeRTF=0;DocAll=0;HideQuals=0;AttPkg=1;ShowTests=0;ShowMaint=0;Layout=;SuppressFOC=0;TDurLow=0;TDurHigh=100;TDurUnit=;TDurHide=0;"/>
 			</UML:ModelElement.taggedValue>
 			<UML:Diagram.element>
 				<UML:DiagramElement geometry="Left=20;Top=139;Right=221;Bottom=266;" subject="EAID_4F677B5E_DCEC_4413_9FB2_A9753E5E62E8" seqno="1" style="DUID=7369F95F;LBL=;"/>
@@ -3047,9 +3084,9 @@
 				<UML:DiagramElement geometry="Left=669;Top=80;Right=1066;Bottom=324;" subject="EAID_A9F2232F_845A_4da2_A329_950ED3CDB676" seqno="4" style="DUID=1AFCEFE0;LBL=;"/>
 				<UML:DiagramElement geometry="Left=341;Top=419;Right=620;Bottom=585;" subject="EAID_65A37092_56CE_4e5a_8C30_366469BD8468" seqno="5" style="DUID=D116714F;LBL=;"/>
 				<UML:DiagramElement geometry="Left=260;Top=126;Right=634;Bottom=279;" subject="EAID_EE63FC0D_D590_4d0f_9F83_338683F8E000" seqno="6" style="DUID=74DC55C1;LBL=;"/>
+				<UML:DiagramElement geometry="SX=0;SY=0;EX=0;EY=0;EDGE=1;$LLB=;LLT=;LMT=;LMB=;LRT=;LRB=;Path=;" subject="EAID_8273AECA_7516_4847_9960_34C4FF71F006" style="Mode=3;EOID=7369F95F;SOID=D116714F;Hidden=0;"/>
 				<UML:DiagramElement geometry="SX=0;SY=0;EX=0;EY=0;EDGE=1;$LLB=;LLT=;LMT=;LMB=;LRT=;LRB=;Path=;" subject="EAID_8BBADE67_3C37_4c4a_8CD5_2911FACC538E" style="Mode=3;EOID=1AFCEFE0;SOID=D116714F;Hidden=0;"/>
 				<UML:DiagramElement geometry="SX=0;SY=0;EX=0;EY=0;EDGE=1;$LLB=;LLT=;LMT=;LMB=;LRT=;LRB=;Path=;" subject="EAID_D761BD7E_7981_43a2_823C_48DC2173761C" style="Mode=2;EOID=74DC55C1;SOID=D116714F;Hidden=0;"/>
-				<UML:DiagramElement geometry="SX=0;SY=0;EX=0;EY=0;EDGE=1;$LLB=;LLT=;LMT=;LMB=;LRT=;LRB=;Path=;" subject="EAID_8273AECA_7516_4847_9960_34C4FF71F006" style="Mode=3;EOID=7369F95F;SOID=D116714F;Hidden=0;"/>
 				<UML:DiagramElement geometry="SX=0;SY=0;EX=0;EY=0;EDGE=4;$LLB=;LLT=;LMT=;LMB=CX=51:CY=15:OX=0:OY=0:HDN=0:BLD=0:ITA=0:UND=0:CLR=-1:ALN=0:DIR=0:ROT=0;LRT=;LRB=;Path=;" subject="EAID_E53B0D49_9955_449f_974D_2D23DBDB2610" style="Mode=2;EOID=9861FA2C;SOID=D116714F;Hidden=0;"/>
 			</UML:Diagram.element>
 		</UML:Diagram>
@@ -3063,7 +3100,7 @@
 				<UML:TaggedValue tag="type" value="Logical"/>
 				<UML:TaggedValue tag="swimlanes" value="locked=false;orientation=0;width=0;inbar=false;names=false;color=0;bold=false;fcol=0;;cls=0;"/>
 				<UML:TaggedValue tag="EAStyle" value="ShowPrivate=1;ShowProtected=1;ShowPublic=1;HideRelationships=0;Locked=0;Border=1;HighlightForeign=1;PackageContents=1;SequenceNotes=0;ScalePrintImage=0;PPgs.cx=0;PPgs.cy=0;DocSize.cx=780;DocSize.cy=1118;ShowDetails=0;Orientation=P;Zoom=100;ShowTags=0;OpParams=3;ShowIcons=1;CollabNums=0;HideProps=0;ShowReqs=0;ShowCons=0;PaperSize=9;HideParents=0;UseAlias=0;HideAtts=0;HideOps=0;HideStereo=0;HideElemStereo=0;ShowTests=0;ShowMaint=0;"/>
-				<UML:TaggedValue tag="styleex" value="ExcludeRTF=0;DocAll=0;HideQuals=0;AttPkg=1;ShowTests=0;ShowMaint=0;SuppressFOC=0;TDurLow=0;TDurHigh=100;TDurUnit=;TDurHide=0;"/>
+				<UML:TaggedValue tag="styleex" value="ExcludeRTF=0;DocAll=0;HideQuals=0;AttPkg=1;ShowTests=0;ShowMaint=0;Layout=;SuppressFOC=0;TDurLow=0;TDurHigh=100;TDurUnit=;TDurHide=0;"/>
 			</UML:ModelElement.taggedValue>
 			<UML:Diagram.element>
 				<UML:DiagramElement geometry="Left=600;Top=20;Right=765;Bottom=95;" subject="EAID_7FBF19CD_D452_4a01_BF36_6591CF96D1D2" seqno="1" style="DUID=56EC20EC;"/>
