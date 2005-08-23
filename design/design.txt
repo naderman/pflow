@@ -1,5 +1,5 @@
-eZ publish Enterprise Component: ConsoleTools, Requirenments
-~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+eZ publish Enterprise Component: ConsoleTools, Requirements
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
 Introduction
 ============
@@ -70,18 +70,24 @@ publish.
 Following functionality will be included:
 
 - General in and output handling functionality
- - Output strings
- - Style output (color, underline?, ...)
- - Position change
- - Error/notice/warning support
+
+- Output strings
+
+  - Style output (color, underline?, ...)
+  - Position change
+  - Error/notice/warning support
+
 - Handling of options
- - Long / short options
- - Dealing with help output
- - Optional and required stuff
- - Dependencies and exclusion of options
-- Hanlding of advanced output
- - Progress bars (single, keep multiple in mind)
- - Tables
+
+  - Long / short options
+  - Dealing with help output
+  - Optional and required stuff
+  - Dependencies and exclusion of options
+  
+- Handling of advanced output
+
+  - Progress bars (single, keep multiple in mind)
+  - Tables
 
 All parts should be as independant as possible. Some parts depend quite hardly
 on the output itself, this is ok. Option parsing and handling should _not_
