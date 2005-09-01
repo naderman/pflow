@@ -7,12 +7,20 @@ if (!defined('PHPUnit2_MAIN_METHOD'))
 }
 
 require_once 'PHPUnit2/TextUI/TestRunner.php';
-require_once 'PHPUnit2/TextUI/ResultPrinter.php';
+require_once 'PHPUnit2/Util/Filter.php';
 
 
 class ezcTestRunner extends PHPUnit2_TextUI_TestRunner 
 {
 	const SUITE_FILENAME = "tests/suite.php";
+
+    public function __construct()
+    {
+        
+        // Remove this file name from the assertion trace.
+        // (Displayed when a test fails)
+        PHPUnit2_Util_Filter::addFileToFilter(__FILE__);     
+    }
 	
 	/**
 	 * For now, until the Console Tools is finished, we use the following 
@@ -149,10 +157,10 @@ class ezcTestRunner extends PHPUnit2_TextUI_TestRunner
 			$className = "ezc". $package . "Suite";
 			$s = call_user_func( array( $className, 'suite' ) );
 
-			$result = $s->run();
-
-            $rp = new PHPUnit2_TextUI_ResultPrinter();
-            $rp->printResult($result, 0);
+            $printer = new ezcTestPrinter();
+            $this->setPrinter($printer);
+ 
+            $this->doRun($s);
             
 		}
 	}
