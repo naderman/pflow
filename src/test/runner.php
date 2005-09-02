@@ -16,7 +16,10 @@ class ezcTestRunner extends PHPUnit2_TextUI_TestRunner
 
     public function __construct()
     {
-        
+        // Call this method only once?
+        $printer = new ezcTestPrinter();
+        $this->setPrinter($printer);
+         
         // Remove this file name from the assertion trace.
         // (Displayed when a test fails)
         PHPUnit2_Util_Filter::addFileToFilter(__FILE__);     
@@ -42,6 +45,7 @@ class ezcTestRunner extends PHPUnit2_TextUI_TestRunner
 	public function showHelp()
 	{
 		print ("./runtests DSN [ [Suite name] file_name ]\n\n");
+        print ("We use this crappy commandline parsing until the ConsoleTools package is made.");
 	}
 
 	public function runFromArguments( $args )
@@ -53,18 +57,27 @@ class ezcTestRunner extends PHPUnit2_TextUI_TestRunner
 		}
 		$this->initializeDatabase( $args[1] );
 
-		$directory = ".";
-		$packages = $this->getPackages( $directory );
+        $directory =  dirname( __FILE__ ) . "/../../../../";
+
+        // If a package is given, use that package, otherwise parse all directories.
+	    $packages = (isset($args[2]) ? array($args[2]) : $this->getPackages( $directory ));
 		
+        $allSuites = new ezcTestSuite("[Testing]");
+
 		foreach ($packages as $package)
 		{
 			$releases = $this->getReleases( $directory, $package );
 
 			foreach( $releases as $release )
 			{
-				$this->runTestSuite( $directory, $package, $release );
+			 	$suite = $this->getTestSuite( $directory, $package, $release );
+
+                if ( !is_null( $suite ) )
+                    $allSuites->addTest($suite);
 			}
 		}
+
+        $this->doRun($allSuites);
 	}
 
 	public function runTest( $filename )
@@ -145,24 +158,20 @@ class ezcTestRunner extends PHPUnit2_TextUI_TestRunner
 	 *
 	 * @returns boolean True if the test has been run, false if not. 
 	 */
-	protected function runTestSuite( $dir, $package, $release )
+	protected function getTestSuite( $dir, $package, $release )
 	{
 		$suitePath = implode( "/", array( $dir, $package, $release, self::SUITE_FILENAME ) );
 		if( file_exists( $suitePath ) )
 		{
 			require_once( $suitePath );
 
-			print ("Going to run: " . $suitePath . "\n");
-
 			$className = "ezc". $package . "Suite";
 			$s = call_user_func( array( $className, 'suite' ) );
 
-            $printer = new ezcTestPrinter();
-            $this->setPrinter($printer);
- 
-            $this->doRun($s);
-            
+            return $s;
 		}
+
+        return null;
 	}
 
 	protected function initializeDatabase( $dsn )
