@@ -30,28 +30,28 @@ class ezcBase
     protected static $packageDir;
 
     /**
-     * @var array  This variable stores all the elements from the autoload 
+     * @var array  This variable stores all the elements from the autoload
      *             arrays. When a new autoload file is loaded, their files
      *             are added to this array.
      */
 	protected static $autoloadArray = array();
 
     /**
-     * Tries to autoload the given className. If the className could be found 
-     * this method returns true, otherwise false. 
+     * Tries to autoload the given className. If the className could be found
+     * this method returns true, otherwise false.
      *
-     * This class caches the requested class names (including the ones who 
-     * failed to load). 
+     * This class caches the requested class names (including the ones who
+     * failed to load).
      *
      *
-     * @param string $className  The name of the class that should be loaded. 
-     * 
+     * @param string $className  The name of the class that should be loaded.
+     *
      * @returns boolean
      */
 	public static function autoload( $className )
 	{
         ezcBase::setPackageDir();
-        
+
 		// Check whether the classname is already in the cached autoloadArray.
 		if( array_key_exists( $className, ezcBase::$autoloadArray ) )
 		{
@@ -85,7 +85,7 @@ class ezcBase
 			if( ezcBase::requireFile( $autoloadFile, $className ) )
 				return true;
 
-			// Maybe there is another autoload available. 
+			// Maybe there is another autoload available.
 			// Register this classname as false.
 			ezcBase::$autoloadArray[ $className ] = false;
 		}
@@ -94,7 +94,7 @@ class ezcBase
 	}
 
     /**
-     * Returns the path to the autoload directory. The path depends on 
+     * Returns the path to the autoload directory. The path depends on
      * the installation of the ezComponents. The SVN version has different
      * paths than the PEAR installed version. (For now).
      *
@@ -102,27 +102,27 @@ class ezcBase
      */
     protected static function setPackageDir()
     {
-        // Get the path to the components. 
+        // Get the path to the components.
         $baseDir = dirname(__FILE__);
 
-        ezcBase::$packageDir = $baseDir . ( ezcBase::developmentMode ? "/../../../" : "/../" ); 
+        ezcBase::$packageDir = $baseDir . ( ezcBase::developmentMode ? "/../../../" : "/../" );
     }
 
     /**
-     * Tries to load the autoload array and, if loaded correctly, includes the class.  
+     * Tries to load the autoload array and, if loaded correctly, includes the class.
      *
      * @param string $fileName    Name of the autoload file.
      * @param string $className   Name of the class that should be autoloaded.
      *
-     * @returns boolean  True is returned when the file is correctly loaded. 
+     * @returns boolean  True is returned when the file is correctly loaded.
      *                   Otherwise false is returned.
      */
 	protected static function requireFile( $fileName, $className )
 	{
         $autoloadDir = ezcBase::$packageDir . "autoload/";
 
-        // We need the full path to the fileName. The method file_exists() doesn't 
-        // automatically check the (php.ini) library paths. Therefore: 
+        // We need the full path to the fileName. The method file_exists() doesn't
+        // automatically check the (php.ini) library paths. Therefore:
         // file_exists("ezc/autoload/$fileName") doesn't work.
 		if( file_exists( "$autoloadDir$fileName" ) )
 		{
@@ -142,8 +142,8 @@ class ezcBase
 		return false;
 	}
 
-    /** 
-     * Loads, require_once, the given file name. If we are in development 
+    /**
+     * Loads, require_once, the given file name. If we are in development
      * mode, "/trunk/src/" is inserted into the path.
      *
      * @param string $file  The name of the file that should be loaded.
