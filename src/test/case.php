@@ -2,11 +2,89 @@
 
 require_once 'PHPUnit2/Framework/TestCase.php';
 
-class ezcTestCase extends PHPUnit2_Framework_TestCase
+abstract class ezcTestCase extends PHPUnit2_Framework_TestCase
 {
+    /** 
+     * Do not mess with the temp dir, otherwise the removeTempDirectory might 
+     * remove the wrong directory. 
+     */
+    private $tempDir;
+
     public function __construct( $string = "" )
     {
         parent::__construct( $string );
+    }
+
+    /** 
+     * Creates and returns the temporary directory.
+     * 
+     * @param string $prefix  Set the prefix of the temporary directory.
+     * 
+     * @param string $path    Set the location of the temporary directory. If 
+     *                        set to false, the temporary directory will 
+     *                        probably placed in the /tmp directory.
+     */
+    protected function createTempDir( $prefix, $path = false )
+    {
+        if ( $tempname = tempnam( $path, $prefix ))
+        {
+            unlink($tempname);
+            if ( mkdir( $tempname ) ) 
+            {
+                $this->tempDir = $tempname;
+                return $tempname;
+            } 
+        }
+ 
+        return false;
+    }
+
+    /**
+     * Get the name of the temporary directory.
+     */
+    public function getTempDir()
+    {
+        return $this->tempDir;
+    }
+
+    /**
+     * Remove the temp directory.
+     */
+    public function removeTempDir()
+    {
+        if( file_exists( $this->tempDir ) )
+        { 
+            $this->removeRecursively( $this->tempDir );
+        }
+    }
+
+    private function removeRecursively( $entry )
+    {
+        if( is_file( $entry ) ) 
+        {
+            // Some extra security that you're not erasing your harddisk :-).
+            if( strncmp( $this->tempDir, $entry, strlen( $this->tempDir ) ) == 0 )
+            {
+                return unlink( $entry );
+            }
+        }
+
+        if( is_dir( $entry ) )
+        {
+            if ( $dh = opendir( $entry ) ) 
+            {
+                while ( ( $file = readdir( $dh ) ) !== false ) 
+                {
+                    if( $file[0] != "." )
+                    {
+                        $this->removeRecursively( $entry . "/" . $file );
+                    }
+                }
+
+                closedir($dh);
+                rmdir( $entry );
+            }
+        }
     }
 
     /**
@@ -33,12 +111,15 @@ class ezcTestCase extends PHPUnit2_Framework_TestCase
             {
                 $object->$propertyName = $value;
             }
-            catch( Exception $e ){
+            catch( Exception $e )
+            {
                 return;
             }
             $this->fail( "Setting property $propertyName to $value did not fail." );
         }
     }
+
+    public static abstract function suite();
 }
 
 
