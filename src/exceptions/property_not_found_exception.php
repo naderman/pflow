@@ -16,7 +16,7 @@
  * @license LGPL {@link http://www.gnu.org/copyleft/lesser.html}
  * @version //autogen//
  */
-class ezcPropertyNotFoundException extends Exception
+class ezcBasePropertyNotFoundException extends Exception
 {
     /**
      * Constructs a new ezcPropertyNotFoundException on the property
