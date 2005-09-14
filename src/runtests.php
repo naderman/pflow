@@ -1,4 +1,4 @@
-#!/var/www/php5/bin/php
+#!/usr/local/php5.1dev/bin/php
 <?
 
 function __autoload( $class_name )

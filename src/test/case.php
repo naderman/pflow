@@ -90,7 +90,7 @@ abstract class ezcTestCase extends PHPUnit2_Framework_TestCase
     /**
      * Checks if $expectedValues are properly set on $propertyName in $object.
      */
-    public function assertProperty( $object, $expectedValues, $propertyName )
+    public function assertSetProperty( $object, $expectedValues, $propertyName )
     {
         foreach( $expectedValues as $value )
         {
@@ -103,7 +103,7 @@ abstract class ezcTestCase extends PHPUnit2_Framework_TestCase
      * Checks if $setValues fail when set on $propertyName in $object.
      * Setting the property must result in an exception.
      */
-    public function assertPropertyFails( $object, $setValues, $propertyName )
+    public function assertSetPropertyFails( $object, $setValues, $propertyName )
     {
         foreach( $setValues as $value )
         {
