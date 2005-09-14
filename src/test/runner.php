@@ -178,7 +178,7 @@ class ezcTestRunner extends PHPUnit2_TextUI_TestRunner
 	{
 		$settings = $this->parseDSN( $dsn );
 
-		print( "Pretend to initialize the database with the following settings: " );
+		// print( "Pretend to initialize the database with the following settings: " );
 		// print_r( $settings );
 	}
 
