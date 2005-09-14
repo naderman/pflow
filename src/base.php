@@ -68,22 +68,21 @@ class ezcBase
 		// Matches the first and optionally the second 'word' from the classname.
 		if( preg_match( "/^ezc([A-Z][a-z]*)([A-Z][a-z]*)?/", $className, $matches ) !== false )
 		{
+            $autoloadFile = "";
 			// Try to match with both names, if available.
-			if( sizeof($matches) > 2 )
+			switch( sizeof($matches) )
 			{
+                case 3:
 				$autoloadFile = strtolower( "{$matches[1]}_{$matches[2]}_autoload.php" );
+			    if( ezcBase::requireFile( $autoloadFile, $className ) )
+				    return true;
 
-				// Try to include. If it succeeds, stop the execution of this method.
-                if( ezcBase::requireFile( $autoloadFile, $className ) )
-                    return true;
+                case 2:
+			    $autoloadFile = strtolower( "{$matches[1]}_autoload.php" );
+			    if( ezcBase::requireFile( $autoloadFile, $className ) )
+				    return true;
+                break;
 			}
-
-			// Try to match with only one name.
-			$autoloadFile = strtolower( "{$matches[1]}_autoload.php" );
-
-			// Does this include exist?
-			if( ezcBase::requireFile( $autoloadFile, $className ) )
-				return true;
 
 			// Maybe there is another autoload available.
 			// Register this classname as false.
