@@ -4,9 +4,9 @@ require_once 'PHPUnit2/Framework/TestCase.php';
 
 abstract class ezcTestCase extends PHPUnit2_Framework_TestCase
 {
-    /** 
-     * Do not mess with the temp dir, otherwise the removeTempDirectory might 
-     * remove the wrong directory. 
+    /**
+     * Do not mess with the temp dir, otherwise the removeTempDirectory might
+     * remove the wrong directory.
      */
     private $tempDir;
 
@@ -15,13 +15,13 @@ abstract class ezcTestCase extends PHPUnit2_Framework_TestCase
         parent::__construct( $string );
     }
 
-    /** 
+    /**
      * Creates and returns the temporary directory.
-     * 
+     *
      * @param string $prefix  Set the prefix of the temporary directory.
-     * 
-     * @param string $path    Set the location of the temporary directory. If 
-     *                        set to false, the temporary directory will 
+     *
+     * @param string $path    Set the location of the temporary directory. If
+     *                        set to false, the temporary directory will
      *                        probably placed in the /tmp directory.
      */
     protected function createTempDir( $prefix, $path = false )
@@ -29,13 +29,13 @@ abstract class ezcTestCase extends PHPUnit2_Framework_TestCase
         if ( $tempname = tempnam( $path, $prefix ))
         {
             unlink($tempname);
-            if ( mkdir( $tempname ) ) 
+            if ( mkdir( $tempname ) )
             {
                 $this->tempDir = $tempname;
                 return $tempname;
-            } 
+            }
         }
- 
+
         return false;
     }
 
@@ -53,14 +53,14 @@ abstract class ezcTestCase extends PHPUnit2_Framework_TestCase
     public function removeTempDir()
     {
         if( file_exists( $this->tempDir ) )
-        { 
+        {
             $this->removeRecursively( $this->tempDir );
         }
     }
 
     private function removeRecursively( $entry )
     {
-        if( is_file( $entry ) ) 
+        if( is_file( $entry ) )
         {
             // Some extra security that you're not erasing your harddisk :-).
             if( strncmp( $this->tempDir, $entry, strlen( $this->tempDir ) ) == 0 )
@@ -71,9 +71,9 @@ abstract class ezcTestCase extends PHPUnit2_Framework_TestCase
 
         if( is_dir( $entry ) )
         {
-            if ( $dh = opendir( $entry ) ) 
+            if ( $dh = opendir( $entry ) )
             {
-                while ( ( $file = readdir( $dh ) ) !== false ) 
+                while ( ( $file = readdir( $dh ) ) !== false )
                 {
                     if( $file[0] != "." )
                     {
@@ -90,7 +90,7 @@ abstract class ezcTestCase extends PHPUnit2_Framework_TestCase
     /**
      * Checks if $expectedValues are properly set on $propertyName in $object.
      */
-    public function assertSetProperty( $object, $expectedValues, $propertyName )
+    public function assertSetProperty( $object, $propertyName, $expectedValues )
     {
         foreach( $expectedValues as $value )
         {
@@ -103,7 +103,7 @@ abstract class ezcTestCase extends PHPUnit2_Framework_TestCase
      * Checks if $setValues fail when set on $propertyName in $object.
      * Setting the property must result in an exception.
      */
-    public function assertSetPropertyFails( $object, $setValues, $propertyName )
+    public function assertSetPropertyFails( $object, $propertyName, $setValues )
     {
         foreach( $setValues as $value )
         {
@@ -112,15 +112,13 @@ abstract class ezcTestCase extends PHPUnit2_Framework_TestCase
                 $object->$propertyName = $value;
             }
             catch( Exception $e )
-            {
-                return;
-            }
+                {
+                    return;
+                }
             $this->fail( "Setting property $propertyName to $value did not fail." );
         }
     }
 
     public static abstract function suite();
 }
-
-
 ?>
