@@ -10,7 +10,7 @@
 
 /**
  * Class for handling console output.
- * This class handles outputting text to the console. It deals with styling 
+ * This class handles outputting text to the console. It deals with formating 
  * text in different ways and offers some comfortable options to deal
  * with console text output.
  *
@@ -19,9 +19,19 @@
  * $opts = array(
  *  'verboseLevel'  => 10,  // extremly verbose
  *  'autobreak'     => 40,  // will break lines every 40 chars
- *  'styles'        => array(
- *      'default'   => 'green', // green default text
- *      'success'   => 'white', // white success messages
+ *  'formats'       => array(
+ *      'default'   => array(     // pseudo format (used when no format given)
+ *          'color'   => 'green', // green  foreground color
+ *      ),
+ *      'success'   => array(     // define format "success"
+ *          'color'   => 'white', // white foreground color
+ *          'style'   => 'bold',  // bold font style
+ *      ),
+ *      'failure'   => array(     // Define format "failur"
+ *          'color'   => 'black', // black foreground color
+ *          'bgcolor' => 'red',   // red background color
+ *          'style'   => 'bold',  // bold font style
+ *      ),
  *  ),
  * );
  * $out = new ezcConsoleOutput($opts);
@@ -31,7 +41,7 @@
  * $out->outputText("and a manual linebreak.\n");
  *
  * $out->outputText("Some verbose output.\n", null, 10);
- * $out->outputText("And some not so verbose, bold output.\n", 'bold', 5);
+ * $out->outputText("And some not so verbose, failure output.\n", 'failure', 5);
  *
  * </code>
  * 
@@ -44,24 +54,31 @@ class ezcConsoleOutput
 {
     /**
      * Options
-     * Default:
      *
+     * Default values:
      * <code>
      * array(
      *   'verboseLevel'  => 1,       // Verbosity level
      *   'autobreak'     => 0,       // Pos <int>. Break lines automatically
      *                               // after this ammount of chars
-     *   'useStyles'     => true,    // Whether to enable styles or not
-     *   'styles'        => array(   // Style alias definition 
-     *                               // {@link ezcConsoleOutput::outputText()}
-     *       'default'   => '',      // Default style. If blank, sys default
-     *       'error'     => 'red',
-     *       'warning'   => 'yellow',
-     *       'success'   => 'green',
-     *       'file'      => 'blue',
-     *       'dir'       => 'green',
-     *       'link'      => 'blue',
-     *   ),
+     *   'useFormats'    => true,    // Whether to enable formatting or not
+     *   'formats'       => array(
+     *      'default'    => array(     // pseudo format (used when no format given)
+     *          'color'   => 'green', // green  foreground color
+     *      ),
+     *      'success'    => array(     // define format "success"
+     *          'color'   => 'white', // white foreground color
+     *          'style'   => 'bold',  // bold font style
+     *      ),
+     *      'failure'    => array(    // Define format "failure"
+     *          'color'   => 'black', // black foreground color
+     *          'bgcolor' => 'red',   // red background color
+     *          'style'   => array(   // multiple styles
+     *              'bold',           // bold font style
+     *              'blink'           // blinking font
+     *           ),
+     *      ),
+     *  ),
      * );
      * </code>
      *
@@ -72,53 +89,80 @@ class ezcConsoleOutput
      */
     private $options = array(
         'verboseLevel'  => 1,
-        'useStyles'     => true,
-        'styles'        => array(
-            'default'   => '',
-            'error'     => 'red',
-            'warning'   => 'yellow',
-            'success'   => 'green',
-            'file'      => 'blue',
-            'dir'       => 'green',
-            'link'      => 'blue',
+        'useFormats'    => true,    // Whether to enable formatting or not
+        'formats'       => array(
+            // default format not re-defined by default (uses system default)
+            'success'    => array(     // define format "success" (standard format)
+                'color'   => 'green',  // green foreground color
+                'style'   => 'bold',   // bold font style
+            ),
+            'failure'    => array(     // define format "failure" (standard format)
+                'color'   => 'red',    // red foreground color
+                'style'   => array(    // multiple styles
+                    'bold',     // bold font style
+                    'blink'     // blinking font
+                ),
+            ),
         ),
     );
 
     /**
-     * Stores the hard coded styles available on the console.
+     * Stores the mapping of color names to their escape
+     * sequence values.
      *
-     * @var array(string => string)
+     * @var array(string => int)
      */
-    private $styles = array(
-		'red' => "\033[1;31m",
-		'green' => "\033[1;32m",
-		'yellow' => "\033[1;33m",
-		'blue' => "\033[1;34m",
-		'magenta' => "\033[1;35m",
-		'cyan' => "\033[1;36m",
-		'white' => "\033[1;37m",
-		'gray' => "\033[1;30m",
-		
-		'dark-red' => "\033[0;31m",
-		'dark-green' => "\033[0;32m",
-		'dark-yellow' => "\033[0;33m",
-		'dark-blue' => "\033[0;34m",
-		'dark-magenta' => "\033[0;35m",
-		'dark-cyan' => "\033[0;36m",
-		'dark-white' => "\033[0;37m",
-		'dark-gray' => "\033[0;30m",
-		
-		'red-bg' => "\033[1;41m",
-		'green-bg' => "\033[1;42m",
-		'yellow-bg' => "\033[1;43m",
-		'blue-bg' => "\033[1;44m",
-		'magenta-bg' => "\033[1;45m",
-		'cyan-bg' => "\033[1;46m",
-		'white-bg' => "\033[1;47m",
-		
-		'bold' => "\033[1;38m",
-		'italic' => "\033[0;39m",
-		'underline' => "\033[0;39m",
+    private $colors = array(
+		'red'           => 31,
+		'green'         => 32,
+		'yellow'        => 33,
+		'blue'          => 34,
+		'magenta'       => 35,
+		'cyan'          => 36,
+		'white'         => 37,
+		'gray'          => 30,
+    );
+	
+    /**
+     * Stores the mapping of bgcolor names to their escape
+     * sequence values.
+     * 
+     * @var array
+     */
+    private $bgcolors = array(
+        'red'        => 41,
+		'green'      => 42,
+		'yellow'     => 43,
+		'blue'       => 44,
+		'magenta'    => 45,
+		'cyan'       => 46,
+		'white'      => 47,
+    );
+
+    /**
+     * Stores the mapping of styles names to their escape
+     * sequence values.
+     * 
+     * @var array(string => int)
+     */
+    private $styles = array( 
+        'bold'              => 1,
+        'faint'             => 2,
+        'normal'            => 22,
+        
+        'italic'            => 3,
+        'notitalic'         => 23,
+        
+        'underlined'        => 4,
+        'doubleunderlined'  => 21,
+        'notunderlined'     => 24,
+        
+        'blink'             => 5,
+        'blinkfast'         => 6,
+        'noblink'           => 25,
+        
+        'negative'          => 7,
+        'positive'          => 27,
     );
 
     /**
@@ -131,6 +175,7 @@ class ezcConsoleOutput
      * @param array(string) $options Options.
      */
     public function __construct( $options = array() ) {
+        $this->setOptions( $options );
         
     }
 
@@ -144,7 +189,7 @@ class ezcConsoleOutput
      * @return void
      */
     public function setOptions( $options ) {
-        
+        $this->setOptionsRecursive( $this->options, $options );
     }
 
     /**
@@ -156,40 +201,40 @@ class ezcConsoleOutput
      * @return array(string) Options.
      */
     public function getOptions( ) {
-        
+        return $this->options;
     }
 
     /**
      * Print text to the console.
-     * Output a string to the console. If $style parameter is ommited, 
+     * Output a string to the console. If $format parameter is ommited, 
      * the default style is chosen. Style can either be a special style
      * {@link eczConsoleOutput::$options}, a style name 
-     * {@link ezcConsoleOutput$styles} or 'none' to print without any styling.
+     * {@link ezcConsoleOutput$formats} or 'none' to print without any styling.
      *
-     * @param string $text      The text to print.
-     * @param string $style     Style chosen for printing.
+     * @param string $text       The text to print.
+     * @param string $format     Format chosen for printing.
      * @param int $verboseLevel On which verbose level to output this message.
      * @param int Output this text only in a specific verbosity level
      */
-    public function outputText( $text, $style = 'default', $verboseLevel = 1 ) {
+    public function outputText( $text, $format = 'default', $verboseLevel = 1 ) {
         
     }
     
     /**
      * Returns a styled version of the text.
-     * Receive a styled version of the inputed text. If $style parameter is 
+     * Receive a styled version of the inputed text. If $format parameter is 
      * ommited, the default style is chosen. Style can either be a special 
      * style or a direct color name.
      * 
      * {@link ezcConsoleOutput::$options}, a style name 
-     * {@link ezcConsoleOutput::$styles} or 'none' to print without any styling.
+     * {@link ezcConsoleOutput::$formats} or 'none' to print without any styling.
      *
-     * @param string $text  Text to apply style to.
-     * @param string $style Style chosen to be applied.
+     * @param string $text   Text to apply style to.
+     * @param string $format Format chosen to be applied.
      * @return string
      */
-    public function styleText( $text, $style = 'default' ) {
-        
+    public function styleText( $text, $format = 'default' ) {
+        $format = $this->getStyle;
     }
 
     /**
@@ -219,5 +264,30 @@ class ezcConsoleOutput
      */
     public function restorePos( ) {
         
+    }
+
+    /**
+     * Set options recursivly without loosing options already set.
+     * This methed recursivly sets the options from an array submitted
+     * to it. Existing options which are not set to be changed will
+     * be protected.
+     * 
+     * @param array $current Reference to the current array to process.
+     * @param array $new     (Multidimensional) Array of new options to be set.
+     * @return void
+     */
+    private function setOptionsRecursive( &$current, $new )
+    {
+        foreach ( $new as $key => $val ) {
+            if ( !isset( $current[$key] ) ) {
+                trigger_error('Unknowen option "' . $key  . '".', E_USER_WARNING);
+                continue;
+            }
+            if ( is_array( $new[$key] ) ) {
+                $this->setOptionsRecursive( $current[$key], $new[$key] );
+            } else {
+                $current[$key] = $new[$key];
+            }
+        }
     }
 }
