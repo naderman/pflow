@@ -15,6 +15,11 @@ abstract class ezcTestCase extends PHPUnit2_Framework_TestCase
         parent::__construct( $string );
     }
 
+    public function setUp()
+    {
+        return parent::setUp();
+    }
+
     /**
      * Creates and returns the temporary directory.
      *
@@ -57,6 +62,24 @@ abstract class ezcTestCase extends PHPUnit2_Framework_TestCase
             $this->removeRecursively( $this->tempDir );
         }
     }
+
+    public function cleanTempDir()
+    {
+        if( is_dir( $this->tempDir ) )
+        {
+            if ( $dh = opendir( $this->tempDir ) ) 
+            {
+                while ( ( $file = readdir( $dh ) ) !== false ) 
+                {
+                    if( $file[0] != "." )
+                    {
+                        $this->removeRecursively( $this->tempDir . "/" . $file );
+                    }
+                }
+            }
+        }
+    }
+
 
     private function removeRecursively( $entry )
     {
@@ -112,9 +135,9 @@ abstract class ezcTestCase extends PHPUnit2_Framework_TestCase
                 $object->$propertyName = $value;
             }
             catch( Exception $e )
-                {
-                    return;
-                }
+            {
+                return;
+            }
             $this->fail( "Setting property $propertyName to $value did not fail." );
         }
     }

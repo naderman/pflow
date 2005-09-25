@@ -1,4 +1,3 @@
-#!/usr/local/php5.1dev/bin/php
 <?
 
 function __autoload( $class_name )
@@ -6,8 +5,6 @@ function __autoload( $class_name )
     require_once("Base/trunk/src/base.php");
     ezcBase::autoload( $class_name );
 }
-
-
 
 // Remove this file name from the assertion trace.
 require_once 'PHPUnit2/Util/Filter.php';
