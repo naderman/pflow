@@ -12,7 +12,7 @@ class ezcConsoleToolsSuite extends ezcTestSuite
 
     public static function suite()
     {
-        return new ezcCacheSuite("ezcConsoleToolsSuite");
+        return new ezcConsoleToolsSuite("ezcConsoleToolsSuite");
     }
 }
 
