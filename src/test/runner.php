@@ -181,10 +181,37 @@ class ezcTestRunner extends PHPUnit2_TextUI_TestRunner
         // Store the settings
         $ts = ezcTestSettings::getInstance();
         $ts->db->dsn = $dsn;
-        $ts->setDatabaseSettings( $settings );
+        try
+        {
+            $ts->setDatabaseSettings( $settings );
+            $db = ezcDbFactory::create( $settings );
+            ezcDbInstance::set( $db );
+        } catch( ezcDbException $e)
+        {
+            switch( $e->getCode() )
+            {
+                case ezcDbException::MISSING_DATABASE_NAME: $this->printError( "The database name is missing."); break;
+                case ezcDbException::MISSING_USER_NAME: $this->printError( "The username is missing."); break;
+                case ezcDbException::MISSING_PASSWORD: $this->printError( "The password is missing."); break;
+                case ezcDbException::UNKNOWN_IMPL: $this->printError( "Unknown PDO implementation. Make sure you specified an existing driver (mysql, pgsql, oci) and that your PHP version has the modules (php -m): PDO and pdo_<driver> (e.g. pdo_mysql, pdo_pgsql, etc)."); break;
+                case ezcDbException::INSTANCE_NOT_FOUND: $this->printError( "Cannot find the db instance."); break;
+                case ezcDbException::NOT_IMPLEMENTED: $this->printError( "The functionality is not implemented."); break;
+                default: $this->getTraceAsString(); break;
+            }
+            exit();
+        }
 
-        $db = ezcDbFactory::create( $settings );
-        ezcDbInstance::set( $db );
+        // TODO Check if the database exists, and whether it is empty.
+        
+    }
+
+    protected function printError( $errorString )
+    {
+        print( $errorString . "\n\n");
+
+        print( "The DSN should look like: <Driver>://<User>[:Password]@<Host>/<Database> \n");
+        print( "For example: mysql://root:root@localhost/unittests\n\n");
+        exit();
     }
 }
 ?>
