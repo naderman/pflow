@@ -45,7 +45,7 @@ class ezcTestRunner extends PHPUnit2_TextUI_TestRunner
     public function showHelp()
     {
         print ("./runtests DSN [ [Suite name] file_name ]\n\n");
-        print ("We use this crappy commandline parsing until the ConsoleTools package is made.");
+        print ("We use this crappy commandline parsing until the ConsoleTools package is made.\n\n");
     }
 
     public function runFromArguments( $args )
