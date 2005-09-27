@@ -115,10 +115,17 @@ abstract class ezcTestCase extends PHPUnit2_Framework_TestCase
      */
     public function assertSetProperty( $object, $propertyName, $expectedValues )
     {
-        foreach( $expectedValues as $value )
+        if( is_array( $expectedValues ) )
         {
-            $object->$propertyName = $value;
-            $this->assertEquals( $value, $object->$propertyName );
+            foreach( $expectedValues as $value )
+            {
+                $object->$propertyName = $value;
+                $this->assertEquals( $value, $object->$propertyName );
+            }
+        }
+        else
+        {
+            $this->fail( "Invalid test: expectedValues is not an array." );
         }
     }
 
