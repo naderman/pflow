@@ -14,16 +14,8 @@ class ezcConsoleToolsSuite extends ezcTestSuite
 
     public static function suite()
     {
-        return new ezcConsoleToolsSuite("ezcConsoleToolsSuite");
+        return new ezcConsoleToolsSuite( "ezcConsoleToolsSuite" );
     }
 }
-
-/*
-if( !defined("RUNNER") )
-{
-    $s = TestUnitSuite::suite();
-    $s->run();
-}
-*/
 
 ?>

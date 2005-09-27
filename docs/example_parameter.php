@@ -4,7 +4,7 @@
  *
  * @package ConsoleTools
  * @version //autogen//
- * @copyright Copyright (C) 2005 eZ systems as. All rights reserved.
+ * @copyright Copyright ( C ) 2005 eZ systems as. All rights reserved.
  * @license LGPL {@link http://www.gnu.org/copyleft/lesser.html}
  */
 
@@ -18,7 +18,7 @@ $help = array(
 );
 
 // Register parameter -h/--help with texts from above
-$paramHandler->registerParam('h', 'help', $help);
+$paramHandler->registerParam( 'h', 'help', $help );
 
 // Options for the file parameter
 $file = array(
@@ -27,11 +27,11 @@ $file = array(
  'short'    => 'Process a file.',
  'long'     => 'Processes a single file.',
  // May not be used in combination with -d/--directory
- 'excludes' => array('d'),
+ 'excludes' => array( 'd' ),
 )
 
 // Register parameter -f/--file with options from above
-$paramHandler->registerParam('f', 'file', $file);
+$paramHandler->registerParam( 'f', 'file', $file );
 
 // Options for dir parameter
 $dir = array(
@@ -39,42 +39,47 @@ $dir = array(
  'short'    => 'Process a directory.',
  'long'     => 'Processes a complete directory.',
  // May not be used with -f/--file together
- 'excludes' => array('f'),
+ 'excludes' => array( 'f' ),
 )
 
 // Register -d/--dir parameter
-$paramHandler->registerParam('d', 'dir', $dir);
+$paramHandler->registerParam( 'd', 'dir', $dir );
 
 // Register the alias --directory for -d/--dir
-$paramHandler->registerAlias('d', 'directory', 'd');
+$paramHandler->registerAlias( 'd', 'directory', 'd' );
 
 
 // ... initialize ezcConsoleOutput or similar to output stuff...
 
 // Process parameters given
 
-try {
+try 
+{
      // Processing
      $paramHandler->processParams();
-} catch (ezcConsoleParameterException $e) {
+} 
+catch ( ezcConsoleParameterException $e ) 
+{
     // An error occured
-    if ($e->code === ezcConsoleParameterException::CODE_DEPENDENCY) {
+    if ( $e->code === ezcConsoleParameterException::CODE_DEPENDENCY ) 
+    {
         // Output some error text
         $consoleOut->outputText(
             'Parameter '.$e->paramName." may not occur here.\n\n", 'error'
         );
         // And output some help on the parameter.
         $consoleOut->output(
-            $paramHandler->getHelp($e->paramName)."\n"
+            $paramHandler->getHelp( $e->paramName )."\n"
         );
     }
     // End the program
-    exit($e->code);
+    exit( $e->code );
 }
 
 // Ok, everything went well
 
-if ($res = $paramHandler->getParam('h')) {
+if ( $res = $paramHandler->getParam( 'h' ) )
+{
     // Help was requested. Output Help text as "info".
     $consoleOut->output(
         $paramHandler->getHelp(), 'info'
@@ -82,16 +87,20 @@ if ($res = $paramHandler->getParam('h')) {
     exit;
 }
 
-if ($res = $paramHandler->getParam('f')) {
+if ( $res = $paramHandler->getParam( 'f' ) ) 
+{
     // -f/--file was set. Value now in res.
     $file = $res;
 }
 
-if ($res = $paramHandler->getParam('f')) {
+if ( $res = $paramHandler->getParam( 'f' ) )
+{
     // -d/--dir/--directory was set. Value now in res.
     $file = $res;
 }
 
-processSomethingOn($file);
+processSomethingOn( $file );
 
-exit(0);
+exit( 0 );
+
+?>

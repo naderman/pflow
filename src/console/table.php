@@ -219,7 +219,7 @@ class ezcConsoleTable
      *
      * @return string
      */
-    public function getTable( ) {
+    public function getTable() {
         
     }
 
@@ -229,7 +229,7 @@ class ezcConsoleTable
      *
      * @return void
      */
-    public function outputTable( ) {
+    public function outputTable() {
 
     }
 }

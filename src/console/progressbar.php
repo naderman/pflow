@@ -115,7 +115,7 @@ class ezcConsoleProgressbar
      * 
      * @return void
      */
-    public function start( ) {
+    public function start() {
         
     }
      
@@ -124,7 +124,7 @@ class ezcConsoleProgressbar
      * Prints the progressbar to the screen. If start() has not been called 
      * yet, the current line is used for {@link ezcConsolProgressbar::start()}.
      */
-    public function output( ) {
+    public function output() {
         
     }
 

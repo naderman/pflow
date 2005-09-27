@@ -19,21 +19,21 @@ $opts = array(
 );
 
 // Initialize the console outputer
-$out = new ezcConsoleOutput($opts);
+$out = new ezcConsoleOutput( $opts );
 
-// Print some normal text (will be green, see options)
-$out->outputText("Welcome to my cool program!\n");
+// Print some normal text ( will be green, see options )
+$out->outputText( "Welcome to my cool program!\n" );
 
 // Output a success messagen
-$out->outputText("You successfully managed to start the program!\n", 'success');
+$out->outputText( "You successfully managed to start the program!\n", 'success' );
 
 // Output an error message in default text
-$out->outputText("Sorry, there was an error: ");
-$out->outputText("Your computer does not support PHP6. ", 'error');
-$out->outputText("Please consider upgrading!");
+$out->outputText( "Sorry, there was an error: " );
+$out->outputText( "Your computer does not support PHP6. ", 'error' );
+$out->outputText( "Please consider upgrading!" );
 
-// Output text only for verbosity 10 (default style)
-$out->outputText("Some verbose output.\n", null, 10);   // With current options, not printed
+// Output text only for verbosity 10 ( default style )
+$out->outputText( "Some verbose output.\n", null, 10 );   // With current options, not printed
 
 // Output some bold text
-$out->outputText("And some not so verbose, bold output.\n", 'bold');
+$out->outputText( "And some not so verbose, bold output.\n", 'bold' );

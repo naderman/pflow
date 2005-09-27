@@ -73,7 +73,7 @@ class ezcConsoleParameter
     /**
      * Create parameter handler
      */
-    public function __construct( ) {
+    public function __construct() {
         
     }
 
@@ -264,7 +264,7 @@ class ezcConsoleParameter
      *
      * @return array(int => string) Arguments.
      */
-    public function getArguments( ) {
+    public function getArguments() {
         
     }
 

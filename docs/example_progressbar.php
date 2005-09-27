@@ -10,8 +10,8 @@
 
 // ... creating ezcConsoleOutput object
 
-// Set maximum value and step width for the progress bar (using kb values)
-$set = array('max' => $file->getSize(), 'step' => 50);
+// Set maximum value and step width for the progress bar ( using kb values )
+$set = array( 'max' => $file->getSize(), 'step' => 50 );
 
 // Some options to change the appearance
 $opt = array(
@@ -21,18 +21,19 @@ $opt = array(
 );
 
 // Create progress bar itself
-$progress = new ezcConsoleProgressbar($out, $set, $opt);
+$progress = new ezcConsoleProgressbar( $out, $set, $opt );
 
 // Do some actions
-while( $file->upload() ) {
-    // Advance the progressbar by one step (uploading 5k per run)
+while( $file->upload() ) 
+{
+    // Advance the progressbar by one step ( uploading 5k per run )
     $progress->advance();
 }
 
 // Finish progress bar and jump to next line.
 $progress->finish();
 
-$out->outputText("Successfully uploaded \"$myFilename\".\n", 'success');
+$out->outputText( "Successfully uploaded \"$myFilename\".\n", 'success' );
 
 ?>
 

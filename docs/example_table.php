@@ -15,30 +15,30 @@ $opts = array(
 );
 
 // Initialize the console outputer
-$out = new ezcConsoleOutput($opts);
+$out = new ezcConsoleOutput( $opts );
 
 $tableOpts = array(
     'lineColorHead' => 'red',  // Make header rows surrounded by red lines
 );
 
 // Initialize table with options, width of 60 chars and 3 cols
-$table = new ezcConsoleTable($out, array('width' => 60, 'cols' = 3), $tableOpts);
+$table = new ezcConsoleTable( $out, array( 'width' => 60, 'cols' = 3 ), $tableOpts );
 
-// Generate a header row (red color)
-$table->addRowHead(array('First col', 'Second col', 'Third col'));
+// Generate a header row ( red color )
+$table->addRowHead( array( 'First col', 'Second col', 'Third col' ));
 
-// Add some data (right column will be largest)
-$table->addRow(array('Data', 'Data', 'Very very very very very long data'));
+// Add some data ( right column will be largest )
+$table->addRow( array( 'Data', 'Data', 'Very very very very very long data' ));
 
-// Add some more data (middle column data will be green)
-$table->addRow(array('More', $out->styleText('More green', 'green'), 'Smaller data'));
+// Add some more data ( middle column data will be green )
+$table->addRow( array( 'More', $out->styleText( 'More green', 'green' ), 'Smaller data' ));
 
 // Print table to the screen
 $table->output();
 
 ?>
 
-RESULT (without color):
+RESULT ( without color ):
 
 +---------------------------------------------------------+
 | First col | Second col | Third col                      |     // Red surrounding

@@ -93,7 +93,7 @@ class ezcConsoleStatusbar
      * 
      * @returns int Number of successes.
      */
-    public function getSuccesses( ) {
+    public function getSuccesses() {
         
     }
     
@@ -103,7 +103,7 @@ class ezcConsoleStatusbar
      * 
      * @returns int Number of failures.
      */
-    public function getFailures( ) {
+    public function getFailures() {
         
     }
 
