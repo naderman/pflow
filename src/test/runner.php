@@ -36,10 +36,10 @@ class ezcTestRunner extends PHPUnit2_TextUI_TestRunner
      * [3] => Database DSN, file, class name.
      * 
      */
-    public static function main( $args ) 
+    public static function main() 
     {
         $tr = new ezcTestRunner();
-        $tr->runFromArguments( $args );
+        $tr->runFromArguments(  $_SERVER["argv"] );
     }
 
     public function showHelp()
@@ -57,12 +57,13 @@ class ezcTestRunner extends PHPUnit2_TextUI_TestRunner
         }
         $this->initializeDatabase( $args[1] );
 
-        $directory =  dirname( __FILE__ ) . "/../../../../";
+        $directory = dirname( __FILE__ ) . "/../../../../";
 
         // If a package is given, use that package, otherwise parse all directories.
         $packages = (isset($args[2]) ? array($args[2]) : $this->getPackages( $directory ));
         
-        $allSuites = new ezcTestSuite("[Testing]");
+        $allSuites = new ezcTestSuite();
+        $allSuites->setName( "[Testing]" );
 
         foreach ($packages as $package)
         {

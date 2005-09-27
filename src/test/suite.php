@@ -24,7 +24,7 @@ class ezcTestSuite extends PHPUnit2_Framework_TestSuite
         $name = ($this->getName() == "" ? "[No name given]" : $this->getName()); 
 
         $padding = str_repeat( "  ", ezcTestSuite::$depth  - 1);
-        print ($padding . str_pad(  $name . ": " , 30, " ", STR_PAD_RIGHT ));
+        print ($padding . str_pad(  $name . ": " , 40, " ", STR_PAD_RIGHT ));
 
         parent::run($result);
 
