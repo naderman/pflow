@@ -6,7 +6,9 @@ class ezcConsoleToolsSuite extends ezcTestSuite
 {
 	public function __construct()
 	{
-		parent::__construct("ConsoleTools");
+		parent::__construct();
+        $this->setName( "ConsoleTools" );
+
 		$this->addTest( ezcConsoleToolsOutputTest::suite() );
 	}
 
