@@ -1,4 +1,4 @@
-<?
+<?php
 
 function __autoload( $class_name )
 {
