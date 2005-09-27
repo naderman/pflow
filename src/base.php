@@ -93,8 +93,13 @@ class ezcBase
             ezcBase::$autoloadArray[$className] = false;
         }
 
-        $path = realpath( ezcBase::$packageDir . 'autoload/' );
-        trigger_error( "Couldn't find autoload file for '$className' in '$path'.", E_USER_ERROR );
+        $path = ezcBase::$packageDir . 'autoload/';
+        $realPath = realpath( $path );
+        if ( $realPath == '' )
+        {
+            trigger_error( "Couldn't find autoload directory '$path'", E_USER_ERROR );
+        }
+        trigger_error( "Couldn't find autoload file for '$className' in '$realPath'", E_USER_ERROR );
         return false;
     }
 
