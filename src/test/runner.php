@@ -6,8 +6,12 @@ if (!defined('PHPUnit2_MAIN_METHOD'))
     define('PHPUnit2_MAIN_METHOD', 'TestRunner::main');
 }
 
+// FIXME: Het switchen van de PEAR error is nodig omdat PEAR nog niet helemaal
+// netjes werkt met E_STRICT helaas.
+$oldErrorReporting = error_reporting( 0 );
 require_once 'PHPUnit2/TextUI/TestRunner.php';
 require_once 'PHPUnit2/Util/Filter.php';
+error_reporting( $oldErrorReporting );
 
 
 class ezcTestRunner extends PHPUnit2_TextUI_TestRunner 
