@@ -13,9 +13,6 @@
  * Base class implements the methods needed to use the ezComponents.
  *
  * @package Base
- * @version //autogentag//
- * @copyright Copyright (C) 2005 eZ systems as. All rights reserved.
- * @license LGPL {@link http://www.gnu.org/copyleft/lesser.html}
  */
 class ezcBase
 {
@@ -34,7 +31,7 @@ class ezcBase
      *             arrays. When a new autoload file is loaded, their files
      *             are added to this array.
      */
-	protected static $autoloadArray = array();
+    protected static $autoloadArray = array();
 
     /**
      * Tries to autoload the given className. If the className could be found
@@ -48,49 +45,58 @@ class ezcBase
      *
      * @returns boolean
      */
-	public static function autoload( $className )
-	{
+    public static function autoload( $className )
+    {
         ezcBase::setPackageDir();
 
-		// Check whether the classname is already in the cached autoloadArray.
-		if( array_key_exists( $className, ezcBase::$autoloadArray ) )
-		{
+        // Check whether the classname is already in the cached autoloadArray.
+        if ( array_key_exists( $className, ezcBase::$autoloadArray ) )
+        {
             // Is it registered as 'unloadable'?
-			if( ezcBase::$autoloadArray[ $className ] == false )
+            if ( ezcBase::$autoloadArray[$className] == false )
+            {
                 return false;
+            }
 
-            ezcBase::loadFile( ezcBase::$autoloadArray[ $className ] );
+            ezcBase::loadFile( ezcBase::$autoloadArray[$className] );
 
-			return true;
-		}
+            return true;
+        }
 
-		// Not cached, so load the autoload from the package.
-		// Matches the first and optionally the second 'word' from the classname.
-		if( preg_match( "/^ezc([A-Z][a-z]*)([A-Z][a-z]*)?/", $className, $matches ) !== false )
-		{
+        // Not cached, so load the autoload from the package.
+        // Matches the first and optionally the second 'word' from the classname.
+        if ( preg_match( "/^ezc([A-Z][a-z]*)([A-Z][a-z]*)?/", $className, $matches ) !== false )
+        {
             $autoloadFile = "";
-			// Try to match with both names, if available.
-			switch( sizeof($matches) )
-			{
+            // Try to match with both names, if available.
+            switch ( sizeof( $matches ) )
+            {
                 case 3:
-				$autoloadFile = strtolower( "{$matches[1]}_{$matches[2]}_autoload.php" );
-			    if( ezcBase::requireFile( $autoloadFile, $className ) )
-				    return true;
+                    $autoloadFile = strtolower( "{$matches[1]}_{$matches[2]}_autoload.php" );
+                    if ( ezcBase::requireFile( $autoloadFile, $className ) )
+                    {
+                        return true;
+                    }
+                    // break intentionally missing.
 
                 case 2:
-			    $autoloadFile = strtolower( "{$matches[1]}_autoload.php" );
-			    if( ezcBase::requireFile( $autoloadFile, $className ) )
-				    return true;
-                break;
-			}
+                    $autoloadFile = strtolower( "{$matches[1]}_autoload.php" );
+                    if ( ezcBase::requireFile( $autoloadFile, $className ) )
+                    {
+                        return true;
+                    }
+                    break;
+            }
 
-			// Maybe there is another autoload available.
-			// Register this classname as false.
-			ezcBase::$autoloadArray[ $className ] = false;
-		}
+            // Maybe there is another autoload available.
+            // Register this classname as false.
+            ezcBase::$autoloadArray[$className] = false;
+        }
 
-		return false;
-	}
+        $path = realpath( ezcBase::$packageDir . 'autoload/' );
+        trigger_error( "Couldn't find autoload file for '$className' in '$path'.", E_USER_ERROR );
+        return false;
+    }
 
     /**
      * Returns the path to the autoload directory. The path depends on
@@ -116,30 +122,30 @@ class ezcBase
      * @returns boolean  True is returned when the file is correctly loaded.
      *                   Otherwise false is returned.
      */
-	protected static function requireFile( $fileName, $className )
-	{
+    protected static function requireFile( $fileName, $className )
+    {
         $autoloadDir = ezcBase::$packageDir . "autoload/";
 
         // We need the full path to the fileName. The method file_exists() doesn't
         // automatically check the (php.ini) library paths. Therefore:
         // file_exists("ezc/autoload/$fileName") doesn't work.
-		if( file_exists( "$autoloadDir$fileName" ) )
-		{
-			$array = require_once( "$autoloadDir$fileName" );
+        if ( file_exists( "$autoloadDir$fileName" ) )
+        {
+            $array = require_once( "$autoloadDir$fileName" );
 
-		    if( array_key_exists( $className, $array ) )
+            if ( array_key_exists( $className, $array ) )
             {
                 // Add the array to the cache, and include the requested file.
-    			ezcBase::$autoloadArray = array_merge( ezcBase::$autoloadArray, $array );
-                ezcBase::loadFile( ezcBase::$autoloadArray[ $className ] );
+                ezcBase::$autoloadArray = array_merge( ezcBase::$autoloadArray, $array );
+                ezcBase::loadFile( ezcBase::$autoloadArray[$className] );
 
                 return true;
             }
-		}
+        }
 
-		// It is still not here :-(.
-		return false;
-	}
+        // It is still not here :-(.
+        return false;
+    }
 
     /**
      * Loads, require_once, the given file name. If we are in development
