@@ -1,7 +1,7 @@
 <?php
 
-// Prevent that our extended class starts to run. 
-if (!defined('PHPUnit2_MAIN_METHOD')) 
+// Prevent that our extended class starts to run.
+if (!defined('PHPUnit2_MAIN_METHOD'))
 {
     define('PHPUnit2_MAIN_METHOD', 'TestRunner::main');
 }
@@ -14,7 +14,7 @@ require_once 'PHPUnit2/Util/Filter.php';
 error_reporting( $oldErrorReporting );
 
 
-class ezcTestRunner extends PHPUnit2_TextUI_TestRunner 
+class ezcTestRunner extends PHPUnit2_TextUI_TestRunner
 {
     const SUITE_FILENAME = "tests/suite.php";
 
@@ -23,24 +23,24 @@ class ezcTestRunner extends PHPUnit2_TextUI_TestRunner
         // Call this method only once?
         $printer = new ezcTestPrinter();
         $this->setPrinter($printer);
-         
+
         // Remove this file name from the assertion trace.
         // (Displayed when a test fails)
-        PHPUnit2_Util_Filter::addFileToFilter(__FILE__);     
+        PHPUnit2_Util_Filter::addFileToFilter(__FILE__);
     }
-    
+
     /**
-     * For now, until the Console Tools is finished, we use the following 
+     * For now, until the Console Tools is finished, we use the following
      * parameters:
      *
      * Arguments:
-     * 
+     *
      * [1] => Database DSN
      * [2] => Database DSN, Suite file.
      * [3] => Database DSN, file, class name.
-     * 
+     *
      */
-    public static function main() 
+    public static function main()
     {
         $tr = new ezcTestRunner();
         $tr->runFromArguments(  $_SERVER["argv"] );
@@ -54,7 +54,7 @@ class ezcTestRunner extends PHPUnit2_TextUI_TestRunner
 
     public function runFromArguments( $args )
     {
-        if ( count( $args )  < 2 ) 
+        if ( count( $args )  < 2 )
         {
             $this->showHelp();
             return;
@@ -65,7 +65,7 @@ class ezcTestRunner extends PHPUnit2_TextUI_TestRunner
 
         // If a package is given, use that package, otherwise parse all directories.
         $packages = (isset($args[2]) ? array($args[2]) : $this->getPackages( $directory ));
-        
+
         $allSuites = new ezcTestSuite();
         $allSuites->setName( "[Testing]" );
 
@@ -99,11 +99,11 @@ class ezcTestRunner extends PHPUnit2_TextUI_TestRunner
     {
         $packages = array();
 
-        if ( is_dir( $dir ) ) 
+        if ( is_dir( $dir ) )
         {
-            if ( $dh = opendir( $dir ) ) 
+            if ( $dh = opendir( $dir ) )
             {
-                while ( ( $entry = readdir( $dh ) ) !== false ) 
+                while ( ( $entry = readdir( $dh ) ) !== false )
                 {
                     if( $this->isPackage( $dir, $entry ) ) $packages[] = $entry;
                 }
@@ -114,19 +114,19 @@ class ezcTestRunner extends PHPUnit2_TextUI_TestRunner
         return $packages;
     }
 
-    protected function isPackage( $dir, $entry ) 
+    protected function isPackage( $dir, $entry )
     {
         // Prepend directory if needed.
         $fullPath = ( $dir == "" ? $entry : $dir ."/". $entry );
 
         // Check if it is a package.
         if( !is_dir( $fullPath ) ) return false;
-        if( $entry[0] == "." ) return false; // .svn, ., .. 
+        if( $entry[0] == "." ) return false; // .svn, ., ..
 
         return true;
     }
 
-    protected function isRelease( $dir, $entry ) 
+    protected function isRelease( $dir, $entry )
     {
         // for now, they have the same rules.
         return $this->isPackage( $dir, $entry );
@@ -140,13 +140,13 @@ class ezcTestRunner extends PHPUnit2_TextUI_TestRunner
         $dir .= "/" . $package;
 
         $releases = array();
-        if ( is_dir( $dir ) ) 
+        if ( is_dir( $dir ) )
         {
-            if ( $dh = opendir( $dir ) ) 
+            if ( $dh = opendir( $dir ) )
             {
-                while ( ( $entry = readdir( $dh ) ) !== false ) 
+                while ( ( $entry = readdir( $dh ) ) !== false )
                 {
-                    if( $this->isRelease( $dir, $entry ) ) 
+                    if( $this->isRelease( $dir, $entry ) )
                     {
                         $releases[] = $entry;
                     }
@@ -161,7 +161,7 @@ class ezcTestRunner extends PHPUnit2_TextUI_TestRunner
     /**
      * Runs a specific test suite from a package and release.
      *
-     * @returns boolean True if the test has been run, false if not. 
+     * @returns boolean True if the test has been run, false if not.
      */
     protected function getTestSuite( $dir, $package, $release )
     {
@@ -182,7 +182,7 @@ class ezcTestRunner extends PHPUnit2_TextUI_TestRunner
     protected function initializeDatabase( $dsn )
     {
         $settings = ezcDbFactory::parseDSN( $dsn );
-       
+
         // Store the settings
         $ts = ezcTestSettings::getInstance();
         $ts->db->dsn = $dsn;
@@ -207,7 +207,7 @@ class ezcTestRunner extends PHPUnit2_TextUI_TestRunner
         }
 
         // TODO Check if the database exists, and whether it is empty.
-        
+
     }
 
     protected function printError( $errorString )
