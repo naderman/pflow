@@ -59,7 +59,13 @@ class ezcTestRunner extends PHPUnit2_TextUI_TestRunner
             $this->showHelp();
             return;
         }
-        $this->initializeDatabase( $args[1] );
+        try {
+            $this->initializeDatabase( $args[1] );
+        }catch( Exception $e )
+            {
+                print( "Database initialization error: {$e->getMessage()}\n" );
+                return;
+            }
 
         $directory = dirname( __FILE__ ) . "/../../../../";
 
