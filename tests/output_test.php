@@ -29,26 +29,27 @@ class ezcConsoleToolsOutputTest extends ezcTestCase
                 'in'  => array( 
                     'color' => 'blue',
                 ),
-                'out' => "\033[34;49;22;23;24m%s\033[39;49;22;23;24;27m"
+                'out' => "\033[34;49;22;23;24;27m%s\033[39;49;22;23;24;27m"
             ),
             'color_only_2' => array( 
                 'in'  => array( 
                     'color' => 'red',
                 ),
-                'out' => "\033[31;49;22;23;24m%s\033[39;49;22;23;24;27m"
+                'out' => "\033[31;49;22;23;24;27m%s\033[39;49;22;23;24;27m"
             ),
             'bgcolor_only_1' => array( 
                 'in'  => array( 
                     'bgcolor' => 'green',
                 ),
-                'out' => "\033[39;42;22;23;24m%s\033[39;49;22;23;24;27m"
+                'out' => "\033[39;42;22;23;24;27m%s\033[39;49;22;23;24;27m"
             ),
             'bgcolor_only_2' => array( 
                 'in'  => array( 
                     'bgcolor' => 'yellow',
                 ),
-                'out' => "\033[39;43;22;23;24m%s\033[39;49;22;23;24;27m"
+                'out' => "\033[39;43;22;23;24;27m%s\033[39;49;22;23;24;27m"
             ),
+            /*
             'style_only_1' => array( 
                 'in'  => array( 
                     'style' => 'bold',
@@ -61,6 +62,7 @@ class ezcConsoleToolsOutputTest extends ezcTestCase
                 ),
                 'out' => "\033[39;49;1m%s\033[39;49;22;23;24;27m"
             ),
+            */
         ),
     );
 
@@ -132,15 +134,34 @@ class ezcConsoleToolsOutputTest extends ezcTestCase
         foreach ( $this->testData['format'] as $name => $inout ) 
         {
             $realRes = $this->consoleOutput->styleText( $this->testString, $name );
-            var_dump( $realRes );
+//            $this->dumpString($realRes);
             $fakeRes = sprintf( $inout['out'], $this->testString );
-            var_dump( $fakeRes );
+//            $this->dumpString($fakeRes);
             $this->assertTrue( $realRes == $fakeRes );
         }
     }
 
     // }}}
 
+    // {{{ dumpString()
+
+    /**
+     * dumpString 
+     * 
+     * @param mixed $string 
+     * @return void
+     */
+    private function dumpString( $string )
+    {
+        echo "Dumping string of length ".strlen( $string ).":\n\n";
+        for ( $i = 0; $i < strlen( $string ); $i++ )
+        {
+            echo '"' . $string[$i] . '" = -' . ord( $string[$i] ) . "-\n";
+        }
+        echo "Finished dumping string.\n\n";
+    }
+
+    // }}}
 }
 
 ?>
