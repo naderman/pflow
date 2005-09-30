@@ -60,6 +60,7 @@
 // }}}
 class ezcConsoleOutput
 {
+    
     // {{{ $options
 
     /**
@@ -99,8 +100,9 @@ class ezcConsoleOutput
      */
     private $options = array(
         'verboseLevel'  => 1,
+        'autobreak'     => 0,
         'useFormats'    => true,    // Whether to enable formatting or not
-        'format'       => array(
+        'format'        => array(
             // default format not re-defined by default (uses system default)
             'success'    => array(     // define format "success" (standard format)
                 'color'   => 'green',  // green foreground color
@@ -117,6 +119,7 @@ class ezcConsoleOutput
     );
 
     // }}}
+
     // {{{ $colors
 
     /**
@@ -214,6 +217,21 @@ class ezcConsoleOutput
     );
 
     // }}}
+    
+    // {{{ $positionStored
+
+    /**
+     * Whether a position has been stored before, using the
+     * storePos() method.
+     *
+     * @see ezcConsoleOutput::storePos()
+     * @var bool
+     */
+    protected $positionStored = false;
+
+    // }}}
+
+    // Public
 
     // {{{ __construct()
 
@@ -232,6 +250,7 @@ class ezcConsoleOutput
     }
 
     // }}}
+        
     // {{{ setOptions()
 
     /**
@@ -244,7 +263,21 @@ class ezcConsoleOutput
      * @return void
      */
     public function setOptions( $options ) {
-        $this->setOptionsRecursive( $this->options, $options );
+        if ( isset( $options['format'] ) ) {
+            $this->setFormats( $options['format'] );
+            unset( $options['format'] );
+        }
+        foreach ( $options as $name => $val ) 
+        {
+            if ( isset( $this->options[$name] ) ) 
+            {
+                $this->options[$name] = $val;
+            } 
+            else 
+            {
+                trigger_error( 'Unknowen option "' . $name  . '".', E_USER_WARNING );
+            }
+        }
     }
 
     // }}}
@@ -263,6 +296,7 @@ class ezcConsoleOutput
     }
 
     // }}}
+    
     // {{{ outputText()
 
     /**
@@ -279,7 +313,7 @@ class ezcConsoleOutput
      */
     public function outputText( $text, $format = 'default', $verboseLevel = 1 ) 
     {
-        if ( $this->options['verbose'] >= $verboseLevel ) 
+        if ( $this->options['verboseLevel'] >= $verboseLevel ) 
         {
             echo ( $this->options['useFormats'] == true ) ? $this->styleText( $text, $format ) : $text;
         }
@@ -307,6 +341,7 @@ class ezcConsoleOutput
     }
 
     // }}}
+
     // {{{ storePos()
 
     /**
@@ -323,7 +358,8 @@ class ezcConsoleOutput
      */
     public function storePos() 
     {
-        
+        return "\033[s";
+        $this->positionStored = true;
     }
 
     // }}}
@@ -340,35 +376,48 @@ class ezcConsoleOutput
      */
     public function restorePos() 
     {
-        
+        if ( !$this->positionStored )
+        {
+            throw new ezcConsoleOutputException( 'Cannot restore position, if no position has been stored before.',  ezcConsoleOutputException::CODE_NOPOSSTORED);
+            return;
+        }
+        echo "\033[u";        
+    }
+
+    // }}}
+    // {{{ toPos()
+
+    /**
+     * Move the cursor to a specific column of the current line.
+     * Moves the cursor to a specific column index of the current line (
+     * default is 1).
+     * 
+     * @param int $col Column to jump to.
+     * @return void
+     */
+    public function toPos( $col = 1 ) 
+    {
+        echo "\033[" . $column . "G";
     }
 
     // }}}
 
-    // {{{ setOptionsRecursive()
+    // Private
+
+    // {{{ setFormats()
 
     /**
-     * Set options recursivly without loosing options already set.
-     * This methed recursivly sets the options from an array submitted
-     * to it. Existing options which are not set to be changed will
-     * be protected.
+     * Set formating options.
+     * Sub method to set formating options.
      * 
-     * @param array $current Reference to the current array to process.
-     * @param array $new     (Multidimensional) Array of new options to be set.
+     * @param array $newFormats Array of new formats to be set.
      * @return void
      */
-    private function setOptionsRecursive( &$current, $new )
+    private function setFormats( $newFormats )
     {
-        foreach ( $new as $key => $val ) 
+        foreach ( $newFormats as $name => $format ) 
         {
-            if ( is_array( $new[$key] ) ) 
-            {
-                $this->setOptionsRecursive( $current[$key], $new[$key] );
-            } 
-            else 
-            {
-                $current[$key] = $new[$key];
-            }
+            $this->options['format'][$name] = $format;
         }
     }
 

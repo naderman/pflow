@@ -21,52 +21,72 @@ class ezcConsoleToolsOutputTest extends ezcTestCase
     private $testString = "a passion for php";
 
     // }}}
-    // {{{ $testData
+    // {{{ $testFormats
 
-    private $testData = array( 
-        'format' => array( 
-            'color_only_1' => array(
-                'in'  => array( 
-                    'color' => 'blue',
-                ),
-                'out' => "\033[34;49;22;23;24;27m%s\033[39;49;22;23;24;27m"
+    private $testFormats = array(
+        'color_only_1' => array(
+            'in'  => array( 
+                'color' => 'blue',
             ),
-            'color_only_2' => array( 
-                'in'  => array( 
-                    'color' => 'red',
-                ),
-                'out' => "\033[31;49;22;23;24;27m%s\033[39;49;22;23;24;27m"
+            'out' => "\033[34;49;22;23;24;27m%s\033[39;49;22;23;24;27m"
+        ),
+        'color_only_2' => array( 
+            'in'  => array( 
+                'color' => 'red',
             ),
-            'bgcolor_only_1' => array( 
-                'in'  => array( 
-                    'bgcolor' => 'green',
-                ),
-                'out' => "\033[39;42;22;23;24;27m%s\033[39;49;22;23;24;27m"
+            'out' => "\033[31;49;22;23;24;27m%s\033[39;49;22;23;24;27m"
+        ),
+        'bgcolor_only_1' => array( 
+            'in'  => array( 
+                'bgcolor' => 'green',
             ),
-            'bgcolor_only_2' => array( 
-                'in'  => array( 
-                    'bgcolor' => 'yellow',
-                ),
-                'out' => "\033[39;43;22;23;24;27m%s\033[39;49;22;23;24;27m"
+            'out' => "\033[39;42;22;23;24;27m%s\033[39;49;22;23;24;27m"
+        ),
+        'bgcolor_only_2' => array( 
+            'in'  => array( 
+                'bgcolor' => 'yellow',
             ),
-            /*
-            'style_only_1' => array( 
-                'in'  => array( 
-                    'style' => 'bold',
-                ),
-                'out' => "\033[39;49;1m%s\033[39;49;22;23;24;27m"
+            'out' => "\033[39;43;22;23;24;27m%s\033[39;49;22;23;24;27m"
+        ),
+        'style_only_1' => array( 
+            'in'  => array( 
+                'style' => 'bold',
             ),
-            'style_only_2' => array( 
-                'in'  => array( 
-                    'style' => 'negative',
-                ),
-                'out' => "\033[39;49;1m%s\033[39;49;22;23;24;27m"
+            'out' => "\033[39;49;1m%s\033[39;49;22;23;24;27m"
+        ),
+        'style_only_2' => array( 
+            'in'  => array( 
+                'style' => 'negative',
             ),
-            */
+            'out' => "\033[39;49;7m%s\033[39;49;22;23;24;27m"
         ),
     );
 
     // }}}
+    // {{{ $testOptions
+
+    private $testOptions = array( 
+        'set_1' => array( 
+            'verboseLevel'      => 1,
+        ),
+        'set_2' => array( 
+            'verboseLevel'      => 5,
+            'autobreak'         => 20,
+            'useFormats'        => false,
+        ),
+        'set_3' => array( 
+            'autobreak'         => 5,
+            'useFormats'        => true,
+            'format'            => array( 
+                'color' => 'blue',
+                'bgcolor' => 'green',
+                'style' => 'negative',
+            ),
+        ),
+    );
+
+    // }}}
+
     // {{{ $consoleOutput
 
     /**
@@ -98,7 +118,7 @@ class ezcConsoleToolsOutputTest extends ezcTestCase
     public function setUp()
     {
         $options = array();
-        foreach ( $this->testData['format'] as $name => $inout ) 
+        foreach ( $this->testFormats as $name => $inout ) 
         {
             $options['format'][$name] = $inout['in'];
         }
@@ -121,23 +141,62 @@ class ezcConsoleToolsOutputTest extends ezcTestCase
 
     // }}} 
 
-    // {{{ testFormatTextSuccess()
+    // {{{ testSetOptions()
 
     /**
-     * testFormatTextSuccess 
+     * testSetOptions
      * 
      * @access public
      * @return 
      */
-    public function testFormatTextSuccess()
+    public function testSetOptions()
     {
-        foreach ( $this->testData['format'] as $name => $inout ) 
+        foreach ( $this->testOptions as $name => $optIn )
+        {
+            $this->consoleOutput->setOptions( $optIn );
+            $optOut = $this->consoleOutput->getOptions();
+            $this->assertTrue( array_intersect( $optIn, $optOut ) == $optIn, 'Options not correctly set. Returned options array did not contain options set before.' );
+        }
+    }
+
+    // }}}
+    // {{{ testFormatText()
+
+    /**
+     * testFormatText
+     * 
+     * @access public
+     * @return 
+     */
+    public function testFormatText()
+    {
+        foreach ( $this->testFormats as $name => $inout ) 
         {
             $realRes = $this->consoleOutput->styleText( $this->testString, $name );
-//            $this->dumpString($realRes);
             $fakeRes = sprintf( $inout['out'], $this->testString );
-//            $this->dumpString($fakeRes);
-            $this->assertTrue( $realRes == $fakeRes );
+            $this->assertTrue( $realRes == $fakeRes, 'Test "' . $name . ' faile. String "' . $realRes . '" (real) is not equal to "' . $fakeRes . '" (fake).' );
+        }
+    }
+
+    // }}}
+    // {{{ testOutputText()
+
+    /**
+     * testOutputText
+     * 
+     * @access public
+     * @return 
+     */
+    public function testOutputText()
+    {
+        foreach ( $this->testFormats as $name => $inout ) 
+        {
+            ob_start();
+            $this->consoleOutput->outputText( $this->testString, $name );
+            $realRes = ob_get_contents();
+            ob_clean();
+            $fakeRes = sprintf( $inout['out'], $this->testString );
+            $this->assertTrue( $realRes == $fakeRes, 'Test "' . $name . ' faile. String "' . $realRes . '" (real) is not equal to "' . $fakeRes . '" (fake).' );
         }
     }
 

@@ -19,4 +19,9 @@
  */
 class ezcConsoleOutputException extends Exception
 {
+    /**
+     * Error code to indicate that a position should be restored, where
+     * no position has been stored before.
+     */
+    const CODE_NOPOSSTORED = 1;
 }
