@@ -59,13 +59,16 @@ class ezcTestRunner extends PHPUnit2_TextUI_TestRunner
             $this->showHelp();
             return;
         }
-        try {
+
+        try 
+        {
             $this->initializeDatabase( $args[1] );
-        }catch( Exception $e )
-            {
-                print( "Database initialization error: {$e->getMessage()}\n" );
-                return;
-            }
+        }
+        catch( Exception $e )
+        {
+            print( "Database initialization error: {$e->getMessage()}\n" );
+            return;
+        }
 
         $directory = dirname( __FILE__ ) . "/../../../../";
 
@@ -192,12 +195,14 @@ class ezcTestRunner extends PHPUnit2_TextUI_TestRunner
         // Store the settings
         $ts = ezcTestSettings::getInstance();
         $ts->db->dsn = $dsn;
+
         try
         {
             $ts->setDatabaseSettings( $settings );
             $db = ezcDbFactory::create( $settings );
             ezcDbInstance::set( $db );
-        } catch( ezcDbException $e)
+        }
+        catch( ezcDbException $e)
         {
             switch( $e->getCode() )
             {
