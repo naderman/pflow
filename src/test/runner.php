@@ -71,7 +71,10 @@ class ezcTestRunner extends PHPUnit2_TextUI_TestRunner
         $this->printCredits();
 
         print( "[Preparing tests]:");
-        $allSuites = $this->prepareTests();
+
+        // If a package is given, use that package, otherwise parse all directories.
+        $packages = (isset($args[2]) ? array($args[2]) : false);
+        $allSuites = $this->prepareTests($packages);
 
         $this->doRun($allSuites);
     }
@@ -84,13 +87,10 @@ class ezcTestRunner extends PHPUnit2_TextUI_TestRunner
         print("ezcUnitTest uses the ".substr($version, 0, $pos)."framework from Sebastian Bergmann.\n\n");
     }
 
-    protected function prepareTests()
+    protected function prepareTests($onePackage = false)
     {
         $directory = dirname( __FILE__ ) . "/../../../../";
-
-        // If a package is given, use that package, otherwise parse all directories.
-        $packages = (isset($args[2]) ? array($args[2]) : $this->getPackages( $directory ));
-
+        $packages = ($onePackage ? $onePackage : $this->getPackages( $directory ) );
  
         $allSuites = new ezcTestSuite();
         $allSuites->setName( "[Testing]" );
