@@ -73,7 +73,7 @@ class ezcTestRunner extends PHPUnit2_TextUI_TestRunner
         print( "[Preparing tests]:");
 
         // If a package is given, use that package, otherwise parse all directories.
-        $packages = (isset($args[2]) ? array($args[2]) : false);
+        $packages = (isset($args[2]) ? $args[2] : false);
         $allSuites = $this->prepareTests($packages);
 
         $this->doRun($allSuites);
@@ -90,21 +90,42 @@ class ezcTestRunner extends PHPUnit2_TextUI_TestRunner
     protected function prepareTests($onePackage = false)
     {
         $directory = dirname( __FILE__ ) . "/../../../../";
-        $packages = ($onePackage ? $onePackage : $this->getPackages( $directory ) );
  
         $allSuites = new ezcTestSuite();
         $allSuites->setName( "[Testing]" );
 
-        foreach ($packages as $package)
+        if( strpos( $onePackage, "/" ) !== false )
         {
-            $releases = $this->getReleases( $directory, $package );
-
-            foreach( $releases as $release )
+            if( file_exists( $onePackage ) )
             {
-                 $suite = $this->getTestSuite( $directory, $package, $release );
+                require_once( $onePackage );
+                $class = $this->getClassName( $onePackage );
 
-                if ( !is_null( $suite ) )
-                    $allSuites->addTest($suite);
+                if ($class !== false)
+                {
+                    $allSuites->addTest( call_user_func( array( $class, 'suite' ) ) );
+                }
+                else
+                {
+                    echo ("\n  Cannot load: $onePackage. \n");
+                }
+            }
+        }
+        else
+        {
+            $packages = ($onePackage ? array($onePackage) : $this->getPackages( $directory ) );
+
+            foreach ($packages as $package)
+            {
+                $releases = $this->getReleases( $directory, $package );
+
+                foreach( $releases as $release )
+                {
+                     $suite = $this->getTestSuite( $directory, $package, $release );
+
+                    if ( !is_null( $suite ) )
+                        $allSuites->addTest($suite);
+                }
             }
         }
 
@@ -115,6 +136,25 @@ class ezcTestRunner extends PHPUnit2_TextUI_TestRunner
     {
     }
 
+    public function getClassName( $file )
+    {
+        $classes = get_declared_classes();
+
+        $size = count($classes);
+        $total = ($size > 30 ? 30 : $size);
+
+        // check only the last 30 classes.
+        for ($i = $size - 1; $i > $size - $total - 1; $i--)
+        {
+            $rf = new ReflectionClass( $classes[$i] );
+
+            $len = strlen($file);
+            if( strcmp( $file, substr( $rf->getFileName(), -$len ) ) == 0 )
+            {
+                return $classes[$i];
+            }
+        }
+    }
 
     /**
      * @param string $dir Absolute or relative path to directory to look in.
