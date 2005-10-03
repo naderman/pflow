@@ -6,8 +6,7 @@ if (!defined('PHPUnit2_MAIN_METHOD'))
     define('PHPUnit2_MAIN_METHOD', 'TestRunner::main');
 }
 
-// FIXME: Het switchen van de PEAR error is nodig omdat PEAR nog niet helemaal
-// netjes werkt met E_STRICT helaas.
+// FIXME: Circumvent the E_STRICT errors from PEAR itself.
 $oldErrorReporting = error_reporting( 0 );
 require_once 'PHPUnit2/TextUI/TestRunner.php';
 require_once 'PHPUnit2/Util/Filter.php';
@@ -69,12 +68,27 @@ class ezcTestRunner extends PHPUnit2_TextUI_TestRunner
             print( "Database initialization error: {$e->getMessage()}\n" );
             return;
         }
+        $this->printCredits();
 
+        print( "[Preparing tests]:");
+        $allSuites = $this->prepareTests();
+
+        $this->doRun($allSuites);
+    }
+
+    protected function printCredits()
+    {
+        print("ezcUnitTest uses the PHPUnit @package_version@ framework from Sebastian Bergmann.\n\n");
+    }
+
+    protected function prepareTests()
+    {
         $directory = dirname( __FILE__ ) . "/../../../../";
 
         // If a package is given, use that package, otherwise parse all directories.
         $packages = (isset($args[2]) ? array($args[2]) : $this->getPackages( $directory ));
 
+ 
         $allSuites = new ezcTestSuite();
         $allSuites->setName( "[Testing]" );
 
@@ -91,7 +105,7 @@ class ezcTestRunner extends PHPUnit2_TextUI_TestRunner
             }
         }
 
-        $this->doRun($allSuites);
+        return $allSuites;
     }
 
     public function runTest( $filename )
@@ -180,6 +194,17 @@ class ezcTestRunner extends PHPUnit2_TextUI_TestRunner
             require_once( $suitePath );
 
             $className = "ezc". $package . "Suite";
+           
+            if (method_exists( $className, "canRun" ) )
+            {
+                $canRun = call_user_func( array( $className, 'canRun' ) );
+                if( $canRun == false )
+                {
+                    print( "\n  Skipped: $className because the requirements for this test are not met. canRun() method returned false." );
+                    return null;
+                }
+            }
+            
             $s = call_user_func( array( $className, 'suite' ) );
 
             return $s;
