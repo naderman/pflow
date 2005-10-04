@@ -40,7 +40,7 @@ class ezcConsoleParameterException extends Exception
     /**
      * The named parameter is not registered
      */
-    const CODE_UNKNOWEN   = 5;
+    const CODE_UNKNOWN   = 5;
 
     /**
      * Parameter this exception is about.
