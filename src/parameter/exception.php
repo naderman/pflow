@@ -55,10 +55,10 @@ class ezcConsoleParameterException extends Exception
      * For error codes, see class constants!
      *
      * @param string string $message   Error message.
-     * @param string string $paramName Name of affected parameter
      * @param int $code                Error code.
+     * @param string string $paramName Name of affected parameter
      */
-    public function __construct( $message, $paramName, $code ) {
+    public function __construct( $message, $code, $paramName = null ) {
         $this->paramName = $paramName;
         parent::__construct( $message, $code );
     }

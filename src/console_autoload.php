@@ -1,8 +1,9 @@
 <?php
 
 return array (
-	'ezcConsoleOutput' => 'ConsoleTools/console/output.php',
-	'ezcConsoleParameter' => 'ConsoleTools/console/parameter.php',
+	'ezcConsoleOutput' => 'ConsoleTools/output.php',
+	'ezcConsoleParameter' => 'ConsoleTools/parameter.php',
+	'ezcConsoleParameterException' => 'ConsoleTools/parameter/exception.php',
 );
 
 ?>

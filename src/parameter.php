@@ -109,7 +109,7 @@ class ezcConsoleParameter
      * @var array(string => mixed)
      */
     private $defaults = array( 
-        'type'      => TYPE_NONE,
+        'type'      => ezcConsoleParameter::TYPE_NONE,
         'default'   => null,
         'multiple'  => false,
         'short'     => '',
@@ -201,7 +201,11 @@ class ezcConsoleParameter
      */
     public function registerAlias( $short, $long, $refShort ) {
         if ( !isset( $this->paramShort[$refShort] ) ) {
-            throw new ezcConsoleParameterException( 'Unknown parameter reference "' . $refShort . '".', ezcConsoleParameterException::CODE_EXISTANCE );
+            throw new ezcConsoleParameterException( 
+                'Unknown parameter reference "' . $refShort . '".', 
+                ezcConsoleParameterException::CODE_EXISTANCE, 
+                $refShort 
+            );
         }
         $this->paramShort[$short] = $this->paramShort[$refShort];
         $this->paramLong[$long] = $this->paramShort[$refShort];
@@ -230,7 +234,11 @@ class ezcConsoleParameter
      */
     public function unregisterParam( $short, $deps = false ) {
         if ( !isset( $this->paramShort[$short] ) ) {
-            throw new ezcConsoleParameterException( 'Unknown parameter reference "' . $short . '".', ezcConsoleParameterException::CODE_EXISTANCE );
+            throw new ezcConsoleParameterException( 
+                'Unknown parameter reference "' . $short . '".', 
+                ezcConsoleParameterException::CODE_EXISTANCE, 
+                $short 
+            );
         }
         $defKey = $this->paramShort[$short];
         // Unset long reference
@@ -253,13 +261,17 @@ class ezcConsoleParameter
     {
         if ( isset( $this->paramShort[$paramName] ) ) 
         {
-            return $this->paramDefs[$this->paramShort[$paramName]];
+            return $this->paramDefs[$this->paramShort[$paramName]]['options'];
         }
         if ( isset( $this->paramLong[$paramName] ) )
         {
-            return $this->paramDefs[$this->paramLong[$paramName]];
+            return $this->paramDefs[$this->paramLong[$paramName]]['options'];
         }
-        throw new ezcConsoleParameterException( 'Unknown parameter reference "' . $paramName . '".', ezcConsoleParameterException::CODE_EXISTANCE );
+        throw new ezcConsoleParameterException( 
+            'Unknown parameter reference "' . $paramName . '".', 
+            ezcConsoleParameterException::CODE_EXISTANCE,
+            $paramName
+        );
     }
 
     /**
@@ -279,6 +291,8 @@ class ezcConsoleParameter
      *
      * @param string $paramDef Parameter definition string.
      * @throws ezcConsoleParameterException If string is not wellformed.
+     *
+     * @todo Implement.
      */
     public function fromString( $paramDef ) {
         
@@ -324,7 +338,11 @@ class ezcConsoleParameter
      *               value or false on not set.
      */
     public function getParam( $short ) {
-        
+        if ( isset( $this->paramValues[$short] ) )
+        {
+            return $this->paramValues[$short];
+        }
+        return false;
     }
 
     /**
@@ -416,6 +434,6 @@ class ezcConsoleParameter
      */
     public function getDefaults()
     {
-        return $this->paramDefaults;
+        return $this->defaults;
     }
 }

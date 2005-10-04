@@ -1,6 +1,7 @@
 <?php
 
-require_once( "output_test.php");
+require_once 'output_test.php';
+require_once 'parameter_test.php';
     
 class ezcConsoleToolsSuite extends ezcTestSuite
 {
@@ -10,6 +11,7 @@ class ezcConsoleToolsSuite extends ezcTestSuite
         $this->setName( "ConsoleTools" );
 
 		$this->addTest( ezcConsoleToolsOutputTest::suite() );
+		$this->addTest( ezcConsoleToolsParameterTest::suite() );
 	}
 
     public static function suite()
