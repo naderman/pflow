@@ -37,6 +37,10 @@ class ezcConsoleParameterException extends Exception
      * Type rule defined for parameter not met.
      */
     const CODE_TYPE       = 4;
+    /**
+     * The named parameter is not registered
+     */
+    const CODE_UNKNOWEN   = 5;
 
     /**
      * Parameter this exception is about.
