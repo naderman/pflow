@@ -66,8 +66,41 @@ class ezcConsoleParameter
     const TYPE_INT      = 2;
     const TYPE_STRING   = 3;
 
+    
+    /**
+     * Array of parameter definitions, indexed by number.
+     * This array contains the paremeter definitions (short name, long name and
+     * options) assigned to a number index. This index gets referenced by the
+     * {@link ezcConsoleParameter::$paramShort} and 
+     * {@link ezcConsoleParameter::$paramLong} arrays, which are indexed by the specific
+     * parameter name.
+     * 
+     * @var array(int => array)
+     */
     private $paramDefs = array();
 
+    /**
+     * Short paraemeter names. Each references a key in 
+     * {@link ezcConsoleParameter::$paramDefs}.
+     * 
+     * @var array(string => int)
+     */
+    private $paramShort = array();
+
+    /**
+     * Long paraemeter names. Each references a key in 
+     * {@link ezcConsoleParameter::$paramDefs}.
+     * 
+     * @var array(string => int)
+     */
+    private $paramLong = array();
+
+    /**
+     * Values submitted for a parameter, indexed by the key used for
+     * {ezcConsoleParameter::$paramDefs}.
+     * 
+     * @var array(int => mixed)
+     */
     private $paramValues = array();
 
     /**
@@ -123,7 +156,15 @@ class ezcConsoleParameter
      * @return void
      */
     public function registerParam( $short, $long, $options = array() ) {
-        
+        end( $this->paramDefs );
+        $nextKey = key( $this->paramDefs ) + 1;
+        $this->paramDefs[$nextKey] = array( 
+            'long'    => $long,
+            'short'   => $short,
+            'options' => $options,
+        );
+        $this->paramShort[$short] = $nextKey;
+        $this->paramLong[$long] = $nextKey;
     }
 
     /**
@@ -138,9 +179,16 @@ class ezcConsoleParameter
      * @param strung $refShort Reference to an existing param (short)
      *
      * @return void
+     *
+     * @throws ezcConsoleParameterException
+     * @see ezcConsoleParameterException::CODE_EXISTANCE
      */
     public function registerAlias( $short, $long, $refShort ) {
-        
+        if ( !isset( $this->paramShort[$refShort] ) ) {
+            throw new ezcConsoleParameterException( 'Unknown parameter reference "' . $refShort . '".', ezcConsoleParameterException::CODE_EXISTANCE );
+        }
+        $this->paramShort[$short] = $this->paramShort[$refShort];
+        $this->paramLong[$long] = $this->paramShort[$refShort];
     }
 
     /**
@@ -161,27 +209,41 @@ class ezcConsoleParameter
      * @throws ezcConsoleParameterException 
      *         If requesting a nonexistant parameter 
      *         {@link ezcConsoleParameterException::CODE_EXISTANCE}.
+     *
+     * @todo Implement dependency check.
      */
     public function unregisterParam( $short, $deps = false ) {
-        
+        if ( !isset( $this->paramShort[$short] ) ) {
+            throw new ezcConsoleParameterException( 'Unknown parameter reference "' . $short . '".', ezcConsoleParameterException::CODE_EXISTANCE );
+        }
+        $defKey = $this->paramShort[$short];
+        // Unset long reference
+        unset( $this->paramLong[$this->paramDefs[$defKey]['long']] );
+        // Unset short reference
+        unset( $this->paramShort[$short] );
+        // Unset parameter definition itself
+        unset( $this->paramDefs[$defKey] );
     }
-    
+
     /**
-     * Remove an alias  to be no more supported.
-     * Unregisteres an existing alias.
-     *
-     * @see ezcConsoleParameter::registerAlias()
+     * Returns the options defined for a specific parameter.
+     * This method receives the long or short name of a parameter and
+     * returns the options associated with it.
      * 
-     * @param string $short Short option name for the parameter to be removed.
-     *
-     * @return void
-     *
-     * @throws ezcConsoleParameterException 
-     *         If requesting a nonexistant alias 
-     *         {@link ezcConsoleParameterException::CODE_EXISTANCE}.
+     * @param string $param Short or long name of the parameter.
+     * @return array(string) Options set for the parameter.
      */
-    public function unregisterAlias( $short ) {
-        
+    public function getParamDef( $paramName )
+    {
+        if ( isset( $this->paramShort[$paramName] ) ) 
+        {
+            return $this->paramDefs[$this->paramShort[$paramName]];
+        }
+        if ( isset( $this->paramLong[$paramName] ) )
+        {
+            return $this->paramDefs[$this->paramLong[$paramName]];
+        }
+        throw new ezcConsoleParameterException( 'Unknown parameter reference "' . $paramName . '".', ezcConsoleParameterException::CODE_EXISTANCE );
     }
 
     /**
