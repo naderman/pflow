@@ -1,4 +1,6 @@
 <?php
+// {{{ DOC file
+
 /**
  * File containing the ezcConsoleParameter class.
  *
@@ -7,6 +9,10 @@
  * @copyright Copyright (C) 2005 eZ systems as. All rights reserved.
  * @license LGPL {@link http://www.gnu.org/copyleft/lesser.html}
  */
+
+// }}}
+
+// {{{ DOC class
 
 /**
  * Class for handling console parameters.
@@ -59,14 +65,33 @@
  * @copyright Copyright (C) 2005 eZ systems as. All rights reserved.
  * @license LGPL {@link http://www.gnu.org/copyleft/lesser.html}
  */
+
+// }}}
 class ezcConsoleParameter
 {
 
+    // {{{ class constants
+
+    /**
+     * Parameter does not cary a value.
+     */
     const TYPE_NONE     = 1;
+
+    /**
+     * Parameter takes an integer value.
+     */
     const TYPE_INT      = 2;
+
+    /**
+     * Parameter takes a string value. 
+     */
     const TYPE_STRING   = 3;
 
+    // }}}
+
     
+    // {{{ $paramDefs
+
     /**
      * Array of parameter definitions, indexed by number.
      * This array contains the paremeter definitions (short name, long name and
@@ -79,6 +104,9 @@ class ezcConsoleParameter
      */
     private $paramDefs = array();
 
+    // }}}
+    // {{{ $paramShort
+
     /**
      * Short paraemeter names. Each references a key in 
      * {@link ezcConsoleParameter::$paramDefs}.
@@ -86,6 +114,9 @@ class ezcConsoleParameter
      * @var array(string => int)
      */
     private $paramShort = array();
+
+    // }}}
+    // {{{ $paramLong
 
     /**
      * Long paraemeter names. Each references a key in 
@@ -95,6 +126,9 @@ class ezcConsoleParameter
      */
     private $paramLong = array();
 
+    // }}}
+    // {{{ $paramValues
+
     /**
      * Values submitted for a parameter, indexed by the key used for
      * {ezcConsoleParameter::$paramDefs}.
@@ -102,6 +136,9 @@ class ezcConsoleParameter
      * @var array(int => mixed)
      */
     private $paramValues = array();
+
+    // }}}
+    // {{{ $defaults
 
     /**
      * Default values for parameter options. 
@@ -119,12 +156,20 @@ class ezcConsoleParameter
         'arguments' => true,
     );
 
+    // }}}
+
+    // {{{ __construct()
+
     /**
      * Create parameter handler
      */
     public function __construct() {
         
     }
+
+    // }}}
+
+    // {{{ registerParam()
 
     /**
      * Register a new parameter.
@@ -183,6 +228,9 @@ class ezcConsoleParameter
         $this->paramLong[$long] = $nextKey;
     }
 
+    // }}}
+    // {{{ registerAlias()
+
     /**
      * Register an alias to a parameter.
      * Registers a new alias for an existing parameter. Aliases may
@@ -210,6 +258,36 @@ class ezcConsoleParameter
         $this->paramShort[$short] = $this->paramShort[$refShort];
         $this->paramLong[$long] = $this->paramShort[$refShort];
     }
+
+    // }}}
+    // {{{ fromString()
+
+    /**
+     * Registeres parameters according to a string specification.
+     * Accepts a string like used in eZ publis 3.x to define parameters and
+     * registeres all parameters accordingly. String definitions look like
+     * this:
+     *
+     * <code>
+     * [s:|size:][u:|user:][a:|all:]
+     * </code>
+     *
+     * This string will result in 3 parameters:
+     * -s / --size
+     * -u / --user
+     * -a / --all
+     *
+     * @param string $paramDef Parameter definition string.
+     * @throws ezcConsoleParameterException If string is not wellformed.
+     *
+     * @todo Implement.
+     */
+    public function fromString( $paramDef ) {
+        
+    }
+
+    // }}}
+    // {{{ unregisterParam()
 
     /**
      * Remove a parameter to be no more supported.
@@ -249,6 +327,10 @@ class ezcConsoleParameter
         unset( $this->paramDefs[$defKey] );
     }
 
+    // }}}
+
+    // {{{ getParamDef()
+
     /**
      * Returns the options defined for a specific parameter.
      * This method receives the long or short name of a parameter and
@@ -274,29 +356,9 @@ class ezcConsoleParameter
         );
     }
 
-    /**
-     * Registeres parameters according to a string specification.
-     * Accepts a string like used in eZ publis 3.x to define parameters and
-     * registeres all parameters accordingly. String definitions look like
-     * this:
-     *
-     * <code>
-     * [s:|size:][u:|user:][a:|all:]
-     * </code>
-     *
-     * This string will result in 3 parameters:
-     * -s / --size
-     * -u / --user
-     * -a / --all
-     *
-     * @param string $paramDef Parameter definition string.
-     * @throws ezcConsoleParameterException If string is not wellformed.
-     *
-     * @todo Implement.
-     */
-    public function fromString( $paramDef ) {
-        
-    }
+    // }}}
+
+    // {{{ process()
 
     /**
      * Process the input parameters.
@@ -327,7 +389,11 @@ class ezcConsoleParameter
     public function process( $args = null ) {
         
     }
+
+    // }}}
     
+    // {{{ getParam()
+
     /**
      * Receive the data for a specific parameter.
      * Returns the data sumbitted for a specific parameter.
@@ -344,6 +410,9 @@ class ezcConsoleParameter
         }
         return false;
     }
+
+    // }}}
+    // {{{ getArguments()
 
     /**
      * Returns arguments provided to the program.
@@ -363,6 +432,9 @@ class ezcConsoleParameter
     public function getArguments() {
         
     }
+
+    // }}}
+    // {{{ getHelp()
 
     /**
      * Returns array of help info on parameters.
@@ -391,6 +463,9 @@ class ezcConsoleParameter
     public function getHelp( $short = null ) {
 
     }
+
+    // }}}
+    // {{{ getHelpText()
 
     /**
      * Returns string of help info on parameters.
@@ -427,6 +502,9 @@ class ezcConsoleParameter
         
     }
 
+    // }}}
+    // {{{ getDefaults()
+
     /**
      * Return the default values for parameter options.
      * 
@@ -436,4 +514,7 @@ class ezcConsoleParameter
     {
         return $this->defaults;
     }
+
+    // }}}
+
 }
