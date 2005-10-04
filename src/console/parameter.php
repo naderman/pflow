@@ -104,6 +104,22 @@ class ezcConsoleParameter
     private $paramValues = array();
 
     /**
+     * Default values for parameter options. 
+     * 
+     * @var array(string => mixed)
+     */
+    private $defaults = array( 
+        'type'      => TYPE_NONE,
+        'default'   => null,
+        'multiple'  => false,
+        'short'     => '',
+        'long'      => '',
+        'depends'   => array(),
+        'excludes'  => array(),
+        'arguments' => true,
+    );
+
+    /**
      * Create parameter handler
      */
     public function __construct() {
@@ -161,7 +177,7 @@ class ezcConsoleParameter
         $this->paramDefs[$nextKey] = array( 
             'long'    => $long,
             'short'   => $short,
-            'options' => $options,
+            'options' => array_merge( $this->defaults, $options ),
         );
         $this->paramShort[$short] = $nextKey;
         $this->paramLong[$long] = $nextKey;
@@ -391,5 +407,15 @@ class ezcConsoleParameter
      */
     public function getHelpText( $short = null ) {
         
+    }
+
+    /**
+     * Return the default values for parameter options.
+     * 
+     * @return array(string => mixed)
+     */
+    public function getDefaults()
+    {
+        return $this->paramDefaults;
     }
 }
