@@ -184,7 +184,7 @@ class ezcBase
     public static function assertType( $instance, $type )
     {
         if ( !( $instance instanceof $type) ) 
-            throw new ezcBaseTypeException( gettype( $instance ), $type);
+            throw new ezcBaseTypeException( $type, gettype( $instance ) );
     }
 }
 
