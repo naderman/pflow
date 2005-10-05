@@ -158,6 +158,19 @@ class ezcConsoleParameter
 
     // }}}
 
+    // {{{ $argumentsAllowed
+
+    /**
+     * Are arguments allowed beside parameters? 
+     * This attributes changes to false, if a parameter excludes
+     * the usage of arguments.
+     * 
+     * @var bool True if arguments are allowed, otherwise false.
+     */
+    private $argumentsAllowed = true;
+
+    // }}}
+
     // {{{ __construct()
 
     /**
@@ -374,20 +387,226 @@ class ezcConsoleParameter
      * 
      * @param array(int -> string) $args The arguments
      *
-     * @throws ezcConsoleParameterDependecyException 
+     * @throws ezcConsoleParameterException 
      *         If dependencies are unmet 
      *         {@link ezcConsoleParameterException::CODE_DEPENDENCY}.
-     * @throws ezcConsoleParameterExclusionException 
+     * @throws ezcConsoleParameterException 
      *         If exclusion rules are unmet 
      *         {@link ezcConsoleParameterException::CODE_EXCLUSION}.
-     * @throws ezcConsoleParameterTypeException 
+     * @throws ezcConsoleParameterException 
      *         If type rules are unmet 
      *         {@link ezcConsoleParameterException::CODE_TYPE}.
+     * @throws ezcConsoleParameterException 
+     *         If a parameter used does not exist
+     *         {@link ezcConsoleParameterException::CODE_EXISTANCE}.
      * 
      * @see ezcConsoleParameterException
      */ 
     public function process( $args = null ) {
-        
+        if ( !isset( $args ) )
+        {
+            $args = $argv;
+        }
+        $i = 1;
+        while ( $i < count( $args ) )
+        {
+            $arg = trim( $args[$i++] );
+            $paramRef = $this->getParamRef( $arg );
+            // Found parameter
+            if ( $paramRef !== false ) 
+            {
+                $i = $this->processParameter( $paramRef, $args, $i );
+            }
+            // Must be the arguments
+            else
+            {
+                $this->processArguments( $args, $i );
+                break;
+            }
+        }
+    }
+
+    // }}}
+
+    // {{{ processParameter()
+
+    /**
+     * Process a parameter.
+     * This method does the processing of a single parameter. It returns the index inside
+     * the $args array, where it stopped on and which should be processed next by the process method.
+     *
+     * @param int $paramRef The parameter reference.
+     * @param array $args The arguments array.
+     * @param int The current index in the $args array.
+     * @returns int The index to continue on in the $args array.
+     */
+    private function processParameter( $paramRef, $args, $i )
+    {
+        if ( $this->paramDefs[$paramRef]['options']['type'] === ezcConsoleParameter::TYPE_NONE )
+        {
+            // No value expected
+            if ( $this->getParamRef( $args[$i] ) === false )
+            {
+                // But one found
+                throw new Exception( 
+                    'Parameter "--'.$this->paramDefs[$paramRef]['long'].'" does not expect a value but "'.$args[$i].'" was submitted.',
+                    ezcConsoleParameterException::CODE_TYPE
+                );
+            }
+            $this->paramValues[$paramRef] = true;
+            // Everything fine, nothing to do
+            return $i;
+        }
+        // Process multiple values
+        if ( $this->paramDefs[$paramRef]['options']['multiple'] === true ) 
+        {
+            $this->paramValues[$paramRef] = array();
+            while ( $i < count( $args ) )
+            {
+                if ( $this->getParamRef( $args[$i] ) !== false )
+                {
+                    // Reached next parameter
+                    break;
+                }
+                if ( $this->checkType( $paramRef, $args[$i] ) !== true )
+                {
+                    // Type mismatched.
+                    throw new Exception( 
+                        'Wrong value type passed to parameter "--'.$this->paramDefs[$paramRef]['long'].'".',
+                        ezcConsoleParameterException::CODE_TYPE
+                    );
+
+                }
+                $this->paramValues[$paramRef][] = $this->sanitizeValue( $args[$i++] );
+            }
+        } 
+        // Process single value
+        else 
+        {
+            if ( $this->getParamRef( $args[$i] ) === false && $this->checkType( $paramRef, $args[$i] ) )
+            {
+                $this->paramValues[$paramRef] = $this->sanitizeValue( $args[$i++] );
+                if ( isset( $args[$i] ) &&  $this->getParamRef( $args[$i] ) === false )
+                {
+                    throw new Exception( 
+                        'Parameter "--'.$this->paramDefs[$paramRef]['long'].'" expects only 1 value, multiple submitted.',
+                        ezcConsoleParameterException::CODE_TYPE
+                    );
+                }
+            }
+        }
+        if ( !isset( $this->paramValues[$paramRef] ) || ( is_array( $this->paramValues[$paramRef] ) && count( $this->paramValues[$paramRef] ) == 0 ) ) 
+        {
+            if ( isset( $this->paramDefs[$paramRef]['options']['default'] ) ) 
+            {
+                $this->paramValues[$paramRef] = $this->paramDefs[$paramRef]['options']['default'];
+            }
+            else
+            {
+                throw new ezcConsoleParameterException( 
+                    'Parameter value missing for parameter "--'.$this->paramLong[$paramRef].'".',
+                    ezcConsoleParameterException::CODE_NOVALUE
+                );
+            }
+        }
+        return $i;
+    }
+
+    // }}}
+    // {{{ checkType()
+
+    /**
+     * Returns if a given value has the correct type expected by a parameter. 
+     * 
+     * @param int $paramRef Reference to the parameter.
+     * @param string $val The value tu check.
+     * @return bool True on succesful check, otherwise false.
+     */
+    private function checkType( $paramRef, $val )
+    {
+        switch ( $this->paramDefs[$paramRef]['options']['type'] )
+        {
+            case ezcConsoleParameter::TYPE_STRING:
+                return true;
+                break;
+            case ezcConsoleParameter::TYPE_INT:
+                return preg_match( '/^[0-9]+$/', $val );
+        }
+        return false;
+    }
+
+    // }}}
+    // {{{ getParamRef()
+
+    /**
+     * Returns the parameter reference to a given parameter name.
+     * This method determines the reference to a parameter out of his short or
+     * long name. The name must start with the typical signazture for a 
+     * parameter name ('-' for short, '--' for long). If the name is not a valid
+     * parameter name (no '-' / '--'), the method returns false. If the name is
+     * syntactically valid, but the parameter does not exist, it will throw an 
+     * exception. On success the parameter reference is returned.
+     * 
+     * @param string $str The string to check.
+     * @return mixed Int reference on success, false on wrong syntax.
+     *
+     *
+     * @throws ezcConsoleParameterException 
+     *         If a parameter used does not exist
+     *         {@link ezcConsoleParameterException::CODE_EXISTANCE}.
+     */
+    private function getParamRef( $arg )
+    {
+        $paramRef = false;
+        // Long parameter name
+        if ( substr( $arg, 0, 2 ) == '--' && substr( $arg, 2, 1 ) != ' ' ) 
+        {
+            $paramName = substr( $arg, 2 );
+            if ( isset( $this->paramLong[$paramName] ) )
+            {
+                $paramRef = $this->paramLong[$paramName];
+            }
+            else
+            {
+                throw new ezcConsoleParameterException( 
+                    'Unknown parameter "'.$paramName.'".',
+                    ezcConsoleParameterException::CODE_EXISTANCE
+                );
+
+            }
+        }
+        // Short parameter name
+        elseif ( substr( $arg, 0, 1 ) == '-' && substr( $arg, 1, 1 ) != '-' ) 
+        {
+            $paramName = substr( $arg, 1 );
+            if ( isset( $this->paramShort[$paramName] ) )
+            {
+                $paramRef = $this->paramShort[$paramName];
+            }
+            else
+            {
+                throw new ezcConsoleParameterException( 
+                    'Unknown parameter "'.$paramName.'".',
+                    ezcConsoleParameterException::CODE_EXISTANCE
+                );
+
+            }
+        }
+        return $paramRef;
+    }
+
+    // }}}
+    // {{{ sanitizeValue()
+
+    /**
+     * Remove quotes from string values. 
+     * 
+     * @param string $val Value to sanitize.
+     * @return string Sanitized value.
+     */
+    private function sanitizeValue( $val )
+    {
+        return preg_replace( '/^([\'"])(.*)\1$/', '\2', $val );
     }
 
     // }}}

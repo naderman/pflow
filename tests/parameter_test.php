@@ -54,8 +54,8 @@ class ezcConsoleToolsParameterTest extends ezcTestCase
             ),
         ),
         array( 
-            'short'     => 'o',
-            'long'      => 'order',
+            'short'     => 'n',
+            'long'      => 'new',
             'options'   => array(
                 'depends'       => array( 't', 'o' ),
                 'excludes'      => array( 'b', 'y' ),
@@ -94,6 +94,35 @@ class ezcConsoleToolsParameterTest extends ezcTestCase
     );
 
     // }}}
+    // {{{ $testArgs
+
+    private $testArgsSuccess = array( 
+        array(
+            'foo.php',
+            '-t',
+            '--original',
+            '"Test string"',
+        ),
+        array(
+            'foo.php',
+            '-o',
+            '"Test string"',
+            '--build',
+            '42',
+        ),
+        array(
+            'foo.php',
+            '-b',
+            '42',
+            '--yank',
+            '"a"',
+            '"b"',
+            '"c"',
+        ),
+    );
+
+    // }}}
+
 
     // {{{   suite()
 
@@ -221,6 +250,28 @@ class ezcConsoleToolsParameterTest extends ezcTestCase
     }
 
     // }}}
+    // {{{ testProcess()
+
+    /**
+     * testProcessSuccess
+     * 
+     * @access public
+     * @return 
+     */
+    public function testProcessSuccess()
+    {
+        foreach ( $this->testParams as $param )
+        {
+            $this->consoleParameter->registerParam( $param['short'], $param['long'], $param['options'] );
+        }
+        foreach ( $this->testArgsSuccess as $args )
+        {
+            $this->consoleParameter->process( $args );
+        }
+    }
+    
+    // }}}
+
 }
 
 ?>
