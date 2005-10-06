@@ -11,12 +11,17 @@
 class ezcConsoleToolsParameterTest extends ezcTestCase
 {
 
-    // {{{ $testParams
+    // { {{ $testParams
 
     private $testParams = array( 
         array( 
             'short'     => 't',
             'long'      => 'testing',
+            'options'   => array(),
+        ),
+        array( 
+            'short'     => 's',
+            'long'      => 'subway',
             'options'   => array(),
         ),
         array( 
@@ -32,6 +37,14 @@ class ezcConsoleToolsParameterTest extends ezcTestCase
             'options'   => array(
                 'type'      => ezcConsoleParameter::TYPE_INT,
                 'default'   => 42,
+            ),
+        ),
+        array( 
+            'short'     => 'd',
+            'long'      => 'destroy',
+            'options'   => array(
+                'type'      => ezcConsoleParameter::TYPE_STRING,
+                'default'   => 'world',
             ),
         ),
         array( 
@@ -99,14 +112,8 @@ class ezcConsoleToolsParameterTest extends ezcTestCase
     private $testArgsSuccess = array( 
         array(
             'foo.php',
-            '-t',
-            '--original',
-            '"Test string"',
-        ),
-        array(
-            'foo.php',
             '-o',
-            '"Test string"',
+            '"Test string2"',
             '--build',
             '42',
         ),
@@ -116,13 +123,33 @@ class ezcConsoleToolsParameterTest extends ezcTestCase
             '42',
             '--yank',
             '"a"',
+            '--yank',
             '"b"',
+            '--yank',
             '"c"',
+        ),
+        array(
+            'foo.php',
+            '--yank=a',
+            '--yank=b',
+            '--yank="c"',
+            '-y',
+            '1',
+            '-y',
+            '2'
+        ),
+        array(
+            'foo.php',
+            '--yank=a',
+            '--yank=b',
+            '-y',
+            '1',
+            'arg1',
+            'arg2',
         ),
     );
 
     // }}}
-
 
     // {{{   suite()
 
@@ -144,6 +171,10 @@ class ezcConsoleToolsParameterTest extends ezcTestCase
     public function setUp()
     {
         $this->consoleParameter = new ezcConsoleParameter();
+        foreach ( $this->testParams as $param )
+        {
+            $this->consoleParameter->registerParam( $param['short'], $param['long'], $param['options'] );
+        }
     }
 
     // }}} 
@@ -162,7 +193,7 @@ class ezcConsoleToolsParameterTest extends ezcTestCase
 
     // }}} 
 
-    // {{{ testRegisterParam()
+    // {{{ testRegisterParam
 
     /**
      * testRegisterParam
@@ -172,22 +203,26 @@ class ezcConsoleToolsParameterTest extends ezcTestCase
      */
     public function testRegisterParam()
     {
+        // Using local object to test registration itself.
+        $tmpConsoleParameter = new ezcConsoleParameter();
         foreach ( $this->testParams as $param )
         {
-            $this->consoleParameter->registerParam( $param['short'], $param['long'], $param['options'] );
-            $this->assertTrue( 
-                array_merge( $this->consoleParameter->getDefaults(), $param['options'] ) == $this->consoleParameter->getParamDef( $param['short'] ),
+            $tmpConsoleParameter->registerParam( $param['short'], $param['long'], $param['options'] );
+            $this->assertEquals( 
+                array_merge( $tmpConsoleParameter->getDefaults(), $param['options'] ),
+                $tmpConsoleParameter->getParamDef( $param['short'] ),
                 'Parameter not registered correctly: "' . $param['short'] . '".'
             );
-            $this->assertTrue( 
-                array_merge( $this->consoleParameter->getDefaults(), $param['options'] ) == $this->consoleParameter->getParamDef( $param['long'] ),
+            $this->assertEquals( 
+                array_merge( $tmpConsoleParameter->getDefaults(), $param['options'] ), 
+                $tmpConsoleParameter->getParamDef( $param['long'] ),
                 'Parameter not registered correctly: "' . $param['long'] . '".'
             );
         }
     }
 
     // }}}
-    // {{{ testRegisterAlias()
+    // {{{ testRegisterAlias
 
     /**
      * testRegisterAliasSuccess
@@ -209,10 +244,9 @@ class ezcConsoleToolsParameterTest extends ezcTestCase
             }
             catch ( ezcConsoleParameterException $e )
             {
-                $this->assertTrue( false, 'Alias registration failed for parameter "' . $alias['ref'] . '" although it should work.' );
+                $this->fail( $e->getMessage() );
             }
         }
-        $this->assertTrue( true );
     }
     
     /**
@@ -223,10 +257,6 @@ class ezcConsoleToolsParameterTest extends ezcTestCase
      */
     public function testRegisterAliasFailure()
     {
-        foreach ( $this->testParams as $param )
-        {
-            $this->consoleParameter->registerParam( $param['short'], $param['long'], $param['options'] );
-        }
         $exceptionCount = 0;
         foreach ( $this->testAliasesFailure as $alias )
         {
@@ -238,36 +268,173 @@ class ezcConsoleToolsParameterTest extends ezcTestCase
             {
                 if ( $e->getCode() !== ezcConsoleParameterException::CODE_EXISTANCE )
                 {
-                    $this->assertTrue( false, 'Alias threw wrong exception code "' . $e->getCode()  . '" when registering alias for unknown parameter.' );
+                    $this->fail( 'Alias registration threw unexpected exception "' . $e->getMessage()  . '" when registering alias for unknown parameter.' );
                 }
                 $exceptionCount++;
             }
         }
-        $this->assertTrue( 
-            $exceptionCount == count( $this->testAliasesFailure ), 
+        // Expect every test data set to fail
+        $this->assertEquals( 
+            $exceptionCount,
+            count( $this->testAliasesFailure ), 
             'Alias registration succeded for ' . ( count( $this->testAliasesFailure ) - $exceptionCount ) . ' unkown parameters.' 
         );
     }
 
     // }}}
-    // {{{ testProcess()
+    // {{{ test process()- success
 
-    /**
-     * testProcessSuccess
-     * 
-     * @access public
-     * @return 
-     */
-    public function testProcessSuccess()
+    // Single parameter tests
+
+    public function testProcessSuccessSingleShortNoValue()
     {
-        foreach ( $this->testParams as $param )
-        {
-            $this->consoleParameter->registerParam( $param['short'], $param['long'], $param['options'] );
-        }
-        foreach ( $this->testArgsSuccess as $args )
+        $args = array(
+            'foo.php',
+            '-t',
+        );
+        $this->commonProcessTestSuccess( $args );
+    }
+    
+    public function testProcessSuccessSingleShortValue()
+    {
+        $args = array(
+            'foo.php',
+            '-o',
+            'bar'
+        );
+        $this->commonProcessTestSuccess( $args );
+    }
+    
+    public function testProcessSuccessSingleLongNoValue()
+    {
+        $args = array(
+            'foo.php',
+            '--testing',
+        );
+        $this->commonProcessTestSuccess( $args );
+    }
+    
+    public function testProcessSuccessSingleLongValue()
+    {
+        $args = array(
+            'foo.php',
+            '--original',
+            'bar'
+        );
+        $this->commonProcessTestSuccess( $args );
+    }
+
+    public function testProcessSuccessSingleShortDefault()
+    {
+        $args = array(
+            'foo.php',
+            '-b'
+        );
+        $this->commonProcessTestSuccess( $args );
+    }
+    
+    public function testProcessSuccessSingleLongDefault()
+    {
+        $args = array(
+            'foo.php',
+            '--build'
+        );
+        $this->commonProcessTestSuccess( $args );
+    }
+
+    // Multiple parameter tests
+    
+    public function testProcessSuccessMultipleShortNoValue()
+    {
+        $args = array(
+            'foo.php',
+            '-t',
+            '-s',
+        );
+        $this->commonProcessTestSuccess( $args );
+    }
+    
+    public function testProcessSuccessMultipleShortValue()
+    {
+        $args = array(
+            'foo.php',
+            '-o',
+            'bar',
+            '-b',
+            '23'
+        );
+        $this->commonProcessTestSuccess( $args );
+    }
+    
+    public function testProcessSuccessMultipleLongNoValue()
+    {
+        $args = array(
+            'foo.php',
+            '--testing',
+            '--subway',
+        );
+        $this->commonProcessTestSuccess( $args );
+    }
+    
+    public function testProcessSuccessMultipleLongValue()
+    {
+        $args = array(
+            'foo.php',
+            '--original',
+            'bar',
+            '--build',
+            '23',
+        );
+        $this->commonProcessTestSuccess( $args );
+    }
+    
+    public function testProcessSuccessMultipleShortDefault()
+    {
+        $args = array(
+            'foo.php',
+            '-b',
+            '-d',
+        );
+        $this->commonProcessTestSuccess( $args );
+    }
+    
+    public function testProcessSuccessMultipleLongDefault()
+    {
+        $args = array(
+            'foo.php',
+            '--build',
+            '--destroy',
+        );
+        $this->commonProcessTestSuccess( $args );
+    }
+
+    // }}}
+
+    // {{{ Helper methods
+
+    private function commonProcessTestSuccess( $args )
+    {
+        try 
         {
             $this->consoleParameter->process( $args );
         }
+        catch ( ezcConsoleParameterException $e )
+        {
+            $this->fail( $e->getMessage() );
+        }
+    }
+    
+    private function commonProcessTestFailure( $args )
+    {
+        try 
+        {
+            $this->consoleParameter->process( $args );
+        }
+        catch ( ezcConsoleParameterException $e )
+        {
+            return;
+        }
+        $this->fail( 'Exception not thrown for invalid parameter submition.' );
     }
     
     // }}}

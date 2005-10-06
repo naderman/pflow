@@ -45,6 +45,10 @@ class ezcConsoleParameterException extends Exception
      * No value has been passed to a parameter that expects one.
      */
     const CODE_NOVALUE    = 6;
+    /**
+     * Multiple values have been passed to a parameter that expects only one.
+     */
+    const CODE_MULTIPLE   = 7;
 
     /**
      * Parameter this exception is about.
