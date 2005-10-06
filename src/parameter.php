@@ -446,7 +446,7 @@ class ezcConsoleParameter
 
     // }}}
 
-    // {{{ getParamValue()
+    // {{{ getParam()
 
     /**
      * Receive the data for a specific parameter.
@@ -462,6 +462,27 @@ class ezcConsoleParameter
             return $this->paramValues[$paramRef];
         }
         return false;
+    }
+
+    // }}}
+    // {{{ getParams()
+
+    /**
+     * Returns the data for all submitted parameters.
+     * This method gives you all submitted parameters with their values. The 
+     * returned array is indexed by the parameter shortcut, which is assigned
+     * to the value.
+     *
+     * @return array(string => mixed) Array of parameter shortcut => value 
+     *                                association.
+     */
+    public function getParams() {
+        $res = array();
+        foreach ( $this->paramValues as $paramRef => $val )
+        {
+            $res[$this->paramDefs[$paramRef]['short']] = $val;
+        }
+        return $res;
     }
 
     // }}}
@@ -483,10 +504,11 @@ class ezcConsoleParameter
      * @return array(int => string) Arguments.
      */
     public function getArguments() {
-        
+        return $this->arguments;
     }
 
     // }}}
+
     // {{{ getHelp()
 
     /**
@@ -603,17 +625,25 @@ class ezcConsoleParameter
             return $i;
         }
         // Value expected, check for it
-        if ( isset( $args[$i] ) && $this->getParamRef( $args[$i] ) === false && $this->checkType( $paramRef, $args[$i] ) )
+        if ( isset( $args[$i] ) && $this->getParamRef( $args[$i] ) === false )
         {
+            // Type check
+            if ( $this->correctType( $paramRef, $args[$i] ) === false )
+            {
+                throw new ezcConsoleParameterException( 
+                    'Parameter "--'.$this->paramDefs[$paramRef]['long'].'" of incorrect type.' ,
+                    ezcConsoleParameterException::CODE_TYPE,
+                    $this->paramDefs[$paramRef]['long']
+                );
+            }
             // Multiple values possible
             if ( $this->paramDefs[$paramRef]['options']['multiple'] === true )
             {
-                $this->paramValues[$paramRef][] = $this->sanitizeValue( $args[$i] );
+                $this->paramValues[$paramRef][] = $args[$i];
             }
             // Only single value expected, check for multiple
             elseif ( isset( $this->paramValues[$paramRef] ) )
             {
-                var_dump( $this->paramValues[$paramRef] );
                 throw new ezcConsoleParameterException( 
                     'Parameter "--'.$this->paramDefs[$paramRef]['long'].'" expects only 1 value but multiple have been submitted.',
                     ezcConsoleParameterException::CODE_MULTIPLE,
@@ -622,7 +652,7 @@ class ezcConsoleParameter
             }
             else
             {
-                $this->paramValues[$paramRef] = $this->sanitizeValue( $args[$i] );
+                $this->paramValues[$paramRef] = $args[$i];
             }
             $i++;
         }
@@ -636,9 +666,9 @@ class ezcConsoleParameter
             else
             {
                 throw new ezcConsoleParameterException( 
-                    'Parameter value missing for parameter "--'.$this->paramLong[$paramRef].'".',
+                    'Parameter value missing for parameter "--'.$this->paramDefs[$paramRef]['long'].'".',
                     ezcConsoleParameterException::CODE_NOVALUE,
-                    $this->paramDefs[$paramRef]['long']
+                    $this->paramDefs[$paramRef]['short']
                 );
             }
         }
@@ -674,26 +704,34 @@ class ezcConsoleParameter
 
     // }}}
 
-    // {{{ checkType()
+    // {{{ correctType()
 
     /**
-     * Returns if a given value has the correct type expected by a parameter. 
-     * 
+     * Checks if a value is of a given type. Converts the value to the
+     * correct PHP type on success.
+     *  
      * @param int $paramRef Reference to the parameter.
      * @param string $val The value tu check.
      * @return bool True on succesful check, otherwise false.
      */
-    private function checkType( $paramRef, $val )
+    private function correctType( $paramRef, &$val )
     {
+        $res = false;
         switch ( $this->paramDefs[$paramRef]['options']['type'] )
         {
             case ezcConsoleParameter::TYPE_STRING:
-                return true;
+                $res = true;
+                $val = preg_replace( '/^(["\'])(.*)\1$/', '\2', $val);
                 break;
             case ezcConsoleParameter::TYPE_INT:
-                return preg_match( '/^[0-9]+$/', $val );
+                $res = preg_match( '/^[0-9]+$/', $val ) ? true : false;
+                if ( $res )
+                {
+                    $val = (int)$val;
+                }
+                break;
         }
-        return false;
+        return $res;
     }
 
     // }}}
@@ -754,20 +792,6 @@ class ezcConsoleParameter
             }
         }
         return $paramRef;
-    }
-
-    // }}}
-    // {{{ sanitizeValue()
-
-    /**
-     * Remove quotes from string values. 
-     * 
-     * @param string $val Value to sanitize.
-     * @return string Sanitized value.
-     */
-    private function sanitizeValue( $val )
-    {
-        return preg_replace( '/^([\'"])(.*)\1$/', '\2', $val );
     }
 
     // }}}
