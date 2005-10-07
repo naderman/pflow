@@ -49,6 +49,10 @@ class ezcConsoleParameterException extends Exception
      * Multiple values have been passed to a parameter that expects only one.
      */
     const CODE_MULTIPLE   = 7;
+    /**
+     * Arguments were submitted although a parameter disallowed them.
+     */
+    const CODE_ARGUMENTS  = 8;
 
     /**
      * Parameter this exception is about.

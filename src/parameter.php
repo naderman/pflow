@@ -413,6 +413,9 @@ class ezcConsoleParameter
      * @throws ezcConsoleParameterException 
      *         If a parameter used does not exist
      *         {@link ezcConsoleParameterException::CODE_EXISTANCE}.
+     * @throws ezcConsoleParameterException 
+     *         If arguments are passed although a parameter dissallowed them
+     *         {@link ezcConsoleParameterException::CODE_ARGUMENTS}.
      * 
      * @see ezcConsoleParameterException
      */ 
@@ -441,8 +444,8 @@ class ezcConsoleParameter
                 break;
             }
         }
+        $this->checkDependencies();
     }
-
 
     // }}}
 
@@ -699,6 +702,80 @@ class ezcConsoleParameter
 
             }
             $this->arguments[] = $args[$i++];
+        }
+    }
+
+    // }}}
+
+    // {{{ checkRules()
+
+    /**
+     * Check the rules that may be associated with a parameter.
+     * Parameters are allowed to have rules associated for
+     * dependencies to other parameters and exclusion of other parameters or
+     * arguments. This method processes the checks.
+     * 
+     * @return void
+     *
+     * @throws ezcConsoleParameterException 
+     *         If dependencies are unmet 
+     *         {@link ezcConsoleParameterException::CODE_DEPENDENCY}.
+     * @throws ezcConsoleParameterException 
+     *         If exclusion rules are unmet 
+     *         {@link ezcConsoleParameterException::CODE_EXCLUSION}.
+     * @throws ezcConsoleParameterException 
+     *         If arguments are passed although a parameter dissallowed them
+     *         {@link ezcConsoleParameterException::CODE_ARGUMENTS}.
+     */
+    private function checkDependencies()
+    {
+        foreach ( array_keys( $this->paramValues ) as $paramRef )
+        {
+            // Dependencies
+            if ( is_array( $this->paramDefs[$paramRef]['options']['depends'] )
+                 && count( $this->paramDefs[$paramRef]['options']['depends'] ) > 0 )
+            {
+                foreach (  $this->paramDefs[$paramRef]['options']['depends'] as $dependName )
+                {
+                    $dependRef = $this->getParamRef( $dependName );
+                    if ( !isset( $this->paramValues[$dependRef] ) )
+                    {
+                        throw new ezcConsoleParameterException( 
+                            'Parameter "--'.$this->paramDefs[$paramRef]['long'].'" depends on "--'.$this->paramDefs[$dependRef]['long'].'" which was not submitted.',
+                            ezcConsoleParameterException::CODE_DEPENDENCY,
+                            $this->paramDefs[$paramRef]['long']
+                        );
+                    }
+                }
+            }
+            // Exclusions
+            if ( is_array( $this->paramDefs[$paramRef]['options']['excludes'] )
+                 && count( $this->paramDefs[$paramRef]['options']['excludes'] ) > 0 )
+            {
+                foreach (  $this->paramDefs[$paramRef]['options']['excludes'] as $excludeName )
+                {
+                    $excludeRef = $this->getParamRef( $excludeName );
+                    if ( isset( $this->paramValues[$excludeRef] ) )
+                    {
+                        throw new ezcConsoleParameterException( 
+                            'Parameter "--'.$this->paramDefs[$paramRef]['long'].'" excludes "--'.$this->paramDefs[$excludeRef]['long'].'" which was submitted.',
+                            ezcConsoleParameterException::CODE_DEPENDENCY,
+                            $this->paramDefs[$paramRef]['long']
+                        );
+                    }
+                }
+            }
+            // Arguments
+            if ( $this->paramDefs[$paramRef]['options']['arguments'] === false 
+                 && is_array( $this->arguments ) 
+                 && count( $this->arguments ) > 0 )
+            {
+                throw new ezcConsoleParameterException( 
+                    'Parameter "--'.$this->paramDefs[$paramRef]['long'].'" excludes the usage of arguments, but arguments have been passed.',
+                    ezcConsoleParameterException::CODE_ARGUMENTS,
+                    $this->paramDefs[$paramRef]['long']
+                );
+            }
         }
     }
 
