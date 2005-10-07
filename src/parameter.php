@@ -444,7 +444,7 @@ class ezcConsoleParameter
                 break;
             }
         }
-        $this->checkDependencies();
+        $this->checkRules();
     }
 
     // }}}
@@ -706,7 +706,6 @@ class ezcConsoleParameter
     }
 
     // }}}
-
     // {{{ checkRules()
 
     /**
@@ -727,7 +726,7 @@ class ezcConsoleParameter
      *         If arguments are passed although a parameter dissallowed them
      *         {@link ezcConsoleParameterException::CODE_ARGUMENTS}.
      */
-    private function checkDependencies()
+    private function checkRules()
     {
         foreach ( array_keys( $this->paramValues ) as $paramRef )
         {
@@ -737,7 +736,7 @@ class ezcConsoleParameter
             {
                 foreach (  $this->paramDefs[$paramRef]['options']['depends'] as $dependName )
                 {
-                    $dependRef = $this->getParamRef( $dependName );
+                    $dependRef = $this->paramShort[$dependName];
                     if ( !isset( $this->paramValues[$dependRef] ) )
                     {
                         throw new ezcConsoleParameterException( 
@@ -754,12 +753,12 @@ class ezcConsoleParameter
             {
                 foreach (  $this->paramDefs[$paramRef]['options']['excludes'] as $excludeName )
                 {
-                    $excludeRef = $this->getParamRef( $excludeName );
+                    $excludeRef = $this->paramShort[$excludeName];
                     if ( isset( $this->paramValues[$excludeRef] ) )
                     {
                         throw new ezcConsoleParameterException( 
                             'Parameter "--'.$this->paramDefs[$paramRef]['long'].'" excludes "--'.$this->paramDefs[$excludeRef]['long'].'" which was submitted.',
-                            ezcConsoleParameterException::CODE_DEPENDENCY,
+                            ezcConsoleParameterException::CODE_EXCLUSION,
                             $this->paramDefs[$paramRef]['long']
                         );
                     }

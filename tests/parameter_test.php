@@ -25,6 +25,13 @@ class ezcConsoleToolsParameterTest extends ezcTestCase
             'options'   => array(),
         ),
         array( 
+            'short'     => 'v',
+            'long'      => 'visual',
+            'options'   => array(
+                'arguments' => false,
+            ),
+        ),
+        array( 
             'short'     => 'o',
             'long'      => 'original',
             'options'   => array(
@@ -64,6 +71,14 @@ class ezcConsoleToolsParameterTest extends ezcTestCase
                 'short'         => 'Some stupid short text.',
                 'long'          => 'Some even more stupid, but somewhat longer long describtion.',
                 'depends'       => array( 't', 'o', 'b', 'y' ),
+            ),
+        ),
+        array( 
+            'short'     => 'e',
+            'long'      => 'edit',
+            'options'   => array(
+                'excludes'      => array( 't', 'y' ),
+                'arguments'     => false,
             ),
         ),
         array( 
@@ -474,6 +489,67 @@ class ezcConsoleToolsParameterTest extends ezcTestCase
         );
         $this->argumentsProcessTestSuccess( $args, $res );
     }
+    
+    public function testProcessSuccessDependencies()
+    {
+        $args = array(
+            'foo.php',
+            '-t',
+            '-o',
+            'bar',
+            '--build',
+            '-y',
+            'text',
+            '--yank',
+            'moretext',
+            '-c'            // This one depends on -t, -o, -b and -y
+        );
+        $res = array( 
+            't' => true,
+            'o' => 'bar',
+            'b' => 42,
+            'y' => array( 
+                'text',
+                'moretext'
+            ),
+            'c' => true,
+        );
+        $this->commonProcessTestSuccess( $args, $res );
+    }
+    
+    public function testProcessSuccessExclusions()
+    {
+        $args = array(
+            'foo.php',
+            '-o',
+            'bar',
+            '--build',
+            '--edit'            // This one exclude -t and -y
+        );
+        $res = array( 
+            'o' => 'bar',
+            'b' => 42,
+            'e' => true,
+        );
+        $this->commonProcessTestSuccess( $args, $res );
+    }
+    
+    public function testProcessSuccessDependenciesExclusions()
+    {
+        $args = array(
+            'foo.php',
+            '-t',
+            '-o',
+            'bar',
+            '-n'            // This one depends on -t and -o, but excludes -b and -y
+        );
+        $res = array( 
+            't' => true,
+            'o' => 'bar',
+            'n' => true,
+        );
+        $this->commonProcessTestSuccess( $args, $res );
+    }
 
     // }}}
 
@@ -536,6 +612,49 @@ class ezcConsoleToolsParameterTest extends ezcTestCase
             
         );
         $this->commonProcessTestFailure( $args, ezcConsoleParameterException::CODE_MULTIPLE );
+    }
+    
+    public function testProcessFailureDependencies()
+    {
+        $args = array(
+            'foo.php',
+            '-t',
+//            '-o',
+//            'bar',
+            '--build',
+            '-y',
+            'text',
+            '--yank',
+            'moretext',
+            '-c'            // This one depends on -t, -o, -b and -y
+        );
+        $this->commonProcessTestFailure( $args, ezcConsoleParameterException::CODE_DEPENDENCY );
+    }
+    
+    public function testProcessFailureExclusions()
+    {
+        $args = array(
+            'foo.php',
+            '-t',
+            '-o',
+            'bar',
+            '--build',
+            '--edit'            // This one excludes -t and -y
+        );
+        $this->commonProcessTestFailure( $args, ezcConsoleParameterException::CODE_EXCLUSION );
+    }
+    
+    public function testProcessFailureArguments()
+    {
+        $args = array(
+            'foo.php',
+            '-t',
+            '--visual',         // This one forbids arguments
+            '-o',
+            'bar',
+            'someargument',
+        );
+        $this->commonProcessTestFailure( $args, ezcConsoleParameterException::CODE_ARGUMENTS );
     }
 
     // }}}
