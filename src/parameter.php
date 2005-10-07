@@ -161,8 +161,8 @@ class ezcConsoleParameter
         'type'      => ezcConsoleParameter::TYPE_NONE,
         'default'   => null,
         'multiple'  => false,
-        'short'     => '',
-        'long'      => '',
+        'short'     => 'No help available.',
+        'long'      => 'Sorry, there is no help text available for this parameter.',
         'depends'   => array(),
         'excludes'  => array(),
         'arguments' => true,
@@ -538,9 +538,74 @@ class ezcConsoleParameter
      *         If requesting a nonexistant parameter 
      *         {@link ezcConsoleParameterException::CODE_EXISTANCE}.
      */
-    public function getHelp( $short = null ) {
-
+    public function getHelp( $short ) {
+        if ( !isset( $this->paramShort[$short] ) ) {
+            throw new ezcConsoleParameterException( 
+                'Parameter "-'.$short.'" not registered.',
+                ezcConsoleParameterException::CODE_EXISTANCE,
+                $short
+            );
+        }
+        $paramRef = $this->paramShort[$short];
+        return array( 
+            'short'   => $this->paramDefs[$paramRef]['options']['short'],
+            'long'    => $this->paramDefs[$paramRef]['options']['long'],
+            'usage'   => $this->getUsageText( $paramRef ),
+            'aliases' => $this->getAliasesText( $paramRef ),
+        );
     }
+
+    private function getUsageText( $paramRef )
+    {
+        $res = array();
+        if ( is_array( $this->paramDefs[$paramRef]['options']['depends'] ) 
+             && count( $this->paramDefs[$paramRef]['options']['depends'] ) > 0 )
+        {
+            $res[] = 'This parameter depends on the following parameters: '
+                     .implode( ', ', $this->paramDefs[$paramRef]['options']['depends'] ).'.';
+        }
+        if ( is_array( $this->paramDefs[$paramRef]['options']['excludes'] ) 
+             && count( $this->paramDefs[$paramRef]['options']['excludes'] ) > 0 )
+        {
+            $res[] = 'This parameter excludes the following parameters: '
+                     .implode( ', ', $this->paramDefs[$paramRef]['options']['depends'] ).'.';
+        }
+        $res[] = ( $this->paramDefs[$paramRef]['options']['arguments'] === true ) 
+                 ? 'You may pass arguments to the program when using this parameter.' 
+                 : 'No arguments are allowed when using this parameter.';
+        switch ( $this->paramDefs[$paramRef]['options']['type'] )
+        {
+            case ezcConsoleParameter::TYPE_NONE:
+                $res[] = 'The parameter does not expect any value.';
+                break;
+            case ezcConsoleParameter::TYPE_STRING:
+                $res[] = 'The parameter expects a string value.';
+                break;
+            case ezcConsoleParameter::TYPE_INT:
+                $res[] = 'The parameter expects an integer value.';
+                break;
+        }
+        $res[] = ( $this->paramDefs[$paramRef]['options']['multiple'] === true )
+                 ? 'This parameter may be used multiple times.'
+                 : 'This parameter may only be used once.';
+        return implode( "\n", $res );
+    }
+
+    private function getAliasesText( $paramRef )
+    {
+        $aliases = array();
+        foreach ( array_merge( $this->paramShort, $this->paramLong ) as $aliasName => $aliasRef )
+        {
+            if ( $aliasRef === $paramRef && $aliasName !== $this->paramDefs[$paramRef]['short'] )
+            {
+                $aliases[] = strlen( $aliasName ) == 1 ? '-'.$aliasName : '--'.$aliasName;
+            }
+        }
+        return count( $aliases ) > 1
+               ? 'The parameters '.implode( ', ', $aliases ).' are aliases to this parameter.'
+               : 'The parameter '.implode( ', ', $aliases ).' is an alias to this parameter.';
+    }
+
 
     // }}}
     // {{{ getHelpText()
