@@ -263,7 +263,8 @@ class ezcConsoleOutput
      * @return void
      */
     public function setOptions( $options ) {
-        if ( isset( $options['format'] ) ) {
+        if ( isset( $options['format'] ) ) 
+        {
             $this->setFormats( $options['format'] );
             unset( $options['format'] );
         }
