@@ -37,6 +37,8 @@
  */
 class ezcConsoleTable
 {
+    // {{{ Constants
+
     /**
      * Automatically wrap text to fit into a column.
      * @see ezcConsoleTable::$options
@@ -54,6 +56,24 @@ class ezcConsoleTable
      */
     const WRAP_CUT  = 3;
     
+    
+    /**
+     * Align text in cells to the right.
+     */
+    const ALIGN_LEFT   = STR_PAD_RIGHT;
+    /**
+     * Align text in cells to the left.
+     */
+    const ALIGN_RIGHT  = STR_PAD_LEFT;
+    /**
+     * Align text in cells to the center.
+     */
+    const ALIGN_CENTER = STR_PAD_BOTH;
+
+    // }}}
+    
+    // {{{ $settings
+
     /**
      * Settings for the table.
      *
@@ -68,6 +88,10 @@ class ezcConsoleTable
      */
     protected $settings;
 
+    // }}}
+
+    // {{{ $options
+
     /**
      * Options for the table.
      *
@@ -76,21 +100,34 @@ class ezcConsoleTable
     protected $options = array(
         'colWidth'  => 'auto',      // Automatically define column width. Else array of width
                                     // per column like array( 0 => 10, 1 => 15, 2 => 5,...);
-        'colWrap'   => WRAP_AUTO,
+        'colWrap'   => ezcConsoleTable::WRAP_AUTO,
+
+        'align'     => ezcConsoleTable::ALIGN_LEFT,
+        'padding'   => ' ',         // Padding between cell borders and text
         
-        'lineTop'       => '-',
-        'lineBottom'    => '-',
-        'lineLeft'      => '|',
-        'lineRight'     => '|',
+        'lineVertical'   => '-',
+        'lineHorizontal' => '|',
 
-        'cornerTopLeft'     => '+',
-        'cornerBottomLeft'  => '+',
-        'cornerTopRight'    => '+',
-        'cornerBottomRight' => '+',
+        'corner'         => '+',
 
-        'lineColor'     => 'default',
-        'lineColorHead' => 'default',
+        'lineFormat'     => 'default',
+        'lineFormatHead' => 'default',
     );
+
+    // }}}
+
+    // {{{ $optionsOverride
+
+    /**
+     * Option sets which locally overwrite the global options for a specific row.
+     * 
+     * @var array
+     */
+    protected $optionsOverride = array();
+
+    // }}}
+
+    // {{{ $outputHandler
 
     /**
      * The ezcConsoleOutput object to use.
@@ -98,6 +135,32 @@ class ezcConsoleTable
      * @var ezcConsoleOutput
      */
     protected $outputHandler;
+
+    // }}}
+
+    // {{{ $tableData
+
+    /**
+     * The actual data to be represented in the table. 
+     * 
+     * @var array
+     */
+    protected $tableData = array();
+
+    // }}}
+
+    // {{{ $tableHeadRows
+
+    /**
+     * Mapping for head line rows (keys of the rows).
+     * 
+     * @var array
+     */
+    protected $tableHeadRows = array();
+
+    // }}}
+
+    // {{{ __construct()
 
     /**
      * Creates a new table.
@@ -108,10 +171,48 @@ class ezcConsoleTable
      *
      * @see ezcConsoleTable::$settings
      * @see ezcConsoleTable::$options
+     *
+     * @throws ezcBaseConfigException On an invalid setting.
      */
-    public function __construct( ezcConsoleOutput $outHandler, $settings, $options = array() ) {
-        
+    public function __construct( ezcConsoleOutput $outHandler, $settings, $options = array() ) 
+    {
+        $this->outputHandler = $outHandler;
+        $this->setSettings( $settings );
+        $this->setOptions( $options );
     }
+
+    // }}}
+
+    // Methods
+
+    // {{{ setOptions()
+
+    /**
+     * Set options for the table.
+     *
+     * @see ezcConsoleTable::$options
+     * 
+     * @param array $options Options to set.
+     * @return void
+     */
+    public function setOptions( $options )
+    {
+        foreach ( $options as $name => $val ) 
+        {
+            if ( isset( $this->options[$name] ) ) 
+            {
+                $this->options[$name] = $val;
+            } 
+            else 
+            {
+                trigger_error( 'Unknowen option "' . $name  . '".', E_USER_WARNING );
+            }
+        }
+    }
+
+    // }}}
+
+    // {{{ create()
 
     /**
      * Create an entire table.
@@ -139,6 +240,10 @@ class ezcConsoleTable
         
     }
 
+    // }}}
+
+    // {{{ addRow()
+
     /**
      * Add a row of data to the table.
      * Add a row of data to the table. A row looks like this:
@@ -155,9 +260,18 @@ class ezcConsoleTable
      * @param array(string) $options        Override {@link eczConsoleTable::$options}
      * @return int Number of the row.
      */
-    public function addRow( $rowData, $options ) {
-
+    public function addRow( $rowData, $options = null ) {
+        $this->tableData[] = $rowData;
+        if ( isset( $options ) )
+        {
+            end( $this->tableData );
+            $this->optionsOverride[key( $this->tableData )] = $options;
+        }
     }
+
+    // }}}
+
+    // {{{ addHeadRow()
 
     /**
      * Add a header row to the table.
@@ -169,9 +283,15 @@ class ezcConsoleTable
      * @param array(string) $options        Override {@link eczConsoleTable::$options}
      * @return int Number of the row.
      */
-    public function addHeadRow( $rowData, $options ) {
-
+    public function addHeadRow( $rowData, $options = null ) {
+        $this->addRow( $rowData, $options );
+        end( $this->tableData );
+        $this->tableHeadRows[key( $this->tableData )] = true;
     }
+
+    // }}}
+
+    // {{{ setCell()
 
     /**
      * Set data for specific cell.
@@ -185,8 +305,12 @@ class ezcConsoleTable
      * @param string $cellData Data for the cell.
      */ 
     public function setCell( $row, $column, $cellData ) {
-        
+        $this->tableData[$row][$column] = $cellData;
     }
+
+    // }}}
+
+    // {{{ makeHeadRow()
 
     /**
      * Make a row to a header row.
@@ -197,8 +321,12 @@ class ezcConsoleTable
      * @see eczConsoleTable::setDefaultRow()
      */
     public function makeHeadRow( $row ) {
-        
+        $this->tableHeadRows[$row] = true;
     }
+
+    // }}}
+
+    // {{{ makeDefaultRow()
 
     /**
      * Make a row to a default row.
@@ -210,18 +338,30 @@ class ezcConsoleTable
      * @see eczConsoleTable::setHeadRow()
      */
     public function makeDefaultRow( $row ) {
-        
+        if ( isset( $this->tableHeadRows[$row] ) )
+        {
+            unset( $this->tableHeadRows[$row] );
+        }
     }
+
+    // }}}
+
+    // {{{ getTable()
 
     /**
      * Returns the table in a string.
-     * Returns the entire table as a string.
+     * Returns the entire table as an array of printable lines.
      *
-     * @return string
+     * @return array An array representation of the table.
      */
-    public function getTable() {
-        
+    public function getTable()
+    {
+        return $this->generateTable();
     }
+
+    // }}}
+
+    // {{{ outputTable()
 
     /**
      * Output the table.
@@ -229,7 +369,189 @@ class ezcConsoleTable
      *
      * @return void
      */
-    public function outputTable() {
-
+    public function outputTable() 
+    {
+        echo implode( "\n", $this->generateTable() );
     }
+
+    // }}}
+
+    // Private
+
+    // {{{ generateTable()
+
+    /**
+     * Generate the complete table as an array. 
+     * 
+     * @return array The table.
+     */
+    private function generateTable()
+    {
+        $colWidth = $this->getColWidths();
+        $table = array();
+        $table[] = $this->generateBorder( $colWidth, ( isset( $this->tableHeadRows[0] ) ) );
+        // Rows submitted by the user
+        foreach ( $this->tableData as $row => $cells )
+        {
+            $header = isset( $this->tableHeadRows[$row] );
+            // Auto broken rows
+            foreach ( $this->breakRows( $cells, $colWidth ) as $brkRow => $brkCells )
+            {
+                $table[] = $this->generateRow( $brkCells, $colWidth, $header );
+            }
+            $table[] = $this->generateBorder( $colWidth, $header || isset( $this->tableHeadRows[$row + 1] ) );
+        }
+        return $table; 
+    }
+
+    // }}}
+
+    // {{{ generateBorder()
+
+    /**
+     * Generate top/bottom borders of rows. 
+     * 
+     * @param array $colWidth Array of column width.
+     * @return string The Border string.
+     */
+    private function generateBorder( $colWidth, $header = false )
+    {
+        $border = '';
+        foreach ( $colWidth as $col => $width )
+        {
+            $border .= $this->options['corner'] . str_repeat( $this->options['lineVertical'], $width + 2 );
+        }
+        $border .= $this->options['corner'];
+
+        return $this->outputHandler->styleText( $border, $this->options[ ( $header ? 'lineFormatHead' : 'lineFormat' ) ] );
+        
+    }
+
+    // }}}
+    // {{{ generateRow()
+
+    /**
+     * Generate a single physical row.
+     * This method generates the string for a single physical table row.
+     * 
+     * @param array $cells    Cells of the row.
+     * @param array $colWidth Calculated columns widths.
+     * @return string The row.
+     */
+    private function generateRow( $cells, $colWidth, $header = false )
+    {
+        $rowData = '';
+        for ( $cell = 0; $cell < count( $colWidth ); $cell++ )
+        {
+            $data = isset( $cells[$cell] ) ? $cells[$cell] : '';
+            $rowData .= $this->outputHandler->styleText( 
+                            $this->options['lineHorizontal'], 
+                            $this->options[ ( $header ? 'lineFormatHead' : 'lineFormat' ) ] 
+                     ) 
+                     . ' ' . str_pad( $data, $colWidth[$cell], ' ', $this->options['align'] ) 
+                     . ' ' ;
+        }
+        $rowData .= $this->outputHandler->styleText( $this->options['lineHorizontal'], $this->options[ ( $header ? 'lineFormatHead' : 'lineFormat' ) ] );
+        return $rowData;
+    }
+
+    // }}}
+
+    // {{{ breakRows()
+
+    /**
+     * Returns auto broken rows from an array of cells.
+     * The data provided by a user may not fit into a cell calculated by the 
+     * class. In this case, the data can be automatically wrapped. The table 
+     * row then spans over multiple physical console lines.
+     * 
+     * @param array $cells    Array of cells in one row.
+     * @param array $colWidth Columns widths array.
+     * @return array Physical rows generated out of this row.
+     * @todo Switch to padding option!
+     */
+    private function breakRows( $cells, $colWidth ) 
+    {
+        $rows = array();
+        foreach ( $cells as $cell => $data ) 
+        {
+            if ( strlen( $data ) > ( $colWidth[$cell] - 3 ) )
+            {
+                $data = explode( "\n", wordwrap( $data, $colWidth[$cell], "\n", true ) );
+                foreach ( $data as $lineNo => $line )
+                {
+                    $rows[$lineNo][$cell] = $line;
+                }
+                
+            }
+            else
+            {
+                $rows[0][$cell] = $data;
+            }
+        }
+        return $rows;
+    }
+
+    // }}}
+    // {{{ getColWidth()
+
+    /**
+     * Determine width of each single column. 
+     * 
+     * @return void
+     */
+    private function getColWidths()
+    {
+        if ( is_array( $this->options['colWidth'] ) )
+        {
+            return $this->options['colWidth'];
+        }
+        $cellMaxWidth = array();
+        foreach ( $this->tableData as $row => $cells )
+        {
+            foreach ( $cells as $col => $cell )
+            {
+                $cellMaxWidth[$col] = isset( $cellMaxWidth[$col] ) ? max( $cellMaxWidth[$col], strlen( $cell ) ) : strlen( $cell );
+            }
+        }
+        $sumWidth = array_sum( $cellMaxWidth );
+        $colWidths = array();
+        foreach ( $cellMaxWidth as $col => $maxWidth )
+        {
+            // @todo This gives nice results, but maybe we can make them nicer?
+            $colWidths[$col] = floor( $maxWidth / $sumWidth * $this->settings['width'] ) - 3;
+        }
+        if ( array_sum( $colWidths ) > ( $this->settings['width'] - 3 * count( $colWidths ) ) )
+        {
+            $colWidths[count( $colWidths ) - 1] -= ( array_sum( $colWidths ) - ( $this->settings['width'] - 3 * count( $colWidths ) ) );
+        }
+        return $colWidths;
+    }
+
+    // }}}
+
+    // {{{ setSettings()
+
+    /**
+     * Check and set the settings submited to the constructor. 
+     * 
+     * @param array $settings 
+     * @return void
+     *
+     * @throws ezcBaseConfigException On an invalid setting.
+     */
+    private function setSettings( $settings )
+    {
+        if ( !isset( $settings['width'] ) || !is_int( $settings['width'] ) || $settings['width'] < 0 ) 
+        {
+            throw new ezcBaseConfigException( 'Missing or invalid width setting.' );
+        }
+        if ( !isset( $settings['cols'] ) || !is_int( $settings['cols'] ) || $settings['cols'] < 0 ) 
+        {
+            throw new ezcBaseConfigException( 'Missing or invalid cols setting.' );
+        }
+        $this->settings = $settings;
+    }
+
+    // }}}
 }
