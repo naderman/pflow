@@ -315,6 +315,10 @@ class ezcConsoleOutput
     {
         if ( $this->options['verboseLevel'] >= $verboseLevel ) 
         {
+            if ( $this->['options']['autobreak'] > 0 )
+            {
+                $text = wordwrap( $text, $this->['options']['autobreak'], "\n", true);
+            }
             echo ( $this->options['useFormats'] == true ) ? $this->styleText( $text, $format ) : $text;
         }
     }
