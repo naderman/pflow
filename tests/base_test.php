@@ -30,6 +30,29 @@ class ezcBaseTest extends ezcTestCase
         }
     }
 
+    public function testConfigExceptionUnknownSetting()
+    {
+        try
+        {
+            throw new ezcBaseConfigException( 'broken', ezcBaseConfigException::UNKNOWN_CONFIG_SETTING );
+        }
+        catch ( ezcBaseConfigException $e )
+        {
+            $this->assertEquals( "The setting 'broken' is not a valid configuration setting.", $e->getMessage() );
+        }
+    }
+
+    public function testConfigExceptionOutOfRange()
+    {
+        try
+        {
+            throw new ezcBaseConfigException( 'broken', ezcBaseConfigException::VALUE_OUT_OF_RANGE, 42 );
+        }
+        catch ( ezcBaseConfigException $e )
+        {
+            $this->assertEquals( "The value '42' that you were trying to assign to setting 'broken' is invalid.", $e->getMessage() );
+        }
+    }
 
     public static function suite()
     {

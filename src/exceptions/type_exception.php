@@ -1,6 +1,6 @@
 <?php
 /**
- * File containing the ezcTypeException class.
+ * File containing the ezcBaseTypeException class.
  *
  * @package Base
  * @version //autogen//
@@ -8,7 +8,7 @@
  * @license LGPL {@link http://www.gnu.org/copyleft/lesser.html}
  */
 /**
- * ezcTypeException is thrown whenever the type of the given instance is not 
+ * ezcBaseTypeException is thrown whenever the type of the given instance is not 
  * as expected.
  *
  * @package Base
