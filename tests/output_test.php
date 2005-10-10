@@ -201,6 +201,37 @@ class ezcConsoleToolsOutputTest extends ezcTestCase
     }
 
     // }}}
+    // {{{ testOutputTextAutobreak()
+
+    /**
+     * testOutputTextAutobreak
+     * 
+     * @access public
+     * @return 
+     */
+    public function testOutputTextAutobreak()
+    {
+        $this->consoleOutput->setOptions( array( 'autobreak' => 20 ) );
+        $testText = 'Some text which is obviously longer than 20 characters and should be broken.';
+        $testResText = 'Some text which is
+obviously longer
+than 20 characters
+and should be
+broken.';
+        
+        foreach ( $this->testFormats as $name => $inout ) 
+        {
+            ob_start();
+            $this->consoleOutput->outputText( $testText, $name );
+            $realRes = ob_get_contents();
+            ob_clean();
+            
+            $fakeRes = sprintf( $inout['out'], $testResText );
+            $this->assertTrue( $realRes == $fakeRes, 'Test "' . $name . ' faile. String "' . $realRes . '" (real) is not equal to "' . $fakeRes . '" (fake).' );
+        }
+    }
+
+    // }}}
 
     // {{{ dumpString()
 
