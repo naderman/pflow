@@ -182,36 +182,6 @@ class ezcConsoleTable
     }
 
     // }}}
-
-    // Methods
-
-    // {{{ setOptions()
-
-    /**
-     * Set options for the table.
-     *
-     * @see ezcConsoleTable::$options
-     * 
-     * @param array $options Options to set.
-     * @return void
-     */
-    public function setOptions( $options )
-    {
-        foreach ( $options as $name => $val ) 
-        {
-            if ( isset( $this->options[$name] ) ) 
-            {
-                $this->options[$name] = $val;
-            } 
-            else 
-            {
-                trigger_error( 'Unknowen option "' . $name  . '".', E_USER_WARNING );
-            }
-        }
-    }
-
-    // }}}
-
     // {{{ create()
 
     /**
@@ -247,6 +217,35 @@ class ezcConsoleTable
 
     // }}}
 
+    // Methods
+
+    // {{{ setOptions()
+
+    /**
+     * Set options for the table.
+     *
+     * @see ezcConsoleTable::$options
+     * 
+     * @param array $options Options to set.
+     * @return void
+     */
+    public function setOptions( $options )
+    {
+        foreach ( $options as $name => $val ) 
+        {
+            if ( isset( $this->options[$name] ) ) 
+            {
+                $this->options[$name] = $val;
+            } 
+            else 
+            {
+                trigger_error( 'Unknowen option "' . $name  . '".', E_USER_WARNING );
+            }
+        }
+    }
+
+    // }}}
+
     // {{{ addRow()
 
     /**
@@ -274,7 +273,6 @@ class ezcConsoleTable
     }
 
     // }}}
-
     // {{{ addHeadRow()
 
     /**
@@ -294,7 +292,7 @@ class ezcConsoleTable
     }
 
     // }}}
-
+    
     // {{{ setCell()
 
     /**
@@ -329,7 +327,6 @@ class ezcConsoleTable
     }
 
     // }}}
-
     // {{{ makeDefaultRow()
 
     /**
@@ -364,7 +361,6 @@ class ezcConsoleTable
     }
 
     // }}}
-
     // {{{ outputTable()
 
     /**
@@ -409,7 +405,6 @@ class ezcConsoleTable
     }
 
     // }}}
-
     // {{{ generateBorder()
 
     /**
@@ -560,4 +555,7 @@ class ezcConsoleTable
     }
 
     // }}}
+
 }
+
+?>
