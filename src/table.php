@@ -286,7 +286,7 @@ class ezcConsoleTable
      * @return int Number of the row.
      */
     public function addHeadRow( $rowData ) {
-        $this->addRow( $rowData, $options );
+        $this->addRow( $rowData );
         end( $this->tableData );
         $this->tableHeadRows[key( $this->tableData )] = true;
     }
@@ -505,28 +505,67 @@ class ezcConsoleTable
         {
             return $this->options['colWidth'];
         }
-        $cellMaxWidth = array();
+        // Width of a column if each is made equal
+        $colNormWidth = round($this->settings['width'] / $this->settings['cols']);
+        $colMaxWidth = array();
+        // Determine the longest data for each column
         foreach ( $this->tableData as $row => $cells )
         {
             foreach ( $cells as $col => $cell )
             {
-                // Uncomment to strip escape sequences from the inserted text.
-                // $cell = preg_replace( '/\033\[([a-f0-9;]+m)/', '', $cell );
-                $cellMaxWidth[$col] = isset( $cellMaxWidth[$col] ) ? max( $cellMaxWidth[$col], strlen( $cell ) ) : strlen( $cell );
+                $colMaxWidth[$col] = isset( $colMaxWidth[$col] ) ? max( $colMaxWidth[$col], strlen( $cell ) ) : strlen( $cell );
             }
         }
-        $sumWidth = array_sum( $cellMaxWidth );
-        $colWidths = array();
-        foreach ( $cellMaxWidth as $col => $maxWidth )
+        $colWidth = array();
+        $colWidthOverlow = array();
+        $spareWidth = 0;
+        // Make columns best fit
+        foreach ( $colMaxWidth as $col => $maxWidth )
         {
-            // @todo This gives nice results, but maybe we can make them nicer?
-            $colWidths[$col] = floor( $maxWidth / $sumWidth * $this->settings['width'] ) - 3;
+            // Does the largest data of the column fit into the average size 
+            // + what we have in spare from earlier columns?
+            if ( $maxWidth <= ( $colNormWidth + $spareWidth ) ) 
+            {
+                // We fit in, make the column as large as necessary
+                $colWidth[$col] = $maxWidth;
+                $spareWidth += ( $colNormWidth - $maxWidth );
+            }
+            else
+            {
+                // Does not fit, use maximal possible width
+                $colWidth[$col]  = $colNormWidth + $spareWidth;
+                $spareWidth = 0;
+                // Store overflow for second processing step
+                $colWidthOverlow[$col] = $maxWidth - $colWidth[$col];
+            }
         }
-        if ( array_sum( $colWidths ) > ( $this->settings['width'] - 3 * count( $colWidths ) ) )
+        // Do we have spare to give to the columns again?
+        if ( $spareWidth > 0 )
         {
-            $colWidths[count( $colWidths ) - 1] -= ( array_sum( $colWidths ) - ( $this->settings['width'] - 3 * count( $colWidths ) ) );
+            // Second processing step
+            if ( count( $colWidthOverlow ) > 0  )
+            {
+                $overflowSum = array_sum( $colWidthOverlow );
+                foreach ( $colWidthOverlow as $col => $overflow )
+                {
+                    $colWidth[$col] += floor( $overflow / $overflowSum * $spareWidth );
+                }
+            }
+            else
+            {
+                $widthSum = array_sum( $colWidth );
+                foreach ( $colWidth as $col => $width )
+                {
+                    $colWidth[$col] += floor( $width / $widthSum * $spareWidth );
+                }
+            }
         }
-        return $colWidths;
+        // Finally sanitize values from rounding issues, if necessary
+        if ( ( $colSum = array_sum( $colWidth ) ) != $this->settings['width'] )
+        {
+            $colWidth[count( $colWidth ) - 1] -= $colSum - $this->settings['width'];
+        }
+        return $colWidth;
     }
 
     // }}}
