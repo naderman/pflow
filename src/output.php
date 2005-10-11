@@ -316,6 +316,7 @@ class ezcConsoleOutput
     {
         if ( $this->options['verboseLevel'] >= $verboseLevel ) 
         {
+            // @todo Check for manual breaks has to go here before autobreak gets active!
             if ( $this->options['autobreak'] > 0 )
             {
                 $text = wordwrap( $text, $this->options['autobreak'], "\n", true);
