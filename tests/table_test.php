@@ -32,11 +32,8 @@ class ezcConsoleToolsTableTest extends ezcTestCase
     );
     
     private $tableData4 = array( 
-        array( 'Parameter', 'Shortcut', 'Descrition' ),
-        array( '--append', '-a', 'Append text to a file. This parameter takes a string value and may be used multiple times.' ),
-        array( '--prepend', '-p', 'Prepend text to a file. This parameter takes a string value and may be used multiple times.' ),
-        array( '--force', '-f', 'Forces the action desired without paying attention to any errors.' ),
-        array( '--silent', '-s', 'Silence all kinds of warnings issued by this program.' ),
+        array( 'Some very very long data here.... and it becomes even much much longer... and even longer....', 'Short', 'Some very very long data here.... and it becomes even much much longer... and even longer....', 'Short' ),
+        array( 'Short', 'Some very very long data here.... and it becomes even much much longer... and even longer....', 'Short', 'Some very very long data here.... and it becomes even much much longer... and even longer....' ),
     );
 
     // {{{   suite()
@@ -100,18 +97,27 @@ class ezcConsoleToolsTableTest extends ezcTestCase
 
     public function testTable1()
     {
-        $table = new ezcConsoleTable( 
-            $this->output,
-            array( 'cols' => 3, 'width' =>  80 ),
-            array( 'lineFormat' => 'default', 'lineFormatHead' => 'red' )
+        $this->commonTableTest( 
+            $this->tableData1,
+            array( 'cols' => 3, 'width' => 80 ),
+            array( 'lineFormatHead' => 'red' )
         );
-        foreach ( $this->tableData1 as $row => $data )
+    }
+
+    private function commonTableTest( $tableData, $settings, $options, $headrows = array( 0 ) )
+    {
+        $table = ezcConsoleTable::create( 
+            $tableData,
+            $this->output,
+            $settings,
+            $options
+        );
+        foreach ( $headrows as $row )
         {
-            $table->addHeadRow( $data );
+            $table->makeHeadRow( $row );
         }
         echo "\n\n";
         $table->outputTable();
-        echo "\n\n";
     }
     
     public function testTable2()
@@ -119,7 +125,7 @@ class ezcConsoleToolsTableTest extends ezcTestCase
         $table = new ezcConsoleTable( 
             $this->output,
             array( 'cols' => count( $this->tableData2[0] ), 'width' =>  60 ),
-            array( 'lineFormatHead' => 'magenta', 'align' => ezcConsoleTable::ALIGN_RIGHT )
+            array( 'lineFormatHead' => 'magenta', 'colAlign' => ezcConsoleTable::ALIGN_RIGHT )
         );
         foreach ( $this->tableData2 as $row => $data )
         {
@@ -135,7 +141,7 @@ class ezcConsoleToolsTableTest extends ezcTestCase
         $table = new ezcConsoleTable( 
             $this->output,
             array( 'cols' => count( $this->tableData3[0] ), 'width' =>  120 ),
-            array( 'lineFormatHead' => 'blue', 'align' => ezcConsoleTable::ALIGN_CENTER )
+            array( 'lineFormatHead' => 'blue', 'colAlign' => ezcConsoleTable::ALIGN_CENTER )
         );
         foreach ( $this->tableData3 as $row => $data )
         {
@@ -151,7 +157,7 @@ class ezcConsoleToolsTableTest extends ezcTestCase
         $table = new ezcConsoleTable( 
             $this->output,
             array( 'cols' => count( $this->tableData4[0] ), 'width' =>  120 ),
-            array( 'lineFormatHead' => 'blue', 'align' => ezcConsoleTable::ALIGN_CENTER )
+            array( 'lineFormatHead' => 'blue', 'colAlign' => ezcConsoleTable::ALIGN_CENTER, 'colWrap' => ezcConsoleTable::WRAP_CUT )
         );
         foreach ( $this->tableData4 as $row => $data )
         {

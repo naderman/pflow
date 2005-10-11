@@ -207,7 +207,7 @@ class ezcConsoleTable
         $table = new ezcConsoleTable( $outHandler, $settings, $options );
         foreach ( $data as $row => $cells )
         {
-            $table->addRow( $data );
+            $table->addRow( $cells );
         }
         return $table;
     }
@@ -467,12 +467,21 @@ class ezcConsoleTable
         {
             if ( strlen( $data ) > ( $colWidth[$cell] ) )
             {
-                $data = explode( "\n", wordwrap( $data, $colWidth[$cell], "\n", true ) );
-                foreach ( $data as $lineNo => $line )
+                switch ( $this->options['colWrap'] )
                 {
-                    $rows[$lineNo][$cell] = $line;
+                    case ezcConsoleTable::WRAP_AUTO:
+                        $data = explode( "\n", wordwrap( $data, $colWidth[$cell], "\n", true ) );
+                        foreach ( $data as $lineNo => $line )
+                        {
+                            $rows[$lineNo][$cell] = $line;
+                        }
+                        break;
+                    case ezcConsoleTable::WRAP_CUT:
+                        $rows[0][$cell] = substr( $data, 0, $colWidth[$cell] );
+                        break;
+                    case ezcConsoleTable::WRAP_NONE:
+                        break;
                 }
-                
             }
             else
             {
