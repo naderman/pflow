@@ -21,7 +21,7 @@
  * 
  * $table = new ezcConsoleTable($out, array('width' => 60, 'cols' = 3), $options);
  * // Generate a header row:
- * $table->addRowHead(array('First col', 'Second col', 'Third col'));
+ * $table->addHeadRow(array('First col', 'Second col', 'Third col'));
  * // Right column will be the largest
  * $table->addRow(array('Data', 'Data', 'Very very very very very long data'));
  * $table->output();
@@ -56,7 +56,6 @@ class ezcConsoleTable
      */
     const WRAP_CUT  = 3;
     
-    
     /**
      * Align text in cells to the right.
      */
@@ -69,6 +68,15 @@ class ezcConsoleTable
      * Align text in cells to the center.
      */
     const ALIGN_CENTER = STR_PAD_BOTH;
+
+    /**
+     * The width given by settings must be used even if the data allows it smaller. 
+     */
+    const WIDTH_FIXED = 1;
+    /**
+     * The width given by settings is a maximum value, if data allows it, the table gets smaller.
+     */
+    const WIDTH_MAX = 2;
 
     // }}}
     
@@ -98,12 +106,12 @@ class ezcConsoleTable
      * @var array(string)
      */
     protected $options = array(
-        'colWidth'  => 'auto',      // Automatically define column width. Else array of width
-                                    // per column like array( 0 => 10, 1 => 15, 2 => 5,...);
-        'colWrap'   => ezcConsoleTable::WRAP_AUTO,
+        'colWidth'       => 'auto',
+        'colWrap'        => ezcConsoleTable::WRAP_AUTO,
+        'colAlign'       => ezcConsoleTable::ALIGN_LEFT,
+        'colPadding'     => ' ',
 
-        'align'     => ezcConsoleTable::ALIGN_LEFT,
-        'padding'   => ' ',         // Padding between cell borders and text
+        'widthType'      => ezcConsoleTable::WIDTH_MAX,
         
         'lineVertical'   => '-',
         'lineHorizontal' => '|',
@@ -113,17 +121,6 @@ class ezcConsoleTable
         'lineFormat'     => 'default',
         'lineFormatHead' => 'default',
     );
-
-    // }}}
-
-    // {{{ $optionsOverride
-
-    /**
-     * Option sets which locally overwrite the global options for a specific row.
-     * 
-     * @var array
-     */
-    protected $optionsOverride = array();
 
     // }}}
 
@@ -265,11 +262,6 @@ class ezcConsoleTable
      */
     public function addRow( $rowData ) {
         $this->tableData[] = $rowData;
-        if ( isset( $options ) )
-        {
-            end( $this->tableData );
-            $this->optionsOverride[key( $this->tableData )] = $options;
-        }
     }
 
     // }}}
@@ -418,7 +410,7 @@ class ezcConsoleTable
         $border = '';
         foreach ( $colWidth as $col => $width )
         {
-            $border .= $this->options['corner'] . str_repeat( $this->options['lineVertical'], $width + 2 );
+            $border .= $this->options['corner'] . str_repeat( $this->options['lineVertical'], $width + ( 2 * strlen( $this->options['colPadding'] ) ) );
         }
         $border .= $this->options['corner'];
 
@@ -447,7 +439,7 @@ class ezcConsoleTable
                             $this->options['lineHorizontal'], 
                             $this->options[ ( $header ? 'lineFormatHead' : 'lineFormat' ) ] 
                      ) 
-                     . ' ' . str_pad( $data, $colWidth[$cell], ' ', $this->options['align'] ) 
+                     . ' ' . str_pad( $data, $colWidth[$cell], ' ', $this->options['colAlign'] ) 
                      . ' ' ;
         }
         $rowData .= $this->outputHandler->styleText( $this->options['lineHorizontal'], $this->options[ ( $header ? 'lineFormatHead' : 'lineFormat' ) ] );
@@ -467,14 +459,13 @@ class ezcConsoleTable
      * @param array $cells    Array of cells in one row.
      * @param array $colWidth Columns widths array.
      * @return array Physical rows generated out of this row.
-     * @todo Switch to padding option!
      */
     private function breakRows( $cells, $colWidth ) 
     {
         $rows = array();
         foreach ( $cells as $cell => $data ) 
         {
-            if ( strlen( $data ) > ( $colWidth[$cell] - 3 ) )
+            if ( strlen( $data ) > ( $colWidth[$cell] ) )
             {
                 $data = explode( "\n", wordwrap( $data, $colWidth[$cell], "\n", true ) );
                 foreach ( $data as $lineNo => $line )
@@ -505,8 +496,10 @@ class ezcConsoleTable
         {
             return $this->options['colWidth'];
         }
+        // Subtract border and padding chars from global width
+        $globalWidth = $this->settings['width'] - ( $this->settings['cols'] * ( 2 * strlen( $this->options['colPadding'] ) + 1 ) ) - 1;
         // Width of a column if each is made equal
-        $colNormWidth = round($this->settings['width'] / $this->settings['cols']);
+        $colNormWidth = round($globalWidth / $this->settings['cols']);
         $colMaxWidth = array();
         // Determine the longest data for each column
         foreach ( $this->tableData as $row => $cells )
@@ -551,7 +544,7 @@ class ezcConsoleTable
                     $colWidth[$col] += floor( $overflow / $overflowSum * $spareWidth );
                 }
             }
-            else
+            elseif ( $this->options['widthType'] === ezcConsoleTable::WIDTH_FIXED )
             {
                 $widthSum = array_sum( $colWidth );
                 foreach ( $colWidth as $col => $width )
@@ -561,9 +554,9 @@ class ezcConsoleTable
             }
         }
         // Finally sanitize values from rounding issues, if necessary
-        if ( ( $colSum = array_sum( $colWidth ) ) != $this->settings['width'] )
+        if ( ( $colSum = array_sum( $colWidth ) ) != $globalWidth && $this->options['widthType'] === ezcConsoleTable::WIDTH_FIXED )
         {
-            $colWidth[count( $colWidth ) - 1] -= $colSum - $this->settings['width'];
+            $colWidth[count( $colWidth ) - 1] -= $colSum - $globalWidth;
         }
         return $colWidth;
     }
