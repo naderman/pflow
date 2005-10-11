@@ -237,7 +237,12 @@ class ezcConsoleTable
      * @param array(string) $options       Options
      */
     public static function create( $data, ezcConsoleOutput $outHandler, $settings, $options = array() ) {
-        
+        $table = new ezcConsoleTable( $outHandler, $settings, $options );
+        foreach ( $data as $row => $cells )
+        {
+            $table->addRow( $data );
+        }
+        return $table;
     }
 
     // }}}
@@ -257,10 +262,9 @@ class ezcConsoleTable
      * The options parameter overrides the globally set options.
      * 
      * @param array(int => string) $rowData The data for the row
-     * @param array(string) $options        Override {@link eczConsoleTable::$options}
      * @return int Number of the row.
      */
-    public function addRow( $rowData, $options = null ) {
+    public function addRow( $rowData ) {
         $this->tableData[] = $rowData;
         if ( isset( $options ) )
         {
@@ -283,7 +287,7 @@ class ezcConsoleTable
      * @param array(string) $options        Override {@link eczConsoleTable::$options}
      * @return int Number of the row.
      */
-    public function addHeadRow( $rowData, $options = null ) {
+    public function addHeadRow( $rowData ) {
         $this->addRow( $rowData, $options );
         end( $this->tableData );
         $this->tableHeadRows[key( $this->tableData )] = true;
@@ -511,6 +515,8 @@ class ezcConsoleTable
         {
             foreach ( $cells as $col => $cell )
             {
+                // Uncomment to strip escape sequences from the inserted text.
+                // $cell = preg_replace( '/\033\[([a-f0-9;]+m)/', '', $cell );
                 $cellMaxWidth[$col] = isset( $cellMaxWidth[$col] ) ? max( $cellMaxWidth[$col], strlen( $cell ) ) : strlen( $cell );
             }
         }
