@@ -96,7 +96,8 @@ class ezcConsoleToolsTableTest extends ezcTestCase
 
     public function testTable1a()
     {
-        $this->commonTableTest( 
+        $this->commonTableTest(
+            __FUNCTION__, 
             $this->tableData1,
             array( 'cols' => count( $this->tableData1[0] ), 'width' => 80 ),
             array( 'lineFormatHead' => 'green' ),
@@ -106,7 +107,8 @@ class ezcConsoleToolsTableTest extends ezcTestCase
     
     public function testTable1b()
     {
-        $this->commonTableTest( 
+        $this->commonTableTest(
+            __FUNCTION__, 
             $this->tableData1,
             array( 'cols' => count( $this->tableData1[0] ), 'width' => 40 ),
             array( 'lineFormatHead' => 'red',  ),
@@ -117,6 +119,7 @@ class ezcConsoleToolsTableTest extends ezcTestCase
     public function testTable2a()
     {
         $this->commonTableTest(
+            __FUNCTION__,
             $this->tableData2,
             array( 'cols' => count( $this->tableData2[0] ), 'width' =>  60 ),
             array( 'lineFormatHead' => 'magenta', 'colAlign' => ezcConsoleTable::ALIGN_RIGHT, 'widthType' => ezcConsoleTable::WIDTH_FIXED )
@@ -126,6 +129,7 @@ class ezcConsoleToolsTableTest extends ezcTestCase
     public function testTable2b()
     {
         $this->commonTableTest(
+            __FUNCTION__,
             $this->tableData2,
             array( 'cols' => count( $this->tableData2[0] ), 'width' =>  60 ),
             array( 'lineFormatHead' => 'magenta', 'colAlign' => ezcConsoleTable::ALIGN_RIGHT )
@@ -135,6 +139,7 @@ class ezcConsoleToolsTableTest extends ezcTestCase
     public function testTable3a()
     {
         $this->commonTableTest(
+            __FUNCTION__,
             $this->tableData3,
             array( 'cols' => count( $this->tableData3[0] ), 'width' =>  120 ),
             array( 'lineFormatHead' => 'blue', 'colAlign' => ezcConsoleTable::ALIGN_CENTER, 'lineVertical' => '#', 'lineHorizontal' => '#', 'corner' => '#' ),
@@ -145,16 +150,18 @@ class ezcConsoleToolsTableTest extends ezcTestCase
     public function testTable3b()
     {
         $this->commonTableTest(
+            __FUNCTION__,
             $this->tableData3,
             array( 'cols' => count( $this->tableData3[0] ), 'width' =>  80 ),
             array( 'lineFormatHead' => 'magenta', 'lineVertical' => 'v', 'lineHorizontal' => 'h', 'corner' => 'c' ),
             array( 1, 2 )
         );
     }
-    
+     
     public function testTable4a()
     {
         $this->commonTableTest(
+            __FUNCTION__,
             $this->tableData4,
             array( 'cols' => count( $this->tableData4[0] ), 'width' =>  120 ),
             array( 'lineFormatHead' => 'blue', 'colAlign' => ezcConsoleTable::ALIGN_CENTER, 'colWrap' => ezcConsoleTable::WRAP_CUT ),
@@ -165,6 +172,7 @@ class ezcConsoleToolsTableTest extends ezcTestCase
     public function testTable4b()
     {
         $this->commonTableTest(
+            __FUNCTION__,
             $this->tableData4,
             array( 'cols' => count( $this->tableData4[0] ), 'width' =>  120 ),
             array( 'lineFormatHead' => 'blue', 'colAlign' => ezcConsoleTable::ALIGN_LEFT, 'colWrap' => ezcConsoleTable::WRAP_AUTO ),
@@ -175,6 +183,7 @@ class ezcConsoleToolsTableTest extends ezcTestCase
     public function testTable4c()
     {
         $this->commonTableTest(
+            __FUNCTION__,
             $this->tableData4,
             array( 'cols' => count( $this->tableData4[0] ), 'width' =>  120 ),
             array( 'lineFormatHead' => 'blue', 'colAlign' => ezcConsoleTable::ALIGN_CENTER, 'colWrap' => ezcConsoleTable::WRAP_NONE ),
@@ -186,7 +195,7 @@ class ezcConsoleToolsTableTest extends ezcTestCase
     
     // {{{ common
 
-    private function commonTableTest( $tableData, $settings, $options, $headrows = array() )
+    private function commonTableTest( $refFile, $tableData, $settings, $options, $headrows = array() )
     {
         $table = ezcConsoleTable::create( 
             $tableData,
@@ -198,8 +207,11 @@ class ezcConsoleToolsTableTest extends ezcTestCase
         {
             $table->makeHeadRow( $row );
         }
-        echo "\n\n";
-        $table->outputTable();
+        $this->assertEquals(
+            file_get_contents( dirname( __FILE__ ) . '/dat/' . $refFile . '.dat' ),
+            implode( "\n", $table->getTable() ),
+            'Table not correctly generated for ' . $refFile . '.'
+        );
     }
 
     // }}}
