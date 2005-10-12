@@ -297,6 +297,19 @@ class ezcConsoleOutput
     }
 
     // }}}
+    // {{{ getFormats()
+
+    /**
+     * Returns an array of the formats registered. 
+     * 
+     * @return array(string) The defined formats.
+     */
+    public function getFormats()
+    {
+        return $this->options['format'];
+    }
+
+    // }}}
     
     // {{{ outputText()
 
