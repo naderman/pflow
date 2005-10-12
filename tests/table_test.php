@@ -33,7 +33,7 @@ class ezcConsoleToolsTableTest extends ezcTestCase
     
     private $tableData4 = array( 
         array( 'Some very very long data here.... and it becomes even much much longer... and even longer....', 'Short', 'Some very very long data here.... and it becomes even much much longer... and even longer....', 'Short' ),
-        array( 'Short', 'Some very very long data here.... and it becomes even much much longer... and even longer....', 'Short', 'Some very very long data here.... and it becomes even much much longer... and even longer....' ),
+        array( 'Short', "Some very very long data here....\n\nand it becomes even much much longer...\n\nand even longer....", 'Short', 'Some very very long data here.... and it becomes even much much longer... and even longer....' ),
     );
 
     // {{{   suite()
@@ -94,17 +94,99 @@ class ezcConsoleToolsTableTest extends ezcTestCase
 
     // }}} 
 
-
-    public function testTable1()
+    public function testTable1a()
     {
         $this->commonTableTest( 
             $this->tableData1,
-            array( 'cols' => 3, 'width' => 80 ),
-            array( 'lineFormatHead' => 'red' )
+            array( 'cols' => count( $this->tableData1[0] ), 'width' => 80 ),
+            array( 'lineFormatHead' => 'green' ),
+            array( 0 )
         );
     }
+    
+    public function testTable1b()
+    {
+        $this->commonTableTest( 
+            $this->tableData1,
+            array( 'cols' => count( $this->tableData1[0] ), 'width' => 40 ),
+            array( 'lineFormatHead' => 'red',  ),
+            array( 0 )
+        );
+    }
+    
+    public function testTable2a()
+    {
+        $this->commonTableTest(
+            $this->tableData2,
+            array( 'cols' => count( $this->tableData2[0] ), 'width' =>  60 ),
+            array( 'lineFormatHead' => 'magenta', 'colAlign' => ezcConsoleTable::ALIGN_RIGHT, 'widthType' => ezcConsoleTable::WIDTH_FIXED )
+        );
+    }
+    
+    public function testTable2b()
+    {
+        $this->commonTableTest(
+            $this->tableData2,
+            array( 'cols' => count( $this->tableData2[0] ), 'width' =>  60 ),
+            array( 'lineFormatHead' => 'magenta', 'colAlign' => ezcConsoleTable::ALIGN_RIGHT )
+        );
+    }
+    
+    public function testTable3a()
+    {
+        $this->commonTableTest(
+            $this->tableData3,
+            array( 'cols' => count( $this->tableData3[0] ), 'width' =>  120 ),
+            array( 'lineFormatHead' => 'blue', 'colAlign' => ezcConsoleTable::ALIGN_CENTER, 'lineVertical' => '#', 'lineHorizontal' => '#', 'corner' => '#' ),
+            array( 0, 3 )
+        );
+    }
+    
+    public function testTable3b()
+    {
+        $this->commonTableTest(
+            $this->tableData3,
+            array( 'cols' => count( $this->tableData3[0] ), 'width' =>  80 ),
+            array( 'lineFormatHead' => 'magenta', 'lineVertical' => 'v', 'lineHorizontal' => 'h', 'corner' => 'c' ),
+            array( 1, 2 )
+        );
+    }
+    
+    public function testTable4a()
+    {
+        $this->commonTableTest(
+            $this->tableData4,
+            array( 'cols' => count( $this->tableData4[0] ), 'width' =>  120 ),
+            array( 'lineFormatHead' => 'blue', 'colAlign' => ezcConsoleTable::ALIGN_CENTER, 'colWrap' => ezcConsoleTable::WRAP_CUT ),
+            array( 0 )
+        );
+    }
+    
+    public function testTable4b()
+    {
+        $this->commonTableTest(
+            $this->tableData4,
+            array( 'cols' => count( $this->tableData4[0] ), 'width' =>  120 ),
+            array( 'lineFormatHead' => 'blue', 'colAlign' => ezcConsoleTable::ALIGN_LEFT, 'colWrap' => ezcConsoleTable::WRAP_AUTO ),
+            array( 0 )
+        );
+    }
+    
+    public function testTable4c()
+    {
+        $this->commonTableTest(
+            $this->tableData4,
+            array( 'cols' => count( $this->tableData4[0] ), 'width' =>  120 ),
+            array( 'lineFormatHead' => 'blue', 'colAlign' => ezcConsoleTable::ALIGN_CENTER, 'colWrap' => ezcConsoleTable::WRAP_NONE ),
+            array( 0 )
+        );
+    }
+    
+    // private
+    
+    // {{{ common
 
-    private function commonTableTest( $tableData, $settings, $options, $headrows = array( 0 ) )
+    private function commonTableTest( $tableData, $settings, $options, $headrows = array() )
     {
         $table = ezcConsoleTable::create( 
             $tableData,
@@ -119,54 +201,8 @@ class ezcConsoleToolsTableTest extends ezcTestCase
         echo "\n\n";
         $table->outputTable();
     }
-    
-    public function testTable2()
-    {
-        $table = new ezcConsoleTable( 
-            $this->output,
-            array( 'cols' => count( $this->tableData2[0] ), 'width' =>  60 ),
-            array( 'lineFormatHead' => 'magenta', 'colAlign' => ezcConsoleTable::ALIGN_RIGHT )
-        );
-        foreach ( $this->tableData2 as $row => $data )
-        {
-            $row == 1 ? $table->addHeadRow( $data ) : $table->addRow( $data );
-        }
-        echo "\n\n";
-        $table->outputTable();
-        echo "\n\n";
-    }
-    
-    public function testTable3()
-    {
-        $table = new ezcConsoleTable( 
-            $this->output,
-            array( 'cols' => count( $this->tableData3[0] ), 'width' =>  120 ),
-            array( 'lineFormatHead' => 'blue', 'colAlign' => ezcConsoleTable::ALIGN_CENTER )
-        );
-        foreach ( $this->tableData3 as $row => $data )
-        {
-            $row == 0 ? $table->addHeadRow( $data ) : $table->addRow( $data );
-        }
-        echo "\n\n";
-        $table->outputTable();
-        echo "\n\n";
-    }
-    
-    public function testTable4()
-    {
-        $table = new ezcConsoleTable( 
-            $this->output,
-            array( 'cols' => count( $this->tableData4[0] ), 'width' =>  120 ),
-            array( 'lineFormatHead' => 'blue', 'colAlign' => ezcConsoleTable::ALIGN_CENTER, 'colWrap' => ezcConsoleTable::WRAP_CUT )
-        );
-        foreach ( $this->tableData4 as $row => $data )
-        {
-            $row == 0 ? $table->addHeadRow( $data ) : $table->addRow( $data );
-        }
-        echo "\n\n";
-        $table->outputTable();
-        echo "\n\n";
-    }
+
+    // }}}
     
 }
 

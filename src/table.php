@@ -463,29 +463,40 @@ class ezcConsoleTable
     private function breakRows( $cells, $colWidth ) 
     {
         $rows = array();
+        // Iterate through cells of the row
         foreach ( $cells as $cell => $data ) 
         {
-            if ( strlen( $data ) > ( $colWidth[$cell] ) )
+            // Physical row id, start with 0 for each row
+            $row = 0;
+            // Split into multiple physical rows if manual breaks exist
+            $dataLines = explode( "\n", $data );
+            foreach ( $dataLines as $dataLine ) 
             {
-                switch ( $this->options['colWrap'] )
+                // Does the physical row fit?
+                if ( strlen( $dataLine ) > ( $colWidth[$cell] ) )
                 {
-                    case ezcConsoleTable::WRAP_AUTO:
-                        $data = explode( "\n", wordwrap( $data, $colWidth[$cell], "\n", true ) );
-                        foreach ( $data as $lineNo => $line )
-                        {
-                            $rows[$lineNo][$cell] = $line;
-                        }
-                        break;
-                    case ezcConsoleTable::WRAP_CUT:
-                        $rows[0][$cell] = substr( $data, 0, $colWidth[$cell] );
-                        break;
-                    case ezcConsoleTable::WRAP_NONE:
-                        break;
+                    switch ( $this->options['colWrap'] )
+                    {
+                        case ezcConsoleTable::WRAP_AUTO:
+                            $subLines = explode( "\n", wordwrap( $dataLine, $colWidth[$cell], "\n", true ) );
+                            foreach ( $subLines as $lineNo => $line )
+                            {
+                                $rows[$row++][$cell] = $line;
+                            }
+                            break;
+                        case ezcConsoleTable::WRAP_CUT:
+                            $rows[$row++][$cell] = substr( $dataLine, 0, $colWidth[$cell] );
+                            break;
+                        case ezcConsoleTable::WRAP_NONE:
+                        default:
+                            $rows[$row++][$cell] = $dataLine;
+                            break;
+                    }
                 }
-            }
-            else
-            {
-                $rows[0][$cell] = $data;
+                else
+                {
+                    $rows[$row++][$cell] = $dataLine;
+                }
             }
         }
         return $rows;
