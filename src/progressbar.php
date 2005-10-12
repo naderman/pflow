@@ -91,7 +91,16 @@ class ezcConsoleProgressbar
      *
      * @var ezcConsoleOutput
      */
-    protected $outputHandler;
+    protected $output;
+
+    /**
+     * Indicates if the starting point for the bar has been stored.
+     * Per default this is false to indicate that no start position has been
+     * stored, yet.
+     * 
+     * @var bool
+     */
+    protected $started = false;
    
     /**
      * Creates a new progress bar.
@@ -104,8 +113,37 @@ class ezcConsoleProgressbar
      * @see ezcConsoleTable::$options
      */
     public function __construct( ezcConsoleOutput $outHandler, $settings, $options = array() ) {
-        
+        $this->output = $outHandler;
+        $this->setSettings( $settings );
+        $this->setOptions( $options );
     }
+    
+    // {{{ setOptions()
+
+    /**
+     * Set options for the table.
+     *
+     * @see ezcConsoleTable::$options
+     * 
+     * @param array $options Options to set.
+     * @return void
+     */
+    public function setOptions( $options )
+    {
+        foreach ( $options as $name => $val ) 
+        {
+            if ( isset( $this->options[$name] ) ) 
+            {
+                $this->options[$name] = $val;
+            } 
+            else 
+            {
+                trigger_error( 'Unknowen option "' . $name  . '".', E_USER_WARNING );
+            }
+        }
+    }
+
+    // }}}
     
     /**
      * Start the progress bar
@@ -116,7 +154,8 @@ class ezcConsoleProgressbar
      * @return void
      */
     public function start() {
-        
+        $this->output->storePos();
+        $this->started = true;
     }
      
     /**
@@ -125,7 +164,11 @@ class ezcConsoleProgressbar
      * yet, the current line is used for {@link ezcConsolProgressbar::start()}.
      */
     public function output() {
-        
+        if ( $this->started === false )
+        {
+            $this->start();
+        }
+        $this->output->restorePos();
     }
 
     /**
@@ -148,4 +191,30 @@ class ezcConsoleProgressbar
     public function finish() {
         
     }
+    
+    // {{{ setSettings()
+
+    /**
+     * Check and set the settings submited to the constructor. 
+     * 
+     * @param array $settings 
+     * @return void
+     *
+     * @throws ezcBaseConfigException On an invalid setting.
+     */
+    private function setSettings( $settings )
+    {
+        if ( !isset( $settings['max'] ) || !is_int( $settings['max'] ) || $settings['max'] < 0 ) 
+        {
+            throw new ezcBaseConfigException( 'Missing or invalid max setting.' );
+        }
+        if ( !isset( $settings['step'] ) || !is_int( $settings['step'] ) || $settings['step'] < 0 ) 
+        {
+            throw new ezcBaseConfigException( 'Missing or invalid step setting.' );
+        }
+        $this->settings = $settings;
+    }
+
+    // }}}
+
 }
