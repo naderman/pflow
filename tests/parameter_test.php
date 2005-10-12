@@ -60,16 +60,16 @@ class ezcConsoleToolsParameterTest extends ezcTestCase
             'options'   => array(
                 'type'          => ezcConsoleParameter::TYPE_STRING,
                 'multiple'      => true,
-                'short'         => 'Some stupid short text.',
-                'long'          => 'Some even more stupid, but somewhat longer long describtion.',
+                'shorthelp'     => 'Some stupid short text.',
+                'longhelp'      => 'Some even more stupid, but somewhat longer long describtion.',
             ),
         ),
         array( 
             'short'     => 'c',
             'long'      => 'console',
             'options'   => array(
-                'short'         => 'Some stupid short text.',
-                'long'          => 'Some even more stupid, but somewhat longer long describtion.',
+                'shorthelp'     => 'Some stupid short text.',
+                'longhelp'      => 'Some even more stupid, but somewhat longer long describtion.',
                 'depends'       => array( 't', 'o', 'b', 'y' ),
             ),
         ),
@@ -655,6 +655,113 @@ class ezcConsoleToolsParameterTest extends ezcTestCase
             'someargument',
         );
         $this->commonProcessTestFailure( $args, ezcConsoleParameterException::CODE_ARGUMENTS );
+    }
+
+    // }}}
+
+    // {{{ test getHelp - universal
+
+    public function testGetHelp1()
+    {
+        $res = array( 
+            array( 
+                '-t / --testing',
+                'No help available.',
+            ),
+            array( 
+                '-s / --subway',
+                'No help available.',
+            ),
+            array( 
+                '-v / --visual',
+                'No help available.',
+            ),
+            array( 
+                '-o / --original',
+                'No help available.',
+            ),
+            array( 
+                '-b / --build',
+                'No help available.',
+            ),
+            array( 
+                '-d / --destroy',
+                'No help available.',
+            ),
+            array( 
+                '-y / --yank',
+                'Some stupid short text.',
+            ),
+            array( 
+                '-c / --console',
+                'Some stupid short text.',
+            ),
+            array( 
+                '-e / --edit',
+                'No help available.',
+            ),
+            array( 
+                '-n / --new',
+                'No help available.',
+            ),
+        );
+        $this->assertEquals( 
+            $res,
+            $this->consoleParameter->getHelp(),
+            'Help array was not generated correctly.'
+        );
+    }
+    
+    public function testGetHelp2()
+    {
+        $res = array( 
+            array( 
+                '-t / --testing',
+                'Sorry, there is no help text available for this parameter.',
+            ),
+            array( 
+                '-s / --subway',
+                'Sorry, there is no help text available for this parameter.',
+            ),
+            array( 
+                '-v / --visual',
+                'Sorry, there is no help text available for this parameter.',
+            ),
+            array( 
+                '-o / --original',
+                'Sorry, there is no help text available for this parameter.',
+            ),
+            array( 
+                '-b / --build',
+                'Sorry, there is no help text available for this parameter.',
+            ),
+            array( 
+                '-d / --destroy',
+                'Sorry, there is no help text available for this parameter.',
+            ),
+            array( 
+                '-y / --yank',
+                'Some even more stupid, but somewhat longer long describtion.',
+            ),
+            array( 
+                '-c / --console',
+                'Some even more stupid, but somewhat longer long describtion.',
+            ),
+            array( 
+                '-e / --edit',
+                'Sorry, there is no help text available for this parameter.',
+            ),
+            array( 
+                '-n / --new',
+                'Sorry, there is no help text available for this parameter.',
+            ),
+        );
+        $this->assertEquals( 
+            $res,
+            $this->consoleParameter->getHelp( true ),
+            'Help array was not generated correctly.'
+        );
+        
     }
 
     // }}}

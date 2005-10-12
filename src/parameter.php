@@ -161,8 +161,8 @@ class ezcConsoleParameter
         'type'      => ezcConsoleParameter::TYPE_NONE,
         'default'   => null,
         'multiple'  => false,
-        'short'     => 'No help available.',
-        'long'      => 'Sorry, there is no help text available for this parameter.',
+        'shorthelp' => 'No help available.',
+        'longhelp'  => 'Sorry, there is no help text available for this parameter.',
         'depends'   => array(),
         'excludes'  => array(),
         'arguments' => true,
@@ -211,8 +211,8 @@ class ezcConsoleParameter
      *                             // default, use TYPE_* constants
      *  'default'   => null,       // no default value by default
      *  'multiple'  => false,      // are multiple values expected?
-     *  'short'     => '',         // no short description by default
-     *  'long'      => '',         // no help text by default
+     *  'shorthelp' => '',         // no short description by default
+     *  'longhelp'  => '',         // no help text by default
      *  'depends'   => array(),    // no depending options by default
      *  'excludes'  => array(),    // no excluded options by default
      *  'arguments' => true,       // are arguments allowed?
@@ -525,6 +525,33 @@ class ezcConsoleParameter
     }
 
     // }}}
+
+    /**
+     * Get help information for your parameters.
+     * This method returns an array of help information for your parameters,
+     * indexed by integer. Each helo info has 2 fields:
+     *
+     * 0 => The parameters names ("<short> / <long>")
+     * 1 => The help text (depending on the $long parameter)
+     *
+     * The $long parameter determines if you want to get the short- or longhelp
+     * texts. The array returned can be used by {@link ezcConsoleTable}.
+     * 
+     * @param bool $long Set this to true for getting the long help version.
+     * @return void
+     */
+    public function getHelp( $long = false )
+    {
+        $help = array();
+        foreach ( $this->paramDefs as $paramRef => $def )
+        {
+            $help[] = array( 
+                '-' . $def['short'] . ' / ' . '--' . $def['long'],
+                $long == false ? $def['options']['shorthelp'] : $def['options']['longhelp'],
+            );
+        }
+        return $help;
+    }
 
     // private
 
