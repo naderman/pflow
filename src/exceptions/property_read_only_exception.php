@@ -24,7 +24,7 @@ class ezcBasePropertyReadOnlyException extends Exception
      */
     function __construct( $name )
     {
-        parent::__construct( "Property is read-only, cannot set: $name", 0 );
+        parent::__construct( "The property '{$name}' is read-only.", 0 );
     }
 }
 ?>
