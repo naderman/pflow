@@ -377,7 +377,7 @@ class ezcConsoleOutput
      */
     public function storePos() 
     {
-        return "\033[s";
+        echo "\033[s";
         $this->positionStored = true;
     }
 
@@ -392,15 +392,16 @@ class ezcConsoleOutput
      * @return void
      *
      * @throws ezcConsoleOutputException If no position saved.
+     * @todo Gnome terminal does not recognize this codes. Solution??
      */
     public function restorePos() 
     {
-        if ( !$this->positionStored )
+        if ( $this->positionStored === false )
         {
             throw new ezcConsoleOutputException( 'Cannot restore position, if no position has been stored before.',  ezcConsoleOutputException::CODE_NOPOSSTORED);
             return;
         }
-        echo "\033[u";        
+        echo "\033[u";
     }
 
     // }}}
