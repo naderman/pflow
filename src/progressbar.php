@@ -23,7 +23,7 @@
  * $opt = array(
  *  'emptyChar'     => '-',
  *  'progressChar'  => '#',
- *  'formatString'  => 'Uploading file '.$myFilename.' %act%/%max% kb [%bar%] %percent%%',
+ *  'formatString'  => 'Uploading file '.$myFilename.' %act%/%max% kb [%bar%] %fraction%%',
  * );
  * $progress = new ezcConsoleProgressbar($out, $set, $opt);
  *
@@ -65,13 +65,13 @@ class ezcConsoleProgressbar
      *   'barChar'       => '+',     // Char to fill progress bar with
      *   'emptyChar'     => ' ',     // Char for empty space in progress bar
      *   'progressChar'  => '>',     // Progress char of the bar filling
-     *   'formatString'  => '[%bar%] %percent%%',   // == "[+++++>    ] 60%"
+     *   'formatString'  => '[%bar%] %fraction%%',   // == "[+++++>    ] 60%"
      *   'width'         => 10,      // Maximum width of the progressbar
      * );
      * </code>
      *
      * 'formatString' can contain the following placeholders:
-     *  '%percent%' => Actual percent value
+     *  '%fraction%' => Actual percent value
      *  '%max%'     => Maximum value
      *  '%act%'     => Actual value
      *  '%bar%'     => The actual progressbar
@@ -82,9 +82,47 @@ class ezcConsoleProgressbar
         'barChar'       => '+',     // Char to fill progress bar with
         'emptyChar'     => ' ',     // Char to fill empty space in progress bar with
         'progressChar'  => '>',     // Right most char of the progress bar filling
-        'formatString'  => '[%bar%] %percent% %',   // Format string
+        'formatString'  => '[%bar%] %fraction% %',   // Format string
         'width'         => 100,     // Maximum width of the progressbar
     );
+
+    /**
+     * Storage for actual values to be replaced in the format string.
+     * Actual values are stored here and will be inserted into the bar
+     * before printing it.
+     * 
+     * @var array(string => string)
+     */
+    protected $valueMap = array( 
+        'bar'       => '',
+        'fraction'  => '',
+        'act'       => '',
+        'max'       => '',
+    );
+
+    /**
+     * One tima calculated measures.
+     * This array saves how much space a specific part of the bar utilizes to not
+     * recalculate those on every step.
+     * 
+     * @var array(string => int)
+     */
+    protected $measures = array( 
+        'barSpace'          => 0,
+        'fractionSpace'     => 0,
+        'actSpace'          => 0,
+        'maxSpace'          => 0,
+        'fixedCharSpace'    => 0,
+    );
+    
+    /**
+     * The current step the progress bar should show. 
+     * 
+     * @var int
+     */
+    protected $currentStep = 0;
+
+    // {{{ $output
 
     /**
      * The ezcConsoleOutput object to use.
@@ -92,6 +130,10 @@ class ezcConsoleProgressbar
      * @var ezcConsoleOutput
      */
     protected $output;
+
+    // }}}
+
+    // {{{ $started
 
     /**
      * Indicates if the starting point for the bar has been stored.
@@ -101,7 +143,11 @@ class ezcConsoleProgressbar
      * @var bool
      */
     protected $started = false;
+
+    // }}}
    
+    // {{{ __construct()
+
     /**
      * Creates a new progress bar.
      *
@@ -117,6 +163,8 @@ class ezcConsoleProgressbar
         $this->setSettings( $settings );
         $this->setOptions( $options );
     }
+
+    // }}}
     
     // {{{ setOptions()
 
@@ -145,19 +193,27 @@ class ezcConsoleProgressbar
 
     // }}}
     
+    // {{{ start()
+
     /**
      * Start the progress bar
      * Starts the progess bar and sticks it to the current line.
      * No output will be done yet. Call {@link ezcConsoleProgressbar::output()}
      * to print the bar.
      * 
-     * @return void
+     * @return 
      */
-    public function start() {
+    public function start() 
+    {
         $this->output->storePos();
+        $this->calculateMeasures();
         $this->started = true;
     }
+
+    // }}}
      
+    // {{{ output()
+
     /**
      * Draw the progress bar.
      * Prints the progressbar to the screen. If start() has not been called 
@@ -171,6 +227,10 @@ class ezcConsoleProgressbar
         $this->output->restorePos();
     }
 
+    // }}}
+
+    // {{{ advance()
+
     /**
      * Advance the progress bar.
      * Advances the progress bar by one step. Redraws the bar by default, using
@@ -182,6 +242,10 @@ class ezcConsoleProgressbar
         
     }
 
+    // }}}
+
+    // {{{ finish()
+
     /**
      * Finish the progress bar.
      * Finishes the bar (jump to 100% if not happened yet,...) and jumps
@@ -191,6 +255,8 @@ class ezcConsoleProgressbar
     public function finish() {
         
     }
+
+    // }}}
     
     // {{{ setSettings()
 
@@ -213,6 +279,37 @@ class ezcConsoleProgressbar
             throw new ezcBaseConfigException( 'Missing or invalid step setting.' );
         }
         $this->settings = $settings;
+    }
+
+    // }}}
+    // {{{ calculateMeasures()
+
+    /**
+     * Calculate several measures necessary to generate a bar. 
+     * 
+     * @return void
+     */
+    protected function calculateMeasures()
+    {
+        $this->measures['fixedCharSpace'] = strlen( $this->stripEscapeSequences( $this->insertValues() ) );
+        $this->measures['maxSpace']       = $this->measures['actSpace'] = strlen( $this->stripEscapeSequences( $this->settings['max'] ) );
+        $this->measures['fractionSpace']  = 3 // max. "100" == 100 %
+        $this->measures['barSpace']       = $this->options['width'] - array_sum( $this->measures );
+    }
+
+    // }}}
+
+    // {{{ stripEscapeSequences()
+
+    /**
+     * Strip all escape sequences from a string to measure it's size correctly. 
+     * 
+     * @param mixed $str 
+     * @return void
+     */
+    protected function stripEscapeSequences( $str )
+    {
+        return preg_replace( '/\033\[[0-9a-f;]*m/i', '', $str  )
     }
 
     // }}}
