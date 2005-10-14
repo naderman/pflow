@@ -203,6 +203,7 @@ class ezcConsoleToolsTableTest extends ezcTestCase
             $settings,
             $options
         );
+        $table->setCellFormat( 'red', 0, 0 );
         foreach ( $headrows as $row )
         {
             $table->makeHeadRow( $row );

@@ -157,6 +157,17 @@ class ezcConsoleTable
 
     // }}}
 
+    // {{{ $cellFormats
+
+    /**
+     * Text format mappings for table cell data. 
+     * 
+     * @var array(int => array(int => string))
+     */
+    protected $cellFormats = array();
+
+    // }}}
+
     // {{{ __construct()
 
     /**
@@ -304,6 +315,37 @@ class ezcConsoleTable
 
     // }}}
 
+    // {{{ setCellFormat ()
+
+    /**
+     * Set the text format for a specific cell.
+     * This method allows you to set a cell format for a sepcific
+     * cell of the table or a complete row (leaving the $col) parameter
+     * empty. You can use any format you created in our output handler to
+     * format a cell.
+     * 
+     * @param int $row The row number where the cell to format resides in.
+     * @param int $col The column part to identify a cell or null to format a row.
+     * @param string $format The format to use for the cell data.
+     * @return void
+     */
+    public function setCellFormat( $format, $row, $col = null  )
+    {
+        if ( isset( $col ) ) 
+        {
+            $this->cellFormats[$row][$col] = $format;
+        }
+        else
+        {
+            for ( $i = 0; $i < $this->settings['cols']; $i++ )
+            {
+                $this->cellFormats[$row][$i] = $format;
+            }
+        }
+    }
+
+    // }}}
+
     // {{{ makeHeadRow()
 
     /**
@@ -389,7 +431,7 @@ class ezcConsoleTable
             // Auto broken rows
             foreach ( $this->breakRows( $cells, $colWidth ) as $brkRow => $brkCells )
             {
-                $table[] = $this->generateRow( $brkCells, $colWidth, $header );
+                $table[] = $this->generateRow( $brkCells, $colWidth, $header, $row );
             }
             $table[] = $this->generateBorder( $colWidth, $header || isset( $this->tableHeadRows[$row + 1] ) );
         }
@@ -429,7 +471,7 @@ class ezcConsoleTable
      * @param array $colWidth Calculated columns widths.
      * @return string The row.
      */
-    private function generateRow( $cells, $colWidth, $header = false )
+    private function generateRow( $cells, $colWidth, $header = false, $row )
     {
         $rowData = '';
         for ( $cell = 0; $cell < count( $colWidth ); $cell++ )
@@ -439,7 +481,11 @@ class ezcConsoleTable
                             $this->options['lineHorizontal'], 
                             $this->options[ ( $header ? 'lineFormatHead' : 'lineFormat' ) ] 
                      ) 
-                     . ' ' . str_pad( $data, $colWidth[$cell], ' ', $this->options['colAlign'] ) 
+                     . ' ' . 
+                        $this->outputHandler->styleText(
+                            str_pad( $data, $colWidth[$cell], ' ', $this->options['colAlign'] ),
+                            isset( $this->cellFormats[$row][$cell] ) ? $this->cellFormats[$row][$cell] : null
+                        )
                      . ' ' ;
         }
         $rowData .= $this->outputHandler->styleText( $this->options['lineHorizontal'], $this->options[ ( $header ? 'lineFormatHead' : 'lineFormat' ) ] );
