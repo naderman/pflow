@@ -171,7 +171,7 @@ class ezcConsoleOutput
      * @var array(string => int)
      */
     private $styles = array( 
-        'default'           => '22;23;24;27',
+        'default'           => '0',
     
         'bold'              => 1,
         'faint'             => 2,
@@ -454,17 +454,25 @@ class ezcConsoleOutput
      */
     private function buildSequence( $format = 'default' )
     {
-        $modifiers = array();
-        $format = isset( $this->options['format'][$format] ) ? $this->options['format'][$format] : $this->defaultFormat;
-        foreach ( $this->defaultFormat as $formatType => $defaultValue ) 
+        if ( $format === 'default' || !isset( $this->options['format'][$format] ) )
         {
-            // Sanitize
-            $format[$formatType] = ( isset( $format[$formatType] ) ) ? $format[$formatType] : $defaultValue;
-            $format[$formatType] = ( is_array( $format[$formatType] ) ) ? $format[$formatType] : array( $format[$formatType] );
+            return sprintf( $this->escapeSequence, 0 );
+        }
+        $modifiers = array();
+        $format = $this->options['format'][$format];
+        foreach ( $format as $formatType => $value ) 
+        {
             // Get modifiers
-            foreach ( $format[$formatType] as $option ) 
+            if ( is_array( $value ) )
             {
-                $modifiers[] = $this->getFormatCode( $formatType, $option );
+                foreach ( $value as $singleVal ) 
+                {
+                    $modifiers[] = $this->getFormatCode( $formatType, $singleVal );
+                }
+            }
+            else
+            {
+                $modifiers[] = $this->getFormatCode( $formatType, $value );
             }
         }
         // Merge modifiers

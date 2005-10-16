@@ -28,37 +28,37 @@ class ezcConsoleToolsOutputTest extends ezcTestCase
             'in'  => array( 
                 'color' => 'blue',
             ),
-            'out' => "\033[34;49;22;23;24;27m%s\033[39;49;22;23;24;27m"
+            'out' => "\033[34m%s\033[0m"
         ),
         'color_only_2' => array( 
             'in'  => array( 
                 'color' => 'red',
             ),
-            'out' => "\033[31;49;22;23;24;27m%s\033[39;49;22;23;24;27m"
+            'out' => "\033[31m%s\033[0m"
         ),
         'bgcolor_only_1' => array( 
             'in'  => array( 
                 'bgcolor' => 'green',
             ),
-            'out' => "\033[39;42;22;23;24;27m%s\033[39;49;22;23;24;27m"
+            'out' => "\033[42m%s\033[0m"
         ),
         'bgcolor_only_2' => array( 
             'in'  => array( 
                 'bgcolor' => 'yellow',
             ),
-            'out' => "\033[39;43;22;23;24;27m%s\033[39;49;22;23;24;27m"
+            'out' => "\033[43m%s\033[0m"
         ),
         'style_only_1' => array( 
             'in'  => array( 
                 'style' => 'bold',
             ),
-            'out' => "\033[39;49;1m%s\033[39;49;22;23;24;27m"
+            'out' => "\033[1m%s\033[0m"
         ),
         'style_only_2' => array( 
             'in'  => array( 
                 'style' => 'negative',
             ),
-            'out' => "\033[39;49;7m%s\033[39;49;22;23;24;27m"
+            'out' => "\033[7m%s\033[0m"
         ),
     );
 
@@ -174,7 +174,11 @@ class ezcConsoleToolsOutputTest extends ezcTestCase
         {
             $realRes = $this->consoleOutput->styleText( $this->testString, $name );
             $fakeRes = sprintf( $inout['out'], $this->testString );
-            $this->assertTrue( $realRes == $fakeRes, 'Test "' . $name . ' faile. String "' . $realRes . '" (real) is not equal to "' . $fakeRes . '" (fake).' );
+            $this->assertEquals( 
+                $fakeRes, 
+                $realRes,
+                'Test "' . $name . ' faile. String "' . $realRes . '" (real) is not equal to "' . $fakeRes . '" (fake).' 
+            );
         }
     }
 
@@ -196,7 +200,11 @@ class ezcConsoleToolsOutputTest extends ezcTestCase
             $realRes = ob_get_contents();
             ob_clean();
             $fakeRes = sprintf( $inout['out'], $this->testString );
-            $this->assertTrue( $realRes == $fakeRes, 'Test "' . $name . ' faile. String "' . $realRes . '" (real) is not equal to "' . $fakeRes . '" (fake).' );
+            $this->assertEquals( 
+                $fakeRes, 
+                $realRes,
+                'Test "' . $name . ' faile. String "' . $realRes . '" (real) is not equal to "' . $fakeRes . '" (fake).' 
+            );
         }
     }
 
@@ -227,7 +235,11 @@ broken.';
             ob_clean();
             
             $fakeRes = sprintf( $inout['out'], $testResText );
-            $this->assertTrue( $realRes == $fakeRes, 'Test "' . $name . ' faile. String "' . $realRes . '" (real) is not equal to "' . $fakeRes . '" (fake).' );
+            $this->assertEquals( 
+                $fakeRes, 
+                $realRes, 
+                'Test "' . $name . ' faile. String "' . $realRes . '" (real) is not equal to "' . $fakeRes . '" (fake).' 
+            );
         }
     }
 
