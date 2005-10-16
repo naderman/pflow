@@ -38,6 +38,9 @@
  */
 class ezcConsoleStatusbar
 {
+
+    // {{{ $options
+
     /**
      * Options
      *
@@ -55,13 +58,35 @@ class ezcConsoleStatusbar
         'failureChar' => '-',     // Char to indicate failure
     );
 
+    // }}}
+
+    // {{{ $outputHandler
+
     /**
      * The ezcConsoleOutput object to use.
      *
      * @var ezcConsoleOutput
      */
     protected $outputHandler;
+
+    // }}}
+
+    // {{{ $counter
+
+    /**
+     * Counter for success and failure outputs. 
+     * 
+     * @var array
+     */
+    protected $counter = array( 
+        true  => 0,
+        false => 0,
+    );
+
+    // }}}
    
+    // {{{ __construct()
+
     /**
      * Creates a new status bar.
      *
@@ -72,9 +97,41 @@ class ezcConsoleStatusbar
      * @see ezcConsoleStatusbar::$options
      */
     public function __construct( ezcConsoleOutput $outHandler, $options = array() ) {
-        
+        $this->outputHandler = $outHandler;
+        $this->setOptions( $options );
     }
+
+    // }}}
     
+    // {{{ setOptions()
+
+    /**
+     * Set options for the statusbar.
+     *
+     * @see ezcConsoleStatusbar::$options
+     * 
+     * @param array $options Options to set.
+     * @return void
+     */
+    public function setOptions( $options )
+    {
+        foreach ( $options as $name => $val ) 
+        {
+            if ( isset( $this->options[$name] ) ) 
+            {
+                $this->options[$name] = $val;
+            } 
+            else 
+            {
+                trigger_error( 'Unknowen option "' . $name  . '".', E_USER_WARNING );
+            }
+        }
+    }
+
+    // }}}
+    
+    // {{{ add()
+
     /**
      * Add a status to the status bar.
      * Adds a new status to the bar which is printed immediatelly. If the
@@ -84,8 +141,44 @@ class ezcConsoleStatusbar
      * @param bool $status Print successChar on true, failureChar on false.
      */
     public function add( $status ) {
-        
+        switch ( $status )
+        {
+            case true:
+            $this->outputHandler->outputText( $this->options['successChar'], 'success' );
+            break;
+
+            case false:
+            $this->outputHandler->outputText( $this->options['failureChar'], 'failure' );
+            break;
+            
+            default:
+            trigger_error( 'Unknown status '.var_export( $status, true ).'.', E_USER_WARNING );
+            return;
+            break;
+        }
+        $this->counter[$status]++;
     }
+
+    // }}}
+
+    // {{{ reset()
+
+    /**
+     * Reset the state of the statusbar object to its initial one. 
+     * 
+     * @return void
+     */
+    public function reset()
+    {
+        foreach ( $this->counter as $status => $count )
+        {
+            $this->counter[$status] = 0;
+        }
+    }
+
+    // }}}
+
+    // {{{ getSuccesses()
 
     /**
      * Returns number of successes during the run.
@@ -94,9 +187,13 @@ class ezcConsoleStatusbar
      * @returns int Number of successes.
      */
     public function getSuccesses() {
-        
+        return $this->counter[true];
     }
+
+    // }}}
     
+    // {{{ getFailures()
+
     /**
      * Returns number of failures during the run.
      * Returns the number of failure characters printed from this status bar.
@@ -104,7 +201,9 @@ class ezcConsoleStatusbar
      * @returns int Number of failures.
      */
     public function getFailures() {
-        
+        return $this->counter[false];
     }
+
+    // }}}
 
 }

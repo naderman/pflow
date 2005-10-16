@@ -7,6 +7,7 @@ return array (
 	'ezcConsoleParameterException'  => 'ConsoleTools/exceptions/parameter_exception.php',
     'ezcConsoleTable'               => 'ConsoleTools/table.php',
     'ezcConsoleProgressbar'         => 'ConsoleTools/progressbar.php',
+    'ezcConsoleStatusbar'          => 'ConsoleTools/statusbar.php',
 );
 
 ?>
