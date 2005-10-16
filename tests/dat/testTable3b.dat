@@ -1,15 +1,15 @@
-[39;49;22;23;24;27mcvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvcvvvvvvvvvvvcvvvvvvvvvvvvc[39;49;22;23;24;27m
-[39;49;22;23;24;27mh[39;49;22;23;24;27m [31;49;1mParameter                                         [39;49;22;23;24;27m [39;49;22;23;24;27mh[39;49;22;23;24;27m [39;49;22;23;24;27mShortcut [39;49;22;23;24;27m [39;49;22;23;24;27mh[39;49;22;23;24;27m [39;49;22;23;24;27mDescrition[39;49;22;23;24;27m [39;49;22;23;24;27mh[39;49;22;23;24;27m
-[35;49;1mcvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvcvvvvvvvvvvvcvvvvvvvvvvvvc[39;49;22;23;24;27m
-[35;49;1mh[39;49;22;23;24;27m [39;49;22;23;24;27mAppend text to a file. This parameter takes a     [39;49;22;23;24;27m [35;49;1mh[39;49;22;23;24;27m [39;49;22;23;24;27m--append [39;49;22;23;24;27m [35;49;1mh[39;49;22;23;24;27m [39;49;22;23;24;27m-a        [39;49;22;23;24;27m [35;49;1mh[39;49;22;23;24;27m
-[35;49;1mh[39;49;22;23;24;27m [39;49;22;23;24;27mstring value and may be used multiple times.      [39;49;22;23;24;27m [35;49;1mh[39;49;22;23;24;27m [39;49;22;23;24;27m         [39;49;22;23;24;27m [35;49;1mh[39;49;22;23;24;27m [39;49;22;23;24;27m          [39;49;22;23;24;27m [35;49;1mh[39;49;22;23;24;27m
-[35;49;1mcvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvcvvvvvvvvvvvcvvvvvvvvvvvvc[39;49;22;23;24;27m
-[35;49;1mh[39;49;22;23;24;27m [39;49;22;23;24;27mPrepend text to a file. This parameter takes a    [39;49;22;23;24;27m [35;49;1mh[39;49;22;23;24;27m [39;49;22;23;24;27m--prepend[39;49;22;23;24;27m [35;49;1mh[39;49;22;23;24;27m [39;49;22;23;24;27m-p        [39;49;22;23;24;27m [35;49;1mh[39;49;22;23;24;27m
-[35;49;1mh[39;49;22;23;24;27m [39;49;22;23;24;27mstring value and may be used multiple times.      [39;49;22;23;24;27m [35;49;1mh[39;49;22;23;24;27m [39;49;22;23;24;27m         [39;49;22;23;24;27m [35;49;1mh[39;49;22;23;24;27m [39;49;22;23;24;27m          [39;49;22;23;24;27m [35;49;1mh[39;49;22;23;24;27m
-[35;49;1mcvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvcvvvvvvvvvvvcvvvvvvvvvvvvc[39;49;22;23;24;27m
-[39;49;22;23;24;27mh[39;49;22;23;24;27m [39;49;22;23;24;27mForces the action desired without paying attention[39;49;22;23;24;27m [39;49;22;23;24;27mh[39;49;22;23;24;27m [39;49;22;23;24;27m--force  [39;49;22;23;24;27m [39;49;22;23;24;27mh[39;49;22;23;24;27m [39;49;22;23;24;27m-f        [39;49;22;23;24;27m [39;49;22;23;24;27mh[39;49;22;23;24;27m
-[39;49;22;23;24;27mh[39;49;22;23;24;27m [39;49;22;23;24;27mto any errors.                                    [39;49;22;23;24;27m [39;49;22;23;24;27mh[39;49;22;23;24;27m [39;49;22;23;24;27m         [39;49;22;23;24;27m [39;49;22;23;24;27mh[39;49;22;23;24;27m [39;49;22;23;24;27m          [39;49;22;23;24;27m [39;49;22;23;24;27mh[39;49;22;23;24;27m
-[39;49;22;23;24;27mcvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvcvvvvvvvvvvvcvvvvvvvvvvvvc[39;49;22;23;24;27m
-[39;49;22;23;24;27mh[39;49;22;23;24;27m [39;49;22;23;24;27mSilence all kinds of warnings issued by this      [39;49;22;23;24;27m [39;49;22;23;24;27mh[39;49;22;23;24;27m [39;49;22;23;24;27m--silent [39;49;22;23;24;27m [39;49;22;23;24;27mh[39;49;22;23;24;27m [39;49;22;23;24;27m-s        [39;49;22;23;24;27m [39;49;22;23;24;27mh[39;49;22;23;24;27m
-[39;49;22;23;24;27mh[39;49;22;23;24;27m [39;49;22;23;24;27mprogram.                                          [39;49;22;23;24;27m [39;49;22;23;24;27mh[39;49;22;23;24;27m [39;49;22;23;24;27m         [39;49;22;23;24;27m [39;49;22;23;24;27mh[39;49;22;23;24;27m [39;49;22;23;24;27m          [39;49;22;23;24;27m [39;49;22;23;24;27mh[39;49;22;23;24;27m
-[39;49;22;23;24;27mcvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvcvvvvvvvvvvvcvvvvvvvvvvvvc[39;49;22;23;24;27m
+[0mcvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvcvvvvvvvvvvvcvvvvvvvvvvvvc[0m
+[0mh[0m [31;1mParameter                                         [0m [0mh[0m [0mShortcut [0m [0mh[0m [0mDescrition[0m [0mh[0m
+[35;1mcvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvcvvvvvvvvvvvcvvvvvvvvvvvvc[0m
+[35;1mh[0m [0mAppend text to a file. This parameter takes a     [0m [35;1mh[0m [0m--append [0m [35;1mh[0m [0m-a        [0m [35;1mh[0m
+[35;1mh[0m [0mstring value and may be used multiple times.      [0m [35;1mh[0m [0m         [0m [35;1mh[0m [0m          [0m [35;1mh[0m
+[35;1mcvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvcvvvvvvvvvvvcvvvvvvvvvvvvc[0m
+[35;1mh[0m [0mPrepend text to a file. This parameter takes a    [0m [35;1mh[0m [0m--prepend[0m [35;1mh[0m [0m-p        [0m [35;1mh[0m
+[35;1mh[0m [0mstring value and may be used multiple times.      [0m [35;1mh[0m [0m         [0m [35;1mh[0m [0m          [0m [35;1mh[0m
+[35;1mcvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvcvvvvvvvvvvvcvvvvvvvvvvvvc[0m
+[0mh[0m [0mForces the action desired without paying attention[0m [0mh[0m [0m--force  [0m [0mh[0m [0m-f        [0m [0mh[0m
+[0mh[0m [0mto any errors.                                    [0m [0mh[0m [0m         [0m [0mh[0m [0m          [0m [0mh[0m
+[0mcvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvcvvvvvvvvvvvcvvvvvvvvvvvvc[0m
+[0mh[0m [0mSilence all kinds of warnings issued by this      [0m [0mh[0m [0m--silent [0m [0mh[0m [0m-s        [0m [0mh[0m
+[0mh[0m [0mprogram.                                          [0m [0mh[0m [0m         [0m [0mh[0m [0m          [0m [0mh[0m
+[0mcvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvcvvvvvvvvvvvcvvvvvvvvvvvvc[0m

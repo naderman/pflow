@@ -213,6 +213,8 @@ class ezcConsoleToolsTableTest extends ezcTestCase
             implode( "\n", $table->getTable() ),
             'Table not correctly generated for ' . $refFile . '.'
         );
+        // To prepare test files use this:
+        // file_put_contents( dirname( __FILE__ ) . '/dat/' . $refFile . '.dat', implode( "\n", $table->getTable() ) );
     }
 
     // }}}
