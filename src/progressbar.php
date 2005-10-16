@@ -43,6 +43,8 @@
  */
 class ezcConsoleProgressbar
 {
+    // {{{ $settings
+
     /**
      * Settings for the progress bar.
      * 
@@ -56,6 +58,9 @@ class ezcConsoleProgressbar
      * @var array(string)
      */
     protected $settings;
+
+    // }}}
+    // {{{ $options
 
     /**
      * Options
@@ -87,6 +92,9 @@ class ezcConsoleProgressbar
         'fractionFormat' => '%01.2f',// sprintf() string for the fraction
     );
 
+    // }}}
+    // {{{ $valueMap
+
     /**
      * Storage for actual values to be replaced in the format string.
      * Actual values are stored here and will be inserted into the bar
@@ -100,6 +108,9 @@ class ezcConsoleProgressbar
         'act'       => '',
         'max'       => '',
     );
+
+    // }}}
+    // {{{ $measures
 
     /**
      * One tima calculated measures.
@@ -115,13 +126,19 @@ class ezcConsoleProgressbar
         'maxSpace'          => 0,
         'fixedCharSpace'    => 0,
     );
-    
+
+    // }}}
+    // {{{ $currentStep
+
     /**
      * The current step the progress bar should show. 
      * 
      * @var int
      */
     protected $currentStep = 0;
+
+    // }}}
+    // {{{ $numSteps
 
     /**
      * The maximum number of steps to go.
@@ -131,6 +148,7 @@ class ezcConsoleProgressbar
      */
     protected $numSteps;
 
+    // }}}
     // {{{ $output
 
     /**
@@ -141,7 +159,6 @@ class ezcConsoleProgressbar
     protected $output;
 
     // }}}
-
     // {{{ $started
 
     /**
@@ -175,7 +192,6 @@ class ezcConsoleProgressbar
     }
 
     // }}}
-    
     // {{{ setOptions()
 
     /**
@@ -225,7 +241,6 @@ class ezcConsoleProgressbar
     }
 
     // }}}
-     
     // {{{ output()
 
     /**
@@ -245,7 +260,6 @@ class ezcConsoleProgressbar
     }
 
     // }}}
-
     // {{{ advance()
 
     /**
@@ -265,7 +279,6 @@ class ezcConsoleProgressbar
     }
 
     // }}}
-
     // {{{ finish()
 
     /**
@@ -276,6 +289,7 @@ class ezcConsoleProgressbar
      */
     public function finish() {
         $this->actualStep = $this->numSteps;
+        $this->output();
     }
 
     // }}}
