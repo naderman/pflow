@@ -79,11 +79,12 @@ class ezcConsoleProgressbar
      * @var array(string)
      */
     protected $options = array(
-        'barChar'       => '+',     // Char to fill progress bar with
-        'emptyChar'     => ' ',     // Char to fill empty space in progress bar with
-        'progressChar'  => '>',     // Right most char of the progress bar filling
-        'formatString'  => '[%bar%] %fraction% %',   // Format string
-        'width'         => 100,     // Maximum width of the progressbar
+        'barChar'        => '+',     // Char to fill progress bar with
+        'emptyChar'      => '-',     // Char to fill empty space in progress bar with
+        'progressChar'   => '>',     // Right most char of the progress bar filling
+        'formatString'   => '%act% / %max% [%bar%] %fraction%%',   // Format string
+        'width'          => 100,     // Maximum width of the progressbar
+        'fractionFormat' => '%01.2f',// sprintf() string for the fraction
     );
 
     /**
@@ -121,6 +122,14 @@ class ezcConsoleProgressbar
      * @var int
      */
     protected $currentStep = 0;
+
+    /**
+     * The maximum number of steps to go.
+     * Calculated once from the settings.
+     *
+     * @var int
+     */
+    protected $numSteps;
 
     // {{{ $output
 
@@ -162,6 +171,7 @@ class ezcConsoleProgressbar
         $this->output = $outHandler;
         $this->setSettings( $settings );
         $this->setOptions( $options );
+        $this->calculateMeasures();
     }
 
     // }}}
@@ -182,6 +192,11 @@ class ezcConsoleProgressbar
         {
             if ( isset( $this->options[$name] ) ) 
             {
+                if ( $name == 'barChar' || $name == 'progressChar' || $name == 'emptyChar' )
+                {
+                    // Not possible by now, would need some more effort in padding, etc.
+                    $val = $this->stripEscapeSequences( $val );
+                }
                 $this->options[$name] = $val;
             } 
             else 
@@ -206,7 +221,6 @@ class ezcConsoleProgressbar
     public function start() 
     {
         $this->output->storePos();
-        $this->calculateMeasures();
         $this->started = true;
     }
 
@@ -225,6 +239,9 @@ class ezcConsoleProgressbar
             $this->start();
         }
         $this->output->restorePos();
+        $this->generateValues();
+        echo strlen( $this->stripEscapeSequences( $this->insertValues(  ) ) );
+        echo $this->insertValues();
     }
 
     // }}}
@@ -238,8 +255,13 @@ class ezcConsoleProgressbar
      *
      * @param bool Whether to redraw the bar immediatelly.
      */
-    public function advance( $redraw = true ) {
-        
+    public function advance( $redraw = true ) 
+    {
+        $this->currentStep += 1;
+        if ( $redraw === true )
+        {
+            $this->output();
+        }
     }
 
     // }}}
@@ -253,11 +275,13 @@ class ezcConsoleProgressbar
      * output handler used, if changed.
      */
     public function finish() {
-        
+        $this->actualStep = $this->numSteps;
     }
 
     // }}}
-    
+
+    // private
+
     // {{{ setSettings()
 
     /**
@@ -279,9 +303,81 @@ class ezcConsoleProgressbar
             throw new ezcBaseConfigException( 'Missing or invalid step setting.' );
         }
         $this->settings = $settings;
+        // Calc number of steps bar goes through
+        $this->numSteps = $this->settings['max'] / $this->settings['step'];
     }
 
     // }}}
+
+    // {{{ generateValues()
+
+    /**
+     * Generate all values to be replaced in the format string. 
+     * 
+     * @return void
+     */
+    protected function generateValues()
+    {
+        // Bar
+        $barFilledSpace = ceil( $this->measures['barSpace'] / $this->numSteps ) * $this->currentStep;
+        // Sanitize value if it gets to large by rounding
+        $barFilledSpace = $barFilledSpace > $this->measures['barSpace'] ? $this->measures['barSpace'] : $barFilledSpace;
+        $bar = str_pad( 
+            str_pad( 
+                $this->options['progressChar'], 
+                $barFilledSpace, 
+                $this->options['barChar'], 
+                STR_PAD_LEFT
+            ), 
+            $this->measures['barSpace'], 
+            $this->options['emptyChar'], 
+            STR_PAD_RIGHT 
+        );
+        $this->valueMap['bar'] = $bar;
+
+        // Fraction
+        $fractionVal = sprintf( 
+            $this->options['fractionFormat'],
+            ( $fractionVal = round( ( $this->settings['step'] * $this->currentStep ) / $this->settings['max'] * 100 ) ) > 100 ? 100 : $fractionVal
+        );
+        $this->valueMap['fraction'] = str_pad( 
+            $fractionVal, 
+            strlen( sprintf( $this->options['fractionFormat'], 100 ) ),
+            ' ',
+            STR_PAD_LEFT
+        );
+
+        // Act / max
+        $actVal = ( $actVal = $this->currentStep * $this->settings['step'] ) > $this->settings['max'] ? $this->settings['max'] : $actVal;
+        $this->valueMap['act'] = str_pad( 
+            $actVal, 
+            strlen( $this->settings['max'] ),
+            ' ',
+            STR_PAD_LEFT
+        );
+        $this->valueMap['max'] = $this->settings['max'];
+    }
+
+// }}}
+    // {{{ insertValues()
+
+    /**
+     * Insert values into bar format string. 
+     * 
+     * @return void
+     */
+    protected function insertValues()
+    {
+        $bar = $this->options['formatString'];
+        foreach ( $this->valueMap as $name => $val )
+        {
+            $bar = str_replace( '%' . $name . '%', $val, $bar );
+        }
+        return $bar;
+    }
+
+    // }}}
+
     // {{{ calculateMeasures()
 
     /**
@@ -292,13 +388,23 @@ class ezcConsoleProgressbar
     protected function calculateMeasures()
     {
         $this->measures['fixedCharSpace'] = strlen( $this->stripEscapeSequences( $this->insertValues() ) );
-        $this->measures['maxSpace']       = $this->measures['actSpace'] = strlen( $this->stripEscapeSequences( $this->settings['max'] ) );
-        $this->measures['fractionSpace']  = 3 // max. "100" == 100 %
+        if ( strpos( $this->options['formatString'],'%max%' ) !== false )
+        {
+            $this->measures['maxSpace'] = strlen( $this->settings['max'] );
+
+        }
+        if ( strpos( $this->options['formatString'], '%act%' ) !== false )
+        {
+            $this->measures['actSpace'] = strlen( $this->settings['max'] );
+        }
+        if ( strpos( $this->options['formatString'], '%fraction%' ) !== false )
+        {
+            $this->measures['fractionSpace'] = strlen( sprintf( $this->options['fractionFormat'], 100 ) );
+        }
         $this->measures['barSpace']       = $this->options['width'] - array_sum( $this->measures );
     }
 
     // }}}
-
     // {{{ stripEscapeSequences()
 
     /**
@@ -309,7 +415,7 @@ class ezcConsoleProgressbar
      */
     protected function stripEscapeSequences( $str )
     {
-        return preg_replace( '/\033\[[0-9a-f;]*m/i', '', $str  )
+        return preg_replace( '/\033\[[0-9a-f;]*m/i', '', $str  );
     }
 
     // }}}
