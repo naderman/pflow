@@ -12,9 +12,6 @@
  * as expected.
  *
  * @package Base
- * @copyright Copyright (C) 2005 eZ systems as. All rights reserved.
- * @license LGPL {@link http://www.gnu.org/copyleft/lesser.html}
- * @version //autogen//
  */
 class ezcBaseTypeException extends Exception
 {

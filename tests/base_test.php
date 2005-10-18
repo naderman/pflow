@@ -1,5 +1,15 @@
 <?php
-
+/**
+ * @package Base
+ * @subpackage Tests
+ * @version //autogentag//
+ * @copyright Copyright (C) 2005 eZ systems as. All rights reserved.
+ * @license LGPL {@link http://www.gnu.org/copyleft/lesser.html}
+ */
+/**
+ * @package Base
+ * @subpackage Tests
+ */
 class ezcBaseTest extends ezcTestCase
 {
     public function testAssertType()

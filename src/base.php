@@ -1,5 +1,4 @@
 <?php
-
 /**
  * File containing the ezcBase class.
  *
@@ -8,7 +7,6 @@
  * @copyright Copyright (C) 2005 eZ systems as. All rights reserved.
  * @license LGPL {@link http://www.gnu.org/copyleft/lesser.html}
  */
-
 /**
  * Base class implements the methods needed to use the ezComponents.
  *

@@ -9,27 +9,32 @@
  */
 /**
  * ezcBaseConfigException is thrown whenever there is something wrong with
- * configuration that is set through the setConfiguration() method of a class.
+ * configuration that is set through the setOptions() method of a class.
  *
  * @package Base
- * @copyright Copyright (C) 2005 eZ systems as. All rights reserved.
- * @license LGPL {@link http://www.gnu.org/copyleft/lesser.html}
- * @version //autogen//
  */
 class ezcBaseConfigException extends Exception
 {
     /**
-     *
+     * Used for when a config setting was unknown
      */
     const UNKNOWN_CONFIG_SETTING = 1;
 
     /**
-     *
+     * Used when an option's value was out of range
      */
     const VALUE_OUT_OF_RANGE = 2;
 
     /**
      * Constructs a new ezcBaseConfigException
+     *
+     * Constructs a new ezcBaseConfigException
+     *
+     * @param string  $settingName The name of the setting where something was
+     *                wrong with.
+     * @param integer $exceptionType The type of exception (use one of the
+     *                class' constants for this)
+     * @param mixed   $value The value that the option was tried to be set too
      */
     function __construct( $settingName, $exceptionType, $value = null )
     {
