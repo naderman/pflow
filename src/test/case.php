@@ -83,7 +83,7 @@ abstract class ezcTestCase extends PHPUnit2_Framework_TestCase
 
     private function removeRecursively( $entry )
     {
-        if( is_file( $entry ) )
+        if( is_file( $entry ) || is_link( $entry ) )
         {
             // Some extra security that you're not erasing your harddisk :-).
             if( strncmp( $this->tempDir, $entry, strlen( $this->tempDir ) ) == 0 )
