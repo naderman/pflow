@@ -242,7 +242,6 @@ class ezcConsoleParameter
      * @param string $long           Long version of parameter
      * @param array(string) $options See description
      *
-     * @return void
      */
     public function registerParam( $short, $long, $options = array() ) {
         end( $this->paramDefs );
@@ -270,7 +269,6 @@ class ezcConsoleParameter
      * @param string $long     Long version of the alias
      * @param strung $refShort Reference to an existing param (short)
      *
-     * @return void
      *
      * @throws ezcConsoleParameterException
      * @see ezcConsoleParameterException::CODE_EXISTANCE
@@ -359,7 +357,6 @@ class ezcConsoleParameter
      * @param string $short Short option name for the parameter to be removed.
      * @param bool $deps    Handling of dependencies while unregistering. 
      *
-     * @return void
      *
      * @throws ezcConsoleParameterException 
      *         If requesting a nonexistant parameter 
@@ -570,7 +567,6 @@ class ezcConsoleParameter
      * texts. The array returned can be used by {@link ezcConsoleTable}.
      * 
      * @param bool $long Set this to true for getting the long help version.
-     * @return void
      */
     public function getHelp( $long = false )
     {
@@ -678,7 +674,6 @@ class ezcConsoleParameter
      * 
      * @param array $args The arguments array.
      * @param int $i Current index in arguments array.
-     * @return void
      */
     private function processArguments( $args, &$i )
     {
@@ -706,7 +701,6 @@ class ezcConsoleParameter
      * dependencies to other parameters and exclusion of other parameters or
      * arguments. This method processes the checks.
      * 
-     * @return void
      *
      * @throws ezcConsoleParameterException 
      *         If dependencies are unmet 
@@ -872,7 +866,6 @@ class ezcConsoleParameter
      * 
      * @param array $args The arguments array
      * @param int $i Current arguments array position
-     * @return void
      */
     private function preprocessLongParam( &$args, $i )
     {

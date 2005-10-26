@@ -58,7 +58,6 @@ class ezcConsoleToolsTableTest extends ezcTestCase
      * setUp 
      * 
      * @access public
-     * @return void
      */
     public function setUp()
     {
@@ -93,7 +92,6 @@ class ezcConsoleToolsTableTest extends ezcTestCase
      * tearDown 
      * 
      * @access public
-     * @return void
      */
     public function tearDown()
     {

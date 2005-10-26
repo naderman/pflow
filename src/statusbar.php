@@ -112,7 +112,6 @@ class ezcConsoleStatusbar
      * @see ezcConsoleStatusbar::$options
      * 
      * @param array $options Options to set.
-     * @return void
      */
     public function setOptions( $options )
     {
@@ -167,7 +166,6 @@ class ezcConsoleStatusbar
     /**
      * Reset the state of the statusbar object to its initial one. 
      * 
-     * @return void
      */
     public function reset()
     {

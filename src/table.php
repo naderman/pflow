@@ -236,7 +236,6 @@ class ezcConsoleTable
      * @see ezcConsoleTable::$options
      * 
      * @param array $options Options to set.
-     * @return void
      */
     public function setOptions( $options )
     {
@@ -328,7 +327,6 @@ class ezcConsoleTable
      * @param int $row The row number where the cell to format resides in.
      * @param int $col The column part to identify a cell or null to format a row.
      * @param string $format The format to use for the cell data.
-     * @return void
      */
     public function setCellFormat( $format, $row, $col = null  )
     {
@@ -402,7 +400,6 @@ class ezcConsoleTable
      * Output the table.
      * Prints the complete table to the console.
      *
-     * @return void
      */
     public function outputTable() 
     {
@@ -555,7 +552,6 @@ class ezcConsoleTable
     /**
      * Determine width of each single column. 
      * 
-     * @return void
      */
     private function getColWidths()
     {
@@ -636,7 +632,6 @@ class ezcConsoleTable
      * Check and set the settings submited to the constructor. 
      * 
      * @param array $settings 
-     * @return void
      *
      * @throws ezcBaseConfigException On an invalid setting.
      */

@@ -201,7 +201,6 @@ class ezcConsoleProgressbar
      * @see ezcConsoleTable::$options
      * 
      * @param array $options Options to set.
-     * @return void
      */
     public function setOptions( $options )
     {
@@ -233,7 +232,6 @@ class ezcConsoleProgressbar
      * No output will be done yet. Call {@link ezcConsoleProgressbar::output()}
      * to print the bar.
      * 
-     * @return void
      */
     public function start() 
     {
@@ -303,7 +301,6 @@ class ezcConsoleProgressbar
      * Check and set the settings submited to the constructor. 
      * 
      * @param array $settings 
-     * @return void
      *
      * @throws ezcBaseConfigException On an invalid setting.
      */
@@ -329,7 +326,6 @@ class ezcConsoleProgressbar
     /**
      * Generate all values to be replaced in the format string. 
      * 
-     * @return void
      */
     protected function generateValues()
     {
@@ -379,7 +375,6 @@ class ezcConsoleProgressbar
     /**
      * Insert values into bar format string. 
      * 
-     * @return void
      */
     protected function insertValues()
     {
@@ -398,7 +393,6 @@ class ezcConsoleProgressbar
     /**
      * Calculate several measures necessary to generate a bar. 
      * 
-     * @return void
      */
     protected function calculateMeasures()
     {
@@ -426,7 +420,6 @@ class ezcConsoleProgressbar
      * Strip all escape sequences from a string to measure it's size correctly. 
      * 
      * @param mixed $str 
-     * @return void
      */
     protected function stripEscapeSequences( $str )
     {

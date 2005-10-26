@@ -261,7 +261,6 @@ class ezcConsoleOutput
      * @see ezcConsoleOutput::$options
      *
      * @param array(string) $options Options.
-     * @return void
      */
     public function setOptions( $options ) {
         if ( isset( $options['format'] ) ) 
@@ -374,7 +373,6 @@ class ezcConsoleOutput
      * @todo Shall multiple markers be supported? Must be emulated by the 
      *       class, since not directly supported by ANSI escape seqs.
      *
-     * @return void
      */
     public function storePos() 
     {
@@ -390,7 +388,6 @@ class ezcConsoleOutput
      * Restores the cursor position last saved using
      * {@link ezcConsoleOutput::storePos()}.
      *
-     * @return void
      *
      * @throws ezcConsoleOutputException If no position saved.
      * @todo Gnome terminal does not recognize this codes. Solution??
@@ -414,7 +411,6 @@ class ezcConsoleOutput
      * default is 1).
      * 
      * @param int $col Column to jump to.
-     * @return void
      */
     public function toPos( $col = 1 ) 
     {
@@ -432,7 +428,6 @@ class ezcConsoleOutput
      * Sub method to set formating options.
      * 
      * @param array $newFormats Array of new formats to be set.
-     * @return void
      */
     private function setFormats( $newFormats )
     {

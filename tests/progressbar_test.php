@@ -33,7 +33,6 @@ class ezcConsoleToolsProgressbarTest extends ezcTestCase
      * setUp 
      * 
      * @access public
-     * @return void
      */
     public function setUp()
     {
@@ -46,7 +45,6 @@ class ezcConsoleToolsProgressbarTest extends ezcTestCase
      * tearDown 
      * 
      * @access public
-     * @return void
      */
     public function tearDown()
     {

@@ -120,7 +120,6 @@ class ezcConsoleToolsOutputTest extends ezcTestCase
      * setUp 
      * 
      * @access public
-     * @return void
      */
     public function setUp()
     {
@@ -139,7 +138,6 @@ class ezcConsoleToolsOutputTest extends ezcTestCase
      * tearDown 
      * 
      * @access public
-     * @return void
      */
     public function tearDown()
     {
@@ -154,7 +152,6 @@ class ezcConsoleToolsOutputTest extends ezcTestCase
      * testSetOptions
      * 
      * @access public
-     * @return void
      */
     public function testSetOptions()
     {
@@ -173,7 +170,6 @@ class ezcConsoleToolsOutputTest extends ezcTestCase
      * testFormatText
      * 
      * @access public
-     * @return void
      */
     public function testFormatText()
     {
@@ -196,7 +192,6 @@ class ezcConsoleToolsOutputTest extends ezcTestCase
      * testOutputText
      * 
      * @access public
-     * @return void
      */
     public function testOutputText()
     {
@@ -222,7 +217,6 @@ class ezcConsoleToolsOutputTest extends ezcTestCase
      * testOutputTextAutobreak
      * 
      * @access public
-     * @return void
      */
     public function testOutputTextAutobreak()
     {
@@ -258,7 +252,6 @@ broken.';
      * dumpString 
      * 
      * @param mixed $string 
-     * @return void
      */
     private function dumpString( $string )
     {
