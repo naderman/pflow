@@ -1,12 +1,19 @@
 <?php
-
 /**
  * ezcConsoleToolsOutputTest 
  * 
  * @package ConsoleTools
- * @version //autogen//
+ * @subpackage Tests
+ * @version //autogentag//
  * @copyright Copyright (C) 2005 eZ systems as. All rights reserved.
  * @license LGPL {@link http://www.gnu.org/copyleft/lesser.html}
+ */
+
+/**
+ * Test suite for ezcConsoleTable class.
+ * 
+ * @package ConsoleTools
+ * @subpackage Tests
  */
 class ezcConsoleToolsTableTest extends ezcTestCase
 {

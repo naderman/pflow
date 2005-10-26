@@ -1,12 +1,19 @@
 <?php
-
 /**
- * ezcConsoleToolsOutputTest 
+ * ezcConsoleToolsParameterTest
  * 
  * @package ConsoleTools
- * @version //autogen//
+ * @subpackage Tests
+ * @version //autogentag//
  * @copyright Copyright (C) 2005 eZ systems as. All rights reserved.
  * @license LGPL {@link http://www.gnu.org/copyleft/lesser.html}
+ */
+
+/**
+ * Test suite for ezcConsoleParameter class.
+ * 
+ * @package ConsoleTools
+ * @subpackage Tests
  */
 class ezcConsoleToolsParameterTest extends ezcTestCase
 {

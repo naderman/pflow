@@ -1,12 +1,19 @@
 <?php
-
 /**
  * ezcConsoleToolsOutputTest 
  * 
  * @package ConsoleTools
- * @version //autogen//
+ * @subpackage Tests
+ * @version //autogentag//
  * @copyright Copyright (C) 2005 eZ systems as. All rights reserved.
  * @license LGPL {@link http://www.gnu.org/copyleft/lesser.html}
+ */
+
+/**
+ * Test suite for ezcConsoleOutput class.
+ * 
+ * @package ConsoleTools
+ * @subpackage Tests
  */
 class ezcConsoleToolsOutputTest extends ezcTestCase
 {
@@ -113,7 +120,7 @@ class ezcConsoleToolsOutputTest extends ezcTestCase
      * setUp 
      * 
      * @access public
-     * @return 
+     * @return void
      */
     public function setUp()
     {
@@ -132,7 +139,7 @@ class ezcConsoleToolsOutputTest extends ezcTestCase
      * tearDown 
      * 
      * @access public
-     * @return 
+     * @return void
      */
     public function tearDown()
     {
@@ -147,7 +154,7 @@ class ezcConsoleToolsOutputTest extends ezcTestCase
      * testSetOptions
      * 
      * @access public
-     * @return 
+     * @return void
      */
     public function testSetOptions()
     {
@@ -166,7 +173,7 @@ class ezcConsoleToolsOutputTest extends ezcTestCase
      * testFormatText
      * 
      * @access public
-     * @return 
+     * @return void
      */
     public function testFormatText()
     {
@@ -189,7 +196,7 @@ class ezcConsoleToolsOutputTest extends ezcTestCase
      * testOutputText
      * 
      * @access public
-     * @return 
+     * @return void
      */
     public function testOutputText()
     {
@@ -215,7 +222,7 @@ class ezcConsoleToolsOutputTest extends ezcTestCase
      * testOutputTextAutobreak
      * 
      * @access public
-     * @return 
+     * @return void
      */
     public function testOutputTextAutobreak()
     {

@@ -1,12 +1,19 @@
 <?php
-
 /**
  * ezcConsoleToolsOutputTest 
  * 
  * @package ConsoleTools
- * @version //autogen//
+ * @subpackage Tests
+ * @version //autogentag//
  * @copyright Copyright (C) 2005 eZ systems as. All rights reserved.
  * @license LGPL {@link http://www.gnu.org/copyleft/lesser.html}
+ */
+
+/**
+ * Test suite for ezcConsoleProgressbar class.
+ * 
+ * @package ConsoleTools
+ * @subpackage Tests
  */
 class ezcConsoleToolsProgressbarTest extends ezcTestCase
 {
@@ -26,7 +33,7 @@ class ezcConsoleToolsProgressbarTest extends ezcTestCase
      * setUp 
      * 
      * @access public
-     * @return 
+     * @return void
      */
     public function setUp()
     {
@@ -39,7 +46,7 @@ class ezcConsoleToolsProgressbarTest extends ezcTestCase
      * tearDown 
      * 
      * @access public
-     * @return 
+     * @return void
      */
     public function tearDown()
     {
