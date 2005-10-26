@@ -24,35 +24,39 @@ class ezcConsoleParameterException extends Exception
     /**
      * Required parameter/alias does not exist.
      */
-    const CODE_EXISTANCE  = 1;
+    const CODE_EXISTANCE        = 1;
     /**
      * Exclusion rule defined for parameter not met.
      */
-    const CODE_EXCLUSION  = 2;
+    const CODE_EXCLUSION        = 2;
     /**
      * Dependency rule defined for parameter not met.
      */
-    const CODE_DEPENDENCY = 3;
+    const CODE_DEPENDENCY       = 3;
     /**
      * Type rule defined for parameter not met.
      */
-    const CODE_TYPE       = 4;
+    const CODE_TYPE             = 4;
     /**
      * Unknown string in parameter row.
      */
-    const CODE_UNKNOWN    = 5;
+    const CODE_UNKNOWN          = 5;
     /**
      * No value has been passed to a parameter that expects one.
      */
-    const CODE_NOVALUE    = 6;
+    const CODE_NOVALUE          = 6;
     /**
      * Multiple values have been passed to a parameter that expects only one.
      */
-    const CODE_MULTIPLE   = 7;
+    const CODE_MULTIPLE         = 7;
     /**
      * Arguments were submitted although a parameter disallowed them.
      */
-    const CODE_ARGUMENTS  = 8;
+    const CODE_ARGUMENTS        = 8;
+    /**
+     * Parameter definition string was not well formed. 
+     */
+    const CODE_NOTWELLFORMED    = 9;
 
     /**
      * Parameter this exception is about.

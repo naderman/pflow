@@ -306,11 +306,40 @@ class ezcConsoleParameter
      *
      * @param string $paramDef Parameter definition string.
      * @throws ezcConsoleParameterException If string is not wellformed.
-     *
-     * @todo Implement.
      */
-    public function fromString( $paramDef ) {
-        
+    public function fromString( $paramDef ) 
+    {
+        $regex = '/\[([a-z0-9-]+)([:?*+])?\|([a-z0-9-]+)([:?*+])?\]/';
+        if ( preg_match_all( $regex, $paramDef, $matches ) )
+        {
+            foreach ( $matches[1] as $id => $short )
+            {
+                $paramOptions = array();
+                if ( empty( $matches[3][$id] )  ) 
+                {
+                    throw new ezcConsoleParameterException( 
+                        'Missing long parameter name for short parameter "-'.$short.'"',
+                        ezcConsoleParameterException::CODE_NOTWELLFORMED 
+                    );
+                }
+                $long = $matches[3][$id];
+                if ( !empty( $matches[2][$id] ) || !empty( $matches[4][$id] ) )
+                {
+                    switch ( !empty( $matches[2][$id] ) ? $matches[2][$id] : $matches[4][$id] )
+                    {
+                        case '+':
+                        case '*':
+                            $paramOptions['multiple'] = true;
+                            break;
+                        case '?':
+                        default:
+                            break;
+                    }
+                }
+                $this->registerParam( $short, $long, $paramOptions );
+            }
+        }
+
     }
 
     // }}}
@@ -526,6 +555,8 @@ class ezcConsoleParameter
 
     // }}}
 
+    // {{{ getHelp()
+
     /**
      * Get help information for your parameters.
      * This method returns an array of help information for your parameters,
@@ -552,6 +583,8 @@ class ezcConsoleParameter
         }
         return $help;
     }
+
+    // }}}
 
     // private
 
@@ -852,4 +885,5 @@ class ezcConsoleParameter
     }
 
     // }}}
+
 }

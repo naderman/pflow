@@ -208,7 +208,7 @@ class ezcConsoleToolsParameterTest extends ezcTestCase
 
     // }}} 
 
-    // {{{ test registerParam - success
+    // {{{ test registerParam() - success
 
     /**
      * testRegisterParam
@@ -238,7 +238,50 @@ class ezcConsoleToolsParameterTest extends ezcTestCase
 
     // }}}
 
-    // {{{ test registerAlias - success
+    // {{{ test fromString()
+
+    public function testFromString()
+    {
+        $param = new ezcConsoleParameter();
+        $param->fromString( '[a:|all:][u?|user?][i|info][o+|overall+]' );
+        $res['a'] = array(
+            'type' => 1,
+            'default' => NULL,
+            'multiple' => false,
+            'shorthelp' => 'No help available.',
+            'longhelp' => 'Sorry, there is no help text available for this parameter.',
+            'depends' => array (),
+            'excludes' => array (),
+            'arguments' => true,
+        );
+        $res['u'] = array(
+            'type' => 1,
+            'default' => NULL,
+            'multiple' => false,
+            'shorthelp' => 'No help available.',
+            'longhelp' => 'Sorry, there is no help text available for this parameter.',
+            'depends' => array (),
+            'excludes' => array (),
+            'arguments' => true,
+        );
+        $res['o'] = array(
+            'type' => 1,
+            'default' => NULL,
+            'multiple' => true,
+            'shorthelp' => 'No help available.',
+            'longhelp' => 'Sorry, there is no help text available for this parameter.',
+            'depends' => array (),
+            'excludes' => array (),
+            'arguments' => true,
+        );
+        $this->assertEquals( $res['a'], $param->getParamDef( 'a' ), 'Parameter -a not registered correctly.'  );
+        $this->assertEquals( $res['u'], $param->getParamDef( 'u' ), 'Parameter -u not registered correctly.'  );
+        $this->assertEquals( $res['o'], $param->getParamDef( 'o' ), 'Parameter -u not registered correctly.'  );
+    }
+
+    // }}}
+
+    // {{{ test registerAlias() - success
 
     /**
      * testRegisterAliasSuccess
@@ -266,7 +309,7 @@ class ezcConsoleToolsParameterTest extends ezcTestCase
     }
     
     // }}}
-    // {{{ test registerAlias - failure
+    // {{{ test registerAlias() - failure
     
     /**
      * testRegisterAliasFailure
@@ -552,7 +595,6 @@ class ezcConsoleToolsParameterTest extends ezcTestCase
     }
 
     // }}}
-
     // {{{ test process() - failure
 
     public function testProcessFailureExistance_1()
@@ -659,7 +701,7 @@ class ezcConsoleToolsParameterTest extends ezcTestCase
 
     // }}}
 
-    // {{{ test getHelp - universal
+    // {{{ test getHelp()
 
     public function testGetHelp1()
     {
