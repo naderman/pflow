@@ -233,7 +233,7 @@ class ezcConsoleProgressbar
      * No output will be done yet. Call {@link ezcConsoleProgressbar::output()}
      * to print the bar.
      * 
-     * @return 
+     * @return void
      */
     public function start() 
     {

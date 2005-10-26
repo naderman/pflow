@@ -61,7 +61,7 @@ class ezcConsoleToolsStatusbarTest extends ezcTestCase
      * setUp 
      * 
      * @access public
-     * @return 
+     * @return void
      */
     public function setUp()
     {
@@ -74,7 +74,7 @@ class ezcConsoleToolsStatusbarTest extends ezcTestCase
      * tearDown 
      * 
      * @access public
-     * @return 
+     * @return void
      */
     public function tearDown()
     {

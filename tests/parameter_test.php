@@ -188,7 +188,7 @@ class ezcConsoleToolsParameterTest extends ezcTestCase
      * setUp 
      * 
      * @access public
-     * @return 
+     * @return void
      */
     public function setUp()
     {
@@ -206,7 +206,7 @@ class ezcConsoleToolsParameterTest extends ezcTestCase
      * tearDown 
      * 
      * @access public
-     * @return 
+     * @return void
      */
     public function tearDown()
     {
@@ -221,7 +221,7 @@ class ezcConsoleToolsParameterTest extends ezcTestCase
      * testRegisterParam
      * 
      * @access public
-     * @return 
+     * @return void
      */
     public function testRegisterParam()
     {
@@ -294,7 +294,7 @@ class ezcConsoleToolsParameterTest extends ezcTestCase
      * testRegisterAliasSuccess
      * 
      * @access public
-     * @return 
+     * @return void
      */
     public function testRegisterAliasSuccess()
     {
@@ -322,7 +322,7 @@ class ezcConsoleToolsParameterTest extends ezcTestCase
      * testRegisterAliasFailure
      * 
      * @access public
-     * @return 
+     * @return void
      */
     public function testRegisterAliasFailure()
     {
