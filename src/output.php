@@ -396,7 +396,7 @@ class ezcConsoleOutput
     {
         if ( $this->positionStored === false )
         {
-            throw new ezcConsoleOutputException( 'Cannot restore position, if no position has been stored before.',  ezcConsoleOutputException::NOPOSSTORED);
+            throw new ezcConsoleOutputException( 'Cannot restore position, if no position has been stored before.',  ezcConsoleOutputException::NO_POSITION_STORED);
             return;
         }
         echo "\033[u";

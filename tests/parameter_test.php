@@ -330,7 +330,7 @@ class ezcConsoleToolsParameterTest extends ezcTestCase
             }
             catch ( ezcConsoleParameterException $e )
             {
-                if ( $e->getCode() !== ezcConsoleParameterException::EXISTANCE )
+                if ( $e->getCode() !== ezcConsoleParameterException::PARAMETER_NOT_EXISTS )
                 {
                     $this->fail( 'Alias registration threw unexpected exception "' . $e->getMessage()  . '" when registering alias for unknown parameter.' );
                 }
@@ -605,7 +605,7 @@ class ezcConsoleToolsParameterTest extends ezcTestCase
             'foo.php',
             '-k',
         );
-        $this->commonProcessTestFailure( $args, ezcConsoleParameterException::EXISTANCE );
+        $this->commonProcessTestFailure( $args, ezcConsoleParameterException::PARAMETER_NOT_EXISTS );
     }
     
     public function testProcessFailureExistance_2()
@@ -614,7 +614,7 @@ class ezcConsoleToolsParameterTest extends ezcTestCase
             'foo.php',
             '--t',
         );
-        $this->commonProcessTestFailure( $args, ezcConsoleParameterException::EXISTANCE );
+        $this->commonProcessTestFailure( $args, ezcConsoleParameterException::PARAMETER_NOT_EXISTS );
     }
     
     public function testProcessFailureExistance_3()
@@ -623,7 +623,7 @@ class ezcConsoleToolsParameterTest extends ezcTestCase
             'foo.php',
             '-testing',
         );
-        $this->commonProcessTestFailure( $args, ezcConsoleParameterException::EXISTANCE );
+        $this->commonProcessTestFailure( $args, ezcConsoleParameterException::PARAMETER_NOT_EXISTS );
     }
     
     public function testProcessFailureType()
@@ -633,7 +633,7 @@ class ezcConsoleToolsParameterTest extends ezcTestCase
             '-b',
             'not_an_int'
         );
-        $this->commonProcessTestFailure( $args, ezcConsoleParameterException::TYPE );
+        $this->commonProcessTestFailure( $args, ezcConsoleParameterException::PARAMETER_TYPE_RULE_NOT_MET );
     }
     
     public function testProcessFailureNovalue()
@@ -642,7 +642,7 @@ class ezcConsoleToolsParameterTest extends ezcTestCase
             'foo.php',
             '-o',
         );
-        $this->commonProcessTestFailure( $args, ezcConsoleParameterException::NOVALUE );
+        $this->commonProcessTestFailure( $args, ezcConsoleParameterException::MISSING_PARAMETER_VALUE );
     }
     
     public function testProcessFailureMultiple()
@@ -655,7 +655,7 @@ class ezcConsoleToolsParameterTest extends ezcTestCase
             'venus',
             
         );
-        $this->commonProcessTestFailure( $args, ezcConsoleParameterException::MULTIPLE );
+        $this->commonProcessTestFailure( $args, ezcConsoleParameterException::TOO_MANY_PARAMETER_VALUES );
     }
     
     public function testProcessFailureDependencies()
@@ -672,7 +672,7 @@ class ezcConsoleToolsParameterTest extends ezcTestCase
             'moretext',
             '-c'            // This one depends on -t, -o, -b and -y
         );
-        $this->commonProcessTestFailure( $args, ezcConsoleParameterException::DEPENDENCY );
+        $this->commonProcessTestFailure( $args, ezcConsoleParameterException::PARAMETER_DEPENDENCY_RULE_NOT_MET );
     }
     
     public function testProcessFailureExclusions()
@@ -685,7 +685,7 @@ class ezcConsoleToolsParameterTest extends ezcTestCase
             '--build',
             '--edit'            // This one excludes -t and -y
         );
-        $this->commonProcessTestFailure( $args, ezcConsoleParameterException::EXCLUSION );
+        $this->commonProcessTestFailure( $args, ezcConsoleParameterException::PARAMETER_EXCLUSION_RULE_NOT_MET );
     }
     
     public function testProcessFailureArguments()
@@ -698,7 +698,7 @@ class ezcConsoleToolsParameterTest extends ezcTestCase
             'bar',
             'someargument',
         );
-        $this->commonProcessTestFailure( $args, ezcConsoleParameterException::ARGUMENTS );
+        $this->commonProcessTestFailure( $args, ezcConsoleParameterException::ARGUMENTS_NOT_ALLOWED );
     }
 
     // }}}

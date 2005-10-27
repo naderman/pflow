@@ -51,7 +51,7 @@
  * try {
  *      $paramHandler->processParams();
  * } catch (ezcConsoleParameterException $e) {
- *      if ($e->code === ezcConsoleParameterException::DEPENDENCY) {
+ *      if ($e->code === ezcConsoleParameterException::PARAMETER_DEPENDENCY_RULE_NOT_MET) {
  *          $consoleOut->outputText(
  *              'Parameter '.$e->paramName." may not occur here.\n", 'error'
  *          );
@@ -271,13 +271,13 @@ class ezcConsoleParameter
      *
      *
      * @throws ezcConsoleParameterException
-     * @see ezcConsoleParameterException::EXISTANCE
+     * @see ezcConsoleParameterException::PARAMETER_NOT_EXISTS
      */
     public function registerAlias( $short, $long, $refShort ) {
         if ( !isset( $this->paramShort[$refShort] ) ) {
             throw new ezcConsoleParameterException( 
                 'Unknown parameter reference "' . $refShort . '".', 
-                ezcConsoleParameterException::EXISTANCE, 
+                ezcConsoleParameterException::PARAMETER_NOT_EXISTS, 
                 $refShort 
             );
         }
@@ -318,7 +318,7 @@ class ezcConsoleParameter
                 {
                     throw new ezcConsoleParameterException( 
                         'Missing long parameter name for short parameter "-'.$short.'"',
-                        ezcConsoleParameterException::NOTWELLFORMED 
+                        ezcConsoleParameterException::PARAMETER_STRING_NOT_WELLFORMED 
                     );
                 }
                 $long = $matches[3][$id];
@@ -360,7 +360,7 @@ class ezcConsoleParameter
      *
      * @throws ezcConsoleParameterException 
      *         If requesting a nonexistant parameter 
-     *         {@link ezcConsoleParameterException::EXISTANCE}.
+     *         {@link ezcConsoleParameterException::PARAMETER_NOT_EXISTS}.
      *
      * @todo Implement dependency check.
      */
@@ -368,7 +368,7 @@ class ezcConsoleParameter
         if ( !isset( $this->paramShort[$short] ) ) {
             throw new ezcConsoleParameterException( 
                 'Unknown parameter reference "' . $short . '".', 
-                ezcConsoleParameterException::EXISTANCE, 
+                ezcConsoleParameterException::PARAMETER_NOT_EXISTS, 
                 $short 
             );
         }
@@ -405,7 +405,7 @@ class ezcConsoleParameter
         }
         throw new ezcConsoleParameterException( 
             'Unknown parameter reference "' . $paramName . '".', 
-            ezcConsoleParameterException::EXISTANCE,
+            ezcConsoleParameterException::PARAMETER_NOT_EXISTS,
             $paramName
         );
     }
@@ -430,19 +430,19 @@ class ezcConsoleParameter
      *
      * @throws ezcConsoleParameterException 
      *         If dependencies are unmet 
-     *         {@link ezcConsoleParameterException::DEPENDENCY}.
+     *         {@link ezcConsoleParameterException::PARAMETER_DEPENDENCY_RULE_NOT_MET}.
      * @throws ezcConsoleParameterException 
      *         If exclusion rules are unmet 
-     *         {@link ezcConsoleParameterException::EXCLUSION}.
+     *         {@link ezcConsoleParameterException::PARAMETER_EXCLUSION_RULE_NOT_MET}.
      * @throws ezcConsoleParameterException 
      *         If type rules are unmet 
-     *         {@link ezcConsoleParameterException::TYPE}.
+     *         {@link ezcConsoleParameterException::PARAMETER_TYPE_RULE_NOT_MET}.
      * @throws ezcConsoleParameterException 
      *         If a parameter used does not exist
-     *         {@link ezcConsoleParameterException::EXISTANCE}.
+     *         {@link ezcConsoleParameterException::PARAMETER_NOT_EXISTS}.
      * @throws ezcConsoleParameterException 
      *         If arguments are passed although a parameter dissallowed them
-     *         {@link ezcConsoleParameterException::ARGUMENTS}.
+     *         {@link ezcConsoleParameterException::ARGUMENTS_NOT_ALLOWED}.
      * 
      * @see ezcConsoleParameterException
      */ 
@@ -608,7 +608,7 @@ class ezcConsoleParameter
                 // But one found
                 throw new Exception( 
                     'Parameter "--'.$this->paramDefs[$paramRef]['long'].'" does not expect a value but "'.$args[$i].'" was submitted.',
-                    ezcConsoleParameterException::TYPE
+                    ezcConsoleParameterException::PARAMETER_TYPE_RULE_NOT_MET
                 );
             }
             $this->paramValues[$paramRef] = true;
@@ -623,7 +623,7 @@ class ezcConsoleParameter
             {
                 throw new ezcConsoleParameterException( 
                     'Parameter "--'.$this->paramDefs[$paramRef]['long'].'" of incorrect type.' ,
-                    ezcConsoleParameterException::TYPE,
+                    ezcConsoleParameterException::PARAMETER_TYPE_RULE_NOT_MET,
                     $this->paramDefs[$paramRef]['long']
                 );
             }
@@ -637,7 +637,7 @@ class ezcConsoleParameter
             {
                 throw new ezcConsoleParameterException( 
                     'Parameter "--'.$this->paramDefs[$paramRef]['long'].'" expects only 1 value but multiple have been submitted.',
-                    ezcConsoleParameterException::MULTIPLE,
+                    ezcConsoleParameterException::TOO_MANY_PARAMETER_VALUES,
                     $this->paramDefs[$paramRef]['long']
                 );
             }
@@ -658,7 +658,7 @@ class ezcConsoleParameter
             {
                 throw new ezcConsoleParameterException( 
                     'Parameter value missing for parameter "--'.$this->paramDefs[$paramRef]['long'].'".',
-                    ezcConsoleParameterException::NOVALUE,
+                    ezcConsoleParameterException::MISSING_PARAMETER_VALUE,
                     $this->paramDefs[$paramRef]['short']
                 );
             }
@@ -683,7 +683,7 @@ class ezcConsoleParameter
             {
                 throw new ezcConsoleParameterException( 
                     'Unexpected parameter in argument list: "'.$args[$i].'".',
-                    UNKNOWN,
+                    UNKNOWN_PARAMETER,
                     $args[$i]
                 );
 
@@ -704,13 +704,13 @@ class ezcConsoleParameter
      *
      * @throws ezcConsoleParameterException 
      *         If dependencies are unmet 
-     *         {@link ezcConsoleParameterException::DEPENDENCY}.
+     *         {@link ezcConsoleParameterException::PARAMETER_DEPENDENCY_RULE_NOT_MET}.
      * @throws ezcConsoleParameterException 
      *         If exclusion rules are unmet 
-     *         {@link ezcConsoleParameterException::EXCLUSION}.
+     *         {@link ezcConsoleParameterException::PARAMETER_EXCLUSION_RULE_NOT_MET}.
      * @throws ezcConsoleParameterException 
      *         If arguments are passed although a parameter dissallowed them
-     *         {@link ezcConsoleParameterException::ARGUMENTS}.
+     *         {@link ezcConsoleParameterException::ARGUMENTS_NOT_ALLOWED}.
      */
     private function checkRules()
     {
@@ -727,7 +727,7 @@ class ezcConsoleParameter
                     {
                         throw new ezcConsoleParameterException( 
                             'Parameter "--'.$this->paramDefs[$paramRef]['long'].'" depends on "--'.$this->paramDefs[$dependRef]['long'].'" which was not submitted.',
-                            ezcConsoleParameterException::DEPENDENCY,
+                            ezcConsoleParameterException::PARAMETER_DEPENDENCY_RULE_NOT_MET,
                             $this->paramDefs[$paramRef]['long']
                         );
                     }
@@ -744,7 +744,7 @@ class ezcConsoleParameter
                     {
                         throw new ezcConsoleParameterException( 
                             'Parameter "--'.$this->paramDefs[$paramRef]['long'].'" excludes "--'.$this->paramDefs[$excludeRef]['long'].'" which was submitted.',
-                            ezcConsoleParameterException::EXCLUSION,
+                            ezcConsoleParameterException::PARAMETER_EXCLUSION_RULE_NOT_MET,
                             $this->paramDefs[$paramRef]['long']
                         );
                     }
@@ -757,7 +757,7 @@ class ezcConsoleParameter
             {
                 throw new ezcConsoleParameterException( 
                     'Parameter "--'.$this->paramDefs[$paramRef]['long'].'" excludes the usage of arguments, but arguments have been passed.',
-                    ezcConsoleParameterException::ARGUMENTS,
+                    ezcConsoleParameterException::ARGUMENTS_NOT_ALLOWED,
                     $this->paramDefs[$paramRef]['long']
                 );
             }
@@ -814,7 +814,7 @@ class ezcConsoleParameter
      *
      * @throws ezcConsoleParameterException 
      *         If a parameter used does not exist
-     *         {@link ezcConsoleParameterException::EXISTANCE}.
+     *         {@link ezcConsoleParameterException::PARAMETER_NOT_EXISTS}.
      */
     private function getParamRef( $arg )
     {
@@ -831,7 +831,7 @@ class ezcConsoleParameter
             {
                 throw new ezcConsoleParameterException( 
                     'Unknown parameter "'.$paramName.'".',
-                    ezcConsoleParameterException::EXISTANCE
+                    ezcConsoleParameterException::PARAMETER_NOT_EXISTS
                 );
 
             }
@@ -848,7 +848,7 @@ class ezcConsoleParameter
             {
                 throw new ezcConsoleParameterException( 
                     'Unknown parameter "'.$paramName.'".',
-                    ezcConsoleParameterException::EXISTANCE
+                    ezcConsoleParameterException::PARAMETER_NOT_EXISTS
                 );
 
             }

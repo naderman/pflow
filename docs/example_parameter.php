@@ -23,7 +23,7 @@ $paramHandler->registerParam( 'h', 'help', $help );
 // Options for the file parameter
 $file = array(
  // Must have a value, type string
- 'type'     => ezcConsoleParameter::TYPE_STRING
+ 'type'     => ezcConsoleParameter::PARAMETER_TYPE_RULE_NOT_MET_STRING
  'short'    => 'Process a file.',
  'long'     => 'Processes a single file.',
  // May not be used in combination with -d/--directory
@@ -35,7 +35,7 @@ $paramHandler->registerParam( 'f', 'file', $file );
 
 // Options for dir parameter
 $dir = array(
- 'type'     => ezcConsoleParameter::TYPE_STRING
+ 'type'     => ezcConsoleParameter::PARAMETER_TYPE_RULE_NOT_MET_STRING
  'short'    => 'Process a directory.',
  'long'     => 'Processes a complete directory.',
  // May not be used with -f/--file together
@@ -61,7 +61,7 @@ try
 catch ( ezcConsoleParameterException $e ) 
 {
     // An error occured
-    if ( $e->code === ezcConsoleParameterException::DEPENDENCY ) 
+    if ( $e->code === ezcConsoleParameterException::PARAMETER_DEPENDENCY_RULE_NOT_MET ) 
     {
         // Output some error text
         $consoleOut->outputText(
