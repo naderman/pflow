@@ -61,7 +61,7 @@ try
 catch ( ezcConsoleParameterException $e ) 
 {
     // An error occured
-    if ( $e->code === ezcConsoleParameterException::CODE_DEPENDENCY ) 
+    if ( $e->code === ezcConsoleParameterException::DEPENDENCY ) 
     {
         // Output some error text
         $consoleOut->outputText(

@@ -330,7 +330,7 @@ class ezcConsoleToolsParameterTest extends ezcTestCase
             }
             catch ( ezcConsoleParameterException $e )
             {
-                if ( $e->getCode() !== ezcConsoleParameterException::CODE_EXISTANCE )
+                if ( $e->getCode() !== ezcConsoleParameterException::EXISTANCE )
                 {
                     $this->fail( 'Alias registration threw unexpected exception "' . $e->getMessage()  . '" when registering alias for unknown parameter.' );
                 }
@@ -605,7 +605,7 @@ class ezcConsoleToolsParameterTest extends ezcTestCase
             'foo.php',
             '-k',
         );
-        $this->commonProcessTestFailure( $args, ezcConsoleParameterException::CODE_EXISTANCE );
+        $this->commonProcessTestFailure( $args, ezcConsoleParameterException::EXISTANCE );
     }
     
     public function testProcessFailureExistance_2()
@@ -614,7 +614,7 @@ class ezcConsoleToolsParameterTest extends ezcTestCase
             'foo.php',
             '--t',
         );
-        $this->commonProcessTestFailure( $args, ezcConsoleParameterException::CODE_EXISTANCE );
+        $this->commonProcessTestFailure( $args, ezcConsoleParameterException::EXISTANCE );
     }
     
     public function testProcessFailureExistance_3()
@@ -623,7 +623,7 @@ class ezcConsoleToolsParameterTest extends ezcTestCase
             'foo.php',
             '-testing',
         );
-        $this->commonProcessTestFailure( $args, ezcConsoleParameterException::CODE_EXISTANCE );
+        $this->commonProcessTestFailure( $args, ezcConsoleParameterException::EXISTANCE );
     }
     
     public function testProcessFailureType()
@@ -633,7 +633,7 @@ class ezcConsoleToolsParameterTest extends ezcTestCase
             '-b',
             'not_an_int'
         );
-        $this->commonProcessTestFailure( $args, ezcConsoleParameterException::CODE_TYPE );
+        $this->commonProcessTestFailure( $args, ezcConsoleParameterException::TYPE );
     }
     
     public function testProcessFailureNovalue()
@@ -642,7 +642,7 @@ class ezcConsoleToolsParameterTest extends ezcTestCase
             'foo.php',
             '-o',
         );
-        $this->commonProcessTestFailure( $args, ezcConsoleParameterException::CODE_NOVALUE );
+        $this->commonProcessTestFailure( $args, ezcConsoleParameterException::NOVALUE );
     }
     
     public function testProcessFailureMultiple()
@@ -655,7 +655,7 @@ class ezcConsoleToolsParameterTest extends ezcTestCase
             'venus',
             
         );
-        $this->commonProcessTestFailure( $args, ezcConsoleParameterException::CODE_MULTIPLE );
+        $this->commonProcessTestFailure( $args, ezcConsoleParameterException::MULTIPLE );
     }
     
     public function testProcessFailureDependencies()
@@ -672,7 +672,7 @@ class ezcConsoleToolsParameterTest extends ezcTestCase
             'moretext',
             '-c'            // This one depends on -t, -o, -b and -y
         );
-        $this->commonProcessTestFailure( $args, ezcConsoleParameterException::CODE_DEPENDENCY );
+        $this->commonProcessTestFailure( $args, ezcConsoleParameterException::DEPENDENCY );
     }
     
     public function testProcessFailureExclusions()
@@ -685,7 +685,7 @@ class ezcConsoleToolsParameterTest extends ezcTestCase
             '--build',
             '--edit'            // This one excludes -t and -y
         );
-        $this->commonProcessTestFailure( $args, ezcConsoleParameterException::CODE_EXCLUSION );
+        $this->commonProcessTestFailure( $args, ezcConsoleParameterException::EXCLUSION );
     }
     
     public function testProcessFailureArguments()
@@ -698,7 +698,7 @@ class ezcConsoleToolsParameterTest extends ezcTestCase
             'bar',
             'someargument',
         );
-        $this->commonProcessTestFailure( $args, ezcConsoleParameterException::CODE_ARGUMENTS );
+        $this->commonProcessTestFailure( $args, ezcConsoleParameterException::ARGUMENTS );
     }
 
     // }}}
