@@ -111,6 +111,36 @@ abstract class ezcTestCase extends PHPUnit2_Framework_TestCase
     }
 
     /**
+     * Checks if the property $propertyName in object $object is a private property
+     * and then checks if it has the correct value.
+     */
+    public function assertPrivateProperty( $object, $propertyName, $expectedValue )
+    {
+        self::assertTrue( is_object( $object ),
+                          "Parameter \$object must be an object, got: <" . gettype( $object ) . ">" );
+        self::assertSame( true, isset( $object->$propertyName ),
+                          "Property <$propertyName> does not exist on object <" . get_class( $object ) . ">." );
+        $data = (array)$object;
+        self::assertSame( true, isset( $data["\0" . getclass( $object ) . "\0" . $propertyName] ),
+                          "Property <$propertyName> is not a private property on object <" . get_class( $object ) . ">." );
+        self::assertSame( $expectedValue, $data["\0" . getclass( $object ) . "\0" . $propertyName],
+                          "Property <$propertyName> does not return correct value from object <" . get_class( $object ) . ">." );
+    }
+
+    /**
+     * Checks if the property $propertyName in object $object contains the correct value $expectedValue.
+     */
+    public function assertGetProperty( $object, $propertyName, $expectedValue )
+    {
+        self::assertTrue( is_object( $object ),
+                          "Parameter \$object must be an object, got: <" . gettype( $object ) . ">" );
+        self::assertSame( true, isset( $object->$propertyName ),
+                          "Property <$propertyName> does not exist on object <" . get_class( $object ) . ">." );
+        self::assertSame( $expectedValue, $object->$propertyName,
+                          "Property <$propertyName> does not return correct value from object <" . get_class( $object ) . ">." );
+    }
+
+    /**
      * Checks if $expectedValues are properly set on $propertyName in $object.
      */
     public function assertSetProperty( $object, $propertyName, $expectedValues )
