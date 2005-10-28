@@ -17,7 +17,7 @@ $set = array( 'max' => $file->getSize(), 'step' => 50 );
 $opt = array(
  'emptyChar'     => '-',
  'progressChar'  => '#',
- 'formatString'  => 'Uploading file "'.$myFilename.'": %act%/%max% kb [%bar%] %percent%%',
+ 'formatString'  => 'Uploading file <' . $myFilename . '>: %act%/%max% kb [%bar%] %percent%%',
 );
 
 // Create progress bar itself

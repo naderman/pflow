@@ -123,7 +123,7 @@ class ezcConsoleStatusbar
             } 
             else 
             {
-                trigger_error( 'Unknowen option "' . $name  . '".', E_USER_WARNING );
+                trigger_error( 'Unknowen option <' . $name . '>.', E_USER_WARNING );
             }
         }
     }

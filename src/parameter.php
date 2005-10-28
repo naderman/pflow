@@ -276,7 +276,7 @@ class ezcConsoleParameter
     public function registerAlias( $short, $long, $refShort ) {
         if ( !isset( $this->paramShort[$refShort] ) ) {
             throw new ezcConsoleParameterException( 
-                'Unknown parameter reference "' . $refShort . '".', 
+                'Unknown parameter reference <' . $refShort . '>.', 
                 ezcConsoleParameterException::PARAMETER_NOT_EXISTS, 
                 $refShort 
             );
@@ -367,7 +367,7 @@ class ezcConsoleParameter
     public function unregisterParam( $short, $deps = false ) {
         if ( !isset( $this->paramShort[$short] ) ) {
             throw new ezcConsoleParameterException( 
-                'Unknown parameter reference "' . $short . '".', 
+                'Unknown parameter reference <' . $short . '>.', 
                 ezcConsoleParameterException::PARAMETER_NOT_EXISTS, 
                 $short 
             );
@@ -404,7 +404,7 @@ class ezcConsoleParameter
             return $this->paramDefs[$this->paramLong[$paramName]]['options'];
         }
         throw new ezcConsoleParameterException( 
-            'Unknown parameter reference "' . $paramName . '".', 
+            'Unknown parameter reference <' . $paramName . '>.', 
             ezcConsoleParameterException::PARAMETER_NOT_EXISTS,
             $paramName
         );
@@ -607,7 +607,7 @@ class ezcConsoleParameter
             {
                 // But one found
                 throw new Exception( 
-                    'Parameter "--'.$this->paramDefs[$paramRef]['long'].'" does not expect a value but "'.$args[$i].'" was submitted.',
+                    'Parameter "--'.$this->paramDefs[$paramRef]['long'].'" does not expect a value but <' . $args[$i] . '> was submitted.',
                     ezcConsoleParameterException::PARAMETER_TYPE_RULE_NOT_MET
                 );
             }
@@ -682,7 +682,7 @@ class ezcConsoleParameter
             if ( substr( $args[$i], 0, 1 ) == '-' )
             {
                 throw new ezcConsoleParameterException( 
-                    'Unexpected parameter in argument list: "'.$args[$i].'".',
+                    'Unexpected parameter in argument list: <' . $args[$i] . '>.',
                     UNKNOWN_PARAMETER,
                     $args[$i]
                 );
@@ -830,7 +830,7 @@ class ezcConsoleParameter
             else
             {
                 throw new ezcConsoleParameterException( 
-                    'Unknown parameter "'.$paramName.'".',
+                    'Unknown parameter <' . $paramName . '>.',
                     ezcConsoleParameterException::PARAMETER_NOT_EXISTS
                 );
 
@@ -847,7 +847,7 @@ class ezcConsoleParameter
             else
             {
                 throw new ezcConsoleParameterException( 
-                    'Unknown parameter "'.$paramName.'".',
+                    'Unknown parameter <' . $paramName . '>.',
                     ezcConsoleParameterException::PARAMETER_NOT_EXISTS
                 );
 

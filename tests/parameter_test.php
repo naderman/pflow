@@ -230,12 +230,12 @@ class ezcConsoleToolsParameterTest extends ezcTestCase
             $this->assertEquals( 
                 array_merge( $tmpConsoleParameter->getDefaults(), $param['options'] ),
                 $tmpConsoleParameter->getParamDef( $param['short'] ),
-                'Parameter not registered correctly: "' . $param['short'] . '".'
+                'Parameter not registered correctly: <' . $param['short'] . '>.'
             );
             $this->assertEquals( 
                 array_merge( $tmpConsoleParameter->getDefaults(), $param['options'] ), 
                 $tmpConsoleParameter->getParamDef( $param['long'] ),
-                'Parameter not registered correctly: "' . $param['long'] . '".'
+                'Parameter not registered correctly: <' . $param['long'] . '>.'
             );
         }
     }
@@ -332,7 +332,7 @@ class ezcConsoleToolsParameterTest extends ezcTestCase
             {
                 if ( $e->getCode() !== ezcConsoleParameterException::PARAMETER_NOT_EXISTS )
                 {
-                    $this->fail( 'Alias registration threw unexpected exception "' . $e->getMessage()  . '" when registering alias for unknown parameter.' );
+                    $this->fail( 'Alias registration threw unexpected exception <' . $e->getMessage() . '> when registering alias for unknown parameter.' );
                 }
                 $exceptionCount++;
             }

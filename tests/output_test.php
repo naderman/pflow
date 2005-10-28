@@ -180,7 +180,7 @@ class ezcConsoleToolsOutputTest extends ezcTestCase
             $this->assertEquals( 
                 $fakeRes, 
                 $realRes,
-                'Test "' . $name . ' faile. String "' . $realRes . '" (real) is not equal to "' . $fakeRes . '" (fake).' 
+                'Test "' . $name . ' faile. String <' . $realRes . '> (real) is not equal to <' . $fakeRes . '> (fake).' 
             );
         }
     }
@@ -205,7 +205,7 @@ class ezcConsoleToolsOutputTest extends ezcTestCase
             $this->assertEquals( 
                 $fakeRes, 
                 $realRes,
-                'Test "' . $name . ' faile. String "' . $realRes . '" (real) is not equal to "' . $fakeRes . '" (fake).' 
+                'Test "' . $name . ' faile. String <' . $realRes . '> (real) is not equal to <' . $fakeRes . '> (fake).' 
             );
         }
     }
@@ -239,7 +239,7 @@ broken.';
             $this->assertEquals( 
                 $fakeRes, 
                 $realRes, 
-                'Test "' . $name . ' faile. String "' . $realRes . '" (real) is not equal to "' . $fakeRes . '" (fake).' 
+                'Test "' . $name . ' faile. String <' . $realRes . '> (real) is not equal to <' . $fakeRes . '> (fake).' 
             );
         }
     }
@@ -258,7 +258,7 @@ broken.';
         echo "Dumping string of length ".strlen( $string ).":\n\n";
         for ( $i = 0; $i < strlen( $string ); $i++ )
         {
-            echo '"' . $string[$i] . '" = -' . ord( $string[$i] ) . "-\n";
+            echo '<' . $string[$i] . '> = -' . ord( $string[$i] ) . "-\n";
         }
         echo "Finished dumping string.\n\n";
     }
