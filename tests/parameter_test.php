@@ -247,9 +247,9 @@ class ezcConsoleToolsParameterTest extends ezcTestCase
     public function testFromString()
     {
         $param = new ezcConsoleParameter();
-        $param->fromString( '[a:|all:][u?|user?][i|info][o+|overall+]' );
+        $param->fromString( '[a:|all:][u?|user?][i|info][o+test|overall+]' );
         $res['a'] = array(
-            'type' => 1,
+            'type' => ezcConsoleParameter::TYPE_NONE,
             'default' => NULL,
             'multiple' => false,
             'shorthelp' => 'No help available.',
@@ -259,8 +259,8 @@ class ezcConsoleToolsParameterTest extends ezcTestCase
             'arguments' => true,
         );
         $res['u'] = array(
-            'type' => 1,
-            'default' => NULL,
+            'type' => ezcConsoleParameter::TYPE_STRING,
+            'default' => '',
             'multiple' => false,
             'shorthelp' => 'No help available.',
             'longhelp' => 'Sorry, there is no help text available for this parameter.',
@@ -269,8 +269,8 @@ class ezcConsoleToolsParameterTest extends ezcTestCase
             'arguments' => true,
         );
         $res['o'] = array(
-            'type' => 1,
-            'default' => NULL,
+            'type' => ezcConsoleParameter::TYPE_STRING,
+            'default' => 'test',
             'multiple' => true,
             'shorthelp' => 'No help available.',
             'longhelp' => 'Sorry, there is no help text available for this parameter.',
@@ -280,7 +280,7 @@ class ezcConsoleToolsParameterTest extends ezcTestCase
         );
         $this->assertEquals( $res['a'], $param->getParamDef( 'a' ), 'Parameter -a not registered correctly.'  );
         $this->assertEquals( $res['u'], $param->getParamDef( 'u' ), 'Parameter -u not registered correctly.'  );
-        $this->assertEquals( $res['o'], $param->getParamDef( 'o' ), 'Parameter -u not registered correctly.'  );
+        $this->assertEquals( $res['o'], $param->getParamDef( 'o' ), 'Parameter -o not registered correctly.'  );
     }
 
     // }}}

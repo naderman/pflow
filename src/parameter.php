@@ -308,32 +308,44 @@ class ezcConsoleParameter
      */
     public function fromString( $paramDef ) 
     {
-        $regex = '/\[([a-z0-9-]+)([:?*+])?\|([a-z0-9-]+)([:?*+])?\]/';
+        $regex = '/\[([a-z0-9-]+)([:?*+])?([^|]*)\|([a-z0-9-]+)([:?*+])?\]/';
         if ( preg_match_all( $regex, $paramDef, $matches ) )
         {
             foreach ( $matches[1] as $id => $short )
             {
                 $paramOptions = array();
-                if ( empty( $matches[3][$id] )  ) 
+                if ( empty( $matches[4][$id] )  ) 
                 {
                     throw new ezcConsoleParameterException( 
                         'Missing long parameter name for short parameter "-'.$short.'"',
                         ezcConsoleParameterException::PARAMETER_STRING_NOT_WELLFORMED 
                     );
                 }
-                $long = $matches[3][$id];
-                if ( !empty( $matches[2][$id] ) || !empty( $matches[4][$id] ) )
+                $long = $matches[4][$id];
+                if ( !empty( $matches[2][$id] ) || !empty( $matches[5][$id] ) )
                 {
-                    switch ( !empty( $matches[2][$id] ) ? $matches[2][$id] : $matches[4][$id] )
+                    switch ( !empty( $matches[2][$id] ) ? $matches[2][$id] : $matches[5][$id] )
                     {
-                        case '+':
                         case '*':
+                            // Allows 0 or more occurances
                             $paramOptions['multiple'] = true;
                             break;
+                        case '+':
+                            // Allows 1 or more occurances
+                            $paramOptions['multiple'] = true;
+                            $paramOptions['type'] = self::TYPE_STRING;
+                            break;
                         case '?':
+                            $paramOptions['type'] = self::TYPE_STRING;
+                            $paramOptions['default'] = '';
+                            break;
                         default:
                             break;
                     }
+                }
+                if ( !empty( $matches[3][$id] ) )
+                {
+                    $paramOptions['default'] = $matches[3][$id];
                 }
                 $this->registerParam( $short, $long, $paramOptions );
             }
