@@ -329,10 +329,14 @@ class ezcConsoleOutput
     {
         if ( $this->options['verboseLevel'] >= $verboseLevel ) 
         {
-            // @todo Check for manual breaks has to go here before autobreak gets active!
             if ( $this->options['autobreak'] > 0 )
             {
-                $text = wordwrap( $text, $this->options['autobreak'], "\n", true);
+                $textLines = explode( "\n", $text );
+                foreach ( $textLines as $id => $textLine )
+                {
+                    $textLines[$id] = wordwrap( $textLine, $this->options['autobreak'], "\n", true);
+                }
+                $text = implode( "\n", $textLines );
             }
             echo ( $this->options['useFormats'] == true ) ? $this->styleText( $text, $format ) : $text;
         }
@@ -369,9 +373,6 @@ class ezcConsoleOutput
      * {@link ezcConsoleOutput::restorePos()}. Multiple calls
      * to this method will override each other. Only the last
      * position is saved.
-     *
-     * @todo Shall multiple markers be supported? Must be emulated by the 
-     *       class, since not directly supported by ANSI escape seqs.
      *
      */
     public function storePos() 

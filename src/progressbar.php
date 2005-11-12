@@ -12,10 +12,6 @@
 /**
  * Creating and maintaining progressbars to be printed to the console. 
  *
- * @todo The author of the PEAR package "Console_ProgressBar" accepted
- *       us to take over his code from that package and improve it for
- *       our needs. {@link http://pear.php.net/package/console_progressbar}
- *
  * <code>
  *
  * // ... creating ezcConsoleOutput object

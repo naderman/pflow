@@ -361,8 +361,6 @@ class ezcConsoleParameter
      * @throws ezcConsoleParameterException 
      *         If requesting a nonexistant parameter 
      *         {@link ezcConsoleParameterException::PARAMETER_NOT_EXISTS}.
-     *
-     * @todo Implement dependency check.
      */
     public function unregisterParam( $short, $deps = false ) {
         if ( !isset( $this->paramShort[$short] ) ) {
@@ -379,6 +377,21 @@ class ezcConsoleParameter
         unset( $this->paramShort[$short] );
         // Unset parameter definition itself
         unset( $this->paramDefs[$defKey] );
+
+        // Check for depending parameters and remove them
+        if ( $deps === true )
+        {
+            foreach ( $this->paramDefs as $paramRef => $paramDef )
+            {
+                foreach( $paramDef['options']['depends'] as $shortDep ) 
+                {
+                    if ( $shortDep === $short )
+                    {
+                        $this->unregisterParam( $short, true );
+                    }
+                }
+            }
+        }
     }
 
     // }}}
