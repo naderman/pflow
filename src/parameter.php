@@ -514,7 +514,7 @@ class ezcConsoleParameter
      */
     public function getParam( $param ) {
         if ( ( $paramRef = $this->getParamRef( $param ) ) !== false ) {
-            return $this->paramValues[$paramRef];
+            return isset( $this->paramValues[$paramRef] ) ? $this->paramValues[$paramRef] : false;
         }
         return false;
     }
