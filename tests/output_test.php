@@ -200,7 +200,7 @@ class ezcConsoleToolsOutputTest extends ezcTestCase
             ob_start();
             $this->consoleOutput->outputText( $this->testString, $name );
             $realRes = ob_get_contents();
-            ob_clean();
+            ob_end_clean();
             $fakeRes = sprintf( $inout['out'], $this->testString );
             $this->assertEquals( 
                 $fakeRes, 
@@ -233,7 +233,7 @@ broken.';
             ob_start();
             $this->consoleOutput->outputText( $testText, $name );
             $realRes = ob_get_contents();
-            ob_clean();
+            ob_end_clean();
             
             $fakeRes = sprintf( $inout['out'], $testResText );
             $this->assertEquals( 
