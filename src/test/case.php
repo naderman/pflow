@@ -158,7 +158,7 @@ abstract class ezcTestCase extends PHPUnit2_Framework_TestCase
                           "Parameter \$object must be an object, got: <" . gettype( $object ) . ">" );
         $data = (array)$object;
         self::assertSame( true, isset( $data["\0*\0" . $propertyName] ),
-                          "Property <$propertyName> is not a private property on object <" . get_class( $object ) . ">." );
+                          "Property <$propertyName> is not a protected property on object <" . get_class( $object ) . ">." );
         self::assertSame( $expectedValue, $data["\0*\0" . $propertyName],
                           "Property <$propertyName> does not return correct value from object <" . get_class( $object ) . ">." );
     }
