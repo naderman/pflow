@@ -135,7 +135,7 @@ class ezcBase
         // file_exists("ezc/autoload/$fileName") doesn't work.
         if ( file_exists( "$autoloadDir$fileName" ) )
         {
-            $array = require_once( "$autoloadDir$fileName" );
+            $array = require( "$autoloadDir$fileName" );
 
             if ( is_array( $array) && array_key_exists( $className, $array ) )
             {
@@ -152,8 +152,8 @@ class ezcBase
     }
 
     /**
-     * Loads, require_once, the given file name. If we are in development
-     * mode, "/trunk/src/" is inserted into the path.
+     * Loads, require(), the given file name. If we are in development mode,
+     * "/trunk/src/" is inserted into the path.
      *
      * @param string $file  The name of the file that should be loaded.
      */
@@ -166,7 +166,7 @@ class ezcBase
             $file = $first . "/trunk/src/" . $second;
         }
 
-        require_once( ezcBase::$packageDir . $file );
+        require( ezcBase::$packageDir . $file );
     }
 
 
