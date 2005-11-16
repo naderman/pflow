@@ -474,7 +474,7 @@ class ezcConsoleParameter
     public function process( $args = null ) {
         if ( !isset( $args ) )
         {
-            $args = $argv;
+            $args = isset($argv) ? $argv : isset($_SERVER['argv']) ? $_SERVER['argv'] : array();
         }
         $i = 1;
         while ( $i < count( $args ) )
