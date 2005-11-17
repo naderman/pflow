@@ -36,8 +36,7 @@ $table->addRow( array( 'More', $out->styleText( 'More green', 'green' ), 'Smalle
 // Print table to the screen
 $table->output();
 
-?>
-
+/*
 RESULT ( without color ):
 
 +---------------------------------------------------------+
@@ -48,4 +47,5 @@ RESULT ( without color ):
 +---------------------------------------------------------+
 | More      | More green | Smaller data                   |     // Green color in middle text
 +---------------------------------------------------------+
-
+*/
+?>

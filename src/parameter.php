@@ -906,3 +906,4 @@ class ezcConsoleParameter
     // }}}
 
 }
+?>

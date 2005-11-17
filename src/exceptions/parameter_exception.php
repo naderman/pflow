@@ -84,3 +84,4 @@ class ezcConsoleParameterException extends Exception
         parent::__construct( $message, $code );
     }
 }
+?>

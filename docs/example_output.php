@@ -37,3 +37,4 @@ $out->outputText( "Some verbose output.\n", null, 10 );   // With current option
 
 // Output some bold text
 $out->outputText( "And some not so verbose, bold output.\n", 'bold' );
+?>

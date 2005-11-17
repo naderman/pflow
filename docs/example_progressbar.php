@@ -35,8 +35,7 @@ $progress->finish();
 
 $out->outputText( "Successfully uploaded \"$myFilename\".\n", 'success' );
 
-?>
-
+/*
 OUTPUT:
 
 // At 30 %
@@ -51,3 +50,5 @@ Uploading file "ezpublish-4.0.0.tgz":  950/1000 kb [###################>] 95%
 // At 100 %
 Uploading file "ezpublish-4.0.0.tgz": 1000/1000 kb [####################] 100%
 Successfully uploaded "ezpublish-4.0.0.tgz".
+*/
+?>

@@ -502,3 +502,4 @@ class ezcConsoleOutput
     // }}}
 
 }
+?>

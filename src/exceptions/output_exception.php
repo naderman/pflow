@@ -25,3 +25,4 @@ class ezcConsoleOutputException extends Exception
      */
     const NO_POSITION_STORED = 1;
 }
+?>
