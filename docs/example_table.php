@@ -22,7 +22,7 @@ $tableOpts = array(
 );
 
 // Initialize table with options, width of 60 chars and 3 cols
-$table = new ezcConsoleTable( $out, array( 'width' => 60, 'cols' = 3 ), $tableOpts );
+$table = new ezcConsoleTable( $out, array( 'width' => 60, 'cols' => 3 ), $tableOpts );
 
 // Generate a header row ( red color )
 $table->addRowHead( array( 'First col', 'Second col', 'Third col' ));
