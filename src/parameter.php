@@ -48,7 +48,8 @@
  * }
  * catch ( ezcConsoleParameterException $e )
  * {
- *      if ( $e->code === ezcConsoleParameterException::PARAMETER_DEPENDENCY_RULE_NOT_MET ) {
+ *      if ( $e->code === ezcConsoleParameterException::PARAMETER_DEPENDENCY_RULE_NOT_MET )
+ *      {
  *          $consoleOut->outputText(
  *              'Parameter '.$e->paramName." may not occur here.\n", 'error'
  *          );
@@ -228,7 +229,8 @@ class ezcConsoleParameter
      */
     public function registerAlias( $short, $long, $refShort )
     {
-        if ( !isset( $this->paramShort[$refShort] ) ) {
+        if ( !isset( $this->paramShort[$refShort] ) )
+        {
             throw new ezcConsoleParameterException( 
                 "Unknown parameter reference <{$refShort}>.",
                 ezcConsoleParameterException::PARAMETER_NOT_EXISTS, 
@@ -324,7 +326,8 @@ class ezcConsoleParameter
      */
     public function unregisterParam( $short, $deps = false )
     {
-        if ( !isset( $this->paramShort[$short] ) ) {
+        if ( !isset( $this->paramShort[$short] ) )
+        {
             throw new ezcConsoleParameterException( 
                 "Unknown parameter reference <{$short}>.", 
                 ezcConsoleParameterException::PARAMETER_NOT_EXISTS, 
@@ -452,7 +455,8 @@ class ezcConsoleParameter
      */
     public function getParam( $param )
     {
-        if ( ( $paramRef = $this->getParamRef( $param ) ) !== false ) {
+        if ( ( $paramRef = $this->getParamRef( $param ) ) !== false )
+        {
             return isset( $this->paramValues[$paramRef] ) ? $this->paramValues[$paramRef] : false;
         }
         return false;
