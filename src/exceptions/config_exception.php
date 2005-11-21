@@ -41,10 +41,10 @@ class ezcBaseConfigException extends Exception
         switch ( $exceptionType )
         {
             case self::UNKNOWN_CONFIG_SETTING:
-                $msg = "The setting '{$settingName}' is not a valid configuration setting.";
+                $msg = "The setting <{$settingName}> is not a valid configuration setting.";
                 break;
             case self::VALUE_OUT_OF_RANGE:
-                $msg = "The value '{$value}' that you were trying to assign to setting '{$settingName}' is invalid.";
+                $msg = "The value <{$value}> that you were trying to assign to setting '<$settingName>' is invalid.";
                 break;
         }
         parent::__construct( $msg, $exceptionType );
