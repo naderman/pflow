@@ -1,9 +1,9 @@
 <?php
 
 // Prevent that our extended class starts to run.
-if (!defined('PHPUnit2_MAIN_METHOD'))
+if ( !defined( 'PHPUnit2_MAIN_METHOD' ) )
 {
-    define('PHPUnit2_MAIN_METHOD', 'TestRunner::main');
+    define( 'PHPUnit2_MAIN_METHOD', 'TestRunner::main' );
 }
 
 // FIXME: Circumvent the E_STRICT errors from PEAR itself.
@@ -21,11 +21,11 @@ class ezcTestRunner extends PHPUnit2_TextUI_TestRunner
     {
         // Call this method only once?
         $printer = new ezcTestPrinter();
-        $this->setPrinter($printer);
+        $this->setPrinter( $printer );
 
         // Remove this file name from the assertion trace.
         // (Displayed when a test fails)
-        PHPUnit2_Util_Filter::addFileToFilter(__FILE__);
+        PHPUnit2_Util_Filter::addFileToFilter( __FILE__ );
     }
 
     /**
@@ -47,8 +47,8 @@ class ezcTestRunner extends PHPUnit2_TextUI_TestRunner
 
     public function showHelp()
     {
-        print ("./runtests DSN [ [Suite name] file_name ]\n\n");
-        print ("We use this crappy commandline parsing until the ConsoleTools package is made.\n\n");
+        print ( "./runtests DSN [ [Suite name] file_name ]\n\n" );
+        print ( "We use this crappy commandline parsing until the ConsoleTools package is made.\n\n" );
     }
 
     public function runFromArguments( $args )
@@ -63,7 +63,7 @@ class ezcTestRunner extends PHPUnit2_TextUI_TestRunner
         {
             $this->initializeDatabase( $args[1] );
         }
-        catch( Exception $e )
+        catch ( Exception $e )
         {
             print( "Database initialization error: {$e->getMessage()}\n" );
             return;
@@ -73,58 +73,60 @@ class ezcTestRunner extends PHPUnit2_TextUI_TestRunner
         print( "[Preparing tests]:");
 
         // If a package is given, use that package, otherwise parse all directories.
-        $packages = (isset($args[2]) ? $args[2] : false);
-        $allSuites = $this->prepareTests($packages);
+        $packages = isset( $args[2] ) ? $args[2] : false;
+        $allSuites = $this->prepareTests( $packages );
 
-        $this->doRun($allSuites);
+        $this->doRun( $allSuites );
     }
 
     protected function printCredits()
     {
         $version = PHPUnit2_Runner_Version::getVersionString();
-        $pos = strpos( $version, "by Sebastian");
+        $pos = strpos( $version, "by Sebastian" );
 
-        print("ezcUnitTest uses the ".substr($version, 0, $pos)."framework from Sebastian Bergmann.\n\n");
+        print( "ezcUnitTest uses the " . substr( $version, 0, $pos ) . "framework from Sebastian Bergmann.\n\n" );
     }
 
-    protected function prepareTests($onePackage = false)
+    protected function prepareTests( $onePackage = false )
     {
         $directory = dirname( __FILE__ ) . "/../../../../";
  
         $allSuites = new ezcTestSuite();
         $allSuites->setName( "[Testing]" );
 
-        if( strpos( $onePackage, "/" ) !== false )
+        if ( strpos( $onePackage, "/" ) !== false )
         {
-            if( file_exists( $onePackage ) )
+            if ( file_exists( $onePackage ) )
             {
                 require_once( $onePackage );
                 $class = $this->getClassName( $onePackage );
 
-                if ($class !== false)
+                if ( $class !== false )
                 {
                     $allSuites->addTest( call_user_func( array( $class, 'suite' ) ) );
                 }
                 else
                 {
-                    echo ("\n  Cannot load: $onePackage. \n");
+                    echo "\n  Cannot load: $onePackage. \n";
                 }
             }
         }
         else
         {
-            $packages = ($onePackage ? array($onePackage) : $this->getPackages( $directory ) );
+            $packages = $onePackage ? array( $onePackage ) : $this->getPackages( $directory );
 
-            foreach ($packages as $package)
+            foreach ( $packages as $package )
             {
                 $releases = $this->getReleases( $directory, $package );
 
-                foreach( $releases as $release )
+                foreach ( $releases as $release )
                 {
-                     $suite = $this->getTestSuite( $directory, $package, $release );
+                    $suite = $this->getTestSuite( $directory, $package, $release );
 
                     if ( !is_null( $suite ) )
-                        $allSuites->addTest($suite);
+                    {
+                        $allSuites->addTest( $suite );
+                    }
                 }
             }
         }
@@ -140,16 +142,16 @@ class ezcTestRunner extends PHPUnit2_TextUI_TestRunner
     {
         $classes = get_declared_classes();
 
-        $size = count($classes);
-        $total = ($size > 30 ? 30 : $size);
+        $size = count( $classes );
+        $total = $size > 30 ? 30 : $size;
 
         // check only the last 30 classes.
-        for ($i = $size - 1; $i > $size - $total - 1; $i--)
+        for ( $i = $size - 1; $i > $size - $total - 1; $i-- )
         {
             $rf = new ReflectionClass( $classes[$i] );
 
-            $len = strlen($file);
-            if( strcmp( $file, substr( $rf->getFileName(), -$len ) ) == 0 )
+            $len = strlen( $file );
+            if ( strcmp( $file, substr( $rf->getFileName(), -$len ) ) == 0 )
             {
                 return $classes[$i];
             }
@@ -171,7 +173,10 @@ class ezcTestRunner extends PHPUnit2_TextUI_TestRunner
             {
                 while ( ( $entry = readdir( $dh ) ) !== false )
                 {
-                    if( $this->isPackage( $dir, $entry ) ) $packages[] = $entry;
+                    if ( $this->isPackage( $dir, $entry ) )
+                    {
+                        $packages[] = $entry;
+                    }
                 }
                 closedir( $dh );
             }
@@ -183,11 +188,17 @@ class ezcTestRunner extends PHPUnit2_TextUI_TestRunner
     protected function isPackage( $dir, $entry )
     {
         // Prepend directory if needed.
-        $fullPath = ( $dir == "" ? $entry : $dir ."/". $entry );
+        $fullPath = $dir == "" ? $entry : $dir ."/". $entry;
 
         // Check if it is a package.
-        if( !is_dir( $fullPath ) ) return false;
-        if( $entry[0] == "." ) return false; // .svn, ., ..
+        if ( !is_dir( $fullPath ) )
+        {
+            return false;
+        }
+        if ( $entry[0] == "." )
+        {
+            return false; // .svn, ., ..
+        }
 
         return true;
     }
@@ -212,7 +223,7 @@ class ezcTestRunner extends PHPUnit2_TextUI_TestRunner
             {
                 while ( ( $entry = readdir( $dh ) ) !== false )
                 {
-                    if( $this->isRelease( $dir, $entry ) )
+                    if ( $this->isRelease( $dir, $entry ) )
                     {
                         $releases[] = $entry;
                     }
@@ -232,16 +243,16 @@ class ezcTestRunner extends PHPUnit2_TextUI_TestRunner
     protected function getTestSuite( $dir, $package, $release )
     {
         $suitePath = implode( "/", array( $dir, $package, $release, self::SUITE_FILENAME ) );
-        if( file_exists( $suitePath ) )
+        if ( file_exists( $suitePath ) )
         {
             require_once( $suitePath );
 
             $className = "ezc". $package . "Suite";
            
-            if (method_exists( $className, "canRun" ) )
+            if ( method_exists( $className, "canRun" ) )
             {
                 $canRun = call_user_func( array( $className, 'canRun' ) );
-                if( $canRun == false )
+                if ( $canRun == false )
                 {
                     print( "\n  Skipped: $className because the requirements for this test are not met. canRun() method returned false." );
                     return null;
@@ -270,16 +281,16 @@ class ezcTestRunner extends PHPUnit2_TextUI_TestRunner
             $db = ezcDbFactory::create( $settings );
             ezcDbInstance::set( $db );
         }
-        catch( ezcDbException $e)
+        catch ( ezcDbException $e)
         {
-            switch( $e->getCode() )
+            switch ( $e->getCode() )
             {
-                case ezcDbException::MISSING_DATABASE_NAME: $this->printError( "The database name is missing."); break;
-                case ezcDbException::MISSING_USER_NAME: $this->printError( "The username is missing."); break;
-                case ezcDbException::MISSING_PASSWORD: $this->printError( "The password is missing."); break;
-                case ezcDbException::UNKNOWN_IMPL: $this->printError( "Unknown PDO implementation. Make sure you specified an existing driver (mysql, pgsql, oci) and that your PHP version has the modules (php -m): PDO and pdo_<driver> (e.g. pdo_mysql, pdo_pgsql, etc)."); break;
-                case ezcDbException::INSTANCE_NOT_FOUND: $this->printError( "Cannot find the db instance."); break;
-                case ezcDbException::NOT_IMPLEMENTED: $this->printError( "The functionality is not implemented."); break;
+                case ezcDbException::MISSING_DATABASE_NAME: $this->printError( "The database name is missing." ); break;
+                case ezcDbException::MISSING_USER_NAME: $this->printError( "The username is missing." ); break;
+                case ezcDbException::MISSING_PASSWORD: $this->printError( "The password is missing." ); break;
+                case ezcDbException::UNKNOWN_IMPL: $this->printError( "Unknown PDO implementation. Make sure you specified an existing driver (mysql, pgsql, oci) and that your PHP version has the modules (php -m): PDO and pdo_<driver> (e.g. pdo_mysql, pdo_pgsql, etc)." ); break;
+                case ezcDbException::INSTANCE_NOT_FOUND: $this->printError( "Cannot find the db instance." ); break;
+                case ezcDbException::NOT_IMPLEMENTED: $this->printError( "The functionality is not implemented." ); break;
                 default: $this->getTraceAsString(); break;
             }
             exit();
@@ -291,10 +302,10 @@ class ezcTestRunner extends PHPUnit2_TextUI_TestRunner
 
     protected function printError( $errorString )
     {
-        print( $errorString . "\n\n");
+        print( $errorString . "\n\n" );
 
-        print( "The DSN should look like: <Driver>://<User>[:Password]@<Host>/<Database> \n");
-        print( "For example: mysql://root:root@localhost/unittests\n\n");
+        print( "The DSN should look like: <Driver>://<User>[:Password]@<Host>/<Database> \n" );
+        print( "For example: mysql://root:root@localhost/unittests\n\n" );
         exit();
     }
 }

@@ -43,7 +43,7 @@ class ezcTestSettings
      */
 	public static function getInstance()
 	{
-        if( is_null( ezcTestSettings::$instance ))
+        if ( is_null( ezcTestSettings::$instance ))
         {
             ezcTestSettings::$instance = new ezcTestSettings();
         }
@@ -56,7 +56,7 @@ class ezcTestSettings
      */
    public function __set( $name, $value )
     {
-        switch( $name )
+        switch ( $name )
         {
             case 'db':
                trigger_error( "Property: db is read-only", E_USER_ERROR );
@@ -69,7 +69,7 @@ class ezcTestSettings
      */
     public function __get( $name )
     {
-        switch( $name )
+        switch ( $name )
         {
             case 'db':
                 return $this->properties['db'];
@@ -83,20 +83,19 @@ class ezcTestSettings
     /**
      * Set all the database settings via a given settings array.
      */
-    public function setDatabaseSettings($settings)
+    public function setDatabaseSettings( $settings )
     {
-        if (isset( $settings["dsn"] ) )      $this->properties["db"]->dsn = $settings["dsn"];
-
-        if (isset( $settings["phptype"] ) )  $this->properties["db"]->phptype = $settings["phptype"];
-        if (isset( $settings["dbsyntax"] ) ) $this->properties["db"]->dbsyntax = $settings["dbsyntax"];
-        if (isset( $settings["username"] ) ) $this->properties["db"]->username = $settings["username"];
-        if (isset( $settings["password"] ) ) $this->properties["db"]->password = $settings["password"];
-        if (isset( $settings["protocol"] ) ) $this->properties["db"]->protocol = $settings["protocol"];
-        if (isset( $settings["hostspec"] ) ) $this->properties["db"]->hostspec = $settings["hostspec"];
-        if (isset( $settings["port"] ) )     $this->properties["db"]->port = $settings["port"];
-        if (isset( $settings["socket"] ) )   $this->properties["db"]->socket = $settings["socket"];
-        if (isset( $settings["database"] ) ) $this->properties["db"]->database = $settings["database"];
+        $settingNames = array(
+            'dsn', 'phptype', 'dbsyntax', 'username', 'password', 'protocol',
+            'hostspec', 'port', 'socket', 'database'
+        );
+        foreach ( $settingNames as $settingName )
+        {
+            if ( isset( $settings[$settingName] ) )
+            {
+                $this->properties['db']->$settingName = $settings[$settingName];
+            }
+        }
     }
 }
-
 ?>

@@ -3,7 +3,7 @@
 require_once 'PHPUnit2/Framework/TestCase.php';
 
 require_once 'PHPUnit2/Util/Filter.php';
-PHPUnit2_Util_Filter::addFileToFilter(__FILE__);
+PHPUnit2_Util_Filter::addFileToFilter( __FILE__ );
 
 abstract class ezcTestCase extends PHPUnit2_Framework_TestCase
 {
@@ -36,7 +36,7 @@ abstract class ezcTestCase extends PHPUnit2_Framework_TestCase
     {
         if ( $tempname = tempnam( $path, $prefix ))
         {
-            unlink($tempname);
+            unlink( $tempname );
             if ( mkdir( $tempname ) )
             {
                 $this->tempDir = $tempname;
@@ -60,7 +60,7 @@ abstract class ezcTestCase extends PHPUnit2_Framework_TestCase
      */
     public function removeTempDir()
     {
-        if( file_exists( $this->tempDir ) )
+        if ( file_exists( $this->tempDir ) )
         {
             $this->removeRecursively( $this->tempDir );
         }
@@ -68,13 +68,13 @@ abstract class ezcTestCase extends PHPUnit2_Framework_TestCase
 
     public function cleanTempDir()
     {
-        if( is_dir( $this->tempDir ) )
+        if ( is_dir( $this->tempDir ) )
         {
             if ( $dh = opendir( $this->tempDir ) ) 
             {
                 while ( ( $file = readdir( $dh ) ) !== false ) 
                 {
-                    if( $file[0] != "." )
+                    if ( $file[0] != "." )
                     {
                         $this->removeRecursively( $this->tempDir . "/" . $file );
                     }
@@ -86,28 +86,28 @@ abstract class ezcTestCase extends PHPUnit2_Framework_TestCase
 
     private function removeRecursively( $entry )
     {
-        if( is_file( $entry ) || is_link( $entry ) )
+        if ( is_file( $entry ) || is_link( $entry ) )
         {
             // Some extra security that you're not erasing your harddisk :-).
-            if( strncmp( $this->tempDir, $entry, strlen( $this->tempDir ) ) == 0 )
+            if ( strncmp( $this->tempDir, $entry, strlen( $this->tempDir ) ) == 0 )
             {
                 return unlink( $entry );
             }
         }
 
-        if( is_dir( $entry ) )
+        if ( is_dir( $entry ) )
         {
             if ( $dh = opendir( $entry ) )
             {
                 while ( ( $file = readdir( $dh ) ) !== false )
                 {
-                    if( $file[0] != "." )
+                    if ( $file[0] != "." )
                     {
                         $this->removeRecursively( $entry . "/" . $file );
                     }
                 }
 
-                closedir($dh);
+                closedir( $dh );
                 rmdir( $entry );
             }
         }
@@ -130,8 +130,8 @@ abstract class ezcTestCase extends PHPUnit2_Framework_TestCase
     public function assertPrivatePropertySame( $object, $propertyName, $expectedValue )
     {
         self::assertTrue( is_object( $object ),
-                          "Parameter \$object must be an object, got: <" . gettype( $object ) . ">" );
-        $data = (array)$object;
+                          "Parameter <\$object> must be an object, got: <" . gettype( $object ) . ">" );
+        $data = (array) $object;
         self::assertSame( true, isset( $data["\0" . get_class( $object ) . "\0" . $propertyName] ),
                           "Property <$propertyName> is not a private property on object <" . get_class( $object ) . ">." );
         self::assertSame( $expectedValue, $data["\0" . get_class( $object ) . "\0" . $propertyName],
@@ -155,8 +155,8 @@ abstract class ezcTestCase extends PHPUnit2_Framework_TestCase
     public function assertProtectedPropertySame( $object, $propertyName, $expectedValue )
     {
         self::assertTrue( is_object( $object ),
-                          "Parameter \$object must be an object, got: <" . gettype( $object ) . ">" );
-        $data = (array)$object;
+                          "Parameter <\$object> must be an object, got: <" . gettype( $object ) . ">" );
+        $data = (array) $object;
         self::assertSame( true, isset( $data["\0*\0" . $propertyName] ),
                           "Property <$propertyName> is not a protected property on object <" . get_class( $object ) . ">." );
         self::assertSame( $expectedValue, $data["\0*\0" . $propertyName],
@@ -176,7 +176,7 @@ abstract class ezcTestCase extends PHPUnit2_Framework_TestCase
     public function assertPropertySame( $object, $propertyName, $expectedValue )
     {
         self::assertTrue( is_object( $object ),
-                          "Parameter \$object must be an object, got: <" . gettype( $object ) . ">" );
+                          "Parameter <\$object> must be an object, got: <" . gettype( $object ) . ">" );
         self::assertSame( true, isset( $object->$propertyName ),
                           "Property <$propertyName> does not exist on object <" . get_class( $object ) . ">." );
         self::assertSame( $expectedValue, $object->$propertyName,
@@ -188,9 +188,9 @@ abstract class ezcTestCase extends PHPUnit2_Framework_TestCase
      */
     public function assertSetProperty( $object, $propertyName, $expectedValues )
     {
-        if( is_array( $expectedValues ) )
+        if ( is_array( $expectedValues ) )
         {
-            foreach( $expectedValues as $value )
+            foreach ( $expectedValues as $value )
             {
                 $object->$propertyName = $value;
                 $this->assertEquals( $value, $object->$propertyName );
@@ -208,13 +208,13 @@ abstract class ezcTestCase extends PHPUnit2_Framework_TestCase
      */
     public function assertSetPropertyFails( $object, $propertyName, $setValues )
     {
-        foreach( $setValues as $value )
+        foreach ( $setValues as $value )
         {
             try
             {
                 $object->$propertyName = $value;
             }
-            catch( Exception $e )
+            catch ( Exception $e )
             {
                 return;
             }

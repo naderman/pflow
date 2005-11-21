@@ -12,18 +12,15 @@ class ezcTestPrinter extends PHPUnit2_TextUI_ResultPrinter
     {
     }
 
-
     /** 
      * Write everything except the:  .. by Sebastian Bergmann.\n\n strings.
      */
-    public function write($string)
+    public function write( $string )
     {
-        if( strlen( $string ) < 23 || strcmp("by Sebastian Bergmann.\n\n", substr( $string, -24 ) ) != 0 )
+        if ( strlen( $string ) < 23 || strcmp( "by Sebastian Bergmann.\n\n", substr( $string, -24 ) ) != 0 )
         {
             print( $string );
         }
     }
-
 }
-
 ?>
