@@ -48,7 +48,7 @@ class ezcBaseTest extends ezcTestCase
         }
         catch ( ezcBaseConfigException $e )
         {
-            $this->assertEquals( "The setting 'broken' is not a valid configuration setting.", $e->getMessage() );
+            $this->assertEquals( "The setting <broken> is not a valid configuration setting.", $e->getMessage() );
         }
     }
 
@@ -60,7 +60,7 @@ class ezcBaseTest extends ezcTestCase
         }
         catch ( ezcBaseConfigException $e )
         {
-            $this->assertEquals( "The value '42' that you were trying to assign to setting 'broken' is invalid.", $e->getMessage() );
+            $this->assertEquals( "The value <42> that you were trying to assign to setting <broken> is invalid.", $e->getMessage() );
         }
     }
 
