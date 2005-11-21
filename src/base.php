@@ -112,7 +112,7 @@ class ezcBase
     protected static function setPackageDir()
     {
         // Get the path to the components.
-        $baseDir = dirname(__FILE__);
+        $baseDir = dirname( __FILE__ );
 
         ezcBase::$packageDir = $baseDir . ( ezcBase::developmentMode ? "/../../../" : "/../" );
     }

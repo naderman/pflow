@@ -23,7 +23,7 @@ class ezcBaseTest extends ezcTestCase
             ezcBase::assertType($a, "ezcBase");
             $this->fail("Expected an ezcBaseTypeException from 'array'");
         }
-        catch( ezcBaseTypeException $e)
+        catch ( ezcBaseTypeException $e)
         {
             $this->assertTrue(true);
         }
@@ -34,7 +34,7 @@ class ezcBaseTest extends ezcTestCase
             ezcBase::assertType($a, "ezcBase");
             $this->fail("Expected an ezcBaseTypeException from 'ezcBaseTest'");
         }
-        catch( ezcBaseTypeException $e)
+        catch ( ezcBaseTypeException $e)
         {
             $this->assertTrue(true);
         }
