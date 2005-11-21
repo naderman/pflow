@@ -17,18 +17,12 @@
  */
 class ezcConsoleToolsOutputTest extends ezcTestCase
 {
-
-    // {{{ $testString
-
     /**
      * testString 
      * 
      * @var string
      */
-    private $testString = "a passion for php";
-
-    // }}}
-    // {{{ $testFormats
+    private $testString = 'A passion for php';
 
     private $testFormats = array(
         'color_only_1' => array(
@@ -69,9 +63,6 @@ class ezcConsoleToolsOutputTest extends ezcTestCase
         ),
     );
 
-    // }}}
-    // {{{ $testOptions
-
     private $testOptions = array( 
         'set_1' => array( 
             'verboseLevel'      => 1,
@@ -92,10 +83,6 @@ class ezcConsoleToolsOutputTest extends ezcTestCase
         ),
     );
 
-    // }}}
-
-    // {{{ $consoleOutput
-
     /**
      * consoleOutput 
      * 
@@ -103,18 +90,10 @@ class ezcConsoleToolsOutputTest extends ezcTestCase
      */
     private $consoleOutput;
 
-    // }}}
-    
-    // {{{   suite()
-
 	public static function suite()
 	{
 		return new ezcTestSuite( "ezcConsoleToolsOutputTest" );
 	}
-
-    // }}}
-
-    // {{{ setUp() 
 
     /**
      * setUp 
@@ -131,9 +110,6 @@ class ezcConsoleToolsOutputTest extends ezcTestCase
         $this->consoleOutput = new ezcConsoleOutput( $options );
     }
 
-    // }}} 
-    // {{{ tearDown()  
-
     /**
      * tearDown 
      * 
@@ -143,10 +119,6 @@ class ezcConsoleToolsOutputTest extends ezcTestCase
     {
         unset( $this->consoleOutput );
     }
-
-    // }}} 
-
-    // {{{ testSetOptions()
 
     /**
      * testSetOptions
@@ -163,9 +135,6 @@ class ezcConsoleToolsOutputTest extends ezcTestCase
         }
     }
 
-    // }}}
-    // {{{ testFormatText()
-
     /**
      * testFormatText
      * 
@@ -180,13 +149,10 @@ class ezcConsoleToolsOutputTest extends ezcTestCase
             $this->assertEquals( 
                 $fakeRes, 
                 $realRes,
-                'Test "' . $name . ' faile. String <' . $realRes . '> (real) is not equal to <' . $fakeRes . '> (fake).' 
+                "Test <{$name}> failed. String <{$realRes}> (real) is not equal to <{$fakeRes}> (fake)."
             );
         }
     }
-
-    // }}}
-    // {{{ testOutputText()
 
     /**
      * testOutputText
@@ -205,13 +171,10 @@ class ezcConsoleToolsOutputTest extends ezcTestCase
             $this->assertEquals( 
                 $fakeRes, 
                 $realRes,
-                'Test "' . $name . ' faile. String <' . $realRes . '> (real) is not equal to <' . $fakeRes . '> (fake).' 
+                "Test <{$name}> failed. String <{$realRes}> (real) is not equal to <{$fakeRes}> (fake)."
             );
         }
     }
-
-    // }}}
-    // {{{ testOutputTextAutobreak()
 
     /**
      * testOutputTextAutobreak
@@ -244,10 +207,6 @@ broken.';
         }
     }
 
-    // }}}
-
-    // {{{ dumpString()
-
     /**
      * dumpString 
      * 
@@ -255,15 +214,12 @@ broken.';
      */
     private function dumpString( $string )
     {
-        echo "Dumping string of length ".strlen( $string ).":\n\n";
+        echo 'Dumping string of length ' . strlen( $string ) . ":\n\n";
         for ( $i = 0; $i < strlen( $string ); $i++ )
         {
-            echo '<' . $string[$i] . '> = -' . ord( $string[$i] ) . "-\n";
+            echo "<{$string[$i]}> = -" . ord( $string[$i] ) . "-\n";
         }
         echo "Finished dumping string.\n\n";
     }
-
-    // }}}
 }
-
 ?>

@@ -10,8 +10,8 @@
 
 // Prepare console output options
 $opts = array(
- 'verboseLevel'  => 1,           // print verbosity levels 0 and 1 only
- 'autobreak'     => 80,          // will break lines every 80 chars
+    'verboseLevel'  => 1,           // print verbosity levels 0 and 1 only
+    'autobreak'     => 80,          // will break lines every 80 chars
 );
 
 // Initialize the console outputer
@@ -25,13 +25,13 @@ $tableOpts = array(
 $table = new ezcConsoleTable( $out, array( 'width' => 60, 'cols' => 3 ), $tableOpts );
 
 // Generate a header row ( red color )
-$table->addRowHead( array( 'First col', 'Second col', 'Third col' ));
+$table->addRowHead( array( 'First col', 'Second col', 'Third col' ) );
 
 // Add some data ( right column will be largest )
-$table->addRow( array( 'Data', 'Data', 'Very very very very very long data' ));
+$table->addRow( array( 'Data', 'Data', 'Very very very very very long data' ) );
 
 // Add some more data ( middle column data will be green )
-$table->addRow( array( 'More', $out->styleText( 'More green', 'green' ), 'Smaller data' ));
+$table->addRow( array( 'More', $out->styleText( 'More green', 'green' ), 'Smaller data' ) );
 
 // Print table to the screen
 $table->output();

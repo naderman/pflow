@@ -20,14 +20,14 @@
  *  'successChar'   => '+',
  *  'failureChar'   => '-',
  * );
- * $status = new ezcConsoleStatusbar($opt);
- * foreach ($files as $file) {
+ * $status = new ezcConsoleStatusbar( $opt );
+ * foreach ( $files as $file ) {
  *      $res = $file->upload();
- *      $status->add($res); // $res is true or false
+ *      $status->add( $res ); // $res is true or false
  * }
  *
- * $msg = $status->getSuccess().' succeeded, '.$status->getFailure().' failed.';
- * $out->outputText("Finished uploading files. $msg \n");
+ * $msg = $status->getSuccess() . ' succeeded, ' . $status->getFailure() . ' failed.';
+ * $out->outputText( "Finished uploading files: $msg\n" );
  *
  * </code>
  *  
@@ -39,9 +39,6 @@
  */
 class ezcConsoleStatusbar
 {
-
-    // {{{ $options
-
     /**
      * Options
      *
@@ -59,20 +56,12 @@ class ezcConsoleStatusbar
         'failureChar' => '-',     // Char to indicate failure
     );
 
-    // }}}
-
-    // {{{ $outputHandler
-
     /**
      * The ezcConsoleOutput object to use.
      *
      * @var ezcConsoleOutput
      */
     protected $outputHandler;
-
-    // }}}
-
-    // {{{ $counter
 
     /**
      * Counter for success and failure outputs. 
@@ -84,10 +73,6 @@ class ezcConsoleStatusbar
         false => 0,
     );
 
-    // }}}
-   
-    // {{{ __construct()
-
     /**
      * Creates a new status bar.
      *
@@ -97,14 +82,11 @@ class ezcConsoleStatusbar
      *
      * @see ezcConsoleStatusbar::$options
      */
-    public function __construct( ezcConsoleOutput $outHandler, $options = array() ) {
+    public function __construct( ezcConsoleOutput $outHandler, $options = array() )
+    {
         $this->outputHandler = $outHandler;
         $this->setOptions( $options );
     }
-
-    // }}}
-    
-    // {{{ setOptions()
 
     /**
      * Set options for the statusbar.
@@ -123,14 +105,10 @@ class ezcConsoleStatusbar
             } 
             else 
             {
-                trigger_error( 'Unknowen option <' . $name . '>.', E_USER_WARNING );
+                trigger_error( "Unknowen option <{$name}>.", E_USER_WARNING );
             }
         }
     }
-
-    // }}}
-    
-    // {{{ add()
 
     /**
      * Add a status to the status bar.
@@ -140,28 +118,25 @@ class ezcConsoleStatusbar
      *
      * @param bool $status Print successChar on true, failureChar on false.
      */
-    public function add( $status ) {
+    public function add( $status )
+    {
         switch ( $status )
         {
             case true:
-            $this->outputHandler->outputText( $this->options['successChar'], 'success' );
-            break;
+                $this->outputHandler->outputText( $this->options['successChar'], 'success' );
+                break;
 
             case false:
-            $this->outputHandler->outputText( $this->options['failureChar'], 'failure' );
-            break;
+                $this->outputHandler->outputText( $this->options['failureChar'], 'failure' );
+                break;
             
             default:
-            trigger_error( 'Unknown status '.var_export( $status, true ).'.', E_USER_WARNING );
-            return;
-            break;
+                trigger_error( 'Unknown status '.var_export( $status, true ).'.', E_USER_WARNING );
+                return;
+                break;
         }
         $this->counter[$status]++;
     }
-
-    // }}}
-
-    // {{{ reset()
 
     /**
      * Reset the state of the statusbar object to its initial one. 
@@ -175,23 +150,16 @@ class ezcConsoleStatusbar
         }
     }
 
-    // }}}
-
-    // {{{ getSuccesses()
-
     /**
      * Returns number of successes during the run.
      * Returns the number of success characters printed from this status bar.
      * 
      * @returns int Number of successes.
      */
-    public function getSuccesses() {
+    public function getSuccesses()
+    {
         return $this->counter[true];
     }
-
-    // }}}
-    
-    // {{{ getFailures()
 
     /**
      * Returns number of failures during the run.
@@ -199,11 +167,9 @@ class ezcConsoleStatusbar
      * 
      * @returns int Number of failures.
      */
-    public function getFailures() {
+    public function getFailures()
+    {
         return $this->counter[false];
     }
-
-    // }}}
-
 }
 ?>

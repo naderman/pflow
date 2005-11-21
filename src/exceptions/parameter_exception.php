@@ -21,43 +21,42 @@
  */
 class ezcConsoleParameterException extends Exception
 {
-
     /**
      * Required parameter/alias does not exist.
      */
-    const PARAMETER_NOT_EXISTS        = 1;
+    const PARAMETER_NOT_EXISTS = 1;
     /**
      * Exclusion rule defined for parameter not met.
      */
-    const PARAMETER_EXCLUSION_RULE_NOT_MET        = 2;
+    const PARAMETER_EXCLUSION_RULE_NOT_MET = 2;
     /**
      * Dependency rule defined for parameter not met.
      */
-    const PARAMETER_DEPENDENCY_RULE_NOT_MET       = 3;
+    const PARAMETER_DEPENDENCY_RULE_NOT_MET = 3;
     /**
      * Type rule defined for parameter not met.
      */
-    const PARAMETER_TYPE_RULE_NOT_MET             = 4;
+    const PARAMETER_TYPE_RULE_NOT_MET = 4;
     /**
      * Unknown string in parameter row.
      */
-    const UNKNOWN_PARAMETER          = 5;
+    const UNKNOWN_PARAMETER = 5;
     /**
      * No value has been passed to a parameter that expects one.
      */
-    const MISSING_PARAMETER_VALUE          = 6;
+    const MISSING_PARAMETER_VALUE = 6;
     /**
      * Multiple values have been passed to a parameter that expects only one.
      */
-    const TOO_MANY_PARAMETER_VALUES         = 7;
+    const TOO_MANY_PARAMETER_VALUES = 7;
     /**
      * Arguments were submitted although a parameter disallowed them.
      */
-    const ARGUMENTS_NOT_ALLOWED        = 8;
+    const ARGUMENTS_NOT_ALLOWED = 8;
     /**
      * Parameter definition string was not well formed. 
      */
-    const PARAMETER_STRING_NOT_WELLFORMED    = 9;
+    const PARAMETER_STRING_NOT_WELLFORMED = 9;
 
     /**
      * Parameter this exception is about.
@@ -79,7 +78,8 @@ class ezcConsoleParameterException extends Exception
      * @param int $code                Error code.
      * @param string string $paramName Name of affected parameter
      */
-    public function __construct( $message, $code, $paramName = null ) {
+    public function __construct( $message, $code, $paramName = null )
+    {
         $this->paramName = $paramName;
         parent::__construct( $message, $code );
     }

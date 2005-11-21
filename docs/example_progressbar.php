@@ -15,9 +15,9 @@ $set = array( 'max' => $file->getSize(), 'step' => 50 );
 
 // Some options to change the appearance
 $opt = array(
- 'emptyChar'     => '-',
- 'progressChar'  => '#',
- 'formatString'  => 'Uploading file <' . $myFilename . '>: %act%/%max% kb [%bar%] %percent%%',
+    'emptyChar'     => '-',
+    'progressChar'  => '#',
+    'formatString'  => "Uploading file <{$myFilename}>: %act%/%max% kb [%bar%] %percent%%",
 );
 
 // Create progress bar itself
@@ -33,7 +33,7 @@ while( $file->upload() )
 // Finish progress bar and jump to next line.
 $progress->finish();
 
-$out->outputText( "Successfully uploaded \"$myFilename\".\n", 'success' );
+$out->outputText( "Successfully uploaded <{$myFilename}>.\n", 'success' );
 
 /*
 OUTPUT:

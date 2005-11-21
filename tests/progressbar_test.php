@@ -17,17 +17,10 @@
  */
 class ezcConsoleToolsProgressbarTest extends ezcTestCase
 {
-
-    // {{{   suite()
-
 	public static function suite()
 	{
 		return new ezcTestSuite( "ezcConsoleToolsProgressbarTest" );
 	}
-
-    // }}}
-
-    // {{{ setUp() 
 
     /**
      * setUp 
@@ -38,9 +31,6 @@ class ezcConsoleToolsProgressbarTest extends ezcTestCase
     {
     }
 
-    // }}} 
-    // {{{ tearDown()  
-
     /**
      * tearDown 
      * 
@@ -49,8 +39,6 @@ class ezcConsoleToolsProgressbarTest extends ezcTestCase
     public function tearDown()
     {
     }
-
-    // }}} 
 
     public function testProgress1()
     {
@@ -118,10 +106,6 @@ class ezcConsoleToolsProgressbarTest extends ezcTestCase
        );
     }
     
-    // private
-    
-    // {{{ common
-
     private function commonProgressbarTest( $refFile, $max, $step, $options )
     {
         $out = new ezcConsoleOutput();
@@ -142,9 +126,5 @@ class ezcConsoleToolsProgressbarTest extends ezcTestCase
         // Use the following line to regenerate test reference files
         // file_put_contents( dirname( __FILE__ ) . '/dat/' . $refFile . '.dat', implode( "\n", $res ) );
     }
-
-    // }}}
-    
 }
-
 ?>

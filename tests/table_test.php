@@ -17,7 +17,6 @@
  */
 class ezcConsoleToolsTableTest extends ezcTestCase
 {
-
     private $tableData1 = array( 
         array( 'Heading no. 1', 'Longer heading no. 2', 'Head 3' ),
         array( 'Data cell 1', 'Data cell 2', 'Data cell 3' ),
@@ -32,8 +31,8 @@ class ezcConsoleToolsTableTest extends ezcTestCase
 
     private $tableData3 = array( 
         array( 'Parameter', 'Shortcut', 'Descrition' ),
-        array( 'Append text to a file. This parameter takes a string value and may be used multiple times.', '--append', '-a'  ),
-        array( 'Prepend text to a file. This parameter takes a string value and may be used multiple times.', '--prepend', '-p'  ),
+        array( 'Append text to a file. This parameter takes a string value and may be used multiple times.', '--append', '-a' ),
+        array( 'Prepend text to a file. This parameter takes a string value and may be used multiple times.', '--prepend', '-p' ),
         array( 'Forces the action desired without paying attention to any errors.', '--force', '-f' ),
         array( 'Silence all kinds of warnings issued by this program.', '--silent', '-s' ),
     );
@@ -43,16 +42,10 @@ class ezcConsoleToolsTableTest extends ezcTestCase
         array( 'Short', "Some very very long data here....\n\nand it becomes even much much longer...\n\nand even longer....", 'Short', 'Some very very long data here.... and it becomes even much much longer... and even longer....' ),
     );
 
-    // {{{   suite()
-
 	public static function suite()
 	{
 		return new ezcTestSuite( "ezcConsoleToolsTableTest" );
 	}
-
-    // }}}
-
-    // {{{ setUp() 
 
     /**
      * setUp 
@@ -85,9 +78,6 @@ class ezcConsoleToolsTableTest extends ezcTestCase
         );
     }
 
-    // }}} 
-    // {{{ tearDown()  
-
     /**
      * tearDown 
      * 
@@ -96,8 +86,6 @@ class ezcConsoleToolsTableTest extends ezcTestCase
     public function tearDown()
     {
     }
-
-    // }}} 
 
     public function testTable1a()
     {
@@ -196,10 +184,6 @@ class ezcConsoleToolsTableTest extends ezcTestCase
         );
     }
     
-    // private
-    
-    // {{{ common
-
     private function commonTableTest( $refFile, $tableData, $settings, $options, $headrows = array() )
     {
         $table = ezcConsoleTable::create( 
@@ -221,9 +205,5 @@ class ezcConsoleToolsTableTest extends ezcTestCase
         // To prepare test files use this:
         // file_put_contents( dirname( __FILE__ ) . '/dat/' . $refFile . '.dat', implode( "\n", $table->getTable() ) );
     }
-
-    // }}}
-    
 }
-
 ?>

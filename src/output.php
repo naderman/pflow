@@ -1,6 +1,4 @@
 <?php
-// {{{ DOC file
-
 /**
  * File containing the ezcConsoleOutput class.
  *
@@ -10,10 +8,6 @@
  * @license LGPL {@link http://www.gnu.org/copyleft/lesser.html}
  * @filesource
  */
-
-// }}}
-
-// {{{ DOC class
 
 /**
  * Class for handling console output.
@@ -41,14 +35,14 @@
  *      ),
  *  ),
  * );
- * $out = new ezcConsoleOutput($opts);
+ * $out = new ezcConsoleOutput( $opts );
  *
- * $out->outputText('This is default text ');
- * $out->outputText('including success message', 'success');
- * $out->outputText("and a manual linebreak.\n");
+ * $out->outputText( 'This is default text ' );
+ * $out->outputText( 'including success message', 'success' );
+ * $out->outputText( "and a manual linebreak.\n" );
  *
- * $out->outputText("Some verbose output.\n", null, 10);
- * $out->outputText("And some not so verbose, failure output.\n", 'failure', 5);
+ * $out->outputText( "Some verbose output.\n", null, 10 );
+ * $out->outputText( "And some not so verbose, failure output.\n", 'failure', 5 );
  *
  * </code>
  * 
@@ -57,13 +51,8 @@
  * @copyright Copyright (C) 2005 eZ systems as. All rights reserved.
  * @license LGPL {@link http://www.gnu.org/copyleft/lesser.html}
  */
-
-// }}}
 class ezcConsoleOutput
 {
-    
-    // {{{ $options
-
     /**
      * Options
      *
@@ -119,10 +108,6 @@ class ezcConsoleOutput
         ),
     );
 
-    // }}}
-
-    // {{{ $colors
-
     /**
      * Stores the mapping of color names to their escape
      * sequence values.
@@ -141,9 +126,6 @@ class ezcConsoleOutput
         'default'       => 39
     );
 
-    // }}}
-    // {{{ $bgcolors
-
     /**
      * Stores the mapping of bgcolor names to their escape
      * sequence values.
@@ -161,9 +143,6 @@ class ezcConsoleOutput
 		'white'      => 47,
         'default'    => 49,
     );
-
-    // }}}
-    // {{{ $styles
 
     /**
      * Stores the mapping of styles names to their escape
@@ -193,18 +172,12 @@ class ezcConsoleOutput
         'positive'          => 27,
     );
 
-    // }}}
-    // {{{ $escapeSequence
-
     /**
      * Basic escape sequence string. Use sprintf() to insert escape codes.
      * 
      * @var string
      */
     private $escapeSequence = "\033[%sm";
-
-    // }}}
-    // {{{ $defaultFormat
 
     /**
      * Hard coded default format definition (fallback solution).
@@ -217,10 +190,6 @@ class ezcConsoleOutput
         'style'     => 'default',
     );
 
-    // }}}
-    
-    // {{{ $positionStored
-
     /**
      * Whether a position has been stored before, using the
      * storePos() method.
@@ -229,12 +198,6 @@ class ezcConsoleOutput
      * @var bool
      */
     protected $positionStored = false;
-
-    // }}}
-
-    // Public
-
-    // {{{ __construct()
 
     /**
      * Create a new console output handler.
@@ -245,14 +208,11 @@ class ezcConsoleOutput
      *
      * @param array(string) $options Options.
      */
-    public function __construct( $options = array() ) {
+    public function __construct( $options = array() )
+    {
         $this->setOptions( $options );
         
     }
-
-    // }}}
-        
-    // {{{ setOptions()
 
     /**
      * Set options.
@@ -262,7 +222,8 @@ class ezcConsoleOutput
      *
      * @param array(string) $options Options.
      */
-    public function setOptions( $options ) {
+    public function setOptions( $options )
+    {
         if ( isset( $options['format'] ) ) 
         {
             $this->setFormats( $options['format'] );
@@ -276,13 +237,10 @@ class ezcConsoleOutput
             } 
             else 
             {
-                trigger_error( 'Unknowen option <' . $name . '>.', E_USER_WARNING );
+                trigger_error( "Unknowen option <{$name}>.", E_USER_WARNING );
             }
         }
     }
-
-    // }}}
-    // {{{ getOptions()
 
     /**
      * Returns options
@@ -292,12 +250,10 @@ class ezcConsoleOutput
      * 
      * @return array(string) Options.
      */
-    public function getOptions() {
+    public function getOptions()
+    {
         return $this->options;
     }
-
-    // }}}
-    // {{{ getFormats()
 
     /**
      * Returns an array of the formats registered. 
@@ -308,10 +264,6 @@ class ezcConsoleOutput
     {
         return $this->options['format'];
     }
-
-    // }}}
-    
-    // {{{ outputText()
 
     /**
      * Print text to the console.
@@ -334,16 +286,13 @@ class ezcConsoleOutput
                 $textLines = explode( "\n", $text );
                 foreach ( $textLines as $id => $textLine )
                 {
-                    $textLines[$id] = wordwrap( $textLine, $this->options['autobreak'], "\n", true);
+                    $textLines[$id] = wordwrap( $textLine, $this->options['autobreak'], "\n", true );
                 }
                 $text = implode( "\n", $textLines );
             }
             echo ( $this->options['useFormats'] == true ) ? $this->styleText( $text, $format ) : $text;
         }
     }
-
-    // }}}
-    // {{{ styleText()
 
     /**
      * Returns a styled version of the text.
@@ -363,10 +312,6 @@ class ezcConsoleOutput
         return $this->buildSequence( $format ) . $text . $this->buildSequence( 'default' );
     }
 
-    // }}}
-
-    // {{{ storePos()
-
     /**
      * Store the current cursor position.
      * Saves the current cursor position to return to it using 
@@ -381,9 +326,6 @@ class ezcConsoleOutput
         $this->positionStored = true;
     }
 
-    // }}}
-    // {{{ restorePos()
-
     /**
      * Restore a cursor position.
      * Restores the cursor position last saved using
@@ -397,14 +339,10 @@ class ezcConsoleOutput
     {
         if ( $this->positionStored === false )
         {
-            throw new ezcConsoleOutputException( 'Cannot restore position, if no position has been stored before.',  ezcConsoleOutputException::NO_POSITION_STORED);
-            return;
+            throw new ezcConsoleOutputException( 'Cannot restore position, if no position has been stored before.',  ezcConsoleOutputException::NO_POSITION_STORED );
         }
         echo "\033[u";
     }
-
-    // }}}
-    // {{{ toPos()
 
     /**
      * Move the cursor to a specific column of the current line.
@@ -415,14 +353,8 @@ class ezcConsoleOutput
      */
     public function toPos( $col = 1 ) 
     {
-        echo "\033[" . $column . "G";
+        echo "\033[{$column}G";
     }
-
-    // }}}
-
-    // Private
-
-    // {{{ setFormats()
 
     /**
      * Set formating options.
@@ -437,9 +369,6 @@ class ezcConsoleOutput
             $this->options['format'][$name] = $format;
         }
     }
-
-    // }}}
-    // {{{ buildSequence()
 
     /**
      * Returns the escape sequence for a specific format.
@@ -476,9 +405,6 @@ class ezcConsoleOutput
         return sprintf( $this->escapeSequence, implode( ';', $modifiers ) );
     }
 
-    // }}}
-    // {{{ getFormatCode()
-
     /**
      * Returns the code for a given formating option of a given type.
      * $type is the type of formatting ( 'color', 'bgcolor' or 'style' ),
@@ -491,15 +417,12 @@ class ezcConsoleOutput
      */
     private function getFormatCode( $type, $key )
     {
-        $attrName = $type.'s';
+        $attrName = $type . 's';
         if ( !isset( $this->$attrName ) || !isset( $this->{$attrName}[$key] ) ) 
         {
             return 0;
         }
         return $this->{$attrName}[$key];
     }
-
-    // }}}
-
 }
 ?>

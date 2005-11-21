@@ -46,16 +46,10 @@ class ezcConsoleToolsStatusbarTest extends ezcTestCase
         false,
     );
 
-    // {{{   suite()
-
 	public static function suite()
 	{
 		return new ezcTestSuite( "ezcConsoleToolsStatusbarTest" );
 	}
-
-    // }}}
-
-    // {{{ setUp() 
 
     /**
      * setUp 
@@ -66,9 +60,6 @@ class ezcConsoleToolsStatusbarTest extends ezcTestCase
     {
     }
 
-    // }}} 
-    // {{{ tearDown()  
-
     /**
      * tearDown 
      * 
@@ -77,8 +68,6 @@ class ezcConsoleToolsStatusbarTest extends ezcTestCase
     public function tearDown()
     {
     }
-
-    // }}} 
 
     public function testStatusbar1()
     {
@@ -119,7 +108,5 @@ class ezcConsoleToolsStatusbarTest extends ezcTestCase
         // To prepare test files use this:
         // file_put_contents( dirname( __FILE__ ) . '/dat/testStatusbar2.dat', $res );
     }
-
 }
-
 ?>

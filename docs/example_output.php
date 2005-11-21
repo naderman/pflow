@@ -29,7 +29,7 @@ $out->outputText( "You successfully managed to start the program!\n", 'success' 
 
 // Output an error message in default text
 $out->outputText( "Sorry, there was an error: " );
-$out->outputText( "Your computer does not support PHP6. ", 'error' );
+$out->outputText( "Your computer does not support PHP 6. ", 'error' );
 $out->outputText( "Please consider upgrading!" );
 
 // Output text only for verbosity 10 ( default style )

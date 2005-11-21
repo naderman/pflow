@@ -55,5 +55,4 @@ class ezcConsoleToolsSuite extends ezcTestSuite
         return new ezcConsoleToolsSuite( "ezcConsoleToolsSuite" );
     }
 }
-
 ?>

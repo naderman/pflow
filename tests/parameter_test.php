@@ -17,9 +17,6 @@
  */
 class ezcConsoleToolsParameterTest extends ezcTestCase
 {
-
-    // {{{ $testParams
-
     private $testParams = array( 
         array( 
             'short'     => 't',
@@ -99,9 +96,6 @@ class ezcConsoleToolsParameterTest extends ezcTestCase
         ),
     );
 
-    // }}}
-    // {{{ $testAliases
-
     private $testAliasesSuccess = array( 
         array(
             'short' => 'n',
@@ -127,9 +121,6 @@ class ezcConsoleToolsParameterTest extends ezcTestCase
             'ref'   => 'z',
         ),
     );
-
-    // }}}
-    // {{{ $testArgs
 
     private $testArgsSuccess = array( 
         array(
@@ -171,18 +162,10 @@ class ezcConsoleToolsParameterTest extends ezcTestCase
         ),
     );
 
-    // }}}
-
-    // {{{   suite()
-
 	public static function suite()
 	{
 		return new ezcTestSuite( "ezcConsoleToolsParameterTest" );
 	}
-
-    // }}}
-
-    // {{{ setUp() 
 
     /**
      * setUp 
@@ -198,9 +181,6 @@ class ezcConsoleToolsParameterTest extends ezcTestCase
         }
     }
 
-    // }}} 
-    // {{{ tearDown()  
-
     /**
      * tearDown 
      * 
@@ -210,10 +190,6 @@ class ezcConsoleToolsParameterTest extends ezcTestCase
     {
         unset( $this->consoleParameter );
     }
-
-    // }}} 
-
-    // {{{ test registerParam() - success
 
     /**
      * testRegisterParam
@@ -239,10 +215,6 @@ class ezcConsoleToolsParameterTest extends ezcTestCase
             );
         }
     }
-
-    // }}}
-
-    // {{{ test fromString()
 
     public function testFromString()
     {
@@ -283,10 +255,6 @@ class ezcConsoleToolsParameterTest extends ezcTestCase
         $this->assertEquals( $res['o'], $param->getParamDef( 'o' ), 'Parameter -o not registered correctly.'  );
     }
 
-    // }}}
-
-    // {{{ test registerAlias() - success
-
     /**
      * testRegisterAliasSuccess
      * 
@@ -310,9 +278,6 @@ class ezcConsoleToolsParameterTest extends ezcTestCase
             }
         }
     }
-    
-    // }}}
-    // {{{ test registerAlias() - failure
     
     /**
      * testRegisterAliasFailure
@@ -345,12 +310,7 @@ class ezcConsoleToolsParameterTest extends ezcTestCase
         );
     }
 
-    // }}}
-
-    // {{{ test process() - success
-
     // Single parameter tests
-
     public function testProcessSuccessSingleShortNoValue()
     {
         $args = array(
@@ -426,7 +386,6 @@ class ezcConsoleToolsParameterTest extends ezcTestCase
     }
 
     // Multiple parameter tests
-    
     public function testProcessSuccessMultipleShortNoValue()
     {
         $args = array(
@@ -596,9 +555,6 @@ class ezcConsoleToolsParameterTest extends ezcTestCase
         $this->commonProcessTestSuccess( $args, $res );
     }
 
-    // }}}
-    // {{{ test process() - failure
-
     public function testProcessFailureExistance_1()
     {
         $args = array(
@@ -700,10 +656,6 @@ class ezcConsoleToolsParameterTest extends ezcTestCase
         );
         $this->commonProcessTestFailure( $args, ezcConsoleParameterException::ARGUMENTS_NOT_ALLOWED );
     }
-
-    // }}}
-
-    // {{{ test getHelp()
 
     public function testGetHelp1()
     {
@@ -808,10 +760,6 @@ class ezcConsoleToolsParameterTest extends ezcTestCase
         
     }
 
-    // }}}
-
-    // {{{ Helper methods
-
     private function commonProcessTestSuccess( $args, $res )
     {
         try 
@@ -861,9 +809,5 @@ class ezcConsoleToolsParameterTest extends ezcTestCase
             'Arguments not parsed correctly.'
         );
     }
-    
-    // }}}
-
 }
-
 ?>

@@ -1,6 +1,4 @@
 <?php
-// {{{ DOC file
-
 /**
  * File containing the ezcConsoleParameter class.
  *
@@ -10,10 +8,6 @@
  * @license LGPL {@link http://www.gnu.org/copyleft/lesser.html}
  * @filesource
  */
-
-// }}}
-
-// {{{ DOC class
 
 /**
  * Class for handling console parameters.
@@ -28,7 +22,7 @@
  *  'short' => 'Get help output.',
  *  'long'  => 'Retreive help on the usage of this command.',
  * );
- * $paramHandler->registerParam('h', 'help', $help);
+ * $paramHandler->registerParam( 'h', 'help', $help );
  *
  * $file = array(
  *  'type'     => ezcConsoleParameter::TYPE_STRING
@@ -36,7 +30,7 @@
  *  'long'     => 'Processes a single file.',
  *  'excludes' => array('d'),
  * )
- * $paramHandler->registerParam('f', 'file', $file);
+ * $paramHandler->registerParam( 'f', 'file', $file );
  *
  * $dir = array(
  *  'type'     => ezcConsoleParameter::TYPE_STRING
@@ -44,35 +38,32 @@
  *  'long'     => 'Processes a complete directory.',
  *  'excludes' => array('f'),
  * )
- * $paramHandler->registerParam('d', 'dir', $dir);
+ * $paramHandler->registerParam( 'd', 'dir', $dir );
  *
- * $paramHandler->registerAlias('d', 'directory', 'd');
+ * $paramHandler->registerAlias( 'd', 'directory', 'd' );
  *
- * try {
+ * try
+ * {
  *      $paramHandler->processParams();
- * } catch (ezcConsoleParameterException $e) {
- *      if ($e->code === ezcConsoleParameterException::PARAMETER_DEPENDENCY_RULE_NOT_MET) {
+ * }
+ * catch ( ezcConsoleParameterException $e )
+ * {
+ *      if ( $e->code === ezcConsoleParameterException::PARAMETER_DEPENDENCY_RULE_NOT_MET ) {
  *          $consoleOut->outputText(
  *              'Parameter '.$e->paramName." may not occur here.\n", 'error'
  *          );
  *      }
- *      exit(1);
+ *      exit( 1 );
  * }
  *
  * </code>
  * 
  * @package ConsoleTools
  * @version //autogen//
- * @copyright Copyright (C) 2005 eZ systems as. All rights reserved.
- * @license LGPL {@link http://www.gnu.org/copyleft/lesser.html}
  */
 
-// }}}
 class ezcConsoleParameter
 {
-
-    // {{{ class constants
-
     /**
      * Parameter does not cary a value.
      */
@@ -88,11 +79,6 @@ class ezcConsoleParameter
      */
     const TYPE_STRING   = 3;
 
-    // }}}
-
-    
-    // {{{ $paramDefs
-
     /**
      * Array of parameter definitions, indexed by number.
      * This array contains the paremeter definitions (short name, long name and
@@ -105,9 +91,6 @@ class ezcConsoleParameter
      */
     private $paramDefs = array();
 
-    // }}}
-    // {{{ $paramShort
-
     /**
      * Short paraemeter names. Each references a key in 
      * {@link ezcConsoleParameter::$paramDefs}.
@@ -115,9 +98,6 @@ class ezcConsoleParameter
      * @var array(string => int)
      */
     private $paramShort = array();
-
-    // }}}
-    // {{{ $paramLong
 
     /**
      * Long paraemeter names. Each references a key in 
@@ -127,9 +107,6 @@ class ezcConsoleParameter
      */
     private $paramLong = array();
 
-    // }}}
-    // {{{ $paramValues
-
     /**
      * Values submitted for a parameter, indexed by the key used for
      * {ezcConsoleParameter::$paramDefs}.
@@ -138,20 +115,12 @@ class ezcConsoleParameter
      */
     private $paramValues = array();
 
-    // }}}
-
-    // {{{ $arguments
-
     /**
      * Arguments, if submitted, are stored here. 
      * 
      * @var array
      */
     private $arguments = array();
-
-    // }}}
-
-    // {{{ $defaults
 
     /**
      * Default values for parameter options. 
@@ -169,10 +138,6 @@ class ezcConsoleParameter
         'arguments' => true,
     );
 
-    // }}}
-
-    // {{{ $argumentsAllowed
-
     /**
      * Are arguments allowed beside parameters? 
      * This attributes changes to false, if a parameter excludes
@@ -182,22 +147,12 @@ class ezcConsoleParameter
      */
     private $argumentsAllowed = true;
 
-    // }}}
-
-    // public
-
-    // {{{ __construct()
-
     /**
      * Create parameter handler
      */
-    public function __construct() {
-        
+    public function __construct()
+    {
     }
-
-    // }}}
-
-    // {{{ registerParam()
 
     /**
      * Register a new parameter.
@@ -243,7 +198,8 @@ class ezcConsoleParameter
      * @param array(string) $options See description
      *
      */
-    public function registerParam( $short, $long, $options = array() ) {
+    public function registerParam( $short, $long, $options = array() )
+    {
         end( $this->paramDefs );
         $nextKey = key( $this->paramDefs ) + 1;
         $this->paramDefs[$nextKey] = array( 
@@ -254,9 +210,6 @@ class ezcConsoleParameter
         $this->paramShort[$short] = $nextKey;
         $this->paramLong[$long] = $nextKey;
     }
-
-    // }}}
-    // {{{ registerAlias()
 
     /**
      * Register an alias to a parameter.
@@ -273,10 +226,11 @@ class ezcConsoleParameter
      * @throws ezcConsoleParameterException
      * @see ezcConsoleParameterException::PARAMETER_NOT_EXISTS
      */
-    public function registerAlias( $short, $long, $refShort ) {
+    public function registerAlias( $short, $long, $refShort )
+    {
         if ( !isset( $this->paramShort[$refShort] ) ) {
             throw new ezcConsoleParameterException( 
-                'Unknown parameter reference <' . $refShort . '>.', 
+                "Unknown parameter reference <{$refShort}>.",
                 ezcConsoleParameterException::PARAMETER_NOT_EXISTS, 
                 $refShort 
             );
@@ -284,9 +238,6 @@ class ezcConsoleParameter
         $this->paramShort[$short] = $this->paramShort[$refShort];
         $this->paramLong[$long] = $this->paramShort[$refShort];
     }
-
-    // }}}
-    // {{{ fromString()
 
     /**
      * Registeres parameters according to a string specification.
@@ -317,7 +268,7 @@ class ezcConsoleParameter
                 if ( empty( $matches[4][$id] )  ) 
                 {
                     throw new ezcConsoleParameterException( 
-                        'Missing long parameter name for short parameter "-'.$short.'"',
+                        "Missing long parameter name for short parameter <-{$short}>",
                         ezcConsoleParameterException::PARAMETER_STRING_NOT_WELLFORMED 
                     );
                 }
@@ -353,9 +304,6 @@ class ezcConsoleParameter
 
     }
 
-    // }}}
-    // {{{ unregisterParam()
-
     /**
      * Remove a parameter to be no more supported.
      * Using this function you will remove a parameter. Depending on the second 
@@ -374,10 +322,11 @@ class ezcConsoleParameter
      *         If requesting a nonexistant parameter 
      *         {@link ezcConsoleParameterException::PARAMETER_NOT_EXISTS}.
      */
-    public function unregisterParam( $short, $deps = false ) {
+    public function unregisterParam( $short, $deps = false )
+    {
         if ( !isset( $this->paramShort[$short] ) ) {
             throw new ezcConsoleParameterException( 
-                'Unknown parameter reference <' . $short . '>.', 
+                "Unknown parameter reference <{$short}>.", 
                 ezcConsoleParameterException::PARAMETER_NOT_EXISTS, 
                 $short 
             );
@@ -406,10 +355,6 @@ class ezcConsoleParameter
         }
     }
 
-    // }}}
-
-    // {{{ getParamDef()
-
     /**
      * Returns the options defined for a specific parameter.
      * This method receives the long or short name of a parameter and
@@ -429,15 +374,11 @@ class ezcConsoleParameter
             return $this->paramDefs[$this->paramLong[$paramName]]['options'];
         }
         throw new ezcConsoleParameterException( 
-            'Unknown parameter reference <' . $paramName . '>.', 
+            "Unknown parameter reference <{$paramName}>.", 
             ezcConsoleParameterException::PARAMETER_NOT_EXISTS,
             $paramName
         );
     }
-
-    // }}}
-
-    // {{{ process()
 
     /**
      * Process the input parameters.
@@ -471,10 +412,11 @@ class ezcConsoleParameter
      * 
      * @see ezcConsoleParameterException
      */ 
-    public function process( $args = null ) {
+    public function process( $args = null )
+    {
         if ( !isset( $args ) )
         {
-            $args = isset($argv) ? $argv : isset($_SERVER['argv']) ? $_SERVER['argv'] : array();
+            $args = isset( $argv ) ? $argv : isset( $_SERVER['argv'] ) ? $_SERVER['argv'] : array();
         }
         $i = 1;
         while ( $i < count( $args ) )
@@ -499,10 +441,6 @@ class ezcConsoleParameter
         $this->checkRules();
     }
 
-    // }}}
-
-    // {{{ getParam()
-
     /**
      * Receive the data for a specific parameter.
      * Returns the data sumbitted for a specific parameter.
@@ -512,15 +450,13 @@ class ezcConsoleParameter
      * @return mixed String value of the parameter, true if set without 
      *               value or false on not set.
      */
-    public function getParam( $param ) {
+    public function getParam( $param )
+    {
         if ( ( $paramRef = $this->getParamRef( $param ) ) !== false ) {
             return isset( $this->paramValues[$paramRef] ) ? $this->paramValues[$paramRef] : false;
         }
         return false;
     }
-
-    // }}}
-    // {{{ getParams()
 
     /**
      * Returns the data for all submitted parameters.
@@ -531,7 +467,8 @@ class ezcConsoleParameter
      * @return array(string => mixed) Array of parameter shortcut => value 
      *                                association.
      */
-    public function getParams() {
+    public function getParams()
+    {
         $res = array();
         foreach ( $this->paramValues as $paramRef => $val )
         {
@@ -539,9 +476,6 @@ class ezcConsoleParameter
         }
         return $res;
     }
-
-    // }}}
-    // {{{ getArguments()
 
     /**
      * Returns arguments provided to the program.
@@ -558,13 +492,10 @@ class ezcConsoleParameter
      *
      * @return array(int => string) Arguments.
      */
-    public function getArguments() {
+    public function getArguments()
+    {
         return $this->arguments;
     }
-
-    // }}}
-
-    // {{{ getDefaults()
 
     /**
      * Return the default values for parameter options.
@@ -575,10 +506,6 @@ class ezcConsoleParameter
     {
         return $this->defaults;
     }
-
-    // }}}
-
-    // {{{ getHelp()
 
     /**
      * Get help information for your parameters.
@@ -606,12 +533,6 @@ class ezcConsoleParameter
         return $help;
     }
 
-    // }}}
-
-    // private
-
-    // {{{ processParameter()
-
     /**
      * Process a parameter.
      * This method does the processing of a single parameter. 
@@ -632,7 +553,7 @@ class ezcConsoleParameter
             {
                 // But one found
                 throw new Exception( 
-                    'Parameter "--'.$this->paramDefs[$paramRef]['long'].'" does not expect a value but <' . $args[$i] . '> was submitted.',
+                    "Parameter <--{$this->paramDefs[$paramRef]['long']}> does not expect a value but <{$args[$i]}> was submitted.",
                     ezcConsoleParameterException::PARAMETER_TYPE_RULE_NOT_MET
                 );
             }
@@ -647,7 +568,7 @@ class ezcConsoleParameter
             if ( $this->correctType( $paramRef, $args[$i] ) === false )
             {
                 throw new ezcConsoleParameterException( 
-                    'Parameter "--'.$this->paramDefs[$paramRef]['long'].'" of incorrect type.' ,
+                    "Parameter <--{$this->paramDefs[$paramRef]['long']}> of incorrect type.",
                     ezcConsoleParameterException::PARAMETER_TYPE_RULE_NOT_MET,
                     $this->paramDefs[$paramRef]['long']
                 );
@@ -661,7 +582,7 @@ class ezcConsoleParameter
             elseif ( isset( $this->paramValues[$paramRef] ) )
             {
                 throw new ezcConsoleParameterException( 
-                    'Parameter "--'.$this->paramDefs[$paramRef]['long'].'" expects only 1 value but multiple have been submitted.',
+                    "Parameter <--{$this->paramDefs[$paramRef]['long']}> expects only 1 value but multiple have been submitted.",
                     ezcConsoleParameterException::TOO_MANY_PARAMETER_VALUES,
                     $this->paramDefs[$paramRef]['long']
                 );
@@ -682,7 +603,7 @@ class ezcConsoleParameter
             else
             {
                 throw new ezcConsoleParameterException( 
-                    'Parameter value missing for parameter "--'.$this->paramDefs[$paramRef]['long'].'".',
+                    "Parameter value missing for parameter <--{$this->paramDefs[$paramRef]['long']}>.",
                     ezcConsoleParameterException::MISSING_PARAMETER_VALUE,
                     $this->paramDefs[$paramRef]['short']
                 );
@@ -691,12 +612,10 @@ class ezcConsoleParameter
         return $i;
     }
 
-    // }}}
-    // {{{ processArguments()
-
     /**
      * Process arguments given to the program. 
      * 
+     * @todo FIXME: Add test for this!
      * @param array $args The arguments array.
      * @param int $i Current index in arguments array.
      */
@@ -707,8 +626,8 @@ class ezcConsoleParameter
             if ( substr( $args[$i], 0, 1 ) == '-' )
             {
                 throw new ezcConsoleParameterException( 
-                    'Unexpected parameter in argument list: <' . $args[$i] . '>.',
-                    UNKNOWN_PARAMETER,
+                    "Unexpected parameter in argument list: <{$args[$i]}>.",
+                    ezcConsoleParameterException::UNKNOWN_PARAMETER,
                     $args[$i]
                 );
 
@@ -716,9 +635,6 @@ class ezcConsoleParameter
             $this->arguments[] = $args[$i++];
         }
     }
-
-    // }}}
-    // {{{ checkRules()
 
     /**
      * Check the rules that may be associated with a parameter.
@@ -751,7 +667,7 @@ class ezcConsoleParameter
                     if ( !isset( $this->paramValues[$dependRef] ) )
                     {
                         throw new ezcConsoleParameterException( 
-                            'Parameter "--'.$this->paramDefs[$paramRef]['long'].'" depends on "--'.$this->paramDefs[$dependRef]['long'].'" which was not submitted.',
+                            "Parameter <--{$this->paramDefs[$paramRef]['long']}> depends on <--{$this->paramDefs[$dependRef]['long']}> which was not submitted.",
                             ezcConsoleParameterException::PARAMETER_DEPENDENCY_RULE_NOT_MET,
                             $this->paramDefs[$paramRef]['long']
                         );
@@ -768,7 +684,7 @@ class ezcConsoleParameter
                     if ( isset( $this->paramValues[$excludeRef] ) )
                     {
                         throw new ezcConsoleParameterException( 
-                            'Parameter "--'.$this->paramDefs[$paramRef]['long'].'" excludes "--'.$this->paramDefs[$excludeRef]['long'].'" which was submitted.',
+                            "Parameter <--{$this->paramDefs[$paramRef]['long']}> excludes <--{$this->paramDefs[$excludeRef]['long']}> which was submitted.",
                             ezcConsoleParameterException::PARAMETER_EXCLUSION_RULE_NOT_MET,
                             $this->paramDefs[$paramRef]['long']
                         );
@@ -781,17 +697,13 @@ class ezcConsoleParameter
                  && count( $this->arguments ) > 0 )
             {
                 throw new ezcConsoleParameterException( 
-                    'Parameter "--'.$this->paramDefs[$paramRef]['long'].'" excludes the usage of arguments, but arguments have been passed.',
+                    "Parameter <--{$this->paramDefs[$paramRef]['long']}> excludes the usage of arguments, but arguments have been passed.",
                     ezcConsoleParameterException::ARGUMENTS_NOT_ALLOWED,
                     $this->paramDefs[$paramRef]['long']
                 );
             }
         }
     }
-
-    // }}}
-
-    // {{{ correctType()
 
     /**
      * Checks if a value is of a given type. Converts the value to the
@@ -808,7 +720,7 @@ class ezcConsoleParameter
         {
             case ezcConsoleParameter::TYPE_STRING:
                 $res = true;
-                $val = preg_replace( '/^(["\'])(.*)\1$/', '\2', $val);
+                $val = preg_replace( '/^(["\'])(.*)\1$/', '\2', $val );
                 break;
             case ezcConsoleParameter::TYPE_INT:
                 $res = preg_match( '/^[0-9]+$/', $val ) ? true : false;
@@ -820,9 +732,6 @@ class ezcConsoleParameter
         }
         return $res;
     }
-
-    // }}}
-    // {{{ getParamRef()
 
     /**
      * Returns the parameter reference to a given parameter name.
@@ -855,7 +764,7 @@ class ezcConsoleParameter
             else
             {
                 throw new ezcConsoleParameterException( 
-                    'Unknown parameter <' . $paramName . '>.',
+                    "Unknown parameter <{$paramName}>",
                     ezcConsoleParameterException::PARAMETER_NOT_EXISTS
                 );
 
@@ -872,7 +781,7 @@ class ezcConsoleParameter
             else
             {
                 throw new ezcConsoleParameterException( 
-                    'Unknown parameter <' . $paramName . '>.',
+                    "Unknown parameter <{$paramName}>.",
                     ezcConsoleParameterException::PARAMETER_NOT_EXISTS
                 );
 
@@ -880,9 +789,6 @@ class ezcConsoleParameter
         }
         return $paramRef;
     }
-
-    // }}}
-    // {{{ preprocessLongParam()
 
     /**
      * Split parameter and value for long parameter names. This method checks 
@@ -902,8 +808,5 @@ class ezcConsoleParameter
             array_splice( $args, $i, 1, $parts );
         }
     }
-
-    // }}}
-
 }
 ?>

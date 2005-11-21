@@ -13,8 +13,8 @@ $paramHandler = new ezcConsoleParameter();
 
 // Options for the help flag
 $help = array(
- 'short' => 'Get help output.',
- 'long'  => 'Retreive help on the usage of this command.',
+    'short' => 'Get help output.',
+    'long'  => 'Retreive help on the usage of this command.',
 );
 
 // Register parameter -h/--help with texts from above
@@ -22,12 +22,12 @@ $paramHandler->registerParam( 'h', 'help', $help );
 
 // Options for the file parameter
 $file = array(
- // Must have a value, type string
- 'type'     => ezcConsoleParameter::TYPE_STRING,
- 'short'    => 'Process a file.',
- 'long'     => 'Processes a single file.',
- // May not be used in combination with -d/--directory
- 'excludes' => array( 'd' ),
+    // Must have a value, type string
+    'type'     => ezcConsoleParameter::TYPE_STRING,
+    'short'    => 'Process a file.',
+    'long'     => 'Processes a single file.',
+    // May not be used in combination with -d/--directory
+    'excludes' => array( 'd' ),
 );
 
 // Register parameter -f/--file with options from above
@@ -35,11 +35,11 @@ $paramHandler->registerParam( 'f', 'file', $file );
 
 // Options for dir parameter
 $dir = array(
- 'type'     => ezcConsoleParameter::TYPE_STRING,
- 'short'    => 'Process a directory.',
- 'long'     => 'Processes a complete directory.',
- // May not be used with -f/--file together
- 'excludes' => array( 'f' ),
+    'type'     => ezcConsoleParameter::TYPE_STRING,
+    'short'    => 'Process a directory.',
+    'long'     => 'Processes a complete directory.',
+    // May not be used with -f/--file together
+    'excludes' => array( 'f' ),
 );
 
 // Register -d/--dir parameter
@@ -65,7 +65,7 @@ catch ( ezcConsoleParameterException $e )
     {
         // Output some error text
         $consoleOut->outputText(
-            'Parameter '.$e->paramName." may not occur here.\n\n", 'error'
+            "Parameter <{$e->paramName}> may not occur here.\n\n", 'error'
         );
         // And output some help on the parameter.
         $consoleOut->output(
@@ -102,5 +102,4 @@ if ( $res = $paramHandler->getParam( 'f' ) )
 processSomethingOn( $file );
 
 exit( 0 );
-
 ?>

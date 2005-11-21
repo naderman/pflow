@@ -20,11 +20,11 @@
  *  'lineColorHead' => 'red',  // Make header rows surrounded by red lines
  * );
  * 
- * $table = new ezcConsoleTable($out, array('width' => 60, 'cols' = 3), $options);
+ * $table = new ezcConsoleTable( $out, array('width' => 60, 'cols' = 3), $options );
  * // Generate a header row:
- * $table->addHeadRow(array('First col', 'Second col', 'Third col'));
+ * $table->addHeadRow( array( 'First col', 'Second col', 'Third col' ) );
  * // Right column will be the largest
- * $table->addRow(array('Data', 'Data', 'Very very very very very long data'));
+ * $table->addRow( array( 'Data', 'Data', 'Very very very very very long data' ) );
  * $table->output();
  *
  * </code>
@@ -38,8 +38,6 @@
  */
 class ezcConsoleTable
 {
-    // {{{ Constants
-
     /**
      * Automatically wrap text to fit into a column.
      * @see ezcConsoleTable::$options
@@ -79,10 +77,6 @@ class ezcConsoleTable
      */
     const WIDTH_MAX = 2;
 
-    // }}}
-    
-    // {{{ $settings
-
     /**
      * Settings for the table.
      *
@@ -96,10 +90,6 @@ class ezcConsoleTable
      * @var array(string)
      */
     protected $settings;
-
-    // }}}
-
-    // {{{ $options
 
     /**
      * Options for the table.
@@ -123,20 +113,12 @@ class ezcConsoleTable
         'lineFormatHead' => 'default',
     );
 
-    // }}}
-
-    // {{{ $outputHandler
-
     /**
      * The ezcConsoleOutput object to use.
      *
      * @var ezcConsoleOutput
      */
     protected $outputHandler;
-
-    // }}}
-
-    // {{{ $tableData
 
     /**
      * The actual data to be represented in the table. 
@@ -145,10 +127,6 @@ class ezcConsoleTable
      */
     protected $tableData = array();
 
-    // }}}
-
-    // {{{ $tableHeadRows
-
     /**
      * Mapping for head line rows (keys of the rows).
      * 
@@ -156,20 +134,12 @@ class ezcConsoleTable
      */
     protected $tableHeadRows = array();
 
-    // }}}
-
-    // {{{ $cellFormats
-
     /**
      * Text format mappings for table cell data. 
      * 
      * @var array(int => array(int => string))
      */
     protected $cellFormats = array();
-
-    // }}}
-
-    // {{{ __construct()
 
     /**
      * Creates a new table.
@@ -189,9 +159,6 @@ class ezcConsoleTable
         $this->setSettings( $settings );
         $this->setOptions( $options );
     }
-
-    // }}}
-    // {{{ create()
 
     /**
      * Create an entire table.
@@ -215,7 +182,8 @@ class ezcConsoleTable
      * @param array(string) $settings      Settings
      * @param array(string) $options       Options
      */
-    public static function create( $data, ezcConsoleOutput $outHandler, $settings, $options = array() ) {
+    public static function create( $data, ezcConsoleOutput $outHandler, $settings, $options = array() )
+    {
         $table = new ezcConsoleTable( $outHandler, $settings, $options );
         foreach ( $data as $row => $cells )
         {
@@ -223,12 +191,6 @@ class ezcConsoleTable
         }
         return $table;
     }
-
-    // }}}
-
-    // Methods
-
-    // {{{ setOptions()
 
     /**
      * Set options for the table.
@@ -247,14 +209,10 @@ class ezcConsoleTable
             } 
             else 
             {
-                trigger_error( 'Unknowen option <' . $name . '>.', E_USER_WARNING );
+                trigger_error( "Unknown option <{$name}>.", E_USER_WARNING );
             }
         }
     }
-
-    // }}}
-
-    // {{{ addRow()
 
     /**
      * Add a row of data to the table.
@@ -271,12 +229,10 @@ class ezcConsoleTable
      * @param array(int => string) $rowData The data for the row
      * @return int Number of the row.
      */
-    public function addRow( $rowData ) {
+    public function addRow( $rowData )
+    {
         $this->tableData[] = $rowData;
     }
-
-    // }}}
-    // {{{ addHeadRow()
 
     /**
      * Add a header row to the table.
@@ -288,15 +244,12 @@ class ezcConsoleTable
      * @param array(string) $options        Override {@link eczConsoleTable::$options}
      * @return int Number of the row.
      */
-    public function addHeadRow( $rowData ) {
+    public function addHeadRow( $rowData )
+    {
         $this->addRow( $rowData );
         end( $this->tableData );
         $this->tableHeadRows[key( $this->tableData )] = true;
     }
-
-    // }}}
-    
-    // {{{ setCell()
 
     /**
      * Set data for specific cell.
@@ -309,13 +262,10 @@ class ezcConsoleTable
      * @param int $column      Column number.
      * @param string $cellData Data for the cell.
      */ 
-    public function setCell( $row, $column, $cellData ) {
+    public function setCell( $row, $column, $cellData )
+    {
         $this->tableData[$row][$column] = $cellData;
     }
-
-    // }}}
-
-    // {{{ setCellFormat ()
 
     /**
      * Set the text format for a specific cell.
@@ -343,10 +293,6 @@ class ezcConsoleTable
         }
     }
 
-    // }}}
-
-    // {{{ makeHeadRow()
-
     /**
      * Make a row to a header row.
      * Defines the row with the specified number to be a header row.
@@ -355,12 +301,10 @@ class ezcConsoleTable
      * 
      * @see eczConsoleTable::setDefaultRow()
      */
-    public function makeHeadRow( $row ) {
+    public function makeHeadRow( $row )
+    {
         $this->tableHeadRows[$row] = true;
     }
-
-    // }}}
-    // {{{ makeDefaultRow()
 
     /**
      * Make a row to a default row.
@@ -371,16 +315,13 @@ class ezcConsoleTable
      *
      * @see eczConsoleTable::setHeadRow()
      */
-    public function makeDefaultRow( $row ) {
+    public function makeDefaultRow( $row )
+    {
         if ( isset( $this->tableHeadRows[$row] ) )
         {
             unset( $this->tableHeadRows[$row] );
         }
     }
-
-    // }}}
-
-    // {{{ getTable()
 
     /**
      * Returns the table in a string.
@@ -393,9 +334,6 @@ class ezcConsoleTable
         return $this->generateTable();
     }
 
-    // }}}
-    // {{{ outputTable()
-
     /**
      * Output the table.
      * Prints the complete table to the console.
@@ -405,12 +343,6 @@ class ezcConsoleTable
     {
         echo implode( "\n", $this->generateTable() );
     }
-
-    // }}}
-
-    // Private
-
-    // {{{ generateTable()
 
     /**
      * Generate the complete table as an array. 
@@ -436,9 +368,6 @@ class ezcConsoleTable
         return $table; 
     }
 
-    // }}}
-    // {{{ generateBorder()
-
     /**
      * Generate top/bottom borders of rows. 
      * 
@@ -455,11 +384,7 @@ class ezcConsoleTable
         $border .= $this->options['corner'];
 
         return $this->outputHandler->styleText( $border, $this->options[ ( $header ? 'lineFormatHead' : 'lineFormat' ) ] );
-        
     }
-
-    // }}}
-    // {{{ generateRow()
 
     /**
      * Generate a single physical row.
@@ -477,22 +402,18 @@ class ezcConsoleTable
             $data = isset( $cells[$cell] ) ? $cells[$cell] : '';
             $rowData .= $this->outputHandler->styleText( 
                             $this->options['lineHorizontal'], 
-                            $this->options[ ( $header ? 'lineFormatHead' : 'lineFormat' ) ] 
-                     ) 
-                     . ' ' . 
-                        $this->outputHandler->styleText(
+                            $this->options[$header ? 'lineFormatHead' : 'lineFormat']
+                        );
+            $rowData .= ' ';
+            $rowData .= $this->outputHandler->styleText(
                             str_pad( $data, $colWidth[$cell], ' ', $this->options['colAlign'] ),
                             isset( $this->cellFormats[$row][$cell] ) ? $this->cellFormats[$row][$cell] : null
-                        )
-                     . ' ' ;
+                        );
+            $rowData .= ' ';
         }
-        $rowData .= $this->outputHandler->styleText( $this->options['lineHorizontal'], $this->options[ ( $header ? 'lineFormatHead' : 'lineFormat' ) ] );
+        $rowData .= $this->outputHandler->styleText( $this->options['lineHorizontal'], $this->options[$header ? 'lineFormatHead' : 'lineFormat'] );
         return $rowData;
     }
-
-    // }}}
-
-    // {{{ breakRows()
 
     /**
      * Returns auto broken rows from an array of cells.
@@ -546,12 +467,8 @@ class ezcConsoleTable
         return $rows;
     }
 
-    // }}}
-    // {{{ getColWidth()
-
     /**
      * Determine width of each single column. 
-     * 
      */
     private function getColWidths()
     {
@@ -562,7 +479,7 @@ class ezcConsoleTable
         // Subtract border and padding chars from global width
         $globalWidth = $this->settings['width'] - ( $this->settings['cols'] * ( 2 * strlen( $this->options['colPadding'] ) + 1 ) ) - 1;
         // Width of a column if each is made equal
-        $colNormWidth = round($globalWidth / $this->settings['cols']);
+        $colNormWidth = round( $globalWidth / $this->settings['cols'] );
         $colMaxWidth = array();
         // Determine the longest data for each column
         foreach ( $this->tableData as $row => $cells )
@@ -624,10 +541,6 @@ class ezcConsoleTable
         return $colWidth;
     }
 
-    // }}}
-
-    // {{{ setSettings()
-
     /**
      * Check and set the settings submited to the constructor. 
      * 
@@ -647,9 +560,5 @@ class ezcConsoleTable
         }
         $this->settings = $settings;
     }
-
-    // }}}
-
 }
-
 ?>
