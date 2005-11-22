@@ -5,7 +5,7 @@
  * @package Base
  * @version //autogen//
  * @copyright Copyright (C) 2005 eZ systems as. All rights reserved.
- * @license BSD {@link http://ez.no/licenses/bsd}
+ * @license http://ez.no/licenses/new_bsd New BSD License
  */
 /**
  * ezcPropertyReadOnlyException is thrown whenever a non existent property
