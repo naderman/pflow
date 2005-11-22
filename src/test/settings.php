@@ -13,8 +13,6 @@
  * the instance of this object, and access the settings. 
  * 
  * @package UnitTest
- * @copyright Copyright (C) 2005 eZ systems as. All rights reserved.
- * @license BSD {@link http://ez.no/licenses/bsd}
  * @author
  * @version //autogen//
  */
