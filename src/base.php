@@ -3,7 +3,7 @@
  * File containing the ezcBase class.
  *
  * @package Base
- * @version //autogentag//
+ * @version 1.0beta1
  * @copyright Copyright (C) 2005 eZ systems as. All rights reserved.
  * @license http://ez.no/licenses/new_bsd New BSD License
  */
@@ -114,7 +114,7 @@ class ezcBase
         // Get the path to the components.
         $baseDir = dirname( __FILE__ );
 
-        ezcBase::$packageDir = $baseDir . ( ezcBase::developmentMode ? "/../../../" : "/../" );
+        ezcBase::$packageDir = $baseDir . ( ezcBase::developmentMode ? "/../../../" : "/../../" );
     }
 
     /**
@@ -159,11 +159,16 @@ class ezcBase
      */
     protected static function loadFile( $file )
     {
+        list( $first, $second ) = explode( '/', $file, 2 );
         if ( ezcBase::developmentMode )
         {
             // Add the "trunk/src/" after the package name.
-            list( $first, $second ) = explode( '/', $file, 2 );
             $file = $first . "/trunk/src/" . $second;
+        }
+        else
+        {
+            // Add the "src/" after the package name.
+            $file = $first . "/src/" . $second;
         }
 
         require( ezcBase::$packageDir . $file );
