@@ -8,12 +8,10 @@
  * @copyright Copyright (C) 2005 eZ systems as. All rights reserved.
  * @license BSD {@link http://ez.no/licenses/bsd}
  */
-
 /**
  * This class represents the structure of all the database settings.
  * 
  * @package UnitTest
- * @author
  * @version //autogen//
  */
 class ezcTestDatabaseSettings

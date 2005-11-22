@@ -7,13 +7,11 @@
  * @copyright Copyright (C) 2005 eZ systems as. All rights reserved.
  * @license BSD {@link http://ez.no/licenses/bsd}
  */
-
 /**
  * This object stores the settings from the TestRunner. Every TestCase can get
  * the instance of this object, and access the settings. 
  * 
  * @package UnitTest
- * @author
  * @version //autogen//
  */
 class ezcTestSettings
