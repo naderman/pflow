@@ -28,5 +28,4 @@ class ezcBaseSuite extends ezcTestSuite
         return new ezcBaseSuite();
     }
 }
-
 ?>

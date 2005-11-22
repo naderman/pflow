@@ -13,6 +13,4 @@ return array(
     'ezcBaseTypeException'                 => 'Base/exceptions/type_exception.php',
     'ezcBaseConfigException'               => 'Base/exceptions/config_exception.php',
 );
-
-
 ?>
