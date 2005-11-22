@@ -346,7 +346,7 @@ class ezcConsoleParameter
         {
             foreach ( $this->paramDefs as $paramRef => $paramDef )
             {
-                foreach( $paramDef['options']['depends'] as $shortDep ) 
+                foreach ( $paramDef['options']['depends'] as $shortDep ) 
                 {
                     if ( $shortDep === $short )
                     {
