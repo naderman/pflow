@@ -5,7 +5,7 @@
  * @package ConsoleTools
  * @version //autogentag//
  * @copyright Copyright (C) 2005 eZ systems as. All rights reserved.
- * @license LGPL {@link http://www.gnu.org/copyleft/lesser.html}
+ * @license BSD {@link http://ez.no/licenses/bsd}
  * @filesource
  */
 
@@ -36,7 +36,7 @@
  * @package ConsoleTools
  * @version //autogen//
  * @copyright Copyright (C) 2005 eZ systems as. All rights reserved.
- * @license LGPL {@link http://www.gnu.org/copyleft/lesser.html}
+ * @license BSD {@link http://ez.no/licenses/bsd}
  */
 class ezcConsoleProgressbar
 {
