@@ -17,11 +17,12 @@
  * // ... creating ezcConsoleOutput object
  * 
  * $opt = array(
- *  'successChar'   => '+',
- *  'failureChar'   => '-',
+ *     'successChar'   => '+',
+ *     'failureChar'   => '-',
  * );
  * $status = new ezcConsoleStatusbar( $opt );
- * foreach ( $files as $file ) {
+ * foreach ( $files as $file )
+ * {
  *      $res = $file->upload();
  *      $status->add( $res ); // $res is true or false
  * }
@@ -103,7 +104,7 @@ class ezcConsoleStatusbar
             } 
             else 
             {
-                trigger_error( "Unknowen option <{$name}>.", E_USER_WARNING );
+                trigger_error( "Unknown option <{$name}>.", E_USER_WARNING );
             }
         }
     }
