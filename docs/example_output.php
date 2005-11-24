@@ -24,7 +24,7 @@ $out = new ezcConsoleOutput( $opts );
 // Print some normal text ( will be green, see options )
 $out->outputText( "Welcome to my cool program!\n" );
 
-// Output a success messagen
+// Output a success message
 $out->outputText( "You successfully managed to start the program!\n", 'success' );
 
 // Output an error message in default text
