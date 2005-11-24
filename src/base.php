@@ -116,7 +116,7 @@ class ezcBase
 
 		switch ( ezcBase::libraryMode )
 		{
-			case "dev":
+			case "devel":
 		        ezcBase::$packageDir = $baseDir. "/../../../";
 				break;
 			case "tarball":
