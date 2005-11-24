@@ -8,13 +8,32 @@
  * @license http://ez.no/licenses/new_bsd New BSD License
  */
 
+/**
+ * Autoload ezc classes 
+ * 
+ * @param string $class_name 
+ */
+function __autoload( $class_name )
+{
+    require_once("Base/trunk/src/base.php");
+    if ( strpos( $class_name, "_" ) !== false )
+    {
+        $file = str_replace( "_", "/", $class_name ) . ".php";
+        $val = require_once( $file );
+        if ( $val == 0 )
+            return true;
+        return false;
+    }
+    ezcBase::autoload( $class_name );
+}
+
 // Prepare parameter handler
 $paramHandler = new ezcConsoleParameter();
 
 // Options for the help flag
 $help = array(
-    'short' => 'Get help output.',
-    'long'  => 'Retreive help on the usage of this command.',
+    'shorthelp' => 'Get help output.',
+    'longhelp'  => 'Retreive help on the usage of this command.',
 );
 
 // Register parameter -h/--help with texts from above
@@ -24,8 +43,8 @@ $paramHandler->registerParam( 'h', 'help', $help );
 $file = array(
     // Must have a value, type string
     'type'     => ezcConsoleParameter::TYPE_STRING,
-    'short'    => 'Process a file.',
-    'long'     => 'Processes a single file.',
+    'shorthelp'    => 'Process a file.',
+    'longhelp'     => 'Processes a single file.',
     // May not be used in combination with -d/--directory
     'excludes' => array( 'd' ),
 );
@@ -36,8 +55,8 @@ $paramHandler->registerParam( 'f', 'file', $file );
 // Options for dir parameter
 $dir = array(
     'type'     => ezcConsoleParameter::TYPE_STRING,
-    'short'    => 'Process a directory.',
-    'long'     => 'Processes a complete directory.',
+    'shorthelp'    => 'Process a directory.',
+    'longhelp'     => 'Processes a complete directory.',
     // May not be used with -f/--file together
     'excludes' => array( 'f' ),
 );
@@ -56,7 +75,7 @@ $paramHandler->registerAlias( 'd', 'directory', 'd' );
 try 
 {
      // Processing
-     $paramHandler->processParams();
+     $paramHandler->process();
 } 
 catch ( ezcConsoleParameterException $e ) 
 {
@@ -67,10 +86,6 @@ catch ( ezcConsoleParameterException $e )
         $consoleOut->outputText(
             "Parameter <{$e->paramName}> may not occur here.\n\n", 'error'
         );
-        // And output some help on the parameter.
-        $consoleOut->output(
-            $paramHandler->getHelp( $e->paramName )."\n"
-        );
     }
     // End the program
     exit( $e->code );
@@ -78,28 +93,28 @@ catch ( ezcConsoleParameterException $e )
 
 // Ok, everything went well
 
-if ( $res = $paramHandler->getParam( 'h' ) )
+if ( $res = $paramHandler->getParam( '-h' ) )
 {
     // Help was requested. Output Help text as "info".
-    $consoleOut->output(
-        $paramHandler->getHelp(), 'info'
-    );
+    foreach ( $paramHandler->getHelp() as $paramHelp ) 
+    {
+        echo $paramHelp[0] . "\t" . $paramHelp[1] . "\n";
+    }
+    echo "\n";
     exit;
 }
 
-if ( $res = $paramHandler->getParam( 'f' ) ) 
+if ( $res = $paramHandler->getParam( '-f' ) ) 
 {
     // -f/--file was set. Value now in res.
     $file = $res;
-}
-
-if ( $res = $paramHandler->getParam( 'f' ) )
+} else if ( $res = $paramHandler->getParam( '-d' ) )
 {
     // -d/--dir/--directory was set. Value now in res.
     $file = $res;
 }
 
-processSomethingOn( $file );
+echo "Successfully processed ". var_export($file, true) . "\n";
 
 exit( 0 );
 ?>

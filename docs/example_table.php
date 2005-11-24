@@ -8,6 +8,25 @@
  * @license http://ez.no/licenses/new_bsd New BSD License
  */
 
+/**
+ * Autoload ezc classes 
+ * 
+ * @param string $class_name 
+ */
+function __autoload( $class_name )
+{
+    require_once("Base/trunk/src/base.php");
+    if ( strpos( $class_name, "_" ) !== false )
+    {
+        $file = str_replace( "_", "/", $class_name ) . ".php";
+        $val = require_once( $file );
+        if ( $val == 0 )
+            return true;
+        return false;
+    }
+    ezcBase::autoload( $class_name );
+}
+
 // Prepare console output options
 $opts = array(
     'verboseLevel'  => 1,           // print verbosity levels 0 and 1 only
@@ -18,23 +37,23 @@ $opts = array(
 $out = new ezcConsoleOutput( $opts );
 
 $tableOpts = array(
-    'lineColorHead' => 'red',  // Make header rows surrounded by red lines
+    'lineFormatHead' => 'red',  // Make header rows surrounded by red lines
 );
 
 // Initialize table with options, width of 60 chars and 3 cols
 $table = new ezcConsoleTable( $out, array( 'width' => 60, 'cols' => 3 ), $tableOpts );
 
 // Generate a header row ( red color )
-$table->addRowHead( array( 'First col', 'Second col', 'Third col' ) );
+$table->addHeadRow( array( 'First col', 'Second col', 'Third col' ) );
 
 // Add some data ( right column will be largest )
 $table->addRow( array( 'Data', 'Data', 'Very very very very very long data' ) );
 
-// Add some more data ( middle column data will be green )
-$table->addRow( array( 'More', $out->styleText( 'More green', 'green' ), 'Smaller data' ) );
+// Add some more data 
+$table->addRow( array( 'More', 'More green', 'Smaller data' ) );
 
 // Print table to the screen
-$table->output();
+$table->outputTable();
 
 /*
 RESULT ( without color ):
