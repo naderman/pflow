@@ -772,6 +772,61 @@ class ezcConsoleToolsParameterTest extends ezcTestCase
         );
         
     }
+    
+    public function testGetHelp3()
+    {
+        $res = array( 
+            array( 
+                '-t / --testing',
+                'No help available.',
+            ),
+            array( 
+                '-s / --subway',
+                'No help available.',
+            ),
+            array( 
+                '-v / --visual',
+                'No help available.',
+            ),
+        );
+        $this->assertEquals( 
+            $res,
+            $this->consoleParameter->getHelp(false, array( 't', 's', 'v' ) ),
+            'Help array was not generated correctly.'
+        );
+    }
+    
+    public function testGetHelp4()
+    {
+        $res = array( 
+            array( 
+                '-t / --testing',
+                'Sorry, there is no help text available for this parameter.',
+            ),
+            array( 
+                '-s / --subway',
+                'Sorry, there is no help text available for this parameter.',
+            ),
+            array( 
+                '-y / --yank',
+                'Some even more stupid, but somewhat longer long describtion.',
+            ),
+            array( 
+                '-e / --edit',
+                'Sorry, there is no help text available for this parameter.',
+            ),
+            array( 
+                '-n / --new',
+                'Sorry, there is no help text available for this parameter.',
+            ),
+        );
+        $this->assertEquals( 
+            $res,
+            $this->consoleParameter->getHelp( true, array( 't', 'subway', 'yank', 'e', 'n' ) ),
+            'Help array was not generated correctly.'
+        );
+        
+    }
 
     private function commonProcessTestSuccess( $args, $res )
     {

@@ -514,18 +514,26 @@ class ezcConsoleParameter
      *
      * The $long parameter determines if you want to get the short- or longhelp
      * texts. The array returned can be used by {@link ezcConsoleTable}.
+     *
+     * If using the second parameter, you can filter the parameters shown in the
+     * help output (e.g. to show short help for related parameters). Provide
+     * as simple number indexed array of short and/or long values to set a filter.
      * 
      * @param bool $long Set this to true for getting the long help version.
+     * @param array $params Set of parameters to generate help for, default is all.
      */
-    public function getHelp( $long = false )
+    public function getHelp( $long = false, $params = array() )
     {
         $help = array();
         foreach ( $this->paramDefs as $paramRef => $def )
         {
-            $help[] = array( 
-                '-' . $def['short'] . ' / ' . '--' . $def['long'],
-                $long == false ? $def['options']['shorthelp'] : $def['options']['longhelp'],
-            );
+            if ( count($params) === 0 || in_array( $def['short'], $params ) || in_array( $def['long'], $params ) )
+            {
+                $help[] = array( 
+                    '-' . $def['short'] . ' / ' . '--' . $def['long'],
+                    $long == false ? $def['options']['shorthelp'] : $def['options']['longhelp'],
+                );
+            }
         }
         return $help;
     }
