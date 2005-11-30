@@ -559,7 +559,7 @@ class ezcConsoleParameter
             return $i;
         }
         // Value expected, check for it
-        if ( isset( $args[$i] ) && $this->getParamRef( $args[$i] ) === false )
+        if ( isset( $args[$i] ) && substr( $args[$i], 0, 1 ) !== '-' )
         {
             // Type check
             if ( $this->correctType( $paramRef, $args[$i] ) === false )
