@@ -263,7 +263,6 @@ class ezcConsoleToolsParameterTest extends ezcTestCase
                 'arguments' => true,
             ),
         );
-        var_dump( $res['o'], $param->getParamDef( 'o' ));
         $this->assertEquals( $res['a'], $param->getParamDef( 'a' ), 'Parameter -a not registered correctly.'  );
         $this->assertEquals( $res['u'], $param->getParamDef( 'u' ), 'Parameter -u not registered correctly.'  );
         $this->assertEquals( $res['o'], $param->getParamDef( 'o' ), 'Parameter -o not registered correctly.'  );
