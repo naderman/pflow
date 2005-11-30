@@ -367,14 +367,8 @@ class ezcConsoleParameter
      */
     public function getParamDef( $paramName )
     {
-        if ( isset( $this->paramShort[$paramName] ) ) 
-        {
-            return $this->paramDefs[$this->paramShort[$paramName]]['options'];
-        }
-        if ( isset( $this->paramLong[$paramName] ) )
-        {
-            return $this->paramDefs[$this->paramLong[$paramName]]['options'];
-        }
+        return $this->paramDefs[$this->getParamRef($paramName)];
+        // Never reached, but shows what can happen with the above call
         throw new ezcConsoleParameterException( 
             "Unknown parameter reference <{$paramName}>.", 
             ezcConsoleParameterException::PARAMETER_NOT_EXISTS,
@@ -739,9 +733,10 @@ class ezcConsoleParameter
     /**
      * Returns the parameter reference to a given parameter name.
      * This method determines the reference to a parameter out of his short or
-     * long name. The name must start with the typical signazture for a 
+     * long name. The name can start with the typical signature for a 
      * parameter name ('-' for short, '--' for long). If the name is not a valid
-     * parameter name (no '-' / '--'), the method returns false. If the name is
+     * parameter name (no '-' / '--'), the method tries bothe alternatives (beware
+     * of conflicts!) and return false if it still finds no alternative. If the name is
      * syntactically valid, but the parameter does not exist, it will throw an 
      * exception. On success the parameter reference is returned.
      * 
@@ -790,6 +785,20 @@ class ezcConsoleParameter
 
             }
         }
+        // No prefix given, check both
+        else
+        {
+            $paramName = $arg;
+            if ( isset( $this->paramShort[$paramName] ) )
+            {
+                $paramRef = $this->paramShort[$paramName];
+            }
+            elseif ( isset( $this->paramLong[$paramName] ) )
+            {
+                $paramRef = $this->paramLong[$paramName];
+            }
+        }
+            
         return $paramRef;
     }
 
