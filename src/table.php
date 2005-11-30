@@ -17,7 +17,7 @@
  * // ... creating ezcConsoleOutput object
  *
  * $options = array(
- *  'lineColorHead' => 'red',  // Make header rows surrounded by red lines
+ *  'lineFormatHead' => 'red',  // Make header rows surrounded by red lines
  * );
  * 
  * $table = new ezcConsoleTable( $out, array('width' => 60, 'cols' = 3), $options );
