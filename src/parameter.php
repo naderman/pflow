@@ -563,7 +563,15 @@ class ezcConsoleParameter
                     ezcConsoleParameterException::PARAMETER_TYPE_RULE_NOT_MET
                 );
             }
-            $this->paramValues[$paramRef] = true;
+            // Multiple occurance possible
+            if ( $this->paramDefs[$paramRef]['options']['multiple'] === true )
+            {
+                $this->paramValues[$paramRef][] = true;
+            }
+            else
+            {
+                $this->paramValues[$paramRef] = true;
+            }
             // Everything fine, nothing to do
             return $i;
         }

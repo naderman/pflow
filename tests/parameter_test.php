@@ -32,6 +32,7 @@ class ezcConsoleToolsParameterTest extends ezcTestCase
             'short'     => 'v',
             'long'      => 'visual',
             'options'   => array(
+                'multiple'  => true,
                 'arguments' => false,
             ),
         ),
@@ -515,6 +516,19 @@ class ezcConsoleToolsParameterTest extends ezcTestCase
         $res = array( 
             'b' => 42,
             'd' => 'world',
+        );
+        $this->commonProcessTestSuccess( $args, $res );
+    }
+    
+    public function testProcessSuccessMultipleLongSameNoValue()
+    {
+        $args = array(
+            'foo.php',
+            '--visual',
+            '--visual',
+        );
+        $res = array( 
+            'v' => array( true, true ),
         );
         $this->commonProcessTestSuccess( $args, $res );
     }
