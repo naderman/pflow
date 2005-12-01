@@ -398,6 +398,38 @@ class ezcConsoleToolsParameterTest extends ezcTestCase
         $this->commonProcessTestSuccess( $args, $res );
     }
 
+    public function testProcessSuccessSingleShortNoValueArguments()
+    {
+        $args = array(
+            'foo.php',
+            '-s',
+            '--',
+            '-foo',
+            '--bar',
+            'baz',
+        );
+        $res = array( 
+            's' => true,
+        );
+        $this->commonProcessTestSuccess( $args, $res );
+    }
+    
+    public function testProcessSuccessSingleLongNoValueArguments()
+    {
+        $args = array(
+            'foo.php',
+            '--subway',
+            '--',
+            '-foo',
+            '--bar',
+            'baz',
+        );
+        $res = array( 
+            's' => true,
+        );
+        $this->commonProcessTestSuccess( $args, $res );
+    }
+
     // Multiple parameter tests
     public function testProcessSuccessMultipleShortNoValue()
     {

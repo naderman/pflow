@@ -423,13 +423,14 @@ class ezcConsoleParameter
                 $this->preprocessLongParam( $args, $i );
             }
             // Check for parameter
-            if ( $this->getParamRef( $args[$i] ) !== false ) 
+            if ( $this->getParamRef( $args[$i] ) !== false )
             {
                 $this->processParameter( $args, $i );
             }
             // Must be the arguments
             else
             {
+                $args[$i] == '--' ? ++$i : $i;
                 $this->processArguments( $args, $i );
                 break;
             }
@@ -554,7 +555,7 @@ class ezcConsoleParameter
         if ( $this->paramDefs[$paramRef]['options']['type'] === ezcConsoleParameter::TYPE_NONE )
         {
             // No value expected
-            if ( isset( $args[$i] ) && $this->getParamRef( $args[$i] ) === false )
+            if ( isset( $args[$i] ) && substr( $args[$i], 0, 1 ) !== '-' )
             {
                 // But one found
                 throw new Exception( 
@@ -628,15 +629,6 @@ class ezcConsoleParameter
     {
         while ( $i < count( $args ) )
         {
-            if ( substr( $args[$i], 0, 1 ) == '-' )
-            {
-                throw new ezcConsoleParameterException( 
-                    "Unexpected parameter in argument list: <{$args[$i]}>.",
-                    ezcConsoleParameterException::UNKNOWN_PARAMETER,
-                    $args[$i]
-                );
-
-            }
             $this->arguments[] = $args[$i++];
         }
     }
@@ -760,7 +752,7 @@ class ezcConsoleParameter
     {
         $paramRef = false;
         // Long parameter name
-        if ( substr( $arg, 0, 2 ) == '--' && substr( $arg, 2, 1 ) != ' ' ) 
+        if ( substr( $arg, 0, 2 ) == '--' && strlen( $arg ) != 2 ) 
         {
             $paramName = substr( $arg, 2 );
             if ( isset( $this->paramLong[$paramName] ) )
