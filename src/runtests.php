@@ -1,5 +1,8 @@
 <?php
 
+// All errors must be reported
+error_reporting( E_ALL | E_STRICT );
+
 function __autoload( $class_name )
 {
     require_once("Base/trunk/src/base.php");
