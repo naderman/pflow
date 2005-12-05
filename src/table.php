@@ -230,6 +230,8 @@ class ezcConsoleTable
     public function addRow( $rowData )
     {
         $this->tableData[] = $rowData;
+        end($this->tableData);
+        return key($this->tableData);
     }
 
     /**
@@ -247,6 +249,7 @@ class ezcConsoleTable
         $this->addRow( $rowData );
         end( $this->tableData );
         $this->tableHeadRows[key( $this->tableData )] = true;
+        return key($this->tableData);
     }
 
     /**
@@ -550,11 +553,11 @@ class ezcConsoleTable
     {
         if ( !isset( $settings['width'] ) || !is_int( $settings['width'] ) || $settings['width'] < 0 ) 
         {
-            throw new ezcBaseConfigException( 'Missing or invalid width setting.' );
+            throw new ezcBaseConfigException( 'width', ezcBaseConfigException::VALUE_OUT_OF_RANGE, isset( $settings['width'] ) ? $settings['width'] : 'null' );
         }
         if ( !isset( $settings['cols'] ) || !is_int( $settings['cols'] ) || $settings['cols'] < 0 ) 
         {
-            throw new ezcBaseConfigException( 'Missing or invalid cols setting.' );
+            throw new ezcBaseConfigException( 'cols', ezcBaseConfigException::VALUE_OUT_OF_RANGE, isset( $settings['cols'] ) ? $settings['cols'] : 'null' );
         }
         $this->settings = $settings;
     }

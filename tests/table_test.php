@@ -183,6 +183,172 @@ class ezcConsoleToolsTableTest extends ezcTestCase
             array( 0 )
         );
     }
+
+    public function testTableManual1 ()
+    {
+        $table = new ezcConsoleTable( $this->output, array( 'cols' => count( $this->tableData1[0] ), 'width' => 100 ) );
+        $i = 0;
+        foreach ( $this->tableData1 as $set ) 
+        {
+            $res = $table->addRow($set);
+            $this->assertEquals( 
+                $i++,
+                $res,
+                'Table returned invalid index on adding row.'
+            );
+        }
+    }
+    
+    public function testTableManual2 ()
+    {
+        $table = new ezcConsoleTable( $this->output, array( 'cols' => count( $this->tableData2[0] ), 'width' => 100 ) );
+        $i = 0;
+        foreach ( $this->tableData2 as $set ) 
+        {
+            $res = $table->addHeadRow($set);
+            $this->assertEquals( 
+                $i++,
+                $res,
+                'Table returned invalid index on adding head row.'
+            );
+        }
+    }
+    
+    public function testTableManual3 ()
+    {
+        $table = new ezcConsoleTable( $this->output, array( 'cols' => count( $this->tableData3[0] ), 'width' => 100 ) );
+        $i = 0;
+        foreach ( $this->tableData3 as $set ) 
+        {
+            if ( $i % 2 == 0 )
+            {
+                $res = $table->addHeadRow($set);
+            }
+            else
+            {
+                $res = $table->addRow($set);
+            }
+            $this->assertEquals( 
+                $i++,
+                $res,
+                'Table returned invalid index on adding mixed rows.'
+            );
+        }
+    }
+
+    public function testTableConfigurationFailure1 ()
+    {
+        // Missing 'cols' setting
+        try
+        {
+            $table = new ezcConsoleTable( $this->output, array( 'width' => 100 ) );
+        }
+        catch (ezcBaseConfigException $e)
+        {
+            $this->assertEquals( 
+                ezcBaseConfigException::VALUE_OUT_OF_RANGE,
+                $e->getCode(),
+                'Wrong exception code thrown on missing <cols> setting.'
+            );
+            return;
+        }
+        $this->fail( 'No exception thrown on missing <cols> setting.' );
+    }
+    
+    public function testTableConfigurationFailure2 ()
+    {
+        // 'cols' setting wrong type
+        try
+        {
+            $table = new ezcConsoleTable( $this->output, array( 'cols' => 'test', 'width' => 100 ) );
+        }
+        catch (ezcBaseConfigException $e)
+        {
+            $this->assertEquals( 
+                ezcBaseConfigException::VALUE_OUT_OF_RANGE,
+                $e->getCode(),
+                'Wrong exception code thrown on wrong type for <cols> setting.'
+            );
+            return;
+        }
+        $this->fail( 'No exception thrown on wrong type for <cols> setting.' );
+    }
+
+    public function testTableConfigurationFailure3 ()
+    {
+        // 'cols' setting out of range
+        try
+        {
+            $table = new ezcConsoleTable( $this->output, array( 'cols' => -10, 'width' => 100 ) );
+        }
+        catch (ezcBaseConfigException $e)
+        {
+            $this->assertEquals( 
+                ezcBaseConfigException::VALUE_OUT_OF_RANGE,
+                $e->getCode(),
+                'Wrong exception code thrown on invalid value of <cols> setting.'
+            );
+            return;
+        }
+        $this->fail( 'No exception thrown on invalid value of <cols> setting.' );
+    }
+    
+    public function testTableConfigurationFailurer4 ()
+    {
+        // Missing 'width' setting
+        try
+        {
+            $table = new ezcConsoleTable( $this->output, array( 'cols' => 10 ) );
+        }
+        catch (ezcBaseConfigException $e)
+        {
+            $this->assertEquals( 
+                ezcBaseConfigException::VALUE_OUT_OF_RANGE,
+                $e->getCode(),
+                'Wrong exception code thrown on missing <width> setting.'
+            );
+            return;
+        }
+        $this->fail( 'No exception thrown on missing <width> setting.' );
+    }
+    
+    public function testTableConfigurationFailure5 ()
+    {
+        // 'width' setting wrong type
+        try
+        {
+            $table = new ezcConsoleTable( $this->output, array( 'cols' => 10, 'width' => false ) );
+        }
+        catch (ezcBaseConfigException $e)
+        {
+            $this->assertEquals( 
+                ezcBaseConfigException::VALUE_OUT_OF_RANGE,
+                $e->getCode(),
+                'Wrong exception code thrown on wrong type for <width> setting.'
+            );
+            return;
+        }
+        $this->fail( 'No exception thrown on wrong type for <width> setting.' );
+    }
+
+    public function testTableConfigurationFailure6 ()
+    {
+        // 'width' setting out of range
+        try
+        {
+            $table = new ezcConsoleTable( $this->output, array( 'cols' => 10, 'width' => -10 ) );
+        }
+        catch (ezcBaseConfigException $e)
+        {
+            $this->assertEquals( 
+                ezcBaseConfigException::VALUE_OUT_OF_RANGE,
+                $e->getCode(),
+                'Wrong exception code thrown on invalid value of <width> setting.'
+            );
+            return;
+        }
+        $this->fail( 'No exception thrown on invalid value of <width> setting.' );
+    }
     
     private function commonTableTest( $refFile, $tableData, $settings, $options, $headrows = array() )
     {
