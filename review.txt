@@ -1,0 +1,19 @@
+General:
+- Check directory structure, if you add more structures to Struct directory
+  then there is no real separaration between the different tools. 
+
+Parameter:
+- Should use struct.
+- What does excludes dO?
+
+Output:
+- Should use struct instead of the options array.
+
+Progressbar:
+- Should use struct instead of the options array.
+
+StatusBar:
+- For sake of compatibility, use struct instead of the options array.
+
+StatusBar:
+- Use struct instead of the options array.
