@@ -11,7 +11,8 @@
 
 /**
  * Class for handling console output.
- * This class handles outputting text to the console. It deals with formating 
+ *
+ * The ezcConsoleOutput class provides an interface to output text to the console. It deals with formating 
  * text in different ways and offers some comfortable options to deal
  * with console text output.
  *
