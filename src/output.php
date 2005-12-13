@@ -18,31 +18,43 @@
  *
  * <code>
  *
- * $opts = array(
- *  'verboseLevel'  => 10,  // extremly verbose
- *  'autobreak'     => 40,  // will break lines every 40 chars
- *  'format'       => array(
- *      'default'   => array(     // pseudo format (used when no format given)
- *          'color'   => 'green', // green  foreground color
- *      ),
- *      'success'   => array(     // define format "success"
- *          'color'   => 'white', // white foreground color
- *          'style'   => 'bold',  // bold font style
- *      ),
- *      'failure'   => array(     // Define format "failur"
- *          'color'   => 'black', // black foreground color
- *          'bgcolor' => 'red',   // red background color
- *          'style'   => 'bold',  // bold font style
- *      ),
- *  ),
- * );
- * $out = new ezcConsoleOutput( $opts );
+ * // Create the output handler
+ * $out = new ezcConsoleOutput();
+ * 
+ * // Set the verbosity to level 10
+ * $out->options->verboseLevel = 10;
+ * // Enable auto wrapping of lines after 40 characters
+ * $out->options->autobreak    = 40;
+ * 
+ * // Set the color of the default output format to green
+ * $out->formats->default->color   = 'green';
  *
+ * // Set the color of the output format named 'success' to white
+ * $out->formats->success->color   = 'white';
+ * // Set the style of the output format named 'success' to bold
+ * $out->formats->success->style   = array( 'bold' );
+ *
+ * // Set the color of the output format named 'failure' to black
+ * $out->formats->failure->color   = 'black';
+ * // Set the style of the output format named 'failure' to bold
+ * $out->formats->failure->style   = array( 'bold' );
+ * // Set the background color of the output format named 'failure' to red
+ * $out->formats->failure->bgcolor = 'red';
+ *
+ * // Output text with default format
  * $out->outputText( 'This is default text ' );
+ * // Output text with format 'success'
  * $out->outputText( 'including success message', 'success' );
+ * // Some more output with default output.
  * $out->outputText( "and a manual linebreak.\n" );
  *
+ * // Manipulate the later output
+ * $out->formats->success->color = 'green';
+ * $out->formats->default->color = 'blue';
+ *
+ * // This is visible, since we set verboseLevel to 10, and printed in default format (now blue)
  * $out->outputText( "Some verbose output.\n", null, 10 );
+ * // This is visible, since we set verboseLevel to 10, and printed in format 'failure'
  * $out->outputText( "And some not so verbose, failure output.\n", 'failure', 5 );
  *
  * </code>
@@ -54,58 +66,17 @@ class ezcConsoleOutput
 {
     /**
      * Options
-     *
-     * Default values:
-     * <code>
-     * array(
-     *   'verboseLevel'  => 1,       // Verbosity level
-     *   'autobreak'     => 0,       // Pos <int>. Break lines automatically
-     *                               // after this ammount of chars
-     *   'useFormats'    => true,    // Whether to enable formatting or not
-     *   'format'       => array(
-     *      'default'    => array(     // pseudo format (used when no format given)
-     *          'color'   => 'green', // green  foreground color
-     *      ),
-     *      'success'    => array(     // define format "success"
-     *          'color'   => 'white', // white foreground color
-     *          'style'   => 'bold',  // bold font style
-     *      ),
-     *      'failure'    => array(    // Define format "failure"
-     *          'color'   => 'black', // black foreground color
-     *          'bgcolor' => 'red',   // red background color
-     *          'style'   => array(   // multiple styles
-     *              'bold',           // bold font style
-     *              'blink'           // blinking font
-     *           ),
-     *      ),
-     *  ),
-     * );
-     * </code>
-     *
-     * @see ezcConsoleOutput::setOptions()
-     * @see ezcConsoleOutput::getOptions()
      * 
-     * @var array(string)
+     * @var object(ezcConsoleOutputOptions)
      */
-    private $options = array(
-        'verboseLevel'  => 1,
-        'autobreak'     => 0,
-        'useFormats'    => true,    // Whether to enable formatting or not
-        'format'        => array(
-            // default format not re-defined by default (uses system default)
-            'success'    => array(     // define format "success" (standard format)
-                'color'   => 'green',  // green foreground color
-                'style'   => 'bold',   // bold font style
-            ),
-            'failure'    => array(     // define format "failure" (standard format)
-                'color'   => 'red',    // red foreground color
-                'style'   => array(    // multiple styles
-                    'bold',     // bold font style
-                    'blink'     // blinking font
-                ),
-            ),
-        ),
-    );
+    protected $options;
+
+    /**
+     * Formats 
+     * 
+     * @var object(ezcConsoleOutputFormats)
+     */
+    protected $formats;
 
     /**
      * Whether a position has been stored before, using the
@@ -117,69 +88,163 @@ class ezcConsoleOutput
     protected $positionStored = false;
 
     /**
+     * Stores the mapping of color names to their escape
+     * sequence values.
+     *
+     * @var array(string => int)
+     */
+    protected static $color = array(
+    	'gray'          => 30,
+    	'red'           => 31,
+    	'green'         => 32,
+    	'yellow'        => 33,
+    	'blue'          => 34,
+    	'magenta'       => 35,
+    	'cyan'          => 36,
+    	'white'         => 37,
+        'default'       => 39
+    );
+
+    /**
+     * Stores the mapping of bgcolor names to their escape
+     * sequence values.
+     * 
+     * @var array(string => int)
+     */
+    protected static $bgcolor = array(
+        'black'      => 40,
+        'red'        => 41,
+    	'green'      => 42,
+    	'yellow'     => 43,
+    	'blue'       => 44,
+    	'magenta'    => 45,
+    	'cyan'       => 46,
+    	'white'      => 47,
+        'default'    => 49,
+    );
+
+    /**
+     * Stores the mapping of styles names to their escape
+     * sequence values.
+     * 
+     * @var array(string => int)
+     */
+    protected static $style = array( 
+        'default'           => '0',
+    
+        'bold'              => 1,
+        'faint'             => 2,
+        'normal'            => 22,
+        
+        'italic'            => 3,
+        'notitalic'         => 23,
+        
+        'underlined'        => 4,
+        'doubleunderlined'  => 21,
+        'notunderlined'     => 24,
+        
+        'blink'             => 5,
+        'blinkfast'         => 6,
+        'noblink'           => 25,
+        
+        'negative'          => 7,
+        'positive'          => 27,
+    );
+
+    /**
+     * Basic escape sequence string. Use sprintf() to insert escape codes.
+     * 
+     * @var string
+     */
+    private $escapeSequence = "\033[%sm";
+
+    /**
      * Create a new console output handler.
      *
      * @see ezcConsoleOutput::$options
-     * @see ezcConsoleOutput::setOptions()
-     * @see ezcConsoleOutput::getOptions()
+     * @see ezcConsoleOutputOptions
+     * @see ezcConsoleOutput::$formats
+     * @see ezcConsoleOutputFormats
      *
-     * @param array(string) $options Options.
+     * @param ezcConsoleOutputOptions $options Options.
+     * @param ezcConsoleOutputFormats $formats Formats.
      */
-    public function __construct( $options = array() )
+    public function __construct( ezcConsoleOutputOptions $options = null, ezcConsoleOutputFormats $formats = null )
     {
-        $this->setOptions( $options );
-        
+        $options = isset( $options ) ? $options : new ezcConsoleOutputOptions();
+        $formats = isset( $formats ) ? $formats : new ezcConsoleOutputFormats();
+        $this->options = $options;
+        $this->formats = $formats;
     }
 
     /**
-     * Set options.
-     *
-     * @see ezcConsoleOutput::getOptions()
-     * @see ezcConsoleOutput::$options
-     *
-     * @param array(string) $options Options.
-     */
-    public function setOptions( $options )
-    {
-        if ( isset( $options['format'] ) ) 
-        {
-            $this->setFormats( $options['format'] );
-            unset( $options['format'] );
-        }
-        foreach ( $options as $name => $val ) 
-        {
-            if ( isset( $this->options[$name] ) ) 
-            {
-                $this->options[$name] = $val;
-            } 
-            else 
-            {
-                trigger_error( "Unknowen option <{$name}>.", E_USER_WARNING );
-            }
-        }
-    }
-
-    /**
-     * Returns options
-     *
-     * @see ezcConsoleOutput::setOptions()
-     * @see ezcConsoleOutput::$options
+     * Property read access.
      * 
-     * @return array(string) Options.
+     * @param string $key Name of the property.
+     * @return mixed Value of the property or null.
+     *
+     * @throws ezcBasePropertyNotFoundException
+     *         If the the desired property is not found.
      */
-    public function getOptions()
+    public function __get( $key )
     {
-        return $this->options;
+        switch ($key) 
+        {
+            case 'options':
+                return $this->options;
+                break;
+            case 'formats':
+                return $this->formats;
+                break;
+            default:
+                break;
+        }
+        throw new ezcBasePropertyNotFoundException( $key );
     }
 
     /**
-     * Returns an array of the formats registered. 
+     * Property write access.
      * 
-     * @return array(string) The defined formats.
+     * @param string $key Name of the property.
+     * @param mixed $val  The value for the property.
+     *
+     * @throws ezcBaseConfigException
+     *         If a the value for the property options is not an instance of
+     *         ezcConsoleOutputOptions
+     *         {@link ezcBaseConfigException::VALUE_OUT_OF_RANGE}.
      */
-    public function getFormats()
+    public function __set( $key, $val )
     {
-        return $this->options['format'];
+        switch ($key) 
+        {
+            case 'options':
+                if ( !( $val instanceof ezcConsoleOutputOptions ) )
+                {
+                    throw new ezcBaseConfigException( 
+                        'options',
+                        ezcBaseConfigException::VALUE_OUT_OF_RANGE,
+                        is_object( $val ) ? get_class( $val ) : gettype( $val )
+                    );
+                }
+                $this->options = $val;
+                return;
+                break;
+            case 'formats':
+                if ( !( $val instanceof ezcConsoleOutputFormats ) )
+                {
+                    throw new ezcBaseConfigException( 
+                        'formats',
+                        ezcBaseConfigException::VALUE_OUT_OF_RANGE,
+                        is_object( $val ) ? get_class( $val ) : gettype( $val )
+                    );
+                }
+                $this->formats = $val;
+                return;
+                break;
+            default:
+                break;
+        }
+        throw new ezcBasePropertyNotFoundException( $key );
     }
 
     /**
@@ -196,18 +261,18 @@ class ezcConsoleOutput
      */
     public function outputText( $text, $format = 'default', $verboseLevel = 1 ) 
     {
-        if ( $this->options['verboseLevel'] >= $verboseLevel ) 
+        if ( $this->options->verboseLevel >= $verboseLevel ) 
         {
-            if ( $this->options['autobreak'] > 0 )
+            if ( $this->options->autobreak > 0 )
             {
                 $textLines = explode( "\n", $text );
                 foreach ( $textLines as $id => $textLine )
                 {
-                    $textLines[$id] = wordwrap( $textLine, $this->options['autobreak'], "\n", true );
+                    $textLines[$id] = wordwrap( $textLine, $this->options->autobreak, "\n", true );
                 }
                 $text = implode( "\n", $textLines );
             }
-            echo ( $this->options['useFormats'] == true ) ? $this->styleText( $text, $format ) : $text;
+            echo ( $this->options->useFormats == true ) ? $this->styleText( $text, $format ) : $text;
         }
     }
 
@@ -274,17 +339,19 @@ class ezcConsoleOutput
     }
 
     /**
-     * Set formating options.
-     * Sub method to set formating options.
+     * Returns if a format code is valid for ta specific formating option.
+     * This method determines, if a given code is valid for a specific formating
+     * option ('color', 'bgcolor' or 'style').
      * 
-     * @param array $newFormats Array of new formats to be set.
+     * @see ezcConsoleOutput::getFormatCode();
+     *
+     * @param string $type Formating type.
+     * @param string $key  Format option name.
+     * @return bool True if the code is valid.
      */
-    private function setFormats( $newFormats )
+    public static function isValidFormatCode( $type, $key )
     {
-        foreach ( $newFormats as $name => $format ) 
-        {
-            $this->options['format'][$name] = $format;
-        }
+        return isset( self::${$type}[$key] );
     }
 
     /**
@@ -295,27 +362,33 @@ class ezcConsoleOutput
      * @param string $format Name of the format.
      * @return string The escpe sequence.
      */
-    private function buildSequence( $format = 'default' )
+    protected function buildSequence( $format = 'default' )
     {
-        if ( $format === 'default' || !isset( $this->options['format'][$format] ) )
+        if ( $format === 'default' )
         {
             return sprintf( $this->escapeSequence, 0 );
         }
         $modifiers = array();
-        $format = $this->options['format'][$format];
-        foreach ( $format as $formatType => $value ) 
+        $formats = array( 'color', 'style', 'bgcolor' );
+        foreach ( $formats as $formatType ) 
         {
             // Get modifiers
-            if ( is_array( $value ) )
+            if ( is_array( $this->formats->$format->$formatType ) )
             {
-                foreach ( $value as $singleVal ) 
+                if ( !in_array( 'default', $this->formats->$format->$formatType ) )
                 {
-                    $modifiers[] = $this->getFormatCode( $formatType, $singleVal );
+                    foreach ( $this->formats->$format->$formatType as $singleVal ) 
+                    {
+                        $modifiers[] = $this->getFormatCode( $formatType, $singleVal );
+                    }
                 }
             }
             else
             {
-                $modifiers[] = $this->getFormatCode( $formatType, $value );
+                if ( $this->formats->$format->$formatType !== 'default' )
+                {
+                    $modifiers[] = $this->getFormatCode( $formatType, $this->formats->$format->$formatType );
+                }
             }
         }
         // Merge modifiers
@@ -324,22 +397,24 @@ class ezcConsoleOutput
 
     /**
      * Returns the code for a given formating option of a given type.
-     * $type is the type of formatting ( 'color', 'bgcolor' or 'style' ),
+     * $type is the type of formating ('color', 'bgcolor' or 'style'),
      * $key the name of the format to lookup. Returns the numeric code for
      * the requested format or 0 if format or type do not exist.
+     * 
+     * @see ezcConsoleOutput::isValidFormatCode()
      * 
      * @param string $type Formating type.
      * @param string $key  Format option name.
      * @return int The code representation.
      */
-    private function getFormatCode( $type, $key )
+    protected function getFormatCode( $type, $key )
     {
-        $attrName = $type . 's';
-        if ( !isset( $this->$attrName ) || !isset( $this->{$attrName}[$key] ) ) 
+        if ( !ezcConsoleOutput::isValidFormatCode( $type, $key ) ) 
         {
             return 0;
         }
-        return $this->{$attrName}[$key];
+        return ezcConsoleOutput::${$type}[$key];
     }
+
 }
 ?>

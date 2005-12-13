@@ -54,28 +54,32 @@ class ezcConsoleToolsTableTest extends ezcTestCase
      */
     public function setUp()
     {
-        $this->output = new ezcConsoleOutput( 
-            array( 
-                'format' => array(
-                    'red' => array( 
-                        'color' => 'red',
-                        'style' => 'bold'
-                    ),
-                    'blue' => array( 
-                        'color' => 'blue',
-                        'style' => 'bold'
-                    ),
-                    'green' => array( 
-                        'color' => 'green',
-                        'style' => 'bold'
-                    ),
-                    'magenta' => array( 
-                        'color' => 'magenta',
-                        'style' => 'bold'
-                    ),
-                ),
-            )
+        $this->output = new ezcConsoleOutput();
+        $formats = array(
+            'red' => array( 
+                'color' => 'red',
+                'style' => 'bold'
+            ),
+            'blue' => array( 
+                'color' => 'blue',
+                'style' => 'bold'
+            ),
+            'green' => array( 
+                'color' => 'green',
+                'style' => 'bold'
+            ),
+            'magenta' => array( 
+                'color' => 'magenta',
+                'style' => 'bold'
+            ),
         );
+        foreach ( $formats as $name => $format )
+        {
+            foreach ( $format as $type => $val )
+            {
+                $this->output->formats->$name->$type = $val;
+            }
+        }
     }
 
     /**

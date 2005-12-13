@@ -102,12 +102,14 @@ class ezcConsoleToolsOutputTest extends ezcTestCase
      */
     public function setUp()
     {
-        $options = array();
+        $this->consoleOutput = new ezcConsoleOutput();
         foreach ( $this->testFormats as $name => $inout ) 
         {
-            $options['format'][$name] = $inout['in'];
+            foreach ( $inout['in'] as $formatName => $val )
+            {
+                $this->consoleOutput->formats->$name->$formatName = $val;
+            }
         }
-        $this->consoleOutput = new ezcConsoleOutput( $options );
     }
 
     /**
@@ -118,21 +120,6 @@ class ezcConsoleToolsOutputTest extends ezcTestCase
     public function tearDown()
     {
         unset( $this->consoleOutput );
-    }
-
-    /**
-     * testSetOptions
-     * 
-     * @access public
-     */
-    public function testSetOptions()
-    {
-        foreach ( $this->testOptions as $name => $optIn )
-        {
-            $this->consoleOutput->setOptions( $optIn );
-            $optOut = $this->consoleOutput->getOptions();
-            $this->assertTrue( array_intersect( $optIn, $optOut ) == $optIn, 'Options not correctly set. Returned options array did not contain options set before.' );
-        }
     }
 
     /**
@@ -147,8 +134,8 @@ class ezcConsoleToolsOutputTest extends ezcTestCase
             $realRes = $this->consoleOutput->styleText( $this->testString, $name );
             $fakeRes = sprintf( $inout['out'], $this->testString );
             $this->assertEquals( 
-                $fakeRes, 
                 $realRes,
+                $fakeRes, 
                 "Test <{$name}> failed. String <{$realRes}> (real) is not equal to <{$fakeRes}> (fake)."
             );
         }
@@ -183,7 +170,7 @@ class ezcConsoleToolsOutputTest extends ezcTestCase
      */
     public function testOutputTextAutobreak()
     {
-        $this->consoleOutput->setOptions( array( 'autobreak' => 20 ) );
+        $this->consoleOutput->options->autobreak = 20;
         $testText = 'Some text which is obviously longer than 20 characters and should be broken.';
         $testResText = 'Some text which is
 obviously longer
@@ -202,7 +189,7 @@ broken.';
             $this->assertEquals( 
                 $fakeRes, 
                 $realRes, 
-                'Test "' . $name . ' faile. String <' . $realRes . '> (real) is not equal to <' . $fakeRes . '> (fake).' 
+                'Test "' . $name . ' failed. String <' . $realRes . '> (real) is not equal to <' . $fakeRes . '> (fake).' 
             );
         }
     }

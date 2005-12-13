@@ -14,6 +14,18 @@
  */
 require_once 'output_test.php';
 /**
+ * Require test suite for ConsoleOutputFormat class.
+ */
+require_once 'output_format_test.php';
+/**
+ * Require test suite for ConsoleOutputFormats class.
+ */
+require_once 'output_formats_test.php';
+/**
+ * Require test suite for ConsoleOutputOptions class.
+ */
+require_once 'output_options_test.php';
+/**
  * Require test suite for ConsoleParameter class.
  */
 require_once 'parameter_test.php';
@@ -44,6 +56,9 @@ class ezcConsoleToolsSuite extends ezcTestSuite
         $this->setName( "ConsoleTools" );
 
 		$this->addTest( ezcConsoleToolsOutputTest::suite() );
+		$this->addTest( ezcConsoleToolsOutputFormatTest::suite() );
+		$this->addTest( ezcConsoleToolsOutputFormatsTest::suite() );
+		$this->addTest( ezcConsoleToolsOutputOptionsTest::suite() );
 		$this->addTest( ezcConsoleToolsParameterTest::suite() );
 		$this->addTest( ezcConsoleToolsTableTest::suite() );
 		$this->addTest( ezcConsoleToolsProgressbarTest::suite() );

@@ -11,6 +11,9 @@
 
 return array (
     'ezcConsoleOutput'             => 'ConsoleTools/output.php',
+    'ezcConsoleOutputOptions'      => 'ConsoleTools/structs/output_options.php',
+    'ezcConsoleOutputFormats'      => 'ConsoleTools/structs/output_formats.php',
+    'ezcConsoleOutputFormat'       => 'ConsoleTools/structs/output_format.php',
     'ezcConsoleOutputException'    => 'ConsoleTools/exceptions/output_exception.php',
     'ezcConsoleParameter'          => 'ConsoleTools/parameter.php',
     'ezcConsoleParameterStruct'    => 'ConsoleTools/structs/parameter.php',

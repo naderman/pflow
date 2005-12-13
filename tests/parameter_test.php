@@ -178,7 +178,7 @@ class ezcConsoleToolsParameterTest extends ezcTestCase
         $this->consoleParameter = new ezcConsoleParameter();
         foreach ( $this->testParams as $paramData )
         {
-            $this->consoleParameter->registerParam( $this->createFakeparam($paramData) );
+            $this->consoleParameter->registerParam( $this->createFakeParam( $paramData ) );
         }
     }
 

@@ -91,7 +91,8 @@ class ezcConsoleToolsStatusbarTest extends ezcTestCase
     
     public function testStatusbar2()
     {
-        $out = new ezcConsoleOutput( array( 'useFormats' => false ) );
+        $out = new ezcConsoleOutput();
+        $out->options->useFormats = false;
         $status = new ezcConsoleStatusbar( $out );
         ob_start();
         foreach ( $this->stati as $statusVal )

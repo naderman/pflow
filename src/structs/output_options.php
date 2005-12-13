@@ -43,11 +43,20 @@ class ezcConsoleOutputOptions {
     public $useFormats = true;
 
     /**
-     * Storage for formating information. 
+     * Create a new ezcConsoleOutputOptions struct. 
+     * Create a new ezcConsoleOutputOptions struct for use with {@link ezcConsoleOutput}. 
      * 
-     * @var array(int => ezcConsoleOutputFormat)
+     * @param int $verboseLevel Verbosity of the output to show.
+     * @param int $autobreak    Auto wrap lines after num chars (0 = unlimited)
+     * @param bool $useFormats  Whether to enable formated output
+     * @return void
      */
-    protected $formats = array();
+    public function __construct( $verboseLevel = 1, $autobreak = 0, $useFormats = true )
+    {
+        $this->verboseLevel = $verboseLevel;
+        $this->autobreak = $autobreak;
+        $this->useFormats = $useFormats;
+    }
 }
 
 ?>
