@@ -15,48 +15,94 @@
  * to a console based application.
  *
  * <code>
- *
  * $paramHandler = new ezcConsoleParameter();
  * 
- * $help = array(
- *  'short' => 'Get help output.',
- *  'long'  => 'Retreive help on the usage of this command.',
- * );
- * $paramHandler->registerParam( 'h', 'help', $help );
+ * // Register simple parameter -h/--help
+ * $paramHandler->registerParam( new ezcConsoleParameterStruct( 'h', 'help' ) );
  *
- * $file = array(
- *  'type'     => ezcConsoleParameter::TYPE_STRING
- *  'short'    => 'Process a file.',
- *  'long'     => 'Processes a single file.',
- *  'excludes' => array('d'),
+ * // Register complex parameter -f/--file
+ * $file = new ezcConsoleParameterStruct(
+ *  'f',
+ *  'file',
+ *  ezcConsoleParameter::TYPE_STRING,
+ *  null,
+ *  false,
+ *  'Process a file.',
+ *  'Processes a single file.',
+ *  array(),
+ *  array( new ezcConsoleParameterRule( $paramHandler->getParam( 'd' ) ) ),
  * )
- * $paramHandler->registerParam( 'f', 'file', $file );
+ * $paramHandler->registerParam( $file );
  *
- * $dir = array(
- *  'type'     => ezcConsoleParameter::TYPE_STRING
- *  'short'    => 'Process a directory.',
- *  'long'     => 'Processes a complete directory.',
- *  'excludes' => array('f'),
+ * // Manipulate parameter -f/--file after registration
+ * $file->multiple = true;
+ * 
+ * // Register another complex parameter
+ * $dir = new ezcConsoleParameterStruct(
+ *  'd',
+ *  'dir',
+ *  ezcConsoleParameter::TYPE_STRING,
+ *  null,
+ *  true,
+ *  'Process a directory.',
+ *  'Processes a complete directory.',
+ *  'excludes' => array( new ezcConsoleParameterRule( $paramHandler->getParam( 'h' ) ) ),
  * )
- * $paramHandler->registerParam( 'd', 'dir', $dir );
+ * $paramHandler->registerParam( $dir );
  *
- * $paramHandler->registerAlias( 'd', 'directory', 'd' );
+ * // Register an alias for this parameter
+ * $paramHandler->registerAlias( 'e', 'extended-dir', $dir );
  *
+ * // Process registered parameters and handle errors
  * try
  * {
- *      $paramHandler->processParams();
+ *      $paramHandler->process();
  * }
  * catch ( ezcConsoleParameterException $e )
  * {
  *      if ( $e->code === ezcConsoleParameterException::PARAMETER_DEPENDENCY_RULE_NOT_MET )
  *      {
  *          $consoleOut->outputText(
- *              'Parameter '.$e->paramName." may not occur here.\n", 'error'
+ *              'Parameter ' . isset( $e->param ) ? $e->param->name : 'unknown' . " may not occur here.\n", 'error'
  *          );
  *      }
  *      exit( 1 );
  * }
  *
+ * // Process a single parameter
+ * $file = $paramHandler->getParam( 'f' );
+ * if ( $file->value === false )
+ * {
+ *      echo "Parameter -{$file->short}/--{$file->long} was not submitted.\n";
+ * }
+ * elseif ( $file->value === true )
+ * {
+ *      echo "Parameter -{$file->short}/--{$file->long} was submitted without value.\n";
+ * }
+ * else
+ * {
+ *      echo "Parameter -{$file->short}/--{$file->long} was submitted with value <{$file->value}>.\n";
+ * }
+ *
+ * // Process all parameters at once:
+ * foreach ( $paramHandler->getValues() as $paramShort => $val )
+ * {
+ *      switch (true)
+ *      {
+ *          case $val === false:
+ *              echo "Parameter $paramShort was not submitted.\n";
+ *              break;
+ *          case $val === true:
+ *              echo "Parameter $paramShort was submitted without a value.\n";
+ *              break;
+ *          case is_array($val):
+ *              echo "Parameter $paramShort was submitted multiple times with value: <".implode(', ', $val).">.\n";
+ *              break;
+ *          default:
+ *              echo "Parameter $paramShort was submitted with value: <$val>.\n";
+ *              break;
+ *      }
+ * }
  * </code>
  * 
  * @package ConsoleTools
@@ -117,15 +163,6 @@ class ezcConsoleParameter
     private $arguments = array();
 
     /**
-     * Are arguments allowed beside parameters? 
-     * This attributes changes to false, if a parameter excludes
-     * the usage of arguments.
-     * 
-     * @var bool True if arguments are allowed, otherwise false.
-     */
-    private $argumentsAllowed = true;
-
-    /**
      * Create parameter handler
      */
     public function __construct()
@@ -140,9 +177,7 @@ class ezcConsoleParameter
      *
      * @see ezcConsoleParameter::unregisterParam()
      *
-     * @param string $short          Short parameter
-     * @param string $long           Long version of parameter
-     * @param array(string) $options See description
+     * @param ezcConsoleParameterStruct $param The parameter to register.
      *
      */
     public function registerParam( ezcConsoleParameterStruct $param )
@@ -187,7 +222,11 @@ class ezcConsoleParameter
      *
      *
      * @throws ezcConsoleParameterException
-     * @see ezcConsoleParameterException::PARAMETER_NOT_EXISTS
+     *         If the referenced parameter does not exist
+     *         {@link ezcConsoleParameterException::PARAMETER_NOT_EXISTS}.
+     * @throws ezcConsoleParameterException
+     *         If another parameter/alias has taken the provided short or long name
+     *         {@link ezcConsoleParameterException::PARAMETER_ALREADY_REGISTERED}.
      */
     public function registerAlias( $short, $long, $param )
     {
@@ -229,7 +268,10 @@ class ezcConsoleParameter
      * -a / --all
      *
      * @param string $paramDef Parameter definition string.
-     * @throws ezcConsoleParameterException If string is not wellformed.
+     * 
+     * @throws ezcConsoleParameterException 
+     *         If string is not wellformed
+     *         {@link ezcConsoleParameterException::PARAMETER_STRING_NOT_WELLFORMED}.
      */
     public function fromString( $paramDef ) 
     {
@@ -287,7 +329,7 @@ class ezcConsoleParameter
      * @see ezcConsoleParameter::registerParam()
      *
      * @throws ezcConsoleParameterException 
-     *         If requesting a nonexistant parameter 
+     *         If requesting a nonexistant parameter
      *         {@link ezcConsoleParameterException::PARAMETER_NOT_EXISTS}.
      */
     public function unregisterParam( $param )
@@ -330,15 +372,16 @@ class ezcConsoleParameter
     
     /**
      * Remove a alias to be no more supported.
-     * Using this function you will remove an alias. All dependencies to that 
-     * specific parameter are removed completly from every other registered 
-     * parameter.
+     * Using this function you will remove an alias.
      *
-     * @see ezcConsoleParameter::registerParam()
+     * @see ezcConsoleParameter::registerAlias()
      * 
+     * @throws ezcConsoleParameterException
+     *      If the requested short/long name belongs to a real parameter instead
+     *      of an alias {@link ezcConsoleParameterException::PARAMETER_IS_NO_ALIAS}. 
+     *
      * @param mixed $short 
      * @param mixed $long 
-     * @return void
      */
     public function unregisterAlias( $short, $long )
     {
@@ -380,6 +423,10 @@ class ezcConsoleParameter
      * 
      * @param string $name Short or long name of the parameter.
      * @return array(string) Options set for the parameter.
+     *
+     * @throws ezcConsoleParameterException 
+     *         If requesting a nonexistant parameter
+     *         {@link ezcConsoleParameterException::PARAMETER_NOT_EXISTS}.
      */
     public function getParam( $name )
     {
@@ -587,7 +634,6 @@ class ezcConsoleParameter
      * @param array $args The arguments array.
      * @param int $i      The current position in the arguments array.
      * @param int The current index in the $args array.
-     * @returns void 
      */
     private function processParameter( $args, &$i )
     {
