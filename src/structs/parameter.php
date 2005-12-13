@@ -386,6 +386,13 @@ class ezcConsoleParameterStruct {
         $this->exclusions = array();
     }
     
+    /**
+     * Property read access.
+     * Provies read access to the properties of the object.
+     * 
+     * @param string $key The name of the property.
+     * @return mixed The value if property exists and isset, otherwise null.
+     */
     public function __get( $key )
     {
         if ( isset( $this->properties[$key] ) )
@@ -394,6 +401,16 @@ class ezcConsoleParameterStruct {
         }
     }
 
+    /**
+     * Sanitize the name of parameters.
+     * Remove whitespaces from parameter names and remove non
+     * alphanumeric chars from the beginning (if someone submits
+     * the name including '-' prefixes).
+     * 
+     * 
+     * @param string $name The name to sanitize.
+     * @return string The sanitized name.
+     */
     public static function sanitizeParameterName( $name )
     {
         return preg_replace( 
