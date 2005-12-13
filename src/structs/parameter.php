@@ -414,7 +414,7 @@ class ezcConsoleParameterStruct {
     public static function sanitizeParameterName( $name )
     {
         return preg_replace( 
-            array( '/^\W*/i', '/\s*/' ),
+            array( '/^[a-z0-9]*/i', '/\s*/' ),
             '',
             $name
         );
