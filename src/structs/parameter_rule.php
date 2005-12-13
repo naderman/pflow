@@ -11,6 +11,7 @@
 
 /**
  * Struct class to store a parameter rule.
+ *
  * This struct stores relation rules between parameters. A relation consists of
  * a parameter that the relation refers to and optionally the value(s) the 
  * refered parameter may have assigned. Rules may be used for dependencies and 

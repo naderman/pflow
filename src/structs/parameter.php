@@ -11,6 +11,7 @@
 
 /**
  * Struct class to store data about a single parameter handled by ezcConsoleParameter.
+ *
  * This class represents a single parameter which can be handled by the
  * ezcConsoleParameter class. This classes only purpose is the storage of
  * the parameter data.
