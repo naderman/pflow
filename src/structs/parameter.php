@@ -22,18 +22,16 @@
 class ezcConsoleParameterStruct {
 
     /**
-     * Short name of the parameter (not prefixed with '-').
+     * Properties, which provide only read access.
+     * Stores the short and long name of a parameter which are readonly after 
+     * being set once during construction.
      * 
-     * @var string
+     * @var array(string)
      */
-    public $short;
-
-    /**
-     * Long name of the parameter (not prefixed with '-').
-     * 
-     * @var string
-     */
-    public $long;
+    protected $properties = array( 
+        'short' => '',
+        'long'  => '',
+    );
 
     /**
      * Value type of this parameter, default is ezcConsoleParameter::TYPE_NONE.
@@ -56,6 +54,13 @@ class ezcConsoleParameterStruct {
     public $default;
 
     /**
+     * Is the submition of multiple instances of this parameters allowed? 
+     * 
+     * @var bool
+     */
+    public $multiple = false;
+    
+    /**
      * Short help text. Ususally displayed when showing parameter help overview.
      * 
      * @var string
@@ -67,7 +72,7 @@ class ezcConsoleParameterStruct {
      * 
      * @var string
      */
-    public $longhelp = 'Sorry, there is no help on this topic available.';
+    public $longhelp = 'Sorry, there is no help text available for this parameter.';
 
     /**
      * Dependency rules of this parameter.
@@ -103,6 +108,16 @@ class ezcConsoleParameterStruct {
     public $arguments = true;
 
     /**
+     * The value the parameter was assigned to when being submitted.
+     * Boolean false indicates the parameter was not submitted, boolean
+     * true means the parameter was submitted, but did not have a value.
+     * In any other case, this caries the submitted value.
+     * 
+     * @var mixed
+     */
+    public $value = false;
+
+    /**
      * Create a new parameter struct.
      * Creates a new basic parameter struct with the base information "$short"
      * (the short name of the parameter) and "$long" (the long version). You
@@ -132,10 +147,33 @@ class ezcConsoleParameterStruct {
      * @param string $short Short name of the parameter without '-' (eg. 'f').
      * @param string $long  Long name of the parameter without '--' (eg. 'file').
      */
-    public function __construct( $short, $long )
-    {
-        $this->short = $short;
-        $this->long = $long;
+    public function __construct( 
+        $short, 
+        $long, 
+        $type = ezcConsoleParameter::TYPE_NONE, 
+        $default = null, 
+        $multiple = false,
+        $shorthelp = 'No help available.',
+        $longhelp = 'Sorry, there is no help text available for this parameter.', 
+        array $dependencies = array(),
+        array $exclusions = array(), 
+        $arguments = true
+    ) {
+        $this->properties['short'] = ezcConsoleParameterStruct::sanitizeParameterName($short);
+        $this->properties['long'] = ezcConsoleParameterStruct::sanitizeParameterName($long);
+        $this->type = $type;
+        $this->default = isset( $default ) ? $default : null;
+        $this->multiple = $multiple;
+        $this->shorthelp = $shorthelp;
+        $this->longhelp = $longhelp;
+        foreach ( $dependencies as $dep )
+        {
+            $this->addDependency( $dep );
+        }
+        foreach( $exclusions as $exc )
+        {
+            $this->addExclusion( $exc );
+        }
     }
 
     /* Add a new dependency for a parameter.
@@ -176,6 +214,25 @@ class ezcConsoleParameterStruct {
     }
     
     /**
+     * Remove all dependency rule refering to a parameter.
+     * This removes all dependency rules from a parameter, that refer to as specific 
+     * parameter. If no rule is registered with this parameter as reference, the 
+     * method call will simply be ignored.
+     * 
+     * @param ezcConsoleParameterStruct $param The param to be check for rules.
+     */
+    public function removeAllDependencies( ezcConsoleParameterStruct $param )
+    {
+        foreach ( $this->dependencies as $id => $rule )
+        {
+            if ( $rule->param === $param )
+            {
+                unset( $this->dependencies[$id] );
+            }
+        }
+    }
+    
+    /**
      * Returns if a given dependency rule is registered with the parameter.
      * Returns true if the given rule is registered with this parameter,
      * otherwise false.
@@ -183,11 +240,11 @@ class ezcConsoleParameterStruct {
      * @param ezcConsoleParameterRule $rule The rule to be removed.
      * @returns bool True if rule is registered, otherwise false.
      */
-    public function hasDependency( ezcConsoleParameterRule $rule )
+    public function hasDependency( ezcConsoleParameterStruct $param )
     {
-        foreach ( $this->dependencies as $id => $existRule )
+        foreach ( $this->dependencies as $id => $rule )
         {
-            if ( $rule === $existRule )
+            if ( $rule->param === $param )
             {
                 return true;
             }
@@ -262,6 +319,25 @@ class ezcConsoleParameterStruct {
     }
     
     /**
+     * Remove all exclusion rule refering to a parameter.
+     * This removes all exclusion rules from a parameter, that refer to as specific 
+     * parameter. If no rule is registered with this parameter as reference, the 
+     * method call will simply be ignored.
+     * 
+     * @param ezcConsoleParameterStruct $param The param to be check for rules.
+     */
+    public function removeAllExclusions( ezcConsoleParameterStruct $param )
+    {
+        foreach ( $this->exclusions as $id => $rule )
+        {
+            if ( $rule->param === $param )
+            {
+                unset( $this->exclusions[$id] );
+            }
+        }
+    }
+    
+    /**
      * Returns if a given exclusion rule is registered with the parameter.
      * Returns true if the given rule is registered with this parameter,
      * otherwise false.
@@ -269,11 +345,11 @@ class ezcConsoleParameterStruct {
      * @param ezcConsoleParameterRule $rule The rule to be removed.
      * @returns bool True if rule is registered, otherwise false.
      */
-    public function hasExclusion( ezcConsoleParameterRule $rule )
+    public function hasExclusion( ezcConsoleParameterStruct $param )
     {
-        foreach ( $this->exclusions as $id => $existRule )
+        foreach ( $this->exclusions as $id => $rule )
         {
-            if ( $rule === $existRule )
+            if ( $rule->param === $param )
             {
                 return true;
             }
@@ -310,7 +386,22 @@ class ezcConsoleParameterStruct {
         $this->exclusions = array();
     }
     
-    
+    public function __get( $key )
+    {
+        if ( isset( $this->properties[$key] ) )
+        {
+            return $this->properties[$key];
+        }
+    }
+
+    public static function sanitizeParameterName( $name )
+    {
+        return preg_replace( 
+            array( '/^\W*/i', '/\s*/' ),
+            '',
+            $name
+        );
+    }
 }
 
 ?>

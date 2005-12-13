@@ -99,13 +99,13 @@ class ezcConsoleToolsParameterTest extends ezcTestCase
 
     private $testAliasesSuccess = array( 
         array(
-            'short' => 'n',
-            'long'  => 'nothing',
+            'short' => 'k',
+            'long'  => 'kelvin',
             'ref'   => 't',
         ),
         array(
-            'short' => 's',
-            'long'  => 'something',
+            'short' => 'f',
+            'long'  => 'foobar',
             'ref'   => 'o',
         ),
     );
@@ -176,10 +176,36 @@ class ezcConsoleToolsParameterTest extends ezcTestCase
     public function setUp()
     {
         $this->consoleParameter = new ezcConsoleParameter();
-        foreach ( $this->testParams as $param )
+        foreach ( $this->testParams as $paramData )
         {
-            $this->consoleParameter->registerParam( $param['short'], $param['long'], $param['options'] );
+            $this->consoleParameter->registerParam( $this->createFakeparam($paramData) );
         }
+    }
+
+    protected function createFakeParam( $paramData )
+    {
+        $param = new ezcConsoleParameterStruct( $paramData['short'], $paramData['long'] );
+        foreach( $paramData['options'] as $name => $val )
+        {
+            if ( $name === 'depends' )
+            {
+                foreach ( $val as $dep )
+                {
+                    $param->addDependency(new ezcConsoleParameterRule($this->consoleParameter->getParam($dep)));
+                }
+                continue;
+            }
+            if ( $name === 'excludes' )
+            {
+                foreach ( $val as $dep )
+                {
+                    $param->addExclusion(new ezcConsoleParameterRule($this->consoleParameter->getParam($dep)));
+                }
+                continue;
+            }
+            $param->$name = $val;
+        }
+        return $param;
     }
 
     /**
@@ -201,19 +227,19 @@ class ezcConsoleToolsParameterTest extends ezcTestCase
     {
         // Using local object to test registration itself.
         $tmpConsoleParameter = new ezcConsoleParameter();
-        foreach ( $this->testParams as $param )
+        foreach ( $this->testParams as $paramData )
         {
-            $tmpConsoleParameter->registerParam( $param['short'], $param['long'], $param['options'] );
-            $param['options'] = array_merge( $tmpConsoleParameter->getDefaults(), $param['options'] );
+            $param = $this->createFakeParam( $paramData );
+            $tmpConsoleParameter->registerParam( $param );
             $this->assertEquals( 
                 $param,
-                $tmpConsoleParameter->getParamDef( $param['short'] ),
-                'Parameter not registered correctly: <' . $param['short'] . '>.'
+                $tmpConsoleParameter->getParam( $paramData['short'] ),
+                'Parameter not registered correctly with short name <' . $paramData['short'] . '>.'
             );
             $this->assertEquals( 
                 $param,
-                $tmpConsoleParameter->getParamDef( $param['long'] ),
-                'Parameter not registered correctly: <' . $param['long'] . '>.'
+                $tmpConsoleParameter->getParam( $paramData['long'] ),
+                'Parameter not registered correctly with long name <' . $paramData['long'] . '>.'
             );
         }
     }
@@ -222,51 +248,45 @@ class ezcConsoleToolsParameterTest extends ezcTestCase
     {
         $param = new ezcConsoleParameter();
         $param->fromString( '[a:|all:][u?|user?][i|info][o+test|overall+]' );
-        $res['a'] = array(
-            'long' => 'all',
-            'short' => 'a',
-            'options' => array(
-                'type' => ezcConsoleParameter::TYPE_NONE,
-                'default' => NULL,
-                'multiple' => false,
-                'shorthelp' => 'No help available.',
-                'longhelp' => 'Sorry, there is no help text available for this parameter.',
-                'depends' => array (),
-                'excludes' => array (),
-                'arguments' => true,
-            ),
+        $res['a'] = new ezcConsoleParameterStruct(
+            'a', 
+            'all', 
+            ezcConsoleParameter::TYPE_NONE, 
+            NULL, 
+            false, 
+            'No help available.', 
+            'Sorry, there is no help text available for this parameter.', 
+            array(), 
+            array (), 
+            true 
         );
-        $res['u'] = array(
-            'long' => 'user',
-            'short' => 'u',
-            'options' => array(
-                'type' => ezcConsoleParameter::TYPE_STRING,
-                'default' => '',
-                'multiple' => false,
-                'shorthelp' => 'No help available.',
-                'longhelp' => 'Sorry, there is no help text available for this parameter.',
-                'depends' => array (),
-                'excludes' => array (),
-                'arguments' => true,
-            ),
+        $res['u'] = new ezcConsoleParameterStruct(
+            'u',
+            'user',
+            ezcConsoleParameter::TYPE_STRING,
+            '',
+            false,
+            'No help available.',
+            'Sorry, there is no help text available for this parameter.',
+            array (),
+            array (),
+            true
         );
-        $res['o'] = array(
-            'long' => 'overall',
-            'short' => 'o',
-            'options' => array(
-                'type' => ezcConsoleParameter::TYPE_STRING,
-                'default' => 'test',
-                'multiple' => true,
-                'shorthelp' => 'No help available.',
-                'longhelp' => 'Sorry, there is no help text available for this parameter.',
-                'depends' => array (),
-                'excludes' => array (),
-                'arguments' => true,
-            ),
+        $res['o'] = new ezcConsoleParameterStruct(
+            'o',
+            'overall',
+            ezcConsoleParameter::TYPE_STRING,
+            'test',
+            true,
+            'No help available.',
+            'Sorry, there is no help text available for this parameter.',
+            array (),
+            array (),
+            true
         );
-        $this->assertEquals( $res['a'], $param->getParamDef( 'a' ), 'Parameter -a not registered correctly.'  );
-        $this->assertEquals( $res['u'], $param->getParamDef( 'u' ), 'Parameter -u not registered correctly.'  );
-        $this->assertEquals( $res['o'], $param->getParamDef( 'o' ), 'Parameter -o not registered correctly.'  );
+        $this->assertEquals( $res['a'], $param->getParam( 'a' ), 'Parameter -a not registered correctly.'  );
+        $this->assertEquals( $res['u'], $param->getParam( 'u' ), 'Parameter -u not registered correctly.'  );
+        $this->assertEquals( $res['o'], $param->getParam( 'o' ), 'Parameter -o not registered correctly.'  );
     }
 
     /**
@@ -276,15 +296,16 @@ class ezcConsoleToolsParameterTest extends ezcTestCase
      */
     public function testRegisterAliasSuccess()
     {
-        foreach ( $this->testParams as $param )
+        $validParams = array();
+        foreach ( $this->consoleParameter->getParams() as $param )
         {
-            $this->consoleParameter->registerParam( $param['short'], $param['long'], $param['options'] );
+            $validParams[$param->short] = $param;
         }
         foreach ( $this->testAliasesSuccess as $alias )
         {
             try 
             {
-                $this->consoleParameter->registerAlias( $alias['short'], $alias['long'], $alias['ref'] );
+                $this->consoleParameter->registerAlias( $alias['short'], $alias['long'], $validParams[$alias['ref']]  );
             }
             catch ( ezcConsoleParameterException $e )
             {
@@ -305,7 +326,7 @@ class ezcConsoleToolsParameterTest extends ezcTestCase
         {
             try 
             {
-                $this->consoleParameter->registerAlias( $alias['short'], $alias['long'], $alias['ref'] );
+                $this->consoleParameter->registerAlias( $alias['short'], $alias['long'], new ezcConsoleParameterStruct('foo', 'bar') );
             }
             catch ( ezcConsoleParameterException $e )
             {
@@ -618,7 +639,7 @@ class ezcConsoleToolsParameterTest extends ezcTestCase
     {
         $args = array(
             'foo.php',
-            '-k',
+            '-q',
         );
         $this->commonProcessTestFailure( $args, ezcConsoleParameterException::PARAMETER_NOT_EXISTS );
     }
@@ -627,7 +648,7 @@ class ezcConsoleToolsParameterTest extends ezcTestCase
     {
         $args = array(
             'foo.php',
-            '--t',
+            '-tools',
         );
         $this->commonProcessTestFailure( $args, ezcConsoleParameterException::PARAMETER_NOT_EXISTS );
     }
@@ -636,7 +657,7 @@ class ezcConsoleToolsParameterTest extends ezcTestCase
     {
         $args = array(
             'foo.php',
-            '-testing',
+            '-testingaeiou',
         );
         $this->commonProcessTestFailure( $args, ezcConsoleParameterException::PARAMETER_NOT_EXISTS );
     }
@@ -885,7 +906,8 @@ class ezcConsoleToolsParameterTest extends ezcTestCase
             $this->fail( $e->getMessage() );
             return;
         }
-        $this->assertEquals( $res, $this->consoleParameter->getParams(), 'Parameters processed incorrectly.' );
+        $values = $this->consoleParameter->getValues();
+        $this->assertTrue( count( array_diff( $res, $values ) ) == 0, 'Parameters processed incorrectly.' );
     }
     
     private function commonProcessTestFailure( $args, $code )

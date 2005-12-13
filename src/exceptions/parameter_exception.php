@@ -55,16 +55,24 @@ class ezcConsoleParameterException extends Exception
      * Parameter definition string was not well formed. 
      */
     const PARAMETER_STRING_NOT_WELLFORMED = 9;
+    /**
+     * A parameter with the same short/long name is already registered.
+     */
+    const PARAMETER_ALREADY_REGISTERED = 10;
+    /**
+     * The parameter refered to is a real parameter, not an alias. 
+     */
+    const PARAMETER_IS_NO_ALIAS = 11;
 
     /**
      * Parameter this exception is about.
-     * Shortcut name of the parameter this exception deals with.
+     * Stores the parameter this exception is about. This attribute is optional.
      *
      * @see ezcConsoleParameter::registerParam()
      *
-     * @var string
+     * @var ezcConsoleParameterStruct
      */
-    public $paramName;
+    public $param;
     
     /**
      * Constructor
@@ -76,9 +84,9 @@ class ezcConsoleParameterException extends Exception
      * @param int $code                Error code.
      * @param string string $paramName Name of affected parameter
      */
-    public function __construct( $message, $code, $paramName = null )
+    public function __construct( $message, $code, ezcConsoleParameterStruct $param = null )
     {
-        $this->paramName = $paramName;
+        $this->param = isset( $param ) ? $param : null;
         parent::__construct( $message, $code );
     }
 }

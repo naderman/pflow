@@ -138,6 +138,20 @@ class ezcConsoleParameterRule {
         $this->values = array();
     }
     
+    /**
+     * Overloading.
+     * Make the values attribute a read-only property.
+     * 
+     * @param mixed $key 
+     * @return void
+     */
+    public function __get( $key ) 
+    {
+        if ( $key === 'values' )
+        {
+            return $this->values;
+        }
+    }
 }
 
 ?>
