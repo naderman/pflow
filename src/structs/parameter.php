@@ -69,18 +69,30 @@ class ezcConsoleParameterStruct {
     public $longhelp = 'Sorry, there is no help on this topic available.';
 
     /**
-     * Dependencies to other parameters, this parameter relies on.
+     * Dependency rules of this parameter.
      * 
-     * @var array(string=>array)
+     * @see ezcConsoleParamemterStruct::addDependency()
+     * @see ezcConsoleParamemterStruct::removeDependency()
+     * @see ezcConsoleParamemterStruct::hasDependency()
+     * @see ezcConsoleParamemterStruct::getDependencies()
+     * @see ezcConsoleParamemterStruct::resetDependencies()
+     * 
+     * @var array(string=>ezcConsoleParamemterRule)
      */
-    public $depends = array();
+    protected $dependencies = array();
 
     /**
-     * Exclusions to other parameters, this parameter relies on.
+     * Exclusion rules of this parameter.
      * 
-     * @var array(string=>array)
+     * @see ezcConsoleParamemterStruct::addExclusion()
+     * @see ezcConsoleParamemterStruct::removeExclusion()
+     * @see ezcConsoleParamemterStruct::hasExclusion()
+     * @see ezcConsoleParamemterStruct::getExclusions()
+     * @see ezcConsoleParamemterStruct::resetExclusions()
+     * 
+     * @var array(string=>ezcConsoleParamemterRule)
      */
-    public $excludes = array();
+    protected $exclusions = array();
 
     /**
      * Whether arguments to the program are allowed, when this parameter is submitted. 
@@ -126,42 +138,72 @@ class ezcConsoleParameterStruct {
     }
 
     /* Add a new dependency for a parameter.
-     * This adds a new dependency to a parameter. First parameter to this
-     * method is the name of the parameter a dependency should be created
-     * to. The second one specifies optionally an array of values that
-     * the dependency relies on (e.g. $param->addDependency('a',
-     * array('foo', 'bar')); will make the parameter depend on another
-     * parameter '-a' to be set to 'foo' or to 'bar'). If the second
-     * parameter is left out, it means that only '-a' must be set, no matter
-     * with which value.
+     * This registeres a new dependency rule with the parameter. If you try
+     * to add an already registered rule it will simply be ignored. Else,
+     * the submitted rule will be added to the parameter as a dependency.
      *
-     * @param string $param Short or longname of the parameter to add a 
-     *                      dependency to (without '-' and '--'!).
-     * @param array $values Optional values the depending parameter may take
-     *                      or null to allow any value.
+     * @param ezcConsoleParameterRule $rule The rule to add.
      */
-    public function addDependency( $param, $values = true )
+    public function addDependency( ezcConsoleParameterRule $rule )
     {
-        if ( !isset( $this->dependends[$param] ) )
+        foreach ( $this->dependencies as $existRule )
         {
-            $this->depends[$name] = $values;
+            if ( $rule === $existRule )
+            {
+                return;
+            }
+        }
+        $this->dependencies[] = $rule;
+    }
+    
+    /**
+     * Remove a dependency rule from a parameter.
+     * This removes a given rule from a parameter, if it exists. If the rule is
+     * not registered with the parameter, the method call will simply be ignored.
+     * 
+     * @param ezcConsoleParameterRule $rule The rule to be removed.
+     */
+    public function removeDependency( ezcConsoleParameterRule $rule )
+    {
+        foreach ( $this->dependencies as $id => $existRule )
+        {
+            if ( $rule === $existRule )
+            {
+                unset( $this->dependencies[$id] );
+            }
         }
     }
     
     /**
-     * Returns the dependencies of a parameter.
-     * Returns an array containing all dependencies registered with this
-     * paramerter. The array is indexed by the short name of the depending
-     * parameters, which are assigned to a) an array of possible values or
-     * b) true to indicate that the parameter is simply required without any
-     * special value.
+     * Returns if a given dependency rule is registered with the parameter.
+     * Returns true if the given rule is registered with this parameter,
+     * otherwise false.
+     * 
+     * @param ezcConsoleParameterRule $rule The rule to be removed.
+     * @returns bool True if rule is registered, otherwise false.
+     */
+    public function hasDependency( ezcConsoleParameterRule $rule )
+    {
+        foreach ( $this->dependencies as $id => $existRule )
+        {
+            if ( $rule === $existRule )
+            {
+                return true;
+            }
+        }
+        return false;
+    }
+    
+    /**
+     * Returns the dependency rules registered with this parameter.
+     * Returns an array of registered dependencies.
      *
      * For example:
      * <code>
      * array(
-     *    'a' => true,                  // Parameter -a must  be set
-     *    'b' => array('foo'),          // Parameter -b must be 'foo'
-     *    'c' => array('foo', 'bar'),   // Parameter -c must be 'foo' or 'bar'
+     *      0 => object(ezcConsoleParameterRule),
+     *      1 => object(ezcConsoleParameterRule),
+     *      2 => object(ezcConsoleParameterRule),
      * );
      * </code>
      * 
@@ -169,75 +211,105 @@ class ezcConsoleParameterStruct {
      */
     public function getDependencies()
     {
-        return $this->depends;
+        return $this->dependencies;
     }
 
     /**
-     * Reset existing dependencies.
-     * Deletes all existing dependencies from the parameter definition and
-     * resets the dependency field back to it's initial status.
+     * Reset existing dependency rules.
+     * Deletes all registered dependency rules from the parameter definition.
      */
     public function resetDependencies() 
     {
-        $this->depends = array();
+        $this->dependencies = array();
+    }
+
+    /* Add a new exclusion for a parameter.
+     * This registeres a new exclusion rule with the parameter. If you try
+     * to add an already registered rule it will simply be ignored. Else,
+     * the submitted rule will be added to the parameter as a exclusion.
+     *
+     * @param ezcConsoleParameterRule $rule The rule to add.
+     */
+    public function addExclusion( ezcConsoleParameterRule $rule )
+    {
+        foreach ( $this->exclusions as $existRule )
+        {
+            if ( $rule === $existRule )
+            {
+                return;
+            }
+        }
+        $this->exclusions[] = $rule;
     }
     
-    /* Add a new exclusion for a parameter.
-     * This adds a new exclusion to a parameter. First parameter to this
-     * method is the name of the parameter a exclusion should be created
-     * to. The second one specifies optionally an array of values that
-     * the exclusion relies on (e.g. $param->addExclusion('a',
-     * array('foo', 'bar')); will make the parameter exclude another
-     * parameter '-a' which may not be set to 'foo' or to 'bar'). If the second
-     * parameter is left out, it means that '-a' must not be set at all, no matter
-     * with which value.
-     *
-     * @param string $param Short or longname of the parameter to add a 
-     *                      exclusion to (without '-' and '--'!).
-     * @param array $values Optional values the excluded parameter must not take
-     *                      or null to disallow any value.
+    /**
+     * Remove a exclusion rule from a parameter.
+     * This removes a given rule from a parameter, if it exists. If the rule is
+     * not registered with the parameter, the method call will simply be ignored.
+     * 
+     * @param ezcConsoleParameterRule $rule The rule to be removed.
      */
-    public function addExclusion( $param, $values = true )
+    public function removeExclusion( ezcConsoleParameterRule $rule )
     {
-        if ( !isset( $this->dependends[$param] ) )
+        foreach ( $this->exclusions as $id => $existRule )
         {
-            $this->excludes[$name] = $values;
+            if ( $rule === $existRule )
+            {
+                unset( $this->exclusions[$id] );
+            }
         }
     }
     
     /**
-     * Returns the exclusions of a parameter.
-     * Returns an array containing all exclusions registered with this
-     * paramerter. The array is indexed by the short name of the excluded
-     * parameters, which are assigned to a) an array of disallowed values or
-     * b) true to indicate that the parameter is simply excluded without any
-     * special value restrictions.
+     * Returns if a given exclusion rule is registered with the parameter.
+     * Returns true if the given rule is registered with this parameter,
+     * otherwise false.
+     * 
+     * @param ezcConsoleParameterRule $rule The rule to be removed.
+     * @returns bool True if rule is registered, otherwise false.
+     */
+    public function hasExclusion( ezcConsoleParameterRule $rule )
+    {
+        foreach ( $this->exclusions as $id => $existRule )
+        {
+            if ( $rule === $existRule )
+            {
+                return true;
+            }
+        }
+        return false;
+    }
+    
+    /**
+     * Returns the exclusion rules registered with this parameter.
+     * Returns an array of registered exclusions.
      *
      * For example:
      * <code>
      * array(
-     *    'a' => true,                  // Parameter -a may not  be set
-     *    'b' => array('foo'),          // Parameter -b may not be 'foo'
-     *    'c' => array('foo', 'bar'),   // Parameter -c may not be 'foo' or 'bar'
+     *      0 => object(ezcConsoleParameterRule),
+     *      1 => object(ezcConsoleParameterRule),
+     *      2 => object(ezcConsoleParameterRule),
      * );
      * </code>
      * 
      * @return array Exclusion definition as described or an empty array.
      */
-    public function getExlusions()
+    public function getExclusions()
     {
-        return $this->excludes;
+        return $this->exclusions;
     }
 
     /**
-     * Reset existing exclusions.
-     * Deletes all existing exclusions from the parameter definition and
-     * resets the exclusion field back to it's initial status.
+     * Reset existing exclusion rules.
+     * Deletes all registered exclusion rules from the parameter definition.
      */
     public function resetExclusions() 
     {
-        $this->excludes = array();
+        $this->exclusions = array();
     }
+    
+    
 }
 
 ?>
