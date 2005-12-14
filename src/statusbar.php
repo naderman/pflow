@@ -14,19 +14,21 @@
  *
  * <code>
  *
- * // ... creating ezcConsoleOutput object
- * 
- * $opt = array(
- *     'successChar'   => '+',
- *     'failureChar'   => '-',
- * );
- * $status = new ezcConsoleStatusbar( $opt );
+ * // Construction
+ * $status = new ezcConsoleStatusbar( new ezcConsoleOutput() );
+ *
+ * // Set option
+ * $status->successChar = '*';
+ *
+ * // Run statusbar
  * foreach ( $files as $file )
  * {
  *      $res = $file->upload();
+ *      // Add status if form of bool true/false to statusbar.
  *      $status->add( $res ); // $res is true or false
  * }
  *
+ * // Retreive and display final statusbar results
  * $msg = $status->getSuccess() . ' succeeded, ' . $status->getFailure() . ' failed.';
  * $out->outputText( "Finished uploading files: $msg\n" );
  *
@@ -133,28 +135,6 @@ class ezcConsoleStatusbar
                 throw new ezcBasePropertyNotFoundException( $key );
         }
         $this->options[$key] = $val;
-    }
-
-    /**
-     * Set options for the statusbar.
-     *
-     * @see ezcConsoleStatusbar::$options
-     * 
-     * @param array $options Options to set.
-     */
-    public function setOptions( $options )
-    {
-        foreach ( $options as $name => $val ) 
-        {
-            if ( isset( $this->options[$name] ) ) 
-            {
-                $this->options[$name] = $val;
-            } 
-            else 
-            {
-                trigger_error( "Unknown option <{$name}>.", E_USER_WARNING );
-            }
-        }
     }
 
     /**
