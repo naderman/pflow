@@ -191,7 +191,7 @@ class ezcConsoleToolsParameterTest extends ezcTestCase
             {
                 foreach ( $val as $dep )
                 {
-                    $param->addDependency(new ezcConsoleParameterRule($this->consoleParameter->getParam($dep)));
+                    $param->addDependency( new ezcConsoleOptionRule( $this->consoleParameter->getParam( $dep ) ) );
                 }
                 continue;
             }
@@ -199,7 +199,7 @@ class ezcConsoleToolsParameterTest extends ezcTestCase
             {
                 foreach ( $val as $dep )
                 {
-                    $param->addExclusion(new ezcConsoleParameterRule($this->consoleParameter->getParam($dep)));
+                    $param->addExclusion(new ezcConsoleOptionRule( $this->consoleParameter->getParam( $dep ) ) );
                 }
                 continue;
             }

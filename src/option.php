@@ -182,9 +182,9 @@ class ezcConsoleOption {
      * to add an already registered rule it will simply be ignored. Else,
      * the submitted rule will be added to the parameter as a dependency.
      *
-     * @param ezcConsoleParameterRule $rule The rule to add.
+     * @param ezcConsoleOptionRule $rule The rule to add.
      */
-    public function addDependency( ezcConsoleParameterRule $rule )
+    public function addDependency( ezcConsoleOptionRule $rule )
     {
         foreach ( $this->dependencies as $existRule )
         {
@@ -201,9 +201,9 @@ class ezcConsoleOption {
      * This removes a given rule from a parameter, if it exists. If the rule is
      * not registered with the parameter, the method call will simply be ignored.
      * 
-     * @param ezcConsoleParameterRule $rule The rule to be removed.
+     * @param ezcConsoleOptionRule $rule The rule to be removed.
      */
-    public function removeDependency( ezcConsoleParameterRule $rule )
+    public function removeDependency( ezcConsoleOptionRule $rule )
     {
         foreach ( $this->dependencies as $id => $existRule )
         {
@@ -238,7 +238,7 @@ class ezcConsoleOption {
      * Returns true if the given rule is registered with this parameter,
      * otherwise false.
      * 
-     * @param ezcConsoleParameterRule $rule The rule to be removed.
+     * @param ezcConsoleOptionRule $rule The rule to be removed.
      * @returns bool True if rule is registered, otherwise false.
      */
     public function hasDependency( ezcConsoleOption $param )
@@ -260,9 +260,9 @@ class ezcConsoleOption {
      * For example:
      * <code>
      * array(
-     *      0 => object(ezcConsoleParameterRule),
-     *      1 => object(ezcConsoleParameterRule),
-     *      2 => object(ezcConsoleParameterRule),
+     *      0 => object(ezcConsoleOptionRule),
+     *      1 => object(ezcConsoleOptionRule),
+     *      2 => object(ezcConsoleOptionRule),
      * );
      * </code>
      * 
@@ -287,9 +287,9 @@ class ezcConsoleOption {
      * to add an already registered rule it will simply be ignored. Else,
      * the submitted rule will be added to the parameter as a exclusion.
      *
-     * @param ezcConsoleParameterRule $rule The rule to add.
+     * @param ezcConsoleOptionRule $rule The rule to add.
      */
-    public function addExclusion( ezcConsoleParameterRule $rule )
+    public function addExclusion( ezcConsoleOptionRule $rule )
     {
         foreach ( $this->exclusions as $existRule )
         {
@@ -306,9 +306,9 @@ class ezcConsoleOption {
      * This removes a given rule from a parameter, if it exists. If the rule is
      * not registered with the parameter, the method call will simply be ignored.
      * 
-     * @param ezcConsoleParameterRule $rule The rule to be removed.
+     * @param ezcConsoleOptionRule $rule The rule to be removed.
      */
-    public function removeExclusion( ezcConsoleParameterRule $rule )
+    public function removeExclusion( ezcConsoleOptionRule $rule )
     {
         foreach ( $this->exclusions as $id => $existRule )
         {
@@ -343,7 +343,7 @@ class ezcConsoleOption {
      * Returns true if the given rule is registered with this parameter,
      * otherwise false.
      * 
-     * @param ezcConsoleParameterRule $rule The rule to be removed.
+     * @param ezcConsoleOptionRule $rule The rule to be removed.
      * @returns bool True if rule is registered, otherwise false.
      */
     public function hasExclusion( ezcConsoleOption $param )
@@ -365,9 +365,9 @@ class ezcConsoleOption {
      * For example:
      * <code>
      * array(
-     *      0 => object(ezcConsoleParameterRule),
-     *      1 => object(ezcConsoleParameterRule),
-     *      2 => object(ezcConsoleParameterRule),
+     *      0 => object(ezcConsoleOptionRule),
+     *      1 => object(ezcConsoleOptionRule),
+     *      2 => object(ezcConsoleOptionRule),
      * );
      * </code>
      * 

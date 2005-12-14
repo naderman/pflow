@@ -30,7 +30,7 @@
  *  'Process a file.',
  *  'Processes a single file.',
  *  array(),
- *  array( new ezcConsoleParameterRule( $paramHandler->getParam( 'd' ) ) ),
+ *  array( new ezcConsoleOptionRule( $paramHandler->getParam( 'd' ) ) ),
  * )
  * $paramHandler->registerParam( $file );
  *
@@ -46,7 +46,7 @@
  *  true,
  *  'Process a directory.',
  *  'Processes a complete directory.',
- *  'excludes' => array( new ezcConsoleParameterRule( $paramHandler->getParam( 'h' ) ) ),
+ *  'excludes' => array( new ezcConsoleOptionRule( $paramHandler->getParam( 'h' ) ) ),
  * )
  * $paramHandler->registerParam( $dir );
  *
@@ -759,10 +759,10 @@ class ezcConsoleParameter
             // Dependencies
             foreach ( $param->getDependencies() as $dep )
             {
-                if ( !isset( $values[$dep->parameter->short] ) || $values[$dep->parameter->short] === false )
+                if ( !isset( $values[$dep->option->short] ) || $values[$dep->option->short] === false )
                 {
                     throw new ezcConsoleParameterException( 
-                        "Parameter with long name <{$param->long}> depends on parameter with long name <{$dep->parameter->long}> which was not submitted.",
+                        "Parameter with long name <{$param->long}> depends on parameter with long name <{$dep->option->long}> which was not submitted.",
                         ezcConsoleParameterException::PARAMETER_DEPENDENCY_RULE_NOT_MET,
                         $param
                     );
@@ -770,10 +770,10 @@ class ezcConsoleParameter
                 $depVals = $dep->values;
                 if ( count( $depVals ) > 0 )
                 {
-                    if ( !in_array( $values[$dep->parameter->short], $depVals ) )
+                    if ( !in_array( $values[$dep->option->short], $depVals ) )
                     {
                         throw new ezcConsoleParameterException( 
-                            "Parameter with long name <{$param->long}> depends on parameter with long name <{$dep->parameter->long}> to be in a specific value range, but isn't.",
+                            "Parameter with long name <{$param->long}> depends on parameter with long name <{$dep->option->long}> to be in a specific value range, but isn't.",
                             ezcConsoleParameterException::PARAMETER_DEPENDENCY_RULE_NOT_MET,
                             $param
                         );
@@ -783,10 +783,10 @@ class ezcConsoleParameter
             // Exclusions
             foreach ( $param->getExclusions() as $exc )
             {
-                if ( isset( $values[$exc->parameter->short] ) && $values[$exc->parameter->short] !== false )
+                if ( isset( $values[$exc->option->short] ) && $values[$exc->option->short] !== false )
                 {
                     throw new ezcConsoleParameterException( 
-                        "Parameter with long name <{$param->long}> excludes the parameter with long name <{$exc->parameter->long}> which was submitted.",
+                        "Parameter with long name <{$param->long}> excludes the parameter with long name <{$exc->option->long}> which was submitted.",
                         ezcConsoleParameterException::PARAMETER_EXCLUSION_RULE_NOT_MET,
                         $param
                     );
@@ -794,10 +794,10 @@ class ezcConsoleParameter
                 $excVals = $exc->values;
                 if ( count( $excVals ) > 0 )
                 {
-                    if ( in_array( $values[$exc->parameter->short], $excVals ) )
+                    if ( in_array( $values[$exc->option->short], $excVals ) )
                     {
                         throw new ezcConsoleParameterException( 
-                            "Parameter with long name <{$param->long}> excludes parameter with long name <{$exc->parameter->long}> to be in a specific value range, but it is.",
+                            "Parameter with long name <{$param->long}> excludes parameter with long name <{$exc->option->long}> to be in a specific value range, but it is.",
                             ezcConsoleParameterException::PARAMETER_EXCLUSION_RULE_NOT_MET,
                             $param
                         );
