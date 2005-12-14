@@ -57,6 +57,7 @@ class ezcConsoleOutputOptions {
         $this->autobreak = $autobreak;
         $this->useFormats = $useFormats;
     }
+
 }
 
 ?>

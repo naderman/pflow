@@ -16,11 +16,12 @@ return array (
     'ezcConsoleOutputFormat'       => 'ConsoleTools/structs/output_format.php',
     'ezcConsoleOutputException'    => 'ConsoleTools/exceptions/output_exception.php',
     'ezcConsoleParameter'          => 'ConsoleTools/parameter.php',
-    'ezcConsoleOptionRule'         => 'ConsoleTools/structs/option_rule.php',
     'ezcConsoleParameterException' => 'ConsoleTools/exceptions/parameter_exception.php',
     'ezcConsoleOption'             => 'ConsoleTools/option.php',
+    'ezcConsoleOptionRule'         => 'ConsoleTools/structs/option_rule.php',
     'ezcConsoleTable'              => 'ConsoleTools/table.php',
     'ezcConsoleProgressbar'        => 'ConsoleTools/progressbar.php',
+    'ezcConsoleProgressbarOptions' => 'ConsoleTools/structs/progressbar_options.php',
     'ezcConsoleStatusbar'          => 'ConsoleTools/statusbar.php',
 );
 
