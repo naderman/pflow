@@ -184,7 +184,7 @@ class ezcConsoleToolsParameterTest extends ezcTestCase
 
     protected function createFakeParam( $paramData )
     {
-        $param = new ezcConsoleParameterStruct( $paramData['short'], $paramData['long'] );
+        $param = new ezcConsoleOption( $paramData['short'], $paramData['long'] );
         foreach( $paramData['options'] as $name => $val )
         {
             if ( $name === 'depends' )
@@ -248,7 +248,7 @@ class ezcConsoleToolsParameterTest extends ezcTestCase
     {
         $param = new ezcConsoleParameter();
         $param->fromString( '[a:|all:][u?|user?][i|info][o+test|overall+]' );
-        $res['a'] = new ezcConsoleParameterStruct(
+        $res['a'] = new ezcConsoleOption(
             'a', 
             'all', 
             ezcConsoleParameter::TYPE_NONE, 
@@ -260,7 +260,7 @@ class ezcConsoleToolsParameterTest extends ezcTestCase
             array (), 
             true 
         );
-        $res['u'] = new ezcConsoleParameterStruct(
+        $res['u'] = new ezcConsoleOption(
             'u',
             'user',
             ezcConsoleParameter::TYPE_STRING,
@@ -272,7 +272,7 @@ class ezcConsoleToolsParameterTest extends ezcTestCase
             array (),
             true
         );
-        $res['o'] = new ezcConsoleParameterStruct(
+        $res['o'] = new ezcConsoleOption(
             'o',
             'overall',
             ezcConsoleParameter::TYPE_STRING,
@@ -326,7 +326,7 @@ class ezcConsoleToolsParameterTest extends ezcTestCase
         {
             try 
             {
-                $this->consoleParameter->registerAlias( $alias['short'], $alias['long'], new ezcConsoleParameterStruct('foo', 'bar') );
+                $this->consoleParameter->registerAlias( $alias['short'], $alias['long'], new ezcConsoleOption('foo', 'bar') );
             }
             catch ( ezcConsoleParameterException $e )
             {

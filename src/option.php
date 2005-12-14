@@ -125,7 +125,7 @@ class ezcConsoleOption {
      * simply apply these parameters as strings (without '-' or '--'). So
      *
      * <code>
-     * $param = new ezcConsoleParameterStruct('f', 'file');
+     * $param = new ezcConsoleOption('f', 'file');
      * </code>
      *
      * will result in a parameter that can be accessed using
@@ -160,8 +160,8 @@ class ezcConsoleOption {
         array $exclusions = array(), 
         $arguments = true
     ) {
-        $this->properties['short'] = ezcConsoleParameterStruct::sanitizeParameterName($short);
-        $this->properties['long'] = ezcConsoleParameterStruct::sanitizeParameterName($long);
+        $this->properties['short'] = ezcConsoleOption::sanitizeParameterName($short);
+        $this->properties['long'] = ezcConsoleOption::sanitizeParameterName($long);
         $this->type = $type;
         $this->default = isset( $default ) ? $default : null;
         $this->multiple = $multiple;
@@ -220,9 +220,9 @@ class ezcConsoleOption {
      * parameter. If no rule is registered with this parameter as reference, the 
      * method call will simply be ignored.
      * 
-     * @param ezcConsoleParameterStruct $param The param to be check for rules.
+     * @param ezcConsoleOption $param The param to be check for rules.
      */
-    public function removeAllDependencies( ezcConsoleParameterStruct $param )
+    public function removeAllDependencies( ezcConsoleOption $param )
     {
         foreach ( $this->dependencies as $id => $rule )
         {
@@ -241,7 +241,7 @@ class ezcConsoleOption {
      * @param ezcConsoleParameterRule $rule The rule to be removed.
      * @returns bool True if rule is registered, otherwise false.
      */
-    public function hasDependency( ezcConsoleParameterStruct $param )
+    public function hasDependency( ezcConsoleOption $param )
     {
         foreach ( $this->dependencies as $id => $rule )
         {
@@ -325,9 +325,9 @@ class ezcConsoleOption {
      * parameter. If no rule is registered with this parameter as reference, the 
      * method call will simply be ignored.
      * 
-     * @param ezcConsoleParameterStruct $param The param to be check for rules.
+     * @param ezcConsoleOption $param The param to be check for rules.
      */
-    public function removeAllExclusions( ezcConsoleParameterStruct $param )
+    public function removeAllExclusions( ezcConsoleOption $param )
     {
         foreach ( $this->exclusions as $id => $rule )
         {
@@ -346,7 +346,7 @@ class ezcConsoleOption {
      * @param ezcConsoleParameterRule $rule The rule to be removed.
      * @returns bool True if rule is registered, otherwise false.
      */
-    public function hasExclusion( ezcConsoleParameterStruct $param )
+    public function hasExclusion( ezcConsoleOption $param )
     {
         foreach ( $this->exclusions as $id => $rule )
         {

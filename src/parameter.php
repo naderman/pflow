@@ -18,10 +18,10 @@
  * $paramHandler = new ezcConsoleParameter();
  * 
  * // Register simple parameter -h/--help
- * $paramHandler->registerParam( new ezcConsoleParameterStruct( 'h', 'help' ) );
+ * $paramHandler->registerParam( new ezcConsoleOption( 'h', 'help' ) );
  *
  * // Register complex parameter -f/--file
- * $file = new ezcConsoleParameterStruct(
+ * $file = new ezcConsoleOption(
  *  'f',
  *  'file',
  *  ezcConsoleParameter::TYPE_STRING,
@@ -38,7 +38,7 @@
  * $file->multiple = true;
  * 
  * // Register another complex parameter
- * $dir = new ezcConsoleParameterStruct(
+ * $dir = new ezcConsoleOption(
  *  'd',
  *  'dir',
  *  ezcConsoleParameter::TYPE_STRING,
@@ -127,7 +127,7 @@ class ezcConsoleParameter
 
     /**
      * Array of parameter definitions, indexed by number.
-     * This array stores the ezcConsoleParameterStruct objects representing
+     * This array stores the ezcConsoleOption objects representing
      * the parameters.
      *
      * For lookup of a parameter after it's short or long values the attributes
@@ -177,10 +177,10 @@ class ezcConsoleParameter
      *
      * @see ezcConsoleParameter::unregisterParam()
      *
-     * @param ezcConsoleParameterStruct $param The parameter to register.
+     * @param ezcConsoleOption $param The parameter to register.
      *
      */
-    public function registerParam( ezcConsoleParameterStruct $param )
+    public function registerParam( ezcConsoleOption $param )
     {
         foreach ( $this->paramShort as $short => $ref )
         {
@@ -218,7 +218,7 @@ class ezcConsoleParameter
      *
      * @param string $short                    Shortcut of the alias
      * @param string $long                     Long version of the alias
-     * @param ezcConsoleParameterStruct $param Reference to an existing parameter
+     * @param ezcConsoleOption $param Reference to an existing parameter
      *
      *
      * @throws ezcConsoleParameterException
@@ -230,8 +230,8 @@ class ezcConsoleParameter
      */
     public function registerAlias( $short, $long, $param )
     {
-        $short = ezcConsoleParameterStruct::sanitizeParameterName($short);
-        $long = ezcConsoleParameterStruct::sanitizeParameterName($long);
+        $short = ezcConsoleOption::sanitizeParameterName($short);
+        $long = ezcConsoleOption::sanitizeParameterName($long);
         if ( !isset( $this->paramShort[$param->short] ) || !isset( $this->paramLong[$param->long] ) )
         {
             throw new ezcConsoleParameterException( 
@@ -288,7 +288,7 @@ class ezcConsoleParameter
                         ezcConsoleParameterException::PARAMETER_STRING_NOT_WELLFORMED 
                     );
                 }
-                $param = new ezcConsoleParameterStruct($short, $matches[4][$id]);
+                $param = new ezcConsoleOption($short, $matches[4][$id]);
                 if ( !empty( $matches[2][$id] ) || !empty( $matches[5][$id] ) )
                 {
                     switch ( !empty( $matches[2][$id] ) ? $matches[2][$id] : $matches[5][$id] )
@@ -385,8 +385,8 @@ class ezcConsoleParameter
      */
     public function unregisterAlias( $short, $long )
     {
-        $short = ezcConsoleParameterStruct::sanitizeParameterName($short);
-        $long = ezcConsoleParameterStruct::sanitizeParameterName($long);
+        $short = ezcConsoleOption::sanitizeParameterName($short);
+        $long = ezcConsoleOption::sanitizeParameterName($long);
         foreach ( $this->params as $id => $param )
         {
             if ( $param->short === $short )
@@ -430,7 +430,7 @@ class ezcConsoleParameter
      */
     public function getParam( $name )
     {
-        $name = ezcConsoleParameterStruct::sanitizeParameterName($name);
+        $name = ezcConsoleOption::sanitizeParameterName($name);
         if ( isset( $this->paramShort[$name] ) )
         {
             return $this->paramShort[$name];
@@ -542,14 +542,14 @@ class ezcConsoleParameter
      * Returns an array of all registered parameter in the following format:
      * <code>
      * array( 
-     *      0 => object(ezcConsoleParameterStruct),
-     *      1 => object(ezcConsoleParameterStruct),
-     *      2 => object(ezcConsoleParameterStruct),
+     *      0 => object(ezcConsoleOption),
+     *      1 => object(ezcConsoleOption),
+     *      2 => object(ezcConsoleOption),
      *      ...
      * );
      * </code>
      *
-     * @return array(string=>object(ezcConsoleParameterStruct)) Registered parameters.
+     * @return array(string=>object(ezcConsoleOption)) Registered parameters.
      */
     public function getParams()
     {

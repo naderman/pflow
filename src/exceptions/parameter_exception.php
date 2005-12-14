@@ -70,7 +70,7 @@ class ezcConsoleParameterException extends Exception
      *
      * @see ezcConsoleParameter::registerParam()
      *
-     * @var ezcConsoleParameterStruct
+     * @var ezcConsoleOption
      */
     public $param;
     
@@ -84,7 +84,7 @@ class ezcConsoleParameterException extends Exception
      * @param int $code                Error code.
      * @param string string $paramName Name of affected parameter
      */
-    public function __construct( $message, $code, ezcConsoleParameterStruct $param = null )
+    public function __construct( $message, $code, ezcConsoleOption $param = null )
     {
         $this->param = isset( $param ) ? $param : null;
         parent::__construct( $message, $code );

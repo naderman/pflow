@@ -17,7 +17,7 @@
  * refered parameter may have assigned. Rules may be used for dependencies and 
  * exclusions between parameters.
  *
- * @see ezcConsoleParameterStruct
+ * @see ezcConsoleOption
  * 
  * @package ConsoleTools
  * @version //autogen//
@@ -27,7 +27,7 @@ class ezcConsoleParameterRule {
     /**
      * The parameter this rule refers to. 
      * 
-     * @var ezcConsoleParameterStruct
+     * @var ezcConsoleOption
      */
     public $parameter;
 
@@ -56,10 +56,10 @@ class ezcConsoleParameterRule {
      * to create a rule, that allows the desired parameter only to accept the
      * value 'a'.
      *
-     * @param ezcConsoleParameterStruct $param The parameter to refer to.
+     * @param ezcConsoleOption $param The parameter to refer to.
      * @param mixed $values The values $param may have assigned.
      */
-    public function __construct( ezcConsoleParameterStruct $param, $values = array() )
+    public function __construct( ezcConsoleOption $param, $values = array() )
     {
         $this->parameter = $param;
         if ( is_array( $values ) )
