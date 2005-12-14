@@ -420,8 +420,8 @@ class ezcConsoleParameter
      * This method receives the long or short name of a parameter and
      * returns the options associated with it.
      * 
-     * @param string $name Short or long name of the parameter.
-     * @return array(string) Options set for the parameter.
+     * @param string $name Short or long name of the parameter (without - or --).
+     * @return ezcConsoleOption The requested option.
      *
      * @throws ezcConsoleParameterException 
      *         If requesting a nonexistant parameter
