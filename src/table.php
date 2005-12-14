@@ -87,29 +87,17 @@ class ezcConsoleTable
      *
      * @var array(string)
      */
-    protected $settings;
+    protected $settings = array( 
+        'width' => 100,
+        'cols'  => 1,
+    );
 
     /**
      * Options for the table.
      *
-     * @var array(string)
+     * @var ezcConsoleTableOptions
      */
-    protected $options = array(
-        'colWidth'       => 'auto',
-        'colWrap'        => ezcConsoleTable::WRAP_AUTO,
-        'colAlign'       => ezcConsoleTable::ALIGN_LEFT,
-        'colPadding'     => ' ',
-
-        'widthType'      => ezcConsoleTable::WIDTH_MAX,
-        
-        'lineVertical'   => '-',
-        'lineHorizontal' => '|',
-
-        'corner'         => '+',
-
-        'lineFormat'     => 'default',
-        'lineFormatHead' => 'default',
-    );
+    protected $options;
 
     /**
      * The ezcConsoleOutput object to use.
@@ -142,20 +130,86 @@ class ezcConsoleTable
     /**
      * Creates a new table.
      *
-     * @param ezcConsoleOutput $outHandler Output handler to utilize
-     * @param array(string) $settings      Settings
-     * @param array(string) $options       Options
+     * @param ezcConsoleOutput $outHandler    Output handler to utilize
+     * @param int $width                      Overall width of the table (chars).
+     * @param int $cols                       Number of columns in a row.
+     * @param ezcConsoleTableOptions $options Options
      *
      * @see ezcConsoleTable::$settings
      * @see ezcConsoleTable::$options
      *
      * @throws ezcBaseConfigException On an invalid setting.
      */
-    public function __construct( ezcConsoleOutput $outHandler, $settings, $options = array() ) 
+    public function __construct( ezcConsoleOutput $outHandler, $width, $cols, ezcConsoleTableOptions $options = null ) 
     {
         $this->outputHandler = $outHandler;
-        $this->setSettings( $settings );
-        $this->setOptions( $options );
+        $this->__set( 'width', $width );
+        $this->__set( 'cols', $cols );
+        $this->__set( 'options', isset( $options ) ? $options : new ezcConsoleTableOptions() );
+    }
+
+    /**
+     * Property read access.
+     * 
+     * @param string $key Name of the property.
+     * @return mixed Value of the property or null.
+     *
+     * @throws ezcBasePropertyNotFoundException
+     *         If the the desired property is not found.
+     */
+    public function __get( $key )
+    {
+        switch ($key) 
+        {
+            case 'options':
+                return $this->$key;
+                break;
+            case 'width':
+            case 'cols':
+                return $this->settings[$key];
+                break;
+            default:
+                break;
+        }
+        throw new ezcBasePropertyNotFoundException( $key );
+    }
+
+    /**
+     * Property write access.
+     * 
+     * @param string $key Name of the property.
+     * @param mixed $val  The value for the property.
+     *
+     * @throws ezcBaseConfigException
+     *         If a the value for the property options is not an instance of
+     *         ezcConsoleOutputOptions
+     *         {@link ezcBaseConfigException::VALUE_OUT_OF_RANGE}.
+     */
+    public function __set( $key, $val )
+    {
+        switch ($key) 
+        {
+            case 'options':
+                if ( !( $val instanceof ezcConsoleTableOptions ) )
+                {
+                    throw new ezcBaseTypeException( 'ezcConsoleTableOptions', gettype( $val ) );
+                }
+                $this->options = $val;
+                return;
+                break;
+            case 'width':
+            case 'cols':
+                if ( $val < 1 )
+                {
+                    throw new ezcBaseConfigException( $key, ezcBaseConfigException::VALUE_OUT_OF_RANGE, $val );
+                }
+                $this->settings[$key] = $val; 
+                return;
+                break;
+            default:
+                break;
+        }
+        throw new ezcBasePropertyNotFoundException( $key );
     }
 
     /**
@@ -180,9 +234,9 @@ class ezcConsoleTable
      * @param array(string) $settings      Settings
      * @param array(string) $options       Options
      */
-    public static function create( $data, ezcConsoleOutput $outHandler, $settings, $options = array() )
+    public static function create( $data, ezcConsoleOutput $outHandler,  $width, $cols, ezcConsoleTableOptions $options = null )
     {
-        $table = new ezcConsoleTable( $outHandler, $settings, $options );
+        $table = new ezcConsoleTable( $outHandler, $width, $cols, $options );
         foreach ( $data as $row => $cells )
         {
             $table->addRow( $cells );
@@ -227,7 +281,7 @@ class ezcConsoleTable
      * @param array(int => string) $rowData The data for the row
      * @return int Number of the row.
      */
-    public function addRow( $rowData )
+    public function addRow( array $rowData )
     {
         $this->tableData[] = $rowData;
         end($this->tableData);
@@ -244,7 +298,7 @@ class ezcConsoleTable
      * @param array(string) $options        Override {@link eczConsoleTable::$options}
      * @return int Number of the row.
      */
-    public function addHeadRow( $rowData )
+    public function addHeadRow( array $rowData )
     {
         $this->addRow( $rowData );
         end( $this->tableData );
@@ -287,7 +341,7 @@ class ezcConsoleTable
         }
         else
         {
-            for ( $i = 0; $i < $this->settings['cols']; $i++ )
+            for ( $i = 0; $i < $this->cols; $i++ )
             {
                 $this->cellFormats[$row][$i] = $format;
             }
@@ -380,11 +434,11 @@ class ezcConsoleTable
         $border = '';
         foreach ( $colWidth as $col => $width )
         {
-            $border .= $this->options['corner'] . str_repeat( $this->options['lineVertical'], $width + ( 2 * strlen( $this->options['colPadding'] ) ) );
+            $border .= $this->options->corner . str_repeat( $this->options->lineVertical, $width + ( 2 * strlen( $this->options->colPadding ) ) );
         }
-        $border .= $this->options['corner'];
+        $border .= $this->options->corner;
 
-        return $this->outputHandler->styleText( $border, $this->options[ ( $header ? 'lineFormatHead' : 'lineFormat' ) ] );
+        return $this->outputHandler->styleText( $border, $this->options->{( $header ? 'lineFormatHead' : 'lineFormat' )} );
     }
 
     /**
@@ -402,17 +456,17 @@ class ezcConsoleTable
         {
             $data = isset( $cells[$cell] ) ? $cells[$cell] : '';
             $rowData .= $this->outputHandler->styleText( 
-                            $this->options['lineHorizontal'], 
-                            $this->options[$header ? 'lineFormatHead' : 'lineFormat']
+                            $this->options->lineHorizontal, 
+                            $this->options->{$header ? 'lineFormatHead' : 'lineFormat'}
                         );
             $rowData .= ' ';
             $rowData .= $this->outputHandler->styleText(
-                            str_pad( $data, $colWidth[$cell], ' ', $this->options['colAlign'] ),
+                            str_pad( $data, $colWidth[$cell], ' ', $this->options->colAlign ),
                             isset( $this->cellFormats[$row][$cell] ) ? $this->cellFormats[$row][$cell] : null
                         );
             $rowData .= ' ';
         }
-        $rowData .= $this->outputHandler->styleText( $this->options['lineHorizontal'], $this->options[$header ? 'lineFormatHead' : 'lineFormat'] );
+        $rowData .= $this->outputHandler->styleText( $this->options->lineHorizontal, $this->options->{$header ? 'lineFormatHead' : 'lineFormat'} );
         return $rowData;
     }
 
@@ -441,7 +495,7 @@ class ezcConsoleTable
                 // Does the physical row fit?
                 if ( strlen( $dataLine ) > ( $colWidth[$cell] ) )
                 {
-                    switch ( $this->options['colWrap'] )
+                    switch ( $this->options->colWrap )
                     {
                         case ezcConsoleTable::WRAP_AUTO:
                             $subLines = explode( "\n", wordwrap( $dataLine, $colWidth[$cell], "\n", true ) );
@@ -473,14 +527,14 @@ class ezcConsoleTable
      */
     private function getColWidths()
     {
-        if ( is_array( $this->options['colWidth'] ) )
+        if ( is_array( $this->options->colWidth ) )
         {
-            return $this->options['colWidth'];
+            return $this->options->colWidth;
         }
         // Subtract border and padding chars from global width
-        $globalWidth = $this->settings['width'] - ( $this->settings['cols'] * ( 2 * strlen( $this->options['colPadding'] ) + 1 ) ) - 1;
+        $globalWidth = $this->width - ( $this->cols * ( 2 * strlen( $this->options->colPadding ) + 1 ) ) - 1;
         // Width of a column if each is made equal
-        $colNormWidth = round( $globalWidth / $this->settings['cols'] );
+        $colNormWidth = round( $globalWidth / $this->cols );
         $colMaxWidth = array();
         // Determine the longest data for each column
         foreach ( $this->tableData as $row => $cells )
@@ -525,7 +579,7 @@ class ezcConsoleTable
                     $colWidth[$col] += floor( $overflow / $overflowSum * $spareWidth );
                 }
             }
-            elseif ( $this->options['widthType'] === ezcConsoleTable::WIDTH_FIXED )
+            elseif ( $this->options->widthType === ezcConsoleTable::WIDTH_FIXED )
             {
                 $widthSum = array_sum( $colWidth );
                 foreach ( $colWidth as $col => $width )
@@ -535,7 +589,7 @@ class ezcConsoleTable
             }
         }
         // Finally sanitize values from rounding issues, if necessary
-        if ( ( $colSum = array_sum( $colWidth ) ) != $globalWidth && $this->options['widthType'] === ezcConsoleTable::WIDTH_FIXED )
+        if ( ( $colSum = array_sum( $colWidth ) ) != $globalWidth && $this->options->widthType === ezcConsoleTable::WIDTH_FIXED )
         {
             $colWidth[count( $colWidth ) - 1] -= $colSum - $globalWidth;
         }

@@ -190,7 +190,7 @@ class ezcConsoleToolsTableTest extends ezcTestCase
 
     public function testTableManual1 ()
     {
-        $table = new ezcConsoleTable( $this->output, array( 'cols' => count( $this->tableData1[0] ), 'width' => 100 ) );
+        $table = new ezcConsoleTable( $this->output, count( $this->tableData1[0] ), 100 );
         $i = 0;
         foreach ( $this->tableData1 as $set ) 
         {
@@ -205,7 +205,7 @@ class ezcConsoleToolsTableTest extends ezcTestCase
     
     public function testTableManual2 ()
     {
-        $table = new ezcConsoleTable( $this->output, array( 'cols' => count( $this->tableData2[0] ), 'width' => 100 ) );
+        $table = new ezcConsoleTable( $this->output, count( $this->tableData2[0] ), 100 );
         $i = 0;
         foreach ( $this->tableData2 as $set ) 
         {
@@ -220,7 +220,7 @@ class ezcConsoleToolsTableTest extends ezcTestCase
     
     public function testTableManual3 ()
     {
-        $table = new ezcConsoleTable( $this->output, array( 'cols' => count( $this->tableData3[0] ), 'width' => 100 ) );
+        $table = new ezcConsoleTable( $this->output, count( $this->tableData3[0] ), 100 );
         $i = 0;
         foreach ( $this->tableData3 as $set ) 
         {
@@ -245,7 +245,7 @@ class ezcConsoleToolsTableTest extends ezcTestCase
         // Missing 'cols' setting
         try
         {
-            $table = new ezcConsoleTable( $this->output, array( 'width' => 100 ) );
+            $table = new ezcConsoleTable( $this->output, null, 100 );
         }
         catch (ezcBaseConfigException $e)
         {
@@ -264,7 +264,7 @@ class ezcConsoleToolsTableTest extends ezcTestCase
         // 'cols' setting wrong type
         try
         {
-            $table = new ezcConsoleTable( $this->output, array( 'cols' => 'test', 'width' => 100 ) );
+            $table = new ezcConsoleTable( $this->output, 'test', 100 );
         }
         catch (ezcBaseConfigException $e)
         {
@@ -283,7 +283,7 @@ class ezcConsoleToolsTableTest extends ezcTestCase
         // 'cols' setting out of range
         try
         {
-            $table = new ezcConsoleTable( $this->output, array( 'cols' => -10, 'width' => 100 ) );
+            $table = new ezcConsoleTable( $this->output, -10, 100 );
         }
         catch (ezcBaseConfigException $e)
         {
@@ -297,31 +297,12 @@ class ezcConsoleToolsTableTest extends ezcTestCase
         $this->fail( 'No exception thrown on invalid value of <cols> setting.' );
     }
     
-    public function testTableConfigurationFailurer4 ()
-    {
-        // Missing 'width' setting
-        try
-        {
-            $table = new ezcConsoleTable( $this->output, array( 'cols' => 10 ) );
-        }
-        catch (ezcBaseConfigException $e)
-        {
-            $this->assertEquals( 
-                ezcBaseConfigException::VALUE_OUT_OF_RANGE,
-                $e->getCode(),
-                'Wrong exception code thrown on missing <width> setting.'
-            );
-            return;
-        }
-        $this->fail( 'No exception thrown on missing <width> setting.' );
-    }
-    
     public function testTableConfigurationFailure5 ()
     {
         // 'width' setting wrong type
         try
         {
-            $table = new ezcConsoleTable( $this->output, array( 'cols' => 10, 'width' => false ) );
+            $table = new ezcConsoleTable( $this->output, 10, false );
         }
         catch (ezcBaseConfigException $e)
         {
@@ -340,7 +321,7 @@ class ezcConsoleToolsTableTest extends ezcTestCase
         // 'width' setting out of range
         try
         {
-            $table = new ezcConsoleTable( $this->output, array( 'cols' => 10, 'width' => -10 ) );
+            $table = new ezcConsoleTable( $this->output, 10, -10 );
         }
         catch (ezcBaseConfigException $e)
         {
@@ -359,9 +340,13 @@ class ezcConsoleToolsTableTest extends ezcTestCase
         $table = ezcConsoleTable::create( 
             $tableData,
             $this->output,
-            $settings,
-            $options
+            $settings['width'],
+            $settings['cols']
         );
+        foreach ( $options as $key => $val )
+        {
+            $table->options->$key = $val;
+        }
         $table->setCellFormat( 'red', 0, 0 );
         foreach ( $headrows as $row )
         {

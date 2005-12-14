@@ -20,6 +20,7 @@ return array (
     'ezcConsoleOption'             => 'ConsoleTools/option.php',
     'ezcConsoleOptionRule'         => 'ConsoleTools/structs/option_rule.php',
     'ezcConsoleTable'              => 'ConsoleTools/table.php',
+    'ezcConsoleTableOptions'       => 'ConsoleTools/structs/table_options.php',
     'ezcConsoleProgressbar'        => 'ConsoleTools/progressbar.php',
     'ezcConsoleProgressbarOptions' => 'ConsoleTools/structs/progressbar_options.php',
     'ezcConsoleStatusbar'          => 'ConsoleTools/statusbar.php',

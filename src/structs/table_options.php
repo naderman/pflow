@@ -1,0 +1,131 @@
+<?php
+/**
+ * File containing the ezcConsoleTableOptions class.
+ *
+ * @package ConsoleTools
+ * @version //autogentag//
+ * @copyright Copyright (C) 2005 eZ systems as. All rights reserved.
+ * @license http://ez.no/licenses/new_bsd New BSD License
+ * @filesource
+ */
+
+/**
+ * Struct class to store the options of the ezcConsoleTable class.
+ *
+ * This class stores the options for the {@link ezcConsoleTable} class.
+ * 
+ * @package ConsoleTools
+ * @version //autogen//
+ */
+class ezcConsoleTableOptions {
+
+    /**
+     * Column width, either a fixed integer value (number of chars)  or 'auto'.
+     * 
+     * @var mixed
+     */
+    public $colWidth = 'auto';
+
+    /**
+     * Wrap style of text contained in strings.
+     * @see ezcConsoleTable::WRAP_AUTO
+     * @see ezcConsoleTable::WRAP_NONE
+     * @see ezcConsoleTable::WRAP_CUT
+     * 
+     * @var int
+     */
+    public $colWrap = ezcConsoleTable::WRAP_AUTO;
+
+    /**
+     * Standard column alignment.
+     * @see ezcConsoleTable::ALIGN_LEFT
+     * @see ezcConsoleTable::ALIGN_RIGHT
+     * @see ezcConsoleTable::ALIGN_CENTER
+     * 
+     * @var int
+     */
+    public $colAlign = ezcConsoleTable::ALIGN_LEFT;
+
+    /**
+     * Padding characters for side padding between data and lines. 
+     * 
+     * @var string
+     */
+    public $colPadding = ' ';
+
+    /**
+     * Type of the given table width (fixed or maximal value).
+     * 
+     * @var int
+     */
+    public $widthType = ezcConsoleTable::WIDTH_MAX;
+        
+    /**
+     * Character to use for drawing vertical lines. 
+     * 
+     * @var string
+     */
+    public $lineVertical = '-';
+    /**
+     * Character to use for drawing hozizontal lines. 
+     * 
+     * @var string
+     */
+    public $lineHorizontal = '|';
+
+    /**
+     * Character to use for drawing line corners.
+     * 
+     * @var string
+     */
+    public $corner = '+';
+
+    /**
+     * Format name to draw normal row lines in.
+     * 
+     * @var string
+     */
+    public $lineFormat = 'default';
+    /**
+     * Format name to draw head rows in. 
+     * 
+     * @var string
+     */
+    public $lineFormatHead = 'default';
+
+    /**
+     * Create a new ezcConsoleProgressbarOptions struct. 
+     * Create a new ezcConsoleProgressbarOptions struct for use with {@link ezcConsoleOutput}. 
+     * 
+     * @param int $verboseLevel Verbosity of the output to show.
+     * @param int $autobreak    Auto wrap lines after num chars (0 = unlimited)
+     * @param bool $useFormats  Whether to enable formated output
+     */
+    public function __construct( 
+        $colWidth = 'auto',
+        $colWrap = ezcConsoleTable::WRAP_AUTO,
+        $colAlign = ezcConsoleTable::ALIGN_LEFT,
+        $colPadding = ' ',
+        $widthType = ezcConsoleTable::WIDTH_MAX,
+        $lineVertical = '-',
+        $lineHorizontal = '|',
+        $corner = '+',
+        $lineFormat = 'default',
+        $lineFormatHead = 'default'
+    )
+    {
+        $this->colWidth  = $colWidth ;
+        $this->colWrap  = $colWrap ;
+        $this->colAlign  = $colAlign ;
+        $this->colPadding  = $colPadding ;
+        $this->widthType  = $widthType ;
+        $this->lineVertical  = $lineVertical ;
+        $this->lineHorizontal  = $lineHorizontal ;
+        $this->corner  = $corner ;
+        $this->lineFormat  = $lineFormat ;
+        $this->lineFormatHead  = $lineFormatHead ;
+    }
+
+}
+
+?>
