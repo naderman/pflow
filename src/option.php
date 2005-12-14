@@ -1,6 +1,6 @@
 <?php
 /**
- * File containing the ezcConsoleParameterStruct class.
+ * File containing the ezcConsoleOption class.
  *
  * @package ConsoleTools
  * @version //autogentag//
@@ -10,16 +10,17 @@
  */
 
 /**
- * Struct class to store data about a single parameter handled by ezcConsoleParameter.
+ * Struct like class to store data about a single option for ezcConsoleParameter.
  *
- * This class represents a single parameter which can be handled by the
- * ezcConsoleParameter class. This classes only purpose is the storage of
- * the parameter data.
+ * This class represents a single command line option, which can be handled by 
+ * the ezcConsoleParameter class. This classes only purpose is the storage of
+ * the parameter data, the handling of options and arguments is done by the
+ * class {@link ezcConsoleParameter}.
  * 
  * @package ConsoleTools
  * @version //autogen//
  */
-class ezcConsoleParameterStruct {
+class ezcConsoleOption {
 
     /**
      * Properties, which provide only read access.
