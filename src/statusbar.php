@@ -81,10 +81,58 @@ class ezcConsoleStatusbar
      *
      * @see ezcConsoleStatusbar::$options
      */
-    public function __construct( ezcConsoleOutput $outHandler, $options = array() )
+    public function __construct( ezcConsoleOutput $outHandler, $successChar = '+', $failureChar = '-' )
     {
         $this->outputHandler = $outHandler;
-        $this->setOptions( $options );
+        $this->__set( 'successChar', $successChar );
+        $this->__set( 'failureChar', $failureChar );
+    }
+
+    /**
+     * Property read access.
+     * 
+     * @param string $key Name of the property.
+     * @return mixed Value of the property or null.
+     *
+     * @throws ezcBasePropertyNotFoundException
+     *         If the the desired property is not found.
+     */
+    public function __get( $key )
+    {
+        if ( isset( $this->options[$key] ) )
+        {
+            return $this->options[$key];
+        }
+        throw new ezcBasePropertyNotFoundException( $key );
+    }
+
+    /**
+     * Property write access.
+     * 
+     * @param string $key Name of the property.
+     * @param mixed $val  The value for the property.
+     *
+     * @throws ezcBasePropertyNotFoundException
+     *         If a desired property could not be found.
+     * @throws ezcBaseConfigException
+     *         If a desired property value is out of range
+     *         {@link ezcBaseConfigException::VALUE_OUT_OF_RANGE}.
+     */
+    public function __set( $key, $val )
+    {
+        switch ( $key )
+        {
+            case 'successChar':
+            case 'failureChar':
+                if ( strlen( $val ) < 1 )
+                {
+                    throw new ezcBaseConfigException( $key, ezcBaseConfigException::VALUE_OUT_OF_RANGE, $val );
+                }
+                break;
+            default:
+                throw new ezcBasePropertyNotFoundException( $key );
+        }
+        $this->options[$key] = $val;
     }
 
     /**
@@ -122,11 +170,11 @@ class ezcConsoleStatusbar
         switch ( $status )
         {
             case true:
-                $this->outputHandler->outputText( $this->options['successChar'], 'success' );
+                $this->outputHandler->outputText( $this->successChar, 'success' );
                 break;
 
             case false:
-                $this->outputHandler->outputText( $this->options['failureChar'], 'failure' );
+                $this->outputHandler->outputText( $this->failureChar, 'failure' );
                 break;
             
             default:
