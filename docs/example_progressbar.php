@@ -8,24 +8,40 @@
  * @license http://ez.no/licenses/new_bsd New BSD License
  */
 
-// ... creating ezcConsoleOutput object
+/**
+ * Autoload ezc classes 
+ * 
+ * @param string $class_name 
+ */
+function __autoload( $class_name )
+{
+    require_once("Base/trunk/src/base.php");
+    if ( strpos( $class_name, "_" ) !== false )
+    {
+        $file = str_replace( "_", "/", $class_name ) . ".php";
+        $val = require_once( $file );
+        if ( $val == 0 )
+            return true;
+        return false;
+    }
+    ezcBase::autoload( $class_name );
+}
 
-// Set maximum value and step width for the progress bar ( using kb values )
-$set = array( 'max' => $file->getSize(), 'step' => 50 );
-
-// Some options to change the appearance
-$opt = array(
-    'emptyChar'     => '-',
-    'progressChar'  => '#',
-    'formatString'  => "Uploading file <{$myFilename}>: %act%/%max% kb [%bar%] %percent%%",
-);
+$out = new ezcConsoleOutput();
 
 // Create progress bar itself
-$progress = new ezcConsoleProgressbar( $out, $set, $opt );
+$progress = new ezcConsoleProgressbar( $out, 100, 5 );
 
-// Do some actions
-while( $file->upload() ) 
+$progress->options->emptyChar = '-';
+$progress->options->progressChar = '#';
+$progress->options->formatString = "Uploading file </tmp/foobar.tar.bz2>: %act%/%max% kb [%bar%]";
+
+// Perform actions
+$i = 0;
+while( $i++ < 20 ) 
 {
+    // Do whatever you want to indicate progress for
+    usleep( mt_rand( 20000, 2000000 ) );
     // Advance the progressbar by one step ( uploading 5k per run )
     $progress->advance();
 }
@@ -33,22 +49,32 @@ while( $file->upload() )
 // Finish progress bar and jump to next line.
 $progress->finish();
 
-$out->outputText( "Successfully uploaded <{$myFilename}>.\n", 'success' );
+$out->outputText( "Successfully uploaded </tmp/foobar.tar.bz2>.\n", 'success' );
 
 /*
-OUTPUT:
+OUTPUT: (sequential, will be printed into 1 line and updated in reallife)
 
-// At 30 %
-Uploading file "ezpublish-4.0.0.tgz":  300/1000 kb [#####>--------------] 30%
+Uploading file </tmp/foobar.tar.bz2>:   5/100 kb [++#----------------------------------------------]
+Uploading file </tmp/foobar.tar.bz2>:  10/100 kb [+++++#-------------------------------------------]
+Uploading file </tmp/foobar.tar.bz2>:  15/100 kb [++++++++#----------------------------------------]
+Uploading file </tmp/foobar.tar.bz2>:  20/100 kb [+++++++++++#-------------------------------------]
+Uploading file </tmp/foobar.tar.bz2>:  25/100 kb [++++++++++++++#----------------------------------]
+Uploading file </tmp/foobar.tar.bz2>:  30/100 kb [+++++++++++++++++#-------------------------------]
+Uploading file </tmp/foobar.tar.bz2>:  35/100 kb [++++++++++++++++++++#----------------------------]
+Uploading file </tmp/foobar.tar.bz2>:  40/100 kb [+++++++++++++++++++++++#-------------------------]
+Uploading file </tmp/foobar.tar.bz2>:  45/100 kb [++++++++++++++++++++++++++#----------------------]
+Uploading file </tmp/foobar.tar.bz2>:  50/100 kb [+++++++++++++++++++++++++++++#-------------------]
+Uploading file </tmp/foobar.tar.bz2>:  55/100 kb [++++++++++++++++++++++++++++++++#----------------]
+Uploading file </tmp/foobar.tar.bz2>:  60/100 kb [+++++++++++++++++++++++++++++++++++#-------------]
+Uploading file </tmp/foobar.tar.bz2>:  65/100 kb [++++++++++++++++++++++++++++++++++++++#----------]
+Uploading file </tmp/foobar.tar.bz2>:  70/100 kb [+++++++++++++++++++++++++++++++++++++++++#-------]
+Uploading file </tmp/foobar.tar.bz2>:  75/100 kb [++++++++++++++++++++++++++++++++++++++++++++#----]
+Uploading file </tmp/foobar.tar.bz2>:  80/100 kb [+++++++++++++++++++++++++++++++++++++++++++++++#-]
+Uploading file </tmp/foobar.tar.bz2>:  85/100 kb [++++++++++++++++++++++++++++++++++++++++++++++++#]
+Uploading file </tmp/foobar.tar.bz2>:  90/100 kb [++++++++++++++++++++++++++++++++++++++++++++++++#]
+Uploading file </tmp/foobar.tar.bz2>:  95/100 kb [++++++++++++++++++++++++++++++++++++++++++++++++#]
+Uploading file </tmp/foobar.tar.bz2>: 100/100 kb [++++++++++++++++++++++++++++++++++++++++++++++++#]
+Uploading file </tmp/foobar.tar.bz2>: 100/100 kb [++++++++++++++++++++++++++++++++++++++++++++++++#]Successfully uploaded </tmp/foobar.tar.bz2>.
 
-// At 50 %
-Uploading file "ezpublish-4.0.0.tgz":  500/1000 kb [#########>----------] 50%
-
-// At 95 %
-Uploading file "ezpublish-4.0.0.tgz":  950/1000 kb [###################>] 95%
-
-// At 100 %
-Uploading file "ezpublish-4.0.0.tgz": 1000/1000 kb [####################] 100%
-Successfully uploaded "ezpublish-4.0.0.tgz".
 */
 ?>

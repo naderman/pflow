@@ -27,37 +27,43 @@ function __autoload( $class_name )
     ezcBase::autoload( $class_name );
 }
 
-// Prepare console output options
-$opts = array(
- 'verboseLevel'  => 1,           // print verbosity levels 0 and 1 only
- 'autobreak'     => 40,          // will break lines every 40 chars
- 'format'        => array(
-     'default'   => array(
-        'color' => 'green'
-     ),     // green default text
-     'success'   => array(
-        'color' => 'blue'
-     ),     // blue success messages
- ),
-);
 
-// Initialize the console outputer
-$out = new ezcConsoleOutput( $opts );
+// Create the output handler
+$out = new ezcConsoleOutput();
 
-// Print some normal text ( will be green, see options )
-$out->outputText( "Welcome to my cool program!\n" );
+// Set the verbosity to level 10
+$out->options->verboseLevel = 10;
+// Enable auto wrapping of lines after 40 characters
+$out->options->autobreak    = 40;
 
-// Output a success message
-$out->outputText( "You successfully managed to start the program!\n", 'success' );
+// Set the color of the default output format to green
+$out->formats->default->color   = 'green';
 
-// Output an error message in default text
-$out->outputText( "Sorry, there was an error: " );
-$out->outputText( "Your computer does not support PHP 6. ", 'failure' );
-$out->outputText( "Please consider upgrading! An this is a very very very very long text text text text." );
+// Set the color of the output format named 'success' to white
+$out->formats->success->color   = 'white';
+// Set the style of the output format named 'success' to bold
+$out->formats->success->style   = array( 'bold' );
 
-// Output text only for verbosity 10 ( default style )
-$out->outputText( "Some verbose output.\n", null, 10 );   // With current options, not printed
+// Set the color of the output format named 'failure' to red
+$out->formats->failure->color   = 'red';
+// Set the style of the output format named 'failure' to bold
+$out->formats->failure->style   = array( 'bold' );
+// Set the background color of the output format named 'failure' to blue
+$out->formats->failure->bgcolor = 'blue';
 
-// Output some bold text
-$out->outputText( "And some not so verbose, bold output.\n", 'bold' );
+// Output text with default format
+$out->outputText( 'This is default text ' );
+// Output text with format 'success'
+$out->outputText( 'including success message', 'success' );
+// Some more output with default output.
+$out->outputText( "and a manual linebreak.\n" );
+
+// Manipulate the later output
+$out->formats->success->color = 'green';
+$out->formats->default->color = 'blue';
+
+// This is visible, since we set verboseLevel to 10, and printed in default format (now blue)
+$out->outputText( "Some verbose output.\n", null, 10 );
+// This is visible, since we set verboseLevel to 10, and printed in format 'failure'
+$out->outputText( "And some not so verbose, failure output.\n", 'failure', 5 );
 ?>

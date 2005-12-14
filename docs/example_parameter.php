@@ -27,94 +27,91 @@ function __autoload( $class_name )
     ezcBase::autoload( $class_name );
 }
 
-// Prepare parameter handler
 $paramHandler = new ezcConsoleParameter();
 
-// Options for the help flag
-$help = array(
-    'shorthelp' => 'Get help output.',
-    'longhelp'  => 'Retreive help on the usage of this command.',
+// Register simple parameter -h/--help
+$paramHandler->registerParam( new ezcConsoleOption( 'h', 'help' ) );
+
+// Register complex parameter -f/--file
+$file = new ezcConsoleOption(
+ 'f',
+ 'file',
+ ezcConsoleParameter::TYPE_STRING,
+ null,
+ false,
+ 'Process a file.',
+ 'Processes a single file.'
 );
+$paramHandler->registerParam( $file );
 
-// Register parameter -h/--help with texts from above
-$paramHandler->registerParam( 'h', 'help', $help );
+// Manipulate parameter -f/--file after registration
+$file->multiple = true;
 
-// Options for the file parameter
-$file = array(
-    // Must have a value, type string
-    'type'     => ezcConsoleParameter::TYPE_STRING,
-    'shorthelp'    => 'Process a file.',
-    'longhelp'     => 'Processes a single file.',
-    // May not be used in combination with -d/--directory
-    'excludes' => array( 'd' ),
+// Register another complex parameter that depends on -f and excludes -h
+$dir = new ezcConsoleOption(
+ 'd',
+ 'dir',
+ ezcConsoleParameter::TYPE_STRING,
+ null,
+ true,
+ 'Process a directory.',
+ 'Processes a complete directory.',
+ array( new ezcConsoleOptionRule( $paramHandler->getParam( 'f' ) ) ),
+ array( new ezcConsoleOptionRule( $paramHandler->getParam( 'h' ) ) )
 );
+$paramHandler->registerParam( $dir );
 
-// Register parameter -f/--file with options from above
-$paramHandler->registerParam( 'f', 'file', $file );
+// Register an alias for this parameter
+$paramHandler->registerAlias( 'e', 'extended-dir', $dir );
 
-// Options for dir parameter
-$dir = array(
-    'type'     => ezcConsoleParameter::TYPE_STRING,
-    'shorthelp'    => 'Process a directory.',
-    'longhelp'     => 'Processes a complete directory.',
-    // May not be used with -f/--file together
-    'excludes' => array( 'f' ),
-);
-
-// Register -d/--dir parameter
-$paramHandler->registerParam( 'd', 'dir', $dir );
-
-// Register the alias --directory for -d/--dir
-$paramHandler->registerAlias( 'd', 'directory', 'd' );
-
-
-// ... initialize ezcConsoleOutput or similar to output stuff...
-
-// Process parameters given
-
-try 
+// Process registered parameters and handle errors
+try
 {
-     // Processing
      $paramHandler->process();
-} 
-catch ( ezcConsoleParameterException $e ) 
+}
+catch ( ezcConsoleParameterException $e )
 {
-    // An error occured
-    if ( $e->code === ezcConsoleParameterException::PARAMETER_DEPENDENCY_RULE_NOT_MET ) 
-    {
-        // Output some error text
-        $consoleOut->outputText(
-            "Parameter <{$e->paramName}> may not occur here.\n\n", 'error'
-        );
-    }
-    // End the program
-    exit( $e->code );
+     if ( $e->code === ezcConsoleParameterException::PARAMETER_DEPENDENCY_RULE_NOT_MET )
+     {
+         $consoleOut->outputText(
+             'Parameter ' . isset( $e->param ) ? $e->param->name : 'unknown' . " may not occur here.\n", 'error'
+         );
+     }
+     exit( 1 );
 }
 
-// Ok, everything went well
-
-if ( $res = $paramHandler->getParam( '-h' ) )
+// Process a single parameter
+$file = $paramHandler->getParam( 'f' );
+if ( $file->value === false )
 {
-    // Help was requested. Output Help text as "info".
-    foreach ( $paramHandler->getHelp() as $paramHelp ) 
-    {
-        echo $paramHelp[0] . "\t" . $paramHelp[1] . "\n";
-    }
-    echo "\n";
-    exit;
+     echo "Parameter -{$file->short}/--{$file->long} was not submitted.\n";
+}
+elseif ( $file->value === true )
+{
+     echo "Parameter -{$file->short}/--{$file->long} was submitted without value.\n";
+}
+else
+{
+     echo "Parameter -{$file->short}/--{$file->long} was submitted with value <".var_export($file->value, true).">.\n";
 }
 
-if ( $res = $paramHandler->getParam( '-f' ) ) 
+// Process all parameters at once:
+foreach ( $paramHandler->getValues() as $paramShort => $val )
 {
-    // -f/--file was set. Value now in res.
-    $file = $res;
-} else if ( $res = $paramHandler->getParam( '-d' ) )
-{
-    // -d/--dir/--directory was set. Value now in res.
-    $file = $res;
+     switch (true)
+     {
+         case $val === false:
+             echo "Parameter $paramShort was not submitted.\n";
+             break;
+         case $val === true:
+             echo "Parameter $paramShort was submitted without a value.\n";
+             break;
+         case is_array($val):
+             echo "Parameter $paramShort was submitted multiple times with value: <".implode(', ', $val).">.\n";
+             break;
+         default:
+             echo "Parameter $paramShort was submitted with value: <$val>.\n";
+             break;
+     }
 }
-
-echo "Successfully processed ". var_export($file, true) . "\n";
-
-exit( 0 );
 ?>
