@@ -19,7 +19,7 @@
  * 
  * // Register simple parameter -h/--help
  * $paramHandler->registerParam( new ezcConsoleOption( 'h', 'help' ) );
- *
+ * 
  * // Register complex parameter -f/--file
  * $file = new ezcConsoleOption(
  *  'f',
@@ -28,16 +28,14 @@
  *  null,
  *  false,
  *  'Process a file.',
- *  'Processes a single file.',
- *  array(),
- *  array( new ezcConsoleOptionRule( $paramHandler->getParam( 'd' ) ) ),
- * )
+ *  'Processes a single file.'
+ * );
  * $paramHandler->registerParam( $file );
- *
+ * 
  * // Manipulate parameter -f/--file after registration
  * $file->multiple = true;
  * 
- * // Register another complex parameter
+ * // Register another complex parameter that depends on -f and excludes -h
  * $dir = new ezcConsoleOption(
  *  'd',
  *  'dir',
@@ -46,13 +44,14 @@
  *  true,
  *  'Process a directory.',
  *  'Processes a complete directory.',
- *  'excludes' => array( new ezcConsoleOptionRule( $paramHandler->getParam( 'h' ) ) ),
- * )
+ *  array( new ezcConsoleOptionRule( $paramHandler->getParam( 'f' ) ) ),
+ *  array( new ezcConsoleOptionRule( $paramHandler->getParam( 'h' ) ) )
+ * );
  * $paramHandler->registerParam( $dir );
- *
+ * 
  * // Register an alias for this parameter
  * $paramHandler->registerAlias( 'e', 'extended-dir', $dir );
- *
+ * 
  * // Process registered parameters and handle errors
  * try
  * {
@@ -68,7 +67,7 @@
  *      }
  *      exit( 1 );
  * }
- *
+ * 
  * // Process a single parameter
  * $file = $paramHandler->getParam( 'f' );
  * if ( $file->value === false )
@@ -81,9 +80,9 @@
  * }
  * else
  * {
- *      echo "Parameter -{$file->short}/--{$file->long} was submitted with value <{$file->value}>.\n";
+ *      echo "Parameter -{$file->short}/--{$file->long} was submitted with value <".var_export($file->value, true).">.\n";
  * }
- *
+ * 
  * // Process all parameters at once:
  * foreach ( $paramHandler->getValues() as $paramShort => $val )
  * {

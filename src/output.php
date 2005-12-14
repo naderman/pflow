@@ -34,12 +34,12 @@
  * // Set the style of the output format named 'success' to bold
  * $out->formats->success->style   = array( 'bold' );
  *
- * // Set the color of the output format named 'failure' to black
- * $out->formats->failure->color   = 'black';
+ * // Set the color of the output format named 'failure' to red
+ * $out->formats->failure->color   = 'red';
  * // Set the style of the output format named 'failure' to bold
  * $out->formats->failure->style   = array( 'bold' );
- * // Set the background color of the output format named 'failure' to red
- * $out->formats->failure->bgcolor = 'red';
+ * // Set the background color of the output format named 'failure' to blue
+ * $out->formats->failure->bgcolor = 'blue';
  *
  * // Output text with default format
  * $out->outputText( 'This is default text ' );

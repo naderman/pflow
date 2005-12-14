@@ -14,15 +14,14 @@
  *
  * <code>
  *
- * // ... creating ezcConsoleOutput object
+ * $out = new ezcConsoleOutput();
  * 
- * $set = array( 'max' => 150, 'step' => 5 );
  * $opt = array(
  *  'emptyChar'     => '-',
  *  'progressChar'  => '#',
  *  'formatString'  => 'Uploading file '.$myFilename.' %act%/%max% kb [%bar%] %fraction%%',
  * );
- * $progress = new ezcConsoleProgressbar( $out, $set, $opt );
+ * $progress = new ezcConsoleProgressbar( $out, 150, 5 );
  *
  * while ( $file->upload() ) {
  *      $progress->advance();
@@ -100,7 +99,7 @@ class ezcConsoleProgressbar
      *
      * @var int
      */
-    protected $numSteps;
+    protected $numSteps = 0;
 
     /**
      * The ezcConsoleOutput object to use.
@@ -227,7 +226,6 @@ class ezcConsoleProgressbar
         }
         $this->output->restorePos();
         $this->generateValues();
-        echo strlen( $this->stripEscapeSequences( $this->insertValues(  ) ) );
         echo $this->insertValues();
     }
 
@@ -255,28 +253,8 @@ class ezcConsoleProgressbar
      */
     public function finish()
     {
-        $this->actualStep = $this->numSteps;
+        $this->currentStep = $this->numSteps;
         $this->output();
-    }
-
-    /**
-     * Check and set the settings submited to the constructor. 
-     * 
-     * @param array $settings 
-     *
-     * @throws ezcBaseConfigException On an invalid setting.
-     */
-    private function setSettings( $settings )
-    {
-        if ( !isset( $settings['max'] ) || !is_int( $settings['max'] ) || $settings['max'] < 0 ) 
-        {
-            throw new ezcBaseConfigException( 'Missing or invalid max setting.' );
-        }
-        if ( !isset( $settings['step'] ) || !is_int( $settings['step'] ) || $settings['step'] < 0 ) 
-        {
-            throw new ezcBaseConfigException( 'Missing or invalid step setting.' );
-        }
-        $this->settings = $settings;
     }
 
     /**
@@ -346,7 +324,7 @@ class ezcConsoleProgressbar
     protected function calculateMeasures()
     {
         // Calc number of steps bar goes through
-        $this->numSteps = $this->max / $this->step;
+        $this->numSteps = (int)round( $this->max / $this->step );
         // Calculate measures
         $this->measures['fixedCharSpace'] = strlen( $this->stripEscapeSequences( $this->insertValues() ) );
         if ( strpos( $this->options->formatString,'%max%' ) !== false )
