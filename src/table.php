@@ -438,7 +438,7 @@ class ezcConsoleTable
         }
         $border .= $this->options->corner;
 
-        return $this->outputHandler->styleText( $border, $this->options->{( $header ? 'lineFormatHead' : 'lineFormat' )} );
+        return $this->outputHandler->formatText( $border, $this->options->{( $header ? 'lineFormatHead' : 'lineFormat' )} );
     }
 
     /**
@@ -455,18 +455,18 @@ class ezcConsoleTable
         for ( $cell = 0; $cell < count( $colWidth ); $cell++ )
         {
             $data = isset( $cells[$cell] ) ? $cells[$cell] : '';
-            $rowData .= $this->outputHandler->styleText( 
+            $rowData .= $this->outputHandler->formatText( 
                             $this->options->lineHorizontal, 
                             $this->options->{$header ? 'lineFormatHead' : 'lineFormat'}
                         );
             $rowData .= ' ';
-            $rowData .= $this->outputHandler->styleText(
+            $rowData .= $this->outputHandler->formatText(
                             str_pad( $data, $colWidth[$cell], ' ', $this->options->colAlign ),
                             isset( $this->cellFormats[$row][$cell] ) ? $this->cellFormats[$row][$cell] : null
                         );
             $rowData .= ' ';
         }
-        $rowData .= $this->outputHandler->styleText( $this->options->lineHorizontal, $this->options->{$header ? 'lineFormatHead' : 'lineFormat'} );
+        $rowData .= $this->outputHandler->formatText( $this->options->lineHorizontal, $this->options->{$header ? 'lineFormatHead' : 'lineFormat'} );
         return $rowData;
     }
 

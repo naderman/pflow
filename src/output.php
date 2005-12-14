@@ -257,13 +257,12 @@ class ezcConsoleOutput
      * @param string $text       The text to print.
      * @param string $format     Format chosen for printing.
      * @param int $verboseLevel On which verbose level to output this message.
-     * @param int Output this text only in a specific verbosity level
      */
     public function outputText( $text, $format = 'default', $verboseLevel = 1 ) 
     {
         if ( $this->options->verboseLevel >= $verboseLevel ) 
         {
-            if ( $this->options->autobreak > 0 )
+            if ( is_int($this->options->autobreak) && $this->options->autobreak > 0 )
             {
                 $textLines = explode( "\n", $text );
                 foreach ( $textLines as $id => $textLine )
@@ -272,24 +271,40 @@ class ezcConsoleOutput
                 }
                 $text = implode( "\n", $textLines );
             }
-            echo ( $this->options->useFormats == true ) ? $this->styleText( $text, $format ) : $text;
+            echo ( $this->options->useFormats == true ) ? $this->formatText( $text, $format ) : $text;
         }
     }
 
     /**
-     * Returns a styled version of the text.
-     * Receive a styled version of the inputed text. If $format parameter is 
-     * ommited, the default style is chosen. Style can either be a special 
-     * style or a direct color name.
+     * Print text to the console and automatically append a line break.
+     * This method acts similar to {@link ezcConsoleOutput::outputText()}, in 
+     * fact it even uses it. The difference is, that outputLine() automattically
+     * appends a manual line break to the printed text. Beside that you can 
+     * leave out the $text parameter of outputLine() to simply print a line 
+     * break.
      * 
-     * {@link ezcConsoleOutput::$options}, a style name 
-     * {@link ezcConsoleOutput::$formats} or 'none' to print without any styling.
+     * @param string $text       The text to print.
+     * @param string $format     Format chosen for printing.
+     * @param int $verboseLevel On which verbose level to output this message.
+     */
+    public function outputLine( $text = '', $format = 'default', $verboseLevel = 1 )
+    {
+        $this->outputText( $text . PHP_EOL, $format, $verboseLevel );
+    }
+
+    /**
+     * Returns a formated version of the text.
+     * Receive a formated version of the input text. If $format parameter is 
+     * ommited, the default style is chosen. The format must be a valid 
+     * regigistered format definition.
+     *
+     * {@link ezcConsoleOutput::$formats}
      *
      * @param string $text   Text to apply style to.
      * @param string $format Format chosen to be applied.
      * @return string
      */
-    public function styleText( $text, $format = 'default' ) 
+    public function formatText( $text, $format = 'default' ) 
     {
         return $this->buildSequence( $format ) . $text . $this->buildSequence( 'default' );
     }

@@ -85,11 +85,11 @@ class ezcConsoleToolsProgressbarTest extends ezcTestCase
         $out = new ezcConsoleOutput();
   
         $formatString = ''
-            . $out->styleText( 'Actual progress', 'success' )
+            . $out->formatText( 'Actual progress', 'success' )
             . ': <'
-            . $out->styleText( '%bar%', 'failure' )
+            . $out->formatText( '%bar%', 'failure' )
             . '> '
-            . $out->styleText( '%fraction%', 'success' );
+            . $out->formatText( '%fraction%', 'success' );
         
         $this->commonProgressbarTest( 
             __FUNCTION__, 

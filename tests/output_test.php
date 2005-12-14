@@ -131,7 +131,7 @@ class ezcConsoleToolsOutputTest extends ezcTestCase
     {
         foreach ( $this->testFormats as $name => $inout ) 
         {
-            $realRes = $this->consoleOutput->styleText( $this->testString, $name );
+            $realRes = $this->consoleOutput->formatText( $this->testString, $name );
             $fakeRes = sprintf( $inout['out'], $this->testString );
             $this->assertEquals( 
                 $realRes,
