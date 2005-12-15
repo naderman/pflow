@@ -10,17 +10,17 @@
  */
 
 /**
- * Class for handling console parameters.
- * This class allows the complete handling of parameters submitted
+ * Class for handling input submitted to console based programs (meaning options and arguments) .
+ * This class allows the complete handling of options and arguments submitted
  * to a console based application.
  *
  * <code>
  * $inputHandler = new ezcConsoleInput();
  * 
- * // Register simple parameter -h/--help
+ * // Register simple option -h/--help
  * $inputHandler->registerOption( new ezcConsoleOption( 'h', 'help' ) );
  * 
- * // Register complex parameter -f/--file
+ * // Register complex option -f/--file
  * $file = new ezcConsoleOption(
  *  'f',
  *  'file',
@@ -32,10 +32,10 @@
  * );
  * $inputHandler->registerOption( $file );
  * 
- * // Manipulate parameter -f/--file after registration
+ * // Manipulate option -f/--file after registration
  * $file->multiple = true;
  * 
- * // Register another complex parameter that depends on -f and excludes -h
+ * // Register another complex option that depends on -f and excludes -h
  * $dir = new ezcConsoleOption(
  *  'd',
  *  'dir',
@@ -49,10 +49,10 @@
  * );
  * $inputHandler->registerOption( $dir );
  * 
- * // Register an alias for this parameter
+ * // Register an alias for this option
  * $inputHandler->registerAlias( 'e', 'extended-dir', $dir );
  * 
- * // Process registered parameters and handle errors
+ * // Process registered options and handle errors
  * try
  * {
  *      $inputHandler->process();
@@ -62,13 +62,13 @@
  *      if ( $e->code === ezcConsoleInputException::PARAMETER_DEPENDENCY_RULE_NOT_MET )
  *      {
  *          $consoleOut->outputText(
- *              'Parameter ' . isset( $e->param ) ? $e->param->name : 'unknown' . " may not occur here.\n", 'error'
+ *              'Option ' . isset( $e->param ) ? $e->param->name : 'unknown' . " may not occur here.\n", 'error'
  *          );
  *      }
  *      exit( 1 );
  * }
  * 
- * // Process a single parameter
+ * // Process a single option value
  * $file = $inputHandler->getOption( 'f' );
  * if ( $file->value === false )
  * {
@@ -83,7 +83,7 @@
  *      echo "Option -{$file->short}/--{$file->long} was submitted with value <".var_export($file->value, true).">.\n";
  * }
  * 
- * // Process all parameters at once:
+ * // Process all option values at once:
  * foreach ( $inputHandler->getValues() as $paramShort => $val )
  * {
  *      switch (true)
@@ -162,7 +162,7 @@ class ezcConsoleInput
     private $arguments = array();
 
     /**
-     * Create parameter handler
+     * Create input handler
      */
     public function __construct()
     {
@@ -186,7 +186,7 @@ class ezcConsoleInput
             if ( $short === $option->short ) 
             {
                 throw new ezcConsoleInputException( 
-                    "A parameter with the short name <{$short}> is already registered.",
+                    "A option with the short name <{$short}> is already registered.",
                     ezcConsoleInputException::PARAMETER_ALREADY_REGISTERED,
                     $option
                 );
@@ -197,7 +197,7 @@ class ezcConsoleInput
             if ( $long === $option->long ) 
             {
                 throw new ezcConsoleInputException( 
-                    "A parameter with the long name <{$long}> is already registered.",
+                    "A option with the long name <{$long}> is already registered.",
                     ezcConsoleInputException::PARAMETER_ALREADY_REGISTERED,
                     $option
                 );
