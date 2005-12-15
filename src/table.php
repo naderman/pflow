@@ -149,91 +149,6 @@ class ezcConsoleTable
     }
 
     /**
-     * Property read access.
-     * 
-     * @param string $key Name of the property.
-     * @return mixed Value of the property or null.
-     *
-     * @throws ezcBasePropertyNotFoundException
-     *         If the the desired property is not found.
-     */
-    public function __get( $key )
-    {
-        switch ($key) 
-        {
-            case 'options':
-                return $this->$key;
-                break;
-            case 'width':
-            case 'cols':
-                return $this->settings[$key];
-                break;
-            default:
-                break;
-        }
-        throw new ezcBasePropertyNotFoundException( $key );
-    }
-
-    /**
-     * Property write access.
-     * 
-     * @param string $key Name of the property.
-     * @param mixed $val  The value for the property.
-     *
-     * @throws ezcBaseConfigException
-     *         If a the value for the property options is not an instance of
-     *         ezcConsoleOutputOptions
-     *         {@link ezcBaseConfigException::VALUE_OUT_OF_RANGE}.
-     */
-    public function __set( $key, $val )
-    {
-        switch ($key) 
-        {
-            case 'options':
-                if ( !( $val instanceof ezcConsoleTableOptions ) )
-                {
-                    throw new ezcBaseTypeException( 'ezcConsoleTableOptions', gettype( $val ) );
-                }
-                $this->options = $val;
-                return;
-                break;
-            case 'width':
-            case 'cols':
-                if ( $val < 1 )
-                {
-                    throw new ezcBaseConfigException( $key, ezcBaseConfigException::VALUE_OUT_OF_RANGE, $val );
-                }
-                $this->settings[$key] = $val; 
-                return;
-                break;
-            default:
-                break;
-        }
-        throw new ezcBasePropertyNotFoundException( $key );
-    }
- 
-    /**
-     * Property isset access.
-     * 
-     * @param string $key Name of the property.
-     * @return bool True is the property is set, otherwise false.
-     */
-    public function __isset( $key )
-    {
-        switch ($key) 
-        {
-            case 'options':
-            case 'width':
-            case 'cols':
-                return true;
-                break;
-            default:
-                break;
-        }
-        return false;
-    }
-
-    /**
      * Create an entire table.
      * Creates an entire table from an array of data.
      *
@@ -418,6 +333,91 @@ class ezcConsoleTable
     public function outputTable() 
     {
         echo implode( "\n", $this->generateTable() );
+    }
+
+    /**
+     * Property read access.
+     * 
+     * @param string $key Name of the property.
+     * @return mixed Value of the property or null.
+     *
+     * @throws ezcBasePropertyNotFoundException
+     *         If the the desired property is not found.
+     */
+    public function __get( $key )
+    {
+        switch ($key) 
+        {
+            case 'options':
+                return $this->$key;
+                break;
+            case 'width':
+            case 'cols':
+                return $this->settings[$key];
+                break;
+            default:
+                break;
+        }
+        throw new ezcBasePropertyNotFoundException( $key );
+    }
+
+    /**
+     * Property write access.
+     * 
+     * @param string $key Name of the property.
+     * @param mixed $val  The value for the property.
+     *
+     * @throws ezcBaseConfigException
+     *         If a the value for the property options is not an instance of
+     *         ezcConsoleOutputOptions
+     *         {@link ezcBaseConfigException::VALUE_OUT_OF_RANGE}.
+     */
+    public function __set( $key, $val )
+    {
+        switch ($key) 
+        {
+            case 'options':
+                if ( !( $val instanceof ezcConsoleTableOptions ) )
+                {
+                    throw new ezcBaseTypeException( 'ezcConsoleTableOptions', gettype( $val ) );
+                }
+                $this->options = $val;
+                return;
+                break;
+            case 'width':
+            case 'cols':
+                if ( $val < 1 )
+                {
+                    throw new ezcBaseConfigException( $key, ezcBaseConfigException::VALUE_OUT_OF_RANGE, $val );
+                }
+                $this->settings[$key] = $val; 
+                return;
+                break;
+            default:
+                break;
+        }
+        throw new ezcBasePropertyNotFoundException( $key );
+    }
+ 
+    /**
+     * Property isset access.
+     * 
+     * @param string $key Name of the property.
+     * @return bool True is the property is set, otherwise false.
+     */
+    public function __isset( $key )
+    {
+        switch ($key) 
+        {
+            case 'options':
+            case 'width':
+            case 'cols':
+                return true;
+                break;
+            default:
+                break;
+        }
+        return false;
     }
 
     /**
@@ -615,26 +615,6 @@ class ezcConsoleTable
             $colWidth[count( $colWidth ) - 1] -= $colSum - $globalWidth;
         }
         return $colWidth;
-    }
-
-    /**
-     * Check and set the settings submited to the constructor. 
-     * 
-     * @param array $settings 
-     *
-     * @throws ezcBaseConfigException On an invalid setting.
-     */
-    private function setSettings( $settings )
-    {
-        if ( !isset( $settings['width'] ) || !is_int( $settings['width'] ) || $settings['width'] < 0 ) 
-        {
-            throw new ezcBaseConfigException( 'width', ezcBaseConfigException::VALUE_OUT_OF_RANGE, isset( $settings['width'] ) ? $settings['width'] : 'null' );
-        }
-        if ( !isset( $settings['cols'] ) || !is_int( $settings['cols'] ) || $settings['cols'] < 0 ) 
-        {
-            throw new ezcBaseConfigException( 'cols', ezcBaseConfigException::VALUE_OUT_OF_RANGE, isset( $settings['cols'] ) ? $settings['cols'] : 'null' );
-        }
-        $this->settings = $settings;
     }
 }
 ?>
