@@ -134,8 +134,6 @@ class ezcConsoleOptionRule {
         switch ( $key )
         {
             case 'option':
-                return true;
-                break;
             case 'values':
                 return true;
                 break;

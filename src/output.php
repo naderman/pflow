@@ -255,11 +255,11 @@ class ezcConsoleOutput
      */
     public function __isset( $key )
     {
-        switch ($key) 
+        switch ( $key )
         {
             case 'options':
             case 'formats':
-                return;
+                return true;
                 break;
             default:
                 break;
