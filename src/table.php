@@ -505,12 +505,12 @@ class ezcConsoleTable implements Countable, Iterator, ArrayAccess
             $data = isset( $cells[$cell] ) ? $cells[$cell] : '';
             $rowData .= $this->outputHandler->formatText( 
                             $this->options->lineHorizontal, 
-                            $row->borderFormat
+                            $borderFormat
                         );
             $rowData .= ' ';
             $rowData .= $this->outputHandler->formatText(
                             str_pad( $data, $colWidth[$cell], ' ', $align ),
-                            $row[$cell]->format
+                            $format
                         );
             $rowData .= ' ';
         }
@@ -531,13 +531,13 @@ class ezcConsoleTable implements Countable, Iterator, ArrayAccess
      */
     private function determineAlign( $row, $cellId = 0 )
     {
-        return $row[$cellId]->align !== ezcConsoleTable::ALIGN_DEFAULT 
+        return ( $row[$cellId]->align !== ezcConsoleTable::ALIGN_DEFAULT 
             ? $row[$cellId]->align
-            : $row->align !== ezcConsoleTable::ALIGN_DEFAULT
+            : ( $row->align !== ezcConsoleTable::ALIGN_DEFAULT
                 ? $row->align
-                : $this->options->defaultAlign !== ezcConsoleTable::ALIGN_DEFAULT
+                : ( $this->options->defaultAlign !== ezcConsoleTable::ALIGN_DEFAULT
                     ? $this->options->defaultAlign
-                    : ezcConsoleTable::ALIGN_LEFT;
+                    : ezcConsoleTable::ALIGN_LEFT ) ) );
     }
 
     /**
@@ -553,11 +553,11 @@ class ezcConsoleTable implements Countable, Iterator, ArrayAccess
      */
     private function determineFormat( $row, $cellId )
     {
-        return $row[$cellId]->format !== 'default'
+        return ( $row[$cellId]->format != 'default'
             ? $row[$cellId]->format
-            : $row->format !== 'default'
+            : ( $row->format !== 'default'
                 ? $row->format
-                : $this->options->defaultFormat;
+                : $this->options->defaultFormat ) );
     }
 
     /**
