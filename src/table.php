@@ -79,6 +79,10 @@ class ezcConsoleTable implements Countable, Iterator, ArrayAccess
     const WRAP_CUT  = 3;
     
     /**
+     * Align text in the default direction. 
+     */
+    const ALIGN_DEFAULT = -1;
+    /**
      * Align text in cells to the right.
      */
     const ALIGN_LEFT   = STR_PAD_RIGHT;
