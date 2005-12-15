@@ -107,27 +107,11 @@ class ezcConsoleTable implements Countable, Iterator, ArrayAccess
     protected $outputHandler;
 
     /**
-     * The actual data to be represented in the table. 
+     * Collection of the rows that are contained in the table. 
      * 
      * @var array
      */
-    protected $tableData = array();
-
     protected $rows;
-
-    /**
-     * Mapping for head line rows (keys of the rows).
-     * 
-     * @var array
-     */
-    protected $tableHeadRows = array();
-
-    /**
-     * Text format mappings for table cell data. 
-     * 
-     * @var array(int => array(int => string))
-     */
-    protected $cellFormats = array();
 
     /**
      * Creates a new table.
@@ -151,40 +135,14 @@ class ezcConsoleTable implements Countable, Iterator, ArrayAccess
     }
 
     /**
-     * Create an entire table.
-     * Creates an entire table from an array of data.
-     *
-     * <code>
-     * array(
-     *  0 => array( 0 => <string>, 1 => <string>, 2 => <string>,... ),
-     *  1 => array( 0 => <string>, 1 => <string>, 2 => <string>,... ),
-     *  2 => array( 0 => <string>, 1 => <string>, 2 => <string>,... ),
-     *  ...
-     * );
-     * </code>
-     *
-     * @see ezcConsoleTable::__construct()
-     * @see ezcConsoleTable::$settings
-     * @see ezcConsoleTable::$options
-     * 
-     * @param array(int -> string) $data   Data for the table
-     * @param ezcConsoleOutput $outHandler Output handler to utilize
-     * @param array(string) $settings      Settings
-     * @param array(string) $options       Options
-     */
-    public static function create( $data, ezcConsoleOutput $outHandler,  $width, $cols, ezcConsoleTableOptions $options = null )
-    {
-        $table = new ezcConsoleTable( $outHandler, $width, $cols, $options );
-        foreach ( $data as $row => $cells )
-        {
-            $table->addRow( $cells );
-        }
-        return $table;
-    }
-
-    /**
      * Returns the table in a string.
-     * Returns the entire table as an array of printable lines.
+     * Returns the entire table as an array of printable lines. Each element of
+     * the array represents a physical line of the drawn table, including all
+     * borders and stuff, so you can simply print the table using
+     * <code>
+     * echo implode( "\n" , $table->getTable() ):
+     * </code>
+     * which is basically what {@link ezcConsoleTable::outputTable()} does.
      *
      * @return array An array representation of the table.
      */
@@ -196,24 +154,11 @@ class ezcConsoleTable implements Countable, Iterator, ArrayAccess
     /**
      * Output the table.
      * Prints the complete table to the console.
-     *
      */
     public function outputTable() 
     {
         echo implode( "\n", $this->generateTable() );
     }
-
-
-
-
-
-
-
-
-
-
-
-
 
     /**
      * Returns if the given offset exists.
@@ -231,6 +176,8 @@ class ezcConsoleTable implements Countable, Iterator, ArrayAccess
         }
         return isset( $this->rows[$offset] );
     }
+
+    // From here only interface method implementations follow, which are not intended for direct usage
 
     /**
      * Returns the element with the given offset. 
@@ -381,18 +328,6 @@ class ezcConsoleTable implements Countable, Iterator, ArrayAccess
     {
         return current( $this->rows ) !== false;
     }
-
-
-
-
-
-
-
-
-
-
-
-
 
     /**
      * Property read access.
