@@ -54,7 +54,21 @@ class ezcConsoleTableRow implements Countable, Iterator, ArrayAccess {
      * 
      * @var string
      */
-    public $borderFormat = 'default';
+    protected $borderFormat = 'default';
+
+    /**
+     * Format applied to cell contents of cells marked with format "default" in this row.
+     * 
+     * @var string
+     */
+    protected $format = 'default';
+
+    /**
+     * Alignment applied to cells marked with ezcConsoleTable::ALIGN_DEFAULT.
+     * 
+     * @var mixed
+     */
+    protected $align = ezcConsoleTable::ALIGN_DEFAULT;
 
     /**
      * The cells of the row. 
@@ -252,7 +266,6 @@ class ezcConsoleTableRow implements Countable, Iterator, ArrayAccess {
 
     /**
      * Property read access.
-     * In this case allows accessing the cells contained in the actual row.
      * 
      * @param string $key Name of the property.
      * @return mixed Value of the property or null.
@@ -262,32 +275,14 @@ class ezcConsoleTableRow implements Countable, Iterator, ArrayAccess {
      */
     public function __get( $key )
     {
-        switch ($key) 
+        if ( isset( $this->$key ) )
         {
-            case 'format':
-            case 'align':
-                // Returns only the first value here
-                foreach ( $this as $cell )
-                {
-                    return $cell->$key;
-                }
-                break;
-            default:
-                break;
+            return $this->$key;
         }
-        throw new ezcBasePropertyNotFoundException( $key );
     }
 
     /**
      * Property write access.
-     * In this case allows accessing the properties of the cells contained in 
-     * the actual row. e.g. 
-     * <code>
-     * $row->align = ezcConsoleTable::ALIGN_CENTER;
-     * </code>
-     * sets the align to be centered for all cells that exist in the row.
-     * ATTENTION: This does not apply to cells that are added after setting
-     * a property for all contained cells.
      * 
      * @param string $key Name of the property.
      * @param mixed $val  The value for the property.
@@ -299,17 +294,25 @@ class ezcConsoleTableRow implements Countable, Iterator, ArrayAccess {
      */
     public function __set( $key, $val )
     {
-        switch ($key) 
+            
+        switch ( $key )
         {
             case 'format':
-            case 'align':
-                foreach ( $this as $cell )
-                {
-                    $cell->$key = $val;
-                }
+            case 'borderFormat':
+                $this->$key = $val;
                 return;
                 break;
-            default:
+            case 'align':
+                if ( $val !== ezcConsoleTable::ALIGN_LEFT && $val !== ezcConsoleTable::ALIGN_CENTER && $val !== ezcConsoleTable::ALIGN_RIGHT )
+                {
+                    throw new ezcBaseConfigException( 
+                        'align',
+                        ezcBaseConfigException::VALUE_OUT_OF_RANGE,
+                        $val
+                    );
+                }
+                $this->align = $val;
+                return;
                 break;
         }
         throw new ezcBasePropertyNotFoundException( $key );
@@ -323,18 +326,18 @@ class ezcConsoleTableRow implements Countable, Iterator, ArrayAccess {
      */
     public function __isset( $key )
     {
-        switch ($key) 
+        switch ( $key )
         {
-            case 'options':
-            case 'width':
-            case 'cols':
+            case 'content':
+            case 'format':
+            case 'align':
                 return true;
                 break;
             default:
-                break;
         }
         return false;
     }
+
 }
 
 ?>

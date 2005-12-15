@@ -49,7 +49,7 @@ class ezcConsoleTableCell {
      * 
      * @var int
      */
-    protected $align = ezcConsoleTable::ALIGN_LEFT;
+    protected $align = ezcConsoleTable::ALIGN_DEFAULT;
 
     /**
      * Create a new ezcConsoleProgressbarCell. 
@@ -60,7 +60,7 @@ class ezcConsoleTableCell {
      * @param int $autobreak    Auto wrap lines after num chars (0 = unlimited)
      * @param bool $useFormats  Whether to enable formated output
      */
-    public function __construct( $content = '', $format = 'default', $align = ezcConsoleTable::ALIGN_LEFT )
+    public function __construct( $content = '', $format = 'default', $align = ezcConsoleTable::ALIGN_DEFAULT )
     {
         $this->__set( 'content', $content );
         $this->__set( 'format', $format );
@@ -106,7 +106,11 @@ class ezcConsoleTableCell {
                 return;
                 break;
             case 'align':
-                if ( $val !== ezcConsoleTable::ALIGN_LEFT && $val !== ezcConsoleTable::ALIGN_CENTER && $val !== ezcConsoleTable::ALIGN_RIGHT )
+                if ( $val !== ezcConsoleTable::ALIGN_LEFT 
+                  && $val !== ezcConsoleTable::ALIGN_CENTER 
+                  && $val !== ezcConsoleTable::ALIGN_RIGHT 
+                  && $val !== ezcConsoleTable::ALIGN_DEFAULT 
+                )
                 {
                     throw new ezcBaseConfigException( 
                         'align',

@@ -37,14 +37,29 @@ class ezcConsoleTableOptions {
     public $colWrap = ezcConsoleTable::WRAP_AUTO;
 
     /**
-     * Standard column alignment.
+     * Standard column alignment, applied to cells that have to explicit alignment assigned.
      * @see ezcConsoleTable::ALIGN_LEFT
      * @see ezcConsoleTable::ALIGN_RIGHT
      * @see ezcConsoleTable::ALIGN_CENTER
+     * @see ezcConsoleTable::ALIGN_DEFAULT
      * 
      * @var int
      */
-    public $colAlign = ezcConsoleTable::ALIGN_LEFT;
+    public $defaultAlign = ezcConsoleTable::ALIGN_LEFT;
+
+    /**
+     * Standard column content format, applied to cells that have 'default' as the content format.
+     * 
+     * @var string
+     */
+    public $defaultFormat = 'default';
+
+    /**
+     * Standard border format, applied to rows that have 'default' as the border format.
+     * 
+     * @var string
+     */
+    public $defaultBorderFormat = 'default';
 
     /**
      * Padding characters for side padding between data and lines. 

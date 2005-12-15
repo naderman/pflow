@@ -119,7 +119,7 @@ class ezcConsoleToolsTableTest extends ezcTestCase
             __FUNCTION__,
             $this->tableData2,
             array( 'cols' => count( $this->tableData2[0] ), 'width' =>  60 ),
-            array( 'lineFormatHead' => 'magenta', 'colAlign' => ezcConsoleTable::ALIGN_RIGHT, 'widthType' => ezcConsoleTable::WIDTH_FIXED )
+            array( 'lineFormatHead' => 'magenta', 'defaultAlign' => ezcConsoleTable::ALIGN_RIGHT, 'widthType' => ezcConsoleTable::WIDTH_FIXED )
         );
     }
     
@@ -129,7 +129,7 @@ class ezcConsoleToolsTableTest extends ezcTestCase
             __FUNCTION__,
             $this->tableData2,
             array( 'cols' => count( $this->tableData2[0] ), 'width' =>  60 ),
-            array( 'lineFormatHead' => 'magenta', 'colAlign' => ezcConsoleTable::ALIGN_RIGHT )
+            array( 'lineFormatHead' => 'magenta', 'defaultAlign' => ezcConsoleTable::ALIGN_RIGHT )
         );
     }
     
@@ -139,7 +139,7 @@ class ezcConsoleToolsTableTest extends ezcTestCase
             __FUNCTION__,
             $this->tableData3,
             array( 'cols' => count( $this->tableData3[0] ), 'width' =>  120 ),
-            array( 'lineFormatHead' => 'blue', 'colAlign' => ezcConsoleTable::ALIGN_CENTER, 'lineVertical' => '#', 'lineHorizontal' => '#', 'corner' => '#' ),
+            array( 'lineFormatHead' => 'blue', 'defaultAlign' => ezcConsoleTable::ALIGN_CENTER, 'lineVertical' => '#', 'lineHorizontal' => '#', 'corner' => '#' ),
             array( 0, 3 )
         );
     }
@@ -161,7 +161,7 @@ class ezcConsoleToolsTableTest extends ezcTestCase
             __FUNCTION__,
             $this->tableData4,
             array( 'cols' => count( $this->tableData4[0] ), 'width' =>  120 ),
-            array( 'lineFormatHead' => 'blue', 'colAlign' => ezcConsoleTable::ALIGN_CENTER, 'colWrap' => ezcConsoleTable::WRAP_CUT ),
+            array( 'lineFormatHead' => 'blue', 'defaultAlign' => ezcConsoleTable::ALIGN_CENTER, 'colWrap' => ezcConsoleTable::WRAP_CUT ),
             array( 0 )
         );
     }
@@ -172,7 +172,7 @@ class ezcConsoleToolsTableTest extends ezcTestCase
             __FUNCTION__,
             $this->tableData4,
             array( 'cols' => count( $this->tableData4[0] ), 'width' =>  120 ),
-            array( 'lineFormatHead' => 'blue', 'colAlign' => ezcConsoleTable::ALIGN_LEFT, 'colWrap' => ezcConsoleTable::WRAP_AUTO ),
+            array( 'lineFormatHead' => 'blue', 'defaultAlign' => ezcConsoleTable::ALIGN_LEFT, 'colWrap' => ezcConsoleTable::WRAP_AUTO ),
             array( 0 )
         );
     }
@@ -183,7 +183,7 @@ class ezcConsoleToolsTableTest extends ezcTestCase
             __FUNCTION__,
             $this->tableData4,
             array( 'cols' => count( $this->tableData4[0] ), 'width' =>  120 ),
-            array( 'lineFormatHead' => 'blue', 'colAlign' => ezcConsoleTable::ALIGN_CENTER, 'colWrap' => ezcConsoleTable::WRAP_NONE ),
+            array( 'lineFormatHead' => 'blue', 'defaultAlign' => ezcConsoleTable::ALIGN_CENTER, 'colWrap' => ezcConsoleTable::WRAP_NONE ),
             array( 0 )
         );
     }
@@ -309,15 +309,6 @@ class ezcConsoleToolsTableTest extends ezcTestCase
             for ( $j = 0; $j < count( $tableData[$i]); $j++ )
             {
                 $table[$i][$j]->content = $tableData[$i][$j];
-            }
-        }
-
-        // Apply colAlign option
-        if ( isset( $options['colAlign'] ) )
-        {
-            foreach ( $table as $row )
-            {
-                ;$row->align = $options['colAlign'];
             }
         }
         

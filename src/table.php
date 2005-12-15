@@ -498,6 +498,10 @@ class ezcConsoleTable implements Countable, Iterator, ArrayAccess
         $rowData = '';
         for ( $cell = 0; $cell < count( $colWidth ); $cell++ )
         {
+            $align = $this->determineAlign( $row, $cell );
+            $format = $this->determineFormat( $row, $cell );
+            $borderFormat = $this->determineBorderFormat( $row );
+            
             $data = isset( $cells[$cell] ) ? $cells[$cell] : '';
             $rowData .= $this->outputHandler->formatText( 
                             $this->options->lineHorizontal, 
@@ -505,13 +509,71 @@ class ezcConsoleTable implements Countable, Iterator, ArrayAccess
                         );
             $rowData .= ' ';
             $rowData .= $this->outputHandler->formatText(
-                            str_pad( $data, $colWidth[$cell], ' ', $row[$cell]->align ),
+                            str_pad( $data, $colWidth[$cell], ' ', $align ),
                             $row[$cell]->format
                         );
             $rowData .= ' ';
         }
         $rowData .= $this->outputHandler->formatText( $this->options->lineHorizontal, $row->borderFormat );
         return $rowData;
+    }
+
+    /**
+     * Determine the alignement of a cell.
+     * Walks the inheritance path upwards to determine the alignement of a 
+     * cell. Checks first, if the cell has it's own alignement (apart from 
+     * ezcConsoleTable::ALIGN_DEFAULT). If not, checks the row for an 
+     * alignement setting and uses the default alignement if not found.
+     * 
+     * @param ezcConsoleTableRow $row   The row this cell belongs to.
+     * @param ezcConsoleTableCell $cell Index of the desired cell.
+     * @return int An alignement constant (ezcConsoleTable::ALIGN_*).
+     */
+    private function determineAlign( $row, $cellId = 0 )
+    {
+        return $row[$cellId]->align !== ezcConsoleTable::ALIGN_DEFAULT 
+            ? $row[$cellId]->align
+            : $row->align !== ezcConsoleTable::ALIGN_DEFAULT
+                ? $row->align
+                : $this->options->defaultAlign !== ezcConsoleTable::ALIGN_DEFAULT
+                    ? $this->options->defaultAlign
+                    : ezcConsoleTable::ALIGN_LEFT;
+    }
+
+    /**
+     * Determine the format of a cells content.
+     * Walks the inheritance path upwards to determine the format of a 
+     * cells content. Checks first, if the cell has it's own format (apart 
+     * from 'default'). If not, checks the row for a format setting and 
+     * uses the default format if not found.
+     * 
+     * @param ezcConsoleTableRow $row   The row this cell belongs to.
+     * @param ezcConsoleTableCell $cell Index of the desired cell.
+     * @return string A format name.
+     */
+    private function determineFormat( $row, $cellId )
+    {
+        return $row[$cellId]->format !== 'default'
+            ? $row[$cellId]->format
+            : $row->format !== 'default'
+                ? $row->format
+                : $this->options->defaultFormat;
+    }
+
+    /**
+     * Determine the format of a rows border.
+     * Walks the inheritance path upwards to determine the format of a 
+     * rows border. Checks first, if the row has it's own format (apart 
+     * from 'default'). If not, uses the default format.
+     * 
+     * @param ezcConsoleTableRow $row   The row this cell belongs to.
+     * @return string A format name.
+     */
+    private function determineBorderFormat( $row )
+    {
+        return $row->borderFormat !== 'default'
+            ? $row->borderFormat
+            : $this->options->defaultBorderFormat;
     }
 
     /**

@@ -27,32 +27,42 @@ function __autoload( $class_name )
     ezcBase::autoload( $class_name );
 }
 
-// Prepare console output options
-$opts = array(
-    'verboseLevel'  => 1,           // print verbosity levels 0 and 1 only
-    'autobreak'     => 80,          // will break lines every 80 chars
-);
+// Initialize the console output handler
+$out = new ezcConsoleOutput();
+// Define a new format "headline"
+$out->formats->headline->color = 'red';
+$out->formats->headline->style = array( 'bold' );
+// Define a new format "sum"
+$out->formats->sum->color = 'blue';
+$out->formats->sum->style = array( 'negative' );
 
-// Initialize the console outputer
-$out = new ezcConsoleOutput( $opts );
+// Create a new table
+$table = new ezcConsoleTable( $out, 60, 1 );
 
-$tableOpts = array(
-    'lineFormatHead' => 'red',  // Make header rows surrounded by red lines
-);
+// Create first row and in it the first cell
+$table[0][0]->content = 'Headline 1';
 
-// Initialize table with options, width of 60 chars and 3 cols
-$table = new ezcConsoleTable( $out, array( 'width' => 60, 'cols' => 3 ), $tableOpts );
+// Create 3 more cells in row 0
+for ( $i = 2; $i < 5; $i++ )
+{
+     $table[0][]->content = "Headline $i";
+}
 
-// Generate a header row ( red color )
-$table->addHeadRow( array( 'First col', 'Second col', 'Third col' ) );
+$data = array( 1, 2, 3, 4);
 
-// Add some data ( right column will be largest )
-$table->addRow( array( 'Data', 'Data', 'Very very very very very long data' ) );
+// Create some more data in the table...
+foreach ( $data as $value )
+{
+     // Create a new row each time and set it's contents to the actual value
+     $table[][0]->content = $value;
+}
 
-// Add some more data 
-$table->addRow( array( 'More', 'More green', 'Smaller data' ) );
+// Set another border format for our headline row
+$table[0]->borderFormat = 'headline';
 
-// Print table to the screen
+// Set the content format for all cells of the 3rd row to "sum"
+$table[2]->format = 'sum';
+
 $table->outputTable();
 
 /*
