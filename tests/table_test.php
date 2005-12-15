@@ -187,59 +187,7 @@ class ezcConsoleToolsTableTest extends ezcTestCase
             array( 0 )
         );
     }
-
-    public function testTableManual1 ()
-    {
-        $table = new ezcConsoleTable( $this->output, count( $this->tableData1[0] ), 100 );
-        $i = 0;
-        foreach ( $this->tableData1 as $set ) 
-        {
-            $res = $table->addRow($set);
-            $this->assertEquals( 
-                $i++,
-                $res,
-                'Table returned invalid index on adding row.'
-            );
-        }
-    }
     
-    public function testTableManual2 ()
-    {
-        $table = new ezcConsoleTable( $this->output, count( $this->tableData2[0] ), 100 );
-        $i = 0;
-        foreach ( $this->tableData2 as $set ) 
-        {
-            $res = $table->addHeadRow($set);
-            $this->assertEquals( 
-                $i++,
-                $res,
-                'Table returned invalid index on adding head row.'
-            );
-        }
-    }
-    
-    public function testTableManual3 ()
-    {
-        $table = new ezcConsoleTable( $this->output, count( $this->tableData3[0] ), 100 );
-        $i = 0;
-        foreach ( $this->tableData3 as $set ) 
-        {
-            if ( $i % 2 == 0 )
-            {
-                $res = $table->addHeadRow($set);
-            }
-            else
-            {
-                $res = $table->addRow($set);
-            }
-            $this->assertEquals( 
-                $i++,
-                $res,
-                'Table returned invalid index on adding mixed rows.'
-            );
-        }
-    }
-
     public function testTableConfigurationFailure1 ()
     {
         // Missing 'cols' setting
@@ -334,24 +282,54 @@ class ezcConsoleToolsTableTest extends ezcTestCase
         }
         $this->fail( 'No exception thrown on invalid value of <width> setting.' );
     }
+
+    public function testArrayAccess()
+    {
+        $table = new ezcConsoleTable( $this->output, 100, 10 );
+        $table[0];
+    }
     
     private function commonTableTest( $refFile, $tableData, $settings, $options, $headrows = array() )
     {
-        $table = ezcConsoleTable::create( 
-            $tableData,
+        $table =  new ezcConsoleTable( 
             $this->output,
             $settings['width'],
             $settings['cols']
         );
+        
+        // Set options
         foreach ( $options as $key => $val )
         {
             $table->options->$key = $val;
         }
-        $table->setCellFormat( 'red', 0, 0 );
+
+        // Add data
+        for ( $i = 0; $i < count( $tableData ); $i++ )
+        {
+            for ( $j = 0; $j < count( $tableData[$i]); $j++ )
+            {
+                $table[$i][$j]->content = $tableData[$i][$j];
+            }
+        }
+
+        // Apply colAlign option
+        if ( isset( $options['colAlign'] ) )
+        {
+            foreach ( $table as $row )
+            {
+                ;$row->align = $options['colAlign'];
+            }
+        }
+        
+        // Set a specific cell format
+        $table[0][0]->format = 'red';
+
+        // Apply head format to head rows
         foreach ( $headrows as $row )
         {
-            $table->makeHeadRow( $row );
+            $table[$row]->borderFormat = isset( $options['lineFormatHead'] ) ? $options['lineFormatHead'] : 'default';
         }
+        
         $this->assertEquals(
             file_get_contents( dirname( __FILE__ ) . '/dat/' . $refFile . '.dat' ),
             implode( "\n", $table->getTable() ),

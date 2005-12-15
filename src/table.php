@@ -34,7 +34,7 @@
  * @package ConsoleTools
  * @version //autogen//
  */
-class ezcConsoleTable
+class ezcConsoleTable implements Countable, Iterator, ArrayAccess
 {
     /**
      * Automatically wrap text to fit into a column.
@@ -113,6 +113,8 @@ class ezcConsoleTable
      */
     protected $tableData = array();
 
+    protected $rows;
+
     /**
      * Mapping for head line rows (keys of the rows).
      * 
@@ -181,140 +183,6 @@ class ezcConsoleTable
     }
 
     /**
-     * Set options for the table.
-     *
-     * @see ezcConsoleTable::$options
-     * 
-     * @param array $options Options to set.
-     */
-    public function setOptions( $options )
-    {
-        foreach ( $options as $name => $val ) 
-        {
-            if ( isset( $this->options[$name] ) ) 
-            {
-                $this->options[$name] = $val;
-            } 
-            else 
-            {
-                trigger_error( "Unknown option <{$name}>.", E_USER_WARNING );
-            }
-        }
-    }
-
-    /**
-     * Add a row of data to the table.
-     * Add a row of data to the table. A row looks like this:
-     * 
-     * <code>
-     * array(
-     *  0 => <string>, 1 => <string>,...
-     * );
-     * </code>
-     *
-     * The options parameter overrides the globally set options.
-     * 
-     * @param array(int => string) $rowData The data for the row
-     * @return int Number of the row.
-     */
-    public function addRow( array $rowData )
-    {
-        $this->tableData[] = $rowData;
-        end($this->tableData);
-        return key($this->tableData);
-    }
-
-    /**
-     * Add a header row to the table.
-     * Add a header row to the table. Format {@link ezcConsoleTable::addRow()}.
-     *
-     * The options parameter overrides the globally set options.
-     *
-     * @param array(int => string) $rowData The row data
-     * @param array(string) $options        Override {@link eczConsoleTable::$options}
-     * @return int Number of the row.
-     */
-    public function addHeadRow( array $rowData )
-    {
-        $this->addRow( $rowData );
-        end( $this->tableData );
-        $this->tableHeadRows[key( $this->tableData )] = true;
-        return key($this->tableData);
-    }
-
-    /**
-     * Set data for specific cell.
-     * Sets the data for a specific cell. If the row referenced
-     * does not exist yet, it's created with empty values. If
-     * previous rows do not exist, they are created with empty 
-     * values. Existing cell data is overwriten.
-     *
-     * @param int $row         Row number.
-     * @param int $column      Column number.
-     * @param string $cellData Data for the cell.
-     */ 
-    public function setCell( $row, $column, $cellData )
-    {
-        $this->tableData[$row][$column] = $cellData;
-    }
-
-    /**
-     * Set the text format for a specific cell.
-     * This method allows you to set a cell format for a sepcific
-     * cell of the table or a complete row (leaving the $col) parameter
-     * empty. You can use any format you created in our output handler to
-     * format a cell.
-     * 
-     * @param int $row The row number where the cell to format resides in.
-     * @param int $col The column part to identify a cell or null to format a row.
-     * @param string $format The format to use for the cell data.
-     */
-    public function setCellFormat( $format, $row, $col = null  )
-    {
-        if ( isset( $col ) ) 
-        {
-            $this->cellFormats[$row][$col] = $format;
-        }
-        else
-        {
-            for ( $i = 0; $i < $this->cols; $i++ )
-            {
-                $this->cellFormats[$row][$i] = $format;
-            }
-        }
-    }
-
-    /**
-     * Make a row to a header row.
-     * Defines the row with the specified number to be a header row.
-     *
-     * @param int $row Number of the row to affect.
-     * 
-     * @see eczConsoleTable::setDefaultRow()
-     */
-    public function makeHeadRow( $row )
-    {
-        $this->tableHeadRows[$row] = true;
-    }
-
-    /**
-     * Make a row to a default row.
-     * Defines the row with the specified number to be a default row.
-     * (Used to bring header rows back to normal.)
-     *
-     * @param int $row Number of the row to affect.
-     *
-     * @see eczConsoleTable::setHeadRow()
-     */
-    public function makeDefaultRow( $row )
-    {
-        if ( isset( $this->tableHeadRows[$row] ) )
-        {
-            unset( $this->tableHeadRows[$row] );
-        }
-    }
-
-    /**
      * Returns the table in a string.
      * Returns the entire table as an array of printable lines.
      *
@@ -334,6 +202,197 @@ class ezcConsoleTable
     {
         echo implode( "\n", $this->generateTable() );
     }
+
+
+
+
+
+
+
+
+
+
+
+
+
+    /**
+     * Returns if the given offset exists.
+     * This method is part of the ArrayAccess interface to allow access to the
+     * data of this object as if it was an array.
+     * 
+     * @param int $offset The offset to check.
+     * @return bool True when the offset exists, otherwise false.
+     */
+    public function offsetExists( $offset )
+    {
+        if ( !is_int( $offset ) || $offset < 0 )
+        {
+            throw new ezcBaseTypeException( 'int+', gettype( $offset ) );
+        }
+        return isset( $this->rows[$offset] );
+    }
+
+    /**
+     * Returns the element with the given offset. 
+     * This method is part of the ArrayAccess interface to allow access to the
+     * data of this object as if it was an array. In case of the
+     * ezcConsoleTable class this method always returns a valid row object
+     * since it creates them on the fly, if a given item does not exist.
+     * 
+     * @param int $offset The offset to check.
+     * @return object(ezcConsoleTableCell)
+     */
+    public function offsetGet( $offset )
+    {
+        if ( !isset( $offset ) )
+        {
+            $offset = count( $this );
+            $this->rows[$offset] = new ezcConsoleTableRow();
+        }
+        if ( !is_int( $offset ) || $offset < 0 )
+        {
+            throw new ezcBaseTypeException( 'int+', gettype( $offset ) );
+        }
+        if ( !isset( $this->rows[$offset] ) )
+        {
+            $this->rows[$offset] = new ezcConsoleTableRow();
+        }
+        return $this->rows[$offset];
+    }
+
+    /**
+     * Set the element with the given offset. 
+     * This method is part of the ArrayAccess interface to allow access to the
+     * data of this object as if it was an array. 
+     * 
+     * @param int $offset                 The offset to assign an item to.
+     * @param object(ezcConsoleTableCell) The item to assign.
+     */
+    public function offsetSet( $offset, $value )
+    {
+        if ( !( $value instanceof ezcConsoleTableCell ) )
+        {
+            throw new ezcBaseTypeException( 'ezcConsoleTableCell', gettype( $value ) );
+        }
+        if ( !isset( $offset ) )
+        {
+            $offset = count( $this );
+        }
+        if ( !is_int( $offset ) || $offset < 0 )
+        {
+            throw new ezcBaseTypeException( 'int+', gettype( $offset ) );
+        }
+        $this->rows[$offset] = $value;
+    }
+
+    /**
+     * Unset the element with the given offset. 
+     * This method is part of the ArrayAccess interface to allow access to the
+     * data of this object as if it was an array. 
+     * 
+     * @param int $offset The offset to unset the value for.
+     */
+    public function offsetUnset( $offset )
+    {
+        if ( !is_int( $offset ) || $offset < 0 )
+        {
+            throw new ezcBaseTypeException( 'int+', gettype( $offset ) );
+        }
+        if ( isset( $this->rows[$offset] ) )
+        {
+            unset( $this->rows[$offset] );
+        }
+    }
+
+    /**
+     * Returns the number of cells in the row.
+     * This method is part of the Countable interface to allow the usage of
+     * PHP's count() function to check how many cells this row has.
+     *
+     * @return int Number of cells in this row.
+     */
+    public function count()
+    {
+        $keys = array_keys( $this->rows );
+        return count( $keys ) > 0 ? ( end( $keys ) + 1 ) : 0;
+    }
+
+    /**
+     * Returns the currently selected cell.
+     * This method is part of the Iterator interface to allow acces to the 
+     * cells of this row by iterating over it like an array (e.g. using
+     * foreach).
+     * 
+     * @return object(ezcConsoleTableCell) The currently selected cell.
+     */
+    public function current()
+    {
+        return current( $this->rows );
+    }
+
+    /**
+     * Returns the key of the currently selected cell.
+     * This method is part of the Iterator interface to allow acces to the 
+     * cells of this row by iterating over it like an array (e.g. using
+     * foreach).
+     * 
+     * @return int The key of the currently selected cell.
+     */
+    public function key()
+    {
+        return key( $this->rows );
+    }
+
+    /**
+     * Returns the next cell and selects it or false on the last cell.
+     * This method is part of the Iterator interface to allow acces to the 
+     * cells of this row by iterating over it like an array (e.g. using
+     * foreach).
+     *
+     * @return mixed ezcConsoleTableCell if the next cell exists, or false.
+     */
+    public function next()
+    {
+        return next( $this->rows );
+    }
+
+    /**
+     * Selects the very first cell and returns it.
+     * This method is part of the Iterator interface to allow acces to the 
+     * cells of this row by iterating over it like an array (e.g. using
+     * foreach).
+     *
+     * @return ezcConsoleTableCell The very first cell of this row.
+     */
+    public function rewind()
+    {
+        return reset( $this->rows );
+    }
+
+    /**
+     * Returns if the current cell is valid.
+     * This method is part of the Iterator interface to allow acces to the 
+     * cells of this row by iterating over it like an array (e.g. using
+     * foreach).
+     *
+     * @return ezcConsoleTableCell The very first cell of this row.
+     */
+    public function valid()
+    {
+        return current( $this->rows ) !== false;
+    }
+
+
+
+
+
+
+
+
+
+
+
+
 
     /**
      * Property read access.
@@ -429,17 +488,17 @@ class ezcConsoleTable
     {
         $colWidth = $this->getColWidths();
         $table = array();
-        $table[] = $this->generateBorder( $colWidth, ( isset( $this->tableHeadRows[0] ) ) );
+        $table[] = $this->generateBorder( $colWidth, $this[0]->borderFormat );
         // Rows submitted by the user
-        foreach ( $this->tableData as $row => $cells )
+        for ( $i = 0;  $i < count( $this->rows ); $i++ )
         {
-            $header = isset( $this->tableHeadRows[$row] );
             // Auto broken rows
-            foreach ( $this->breakRows( $cells, $colWidth ) as $brkRow => $brkCells )
+            foreach ( $this->breakRows( $this->rows[$i], $colWidth ) as $brkRow => $brkCells )
             {
-                $table[] = $this->generateRow( $brkCells, $colWidth, $header, $row );
+                $table[] = $this->generateRow( $brkCells, $colWidth, $this->rows[$i] );
             }
-            $table[] = $this->generateBorder( $colWidth, $header || isset( $this->tableHeadRows[$row + 1] ) );
+            $afterBorderFormat = isset( $this->rows[$i + 1] ) && $this->rows[$i + 1]->borderFormat != 'default' ? $this->rows[$i + 1]->borderFormat : $this->rows[$i]->borderFormat;
+            $table[] = $this->generateBorder( $colWidth, $afterBorderFormat );
         }
         return $table; 
     }
@@ -450,7 +509,7 @@ class ezcConsoleTable
      * @param array $colWidth Array of column width.
      * @return string The Border string.
      */
-    private function generateBorder( $colWidth, $header = false )
+    private function generateBorder( $colWidth, $format )
     {
         $border = '';
         foreach ( $colWidth as $col => $width )
@@ -459,7 +518,7 @@ class ezcConsoleTable
         }
         $border .= $this->options->corner;
 
-        return $this->outputHandler->formatText( $border, $this->options->{( $header ? 'lineFormatHead' : 'lineFormat' )} );
+        return $this->outputHandler->formatText( $border, $format );
     }
 
     /**
@@ -470,7 +529,7 @@ class ezcConsoleTable
      * @param array $colWidth Calculated columns widths.
      * @return string The row.
      */
-    private function generateRow( $cells, $colWidth, $header = false, $row )
+    private function generateRow( $cells, $colWidth, $row )
     {
         $rowData = '';
         for ( $cell = 0; $cell < count( $colWidth ); $cell++ )
@@ -478,16 +537,16 @@ class ezcConsoleTable
             $data = isset( $cells[$cell] ) ? $cells[$cell] : '';
             $rowData .= $this->outputHandler->formatText( 
                             $this->options->lineHorizontal, 
-                            $this->options->{$header ? 'lineFormatHead' : 'lineFormat'}
+                            $row->borderFormat
                         );
             $rowData .= ' ';
             $rowData .= $this->outputHandler->formatText(
-                            str_pad( $data, $colWidth[$cell], ' ', $this->options->colAlign ),
-                            isset( $this->cellFormats[$row][$cell] ) ? $this->cellFormats[$row][$cell] : null
+                            str_pad( $data, $colWidth[$cell], ' ', $row[$cell]->align ),
+                            $row[$cell]->format
                         );
             $rowData .= ' ';
         }
-        $rowData .= $this->outputHandler->formatText( $this->options->lineHorizontal, $this->options->{$header ? 'lineFormatHead' : 'lineFormat'} );
+        $rowData .= $this->outputHandler->formatText( $this->options->lineHorizontal, $row->borderFormat );
         return $rowData;
     }
 
@@ -505,8 +564,9 @@ class ezcConsoleTable
     {
         $rows = array();
         // Iterate through cells of the row
-        foreach ( $cells as $cell => $data ) 
+        foreach ( $colWidth as $cell => $width ) 
         {
+            $data = $cells[$cell]->content;
             // Physical row id, start with 0 for each row
             $row = 0;
             // Split into multiple physical rows if manual breaks exist
@@ -558,15 +618,15 @@ class ezcConsoleTable
         $colNormWidth = round( $globalWidth / $this->cols );
         $colMaxWidth = array();
         // Determine the longest data for each column
-        foreach ( $this->tableData as $row => $cells )
+        foreach ( $this->rows as $row => $cells )
         {
             foreach ( $cells as $col => $cell )
             {
-                $colMaxWidth[$col] = isset( $colMaxWidth[$col] ) ? max( $colMaxWidth[$col], strlen( $cell ) ) : strlen( $cell );
+                $colMaxWidth[$col] = isset( $colMaxWidth[$col] ) ? max( $colMaxWidth[$col], strlen( $cell->content ) ) : strlen( $cell->content );
             }
         }
         $colWidth = array();
-        $colWidthOverlow = array();
+        $colWidthOverflow = array();
         $spareWidth = 0;
         // Make columns best fit
         foreach ( $colMaxWidth as $col => $maxWidth )
@@ -585,17 +645,17 @@ class ezcConsoleTable
                 $colWidth[$col]  = $colNormWidth + $spareWidth;
                 $spareWidth = 0;
                 // Store overflow for second processing step
-                $colWidthOverlow[$col] = $maxWidth - $colWidth[$col];
+                $colWidthOverflow[$col] = $maxWidth - $colWidth[$col];
             }
         }
         // Do we have spare to give to the columns again?
         if ( $spareWidth > 0 )
         {
             // Second processing step
-            if ( count( $colWidthOverlow ) > 0  )
+            if ( count( $colWidthOverflow ) > 0  )
             {
-                $overflowSum = array_sum( $colWidthOverlow );
-                foreach ( $colWidthOverlow as $col => $overflow )
+                $overflowSum = array_sum( $colWidthOverflow );
+                foreach ( $colWidthOverflow as $col => $overflow );
                 {
                     $colWidth[$col] += floor( $overflow / $overflowSum * $spareWidth );
                 }
