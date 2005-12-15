@@ -67,6 +67,17 @@ class ezcConsoleOutputFormats {
     {
         $this->formats[$key] = $val;
     }
+ 
+    /**
+     * Property isset access.
+     * 
+     * @param string $key Name of the property.
+     * @return bool True is the property is set, otherwise false.
+     */
+    public function __isset( $key )
+    {
+        return isset( $this->formats[$key] );
+    }
 
 }
 

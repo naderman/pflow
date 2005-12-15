@@ -403,6 +403,31 @@ class ezcConsoleOption {
     }
 
     /**
+     * Property write access.
+     * 
+     * @param string $key Name of the property.
+     * @param mixed $val  The value for the property.
+     *
+     * @throws ezcBasePropertyReadOnlyException
+     *         If the property you try to access is read-only.
+     */
+    public function __set( $key, $val )
+    {
+        throw new ezcBasePropertyReadOnlyException( $key );
+    }
+ 
+    /**
+     * Property isset access.
+     * 
+     * @param string $key Name of the property.
+     * @return bool True is the property is set, otherwise false.
+     */
+    public function __isset( $key )
+    {
+        return isset( $this->properties[$key] );
+    }
+
+    /**
      * Sanitize the name of parameters.
      * Remove whitespaces from parameter names and remove non
      * alphanumeric chars from the beginning (if someone submits

@@ -211,6 +211,27 @@ class ezcConsoleTable
         }
         throw new ezcBasePropertyNotFoundException( $key );
     }
+ 
+    /**
+     * Property isset access.
+     * 
+     * @param string $key Name of the property.
+     * @return bool True is the property is set, otherwise false.
+     */
+    public function __isset( $key )
+    {
+        switch ($key) 
+        {
+            case 'options':
+            case 'width':
+            case 'cols':
+                return true;
+                break;
+            default:
+                break;
+        }
+        return false;
+    }
 
     /**
      * Create an entire table.

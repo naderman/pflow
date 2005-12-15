@@ -198,6 +198,26 @@ class ezcConsoleProgressbar
         $this->started = false;
         $this->$key = $val;
     }
+ 
+    /**
+     * Property isset access.
+     * 
+     * @param string $key Name of the property.
+     * @return bool True is the property is set, otherwise false.
+     */
+    public function __isset( $key )
+    {
+        switch ( $key )
+        {
+            case 'options':
+            case 'max':
+            case 'step':
+                return true;
+                break;
+            default:
+        }
+        return false;
+    }
 
     /**
      * Start the progress bar
