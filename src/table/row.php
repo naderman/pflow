@@ -30,13 +30,16 @@
  * $row[0]->align = ezcConsoleTable::ALIGN_CENTER;
  * 
  * // Traverse through the row.
- * foreach ($row as $bar)
+ * foreach ($row as $cell)
  * {
- *     var_dump($bar);
+ *     var_dump($cell);
  * }
+ *
+ * // Set the align property for all cells in a row
+ * $row->align = ezcConsoleTable::ALIGN_CENTER;
+ * 
  * </code>
  *
- * @TODO format -> borderFormat (->format should set format for all cells)
  * This class stores the rows for the {@link ezcConsoleTable} class.
  * 
  * @package ConsoleTools
@@ -51,7 +54,7 @@ class ezcConsoleTableRow implements Countable, Iterator, ArrayAccess {
      * 
      * @var string
      */
-    public $format = 'default';
+    public $borderFormat = 'default';
 
     /**
      * The cells of the row. 
@@ -174,7 +177,7 @@ class ezcConsoleTableRow implements Countable, Iterator, ArrayAccess {
      * This method is part of the Countable interface to allow the usage of
      * PHP's count() function to check how many cells this row has.
      *
-     * @returns int Number of cells in this row.
+     * @return int Number of cells in this row.
      */
     public function count()
     {
@@ -188,7 +191,7 @@ class ezcConsoleTableRow implements Countable, Iterator, ArrayAccess {
      * cells of this row by iterating over it like an array (e.g. using
      * foreach).
      * 
-     * @returns object(ezcConsoleTableCell) The currently selected cell.
+     * @return object(ezcConsoleTableCell) The currently selected cell.
      */
     public function current()
     {
@@ -201,7 +204,7 @@ class ezcConsoleTableRow implements Countable, Iterator, ArrayAccess {
      * cells of this row by iterating over it like an array (e.g. using
      * foreach).
      * 
-     * @returns int The key of the currently selected cell.
+     * @return int The key of the currently selected cell.
      */
     public function key()
     {
@@ -214,7 +217,7 @@ class ezcConsoleTableRow implements Countable, Iterator, ArrayAccess {
      * cells of this row by iterating over it like an array (e.g. using
      * foreach).
      *
-     * @returns mixed ezcConsoleTableCell if the next cell exists, or false.
+     * @return mixed ezcConsoleTableCell if the next cell exists, or false.
      */
     public function next()
     {
@@ -227,7 +230,7 @@ class ezcConsoleTableRow implements Countable, Iterator, ArrayAccess {
      * cells of this row by iterating over it like an array (e.g. using
      * foreach).
      *
-     * @returns ezcConsoleTableCell The very first cell of this row.
+     * @return ezcConsoleTableCell The very first cell of this row.
      */
     public function rewind()
     {
@@ -240,13 +243,98 @@ class ezcConsoleTableRow implements Countable, Iterator, ArrayAccess {
      * cells of this row by iterating over it like an array (e.g. using
      * foreach).
      *
-     * @returns ezcConsoleTableCell The very first cell of this row.
+     * @return ezcConsoleTableCell The very first cell of this row.
      */
     public function valid()
     {
         return current( $this->cells ) !== false;
     }
 
+    /**
+     * Property read access.
+     * In this case allows accessing the cells contained in the actual row.
+     * 
+     * @param string $key Name of the property.
+     * @return mixed Value of the property or null.
+     *
+     * @throws ezcBasePropertyNotFoundException
+     *         If the the desired property is not found.
+     */
+    public function __get( $key )
+    {
+        switch ($key) 
+        {
+            case 'format':
+            case 'align':
+                // Returns only the first value here
+                foreach ( $this as $cell )
+                {
+                    return $cell->$key;
+                }
+                break;
+            default:
+                break;
+        }
+        throw new ezcBasePropertyNotFoundException( $key );
+    }
+
+    /**
+     * Property write access.
+     * In this case allows accessing the properties of the cells contained in 
+     * the actual row. e.g. 
+     * <code>
+     * $row->align = ezcConsoleTable::ALIGN_CENTER;
+     * </code>
+     * sets the align to be centered for all cells that exist in the row.
+     * ATTENTION: This does not apply to cells that are added after setting
+     * a property for all contained cells.
+     * 
+     * @param string $key Name of the property.
+     * @param mixed $val  The value for the property.
+     *
+     * @throws ezcBaseConfigException
+     *         If a the value for the property options is not an instance of
+     *         ezcConsoleOutputOptions
+     *         {@link ezcBaseConfigException::VALUE_OUT_OF_RANGE}.
+     */
+    public function __set( $key, $val )
+    {
+        switch ($key) 
+        {
+            case 'format':
+            case 'align':
+                foreach ( $this as $cell )
+                {
+                    $cell->$key = $val;
+                }
+                return;
+                break;
+            default:
+                break;
+        }
+        throw new ezcBasePropertyNotFoundException( $key );
+    }
+ 
+    /**
+     * Property isset access.
+     * 
+     * @param string $key Name of the property.
+     * @return bool True is the property is set, otherwise false.
+     */
+    public function __isset( $key )
+    {
+        switch ($key) 
+        {
+            case 'options':
+            case 'width':
+            case 'cols':
+                return true;
+                break;
+            default:
+                break;
+        }
+        return false;
+    }
 }
 
 ?>

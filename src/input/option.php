@@ -239,7 +239,7 @@ class ezcConsoleOption {
      * otherwise false.
      * 
      * @param ezcConsoleOptionRule $rule The rule to be removed.
-     * @returns bool True if rule is registered, otherwise false.
+     * @return bool True if rule is registered, otherwise false.
      */
     public function hasDependency( ezcConsoleOption $param )
     {
@@ -344,7 +344,7 @@ class ezcConsoleOption {
      * otherwise false.
      * 
      * @param ezcConsoleOptionRule $rule The rule to be removed.
-     * @returns bool True if rule is registered, otherwise false.
+     * @return bool True if rule is registered, otherwise false.
      */
     public function hasExclusion( ezcConsoleOption $param )
     {

@@ -192,7 +192,7 @@ class ezcConsoleStatusbar
      * Returns number of successes during the run.
      * Returns the number of success characters printed from this status bar.
      * 
-     * @returns int Number of successes.
+     * @return int Number of successes.
      */
     public function getSuccesses()
     {
@@ -203,7 +203,7 @@ class ezcConsoleStatusbar
      * Returns number of failures during the run.
      * Returns the number of failure characters printed from this status bar.
      * 
-     * @returns int Number of failures.
+     * @return int Number of failures.
      */
     public function getFailures()
     {
