@@ -229,8 +229,8 @@ class ezcConsoleInput
      */
     public function registerAlias( $short, $long, $option )
     {
-        $short = ezcConsoleOption::sanitizeParameterName($short);
-        $long = ezcConsoleOption::sanitizeParameterName($long);
+        $short = ezcConsoleOption::sanitizeOptionName($short);
+        $long = ezcConsoleOption::sanitizeOptionName($long);
         if ( !isset( $this->optionShort[$option->short] ) || !isset( $this->optionLong[$option->long] ) )
         {
             throw new ezcConsoleInputException( 
@@ -386,8 +386,8 @@ class ezcConsoleInput
      */
     public function unregisterAlias( $short, $long )
     {
-        $short = ezcConsoleOption::sanitizeParameterName($short);
-        $long = ezcConsoleOption::sanitizeParameterName($long);
+        $short = ezcConsoleOption::sanitizeOptionName($short);
+        $long = ezcConsoleOption::sanitizeOptionName($long);
         foreach ( $this->options as $id => $option )
         {
             if ( $option->short === $short )
@@ -431,7 +431,7 @@ class ezcConsoleInput
      */
     public function getOption( $name )
     {
-        $name = ezcConsoleOption::sanitizeParameterName($name);
+        $name = ezcConsoleOption::sanitizeOptionName($name);
         if ( isset( $this->optionShort[$name] ) )
         {
             return $this->optionShort[$name];

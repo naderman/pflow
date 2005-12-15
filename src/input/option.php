@@ -160,8 +160,8 @@ class ezcConsoleOption {
         array $exclusions = array(), 
         $arguments = true
     ) {
-        $this->properties['short'] = ezcConsoleOption::sanitizeParameterName($short);
-        $this->properties['long'] = ezcConsoleOption::sanitizeParameterName($long);
+        $this->properties['short'] = ezcConsoleOption::sanitizeOptionName($short);
+        $this->properties['long'] = ezcConsoleOption::sanitizeOptionName($long);
         $this->type = $type;
         $this->default = isset( $default ) ? $default : null;
         $this->multiple = $multiple;
@@ -412,7 +412,7 @@ class ezcConsoleOption {
      * @param string $name The name to sanitize.
      * @return string The sanitized name.
      */
-    public static function sanitizeParameterName( $name )
+    public static function sanitizeOptionName( $name )
     {
         return preg_replace( 
             array( '/^[^a-z0-9]*/i', '/\s*/' ),
