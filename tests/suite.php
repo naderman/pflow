@@ -34,6 +34,14 @@ require_once 'parameter_test.php';
  */
 require_once 'table_test.php';
 /**
+ * Require test suite for ConsoleTable class.
+ */
+require_once 'table_row_test.php';
+/**
+ * Require test suite for ConsoleTable class.
+ */
+require_once 'table_cell_test.php';
+/**
  * Require test suite for ConsoleProgressbar class.
  */
 require_once 'progressbar_test.php';
@@ -60,6 +68,8 @@ class ezcConsoleToolsSuite extends ezcTestSuite
 		$this->addTest( ezcConsoleToolsOutputFormatsTest::suite() );
 		$this->addTest( ezcConsoleToolsOutputOptionsTest::suite() );
 		$this->addTest( ezcConsoleToolsParameterTest::suite() );
+		$this->addTest( ezcConsoleToolsTableCellTest::suite() );
+		$this->addTest( ezcConsoleToolsTableRowTest::suite() );
 		$this->addTest( ezcConsoleToolsTableTest::suite() );
 		$this->addTest( ezcConsoleToolsProgressbarTest::suite() );
 		$this->addTest( ezcConsoleToolsStatusbarTest::suite() );
