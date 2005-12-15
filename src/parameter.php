@@ -15,10 +15,10 @@
  * to a console based application.
  *
  * <code>
- * $paramHandler = new ezcConsoleParameter();
+ * $inputHandler = new ezcConsoleParameter();
  * 
  * // Register simple parameter -h/--help
- * $paramHandler->registerParam( new ezcConsoleOption( 'h', 'help' ) );
+ * $inputHandler->registerOption( new ezcConsoleOption( 'h', 'help' ) );
  * 
  * // Register complex parameter -f/--file
  * $file = new ezcConsoleOption(
@@ -30,7 +30,7 @@
  *  'Process a file.',
  *  'Processes a single file.'
  * );
- * $paramHandler->registerParam( $file );
+ * $inputHandler->registerOption( $file );
  * 
  * // Manipulate parameter -f/--file after registration
  * $file->multiple = true;
@@ -44,18 +44,18 @@
  *  true,
  *  'Process a directory.',
  *  'Processes a complete directory.',
- *  array( new ezcConsoleOptionRule( $paramHandler->getParam( 'f' ) ) ),
- *  array( new ezcConsoleOptionRule( $paramHandler->getParam( 'h' ) ) )
+ *  array( new ezcConsoleOptionRule( $inputHandler->getOption( 'f' ) ) ),
+ *  array( new ezcConsoleOptionRule( $inputHandler->getOption( 'h' ) ) )
  * );
- * $paramHandler->registerParam( $dir );
+ * $inputHandler->registerOption( $dir );
  * 
  * // Register an alias for this parameter
- * $paramHandler->registerAlias( 'e', 'extended-dir', $dir );
+ * $inputHandler->registerAlias( 'e', 'extended-dir', $dir );
  * 
  * // Process registered parameters and handle errors
  * try
  * {
- *      $paramHandler->process();
+ *      $inputHandler->process();
  * }
  * catch ( ezcConsoleParameterException $e )
  * {
@@ -69,36 +69,36 @@
  * }
  * 
  * // Process a single parameter
- * $file = $paramHandler->getParam( 'f' );
+ * $file = $inputHandler->getOption( 'f' );
  * if ( $file->value === false )
  * {
- *      echo "Parameter -{$file->short}/--{$file->long} was not submitted.\n";
+ *      echo "Option -{$file->short}/--{$file->long} was not submitted.\n";
  * }
  * elseif ( $file->value === true )
  * {
- *      echo "Parameter -{$file->short}/--{$file->long} was submitted without value.\n";
+ *      echo "Option -{$file->short}/--{$file->long} was submitted without value.\n";
  * }
  * else
  * {
- *      echo "Parameter -{$file->short}/--{$file->long} was submitted with value <".var_export($file->value, true).">.\n";
+ *      echo "Option -{$file->short}/--{$file->long} was submitted with value <".var_export($file->value, true).">.\n";
  * }
  * 
  * // Process all parameters at once:
- * foreach ( $paramHandler->getValues() as $paramShort => $val )
+ * foreach ( $inputHandler->getValues() as $paramShort => $val )
  * {
  *      switch (true)
  *      {
  *          case $val === false:
- *              echo "Parameter $paramShort was not submitted.\n";
+ *              echo "Option $paramShort was not submitted.\n";
  *              break;
  *          case $val === true:
- *              echo "Parameter $paramShort was submitted without a value.\n";
+ *              echo "Option $paramShort was submitted without a value.\n";
  *              break;
  *          case is_array($val):
- *              echo "Parameter $paramShort was submitted multiple times with value: <".implode(', ', $val).">.\n";
+ *              echo "Option $paramShort was submitted multiple times with value: <".implode(', ', $val).">.\n";
  *              break;
  *          default:
- *              echo "Parameter $paramShort was submitted with value: <$val>.\n";
+ *              echo "Option $paramShort was submitted with value: <$val>.\n";
  *              break;
  *      }
  * }
@@ -110,49 +110,49 @@
 class ezcConsoleParameter
 {
     /**
-     * Parameter does not cary a value.
+     * Option does not cary a value.
      */
     const TYPE_NONE     = 1;
 
     /**
-     * Parameter takes an integer value.
+     * Option takes an integer value.
      */
     const TYPE_INT      = 2;
 
     /**
-     * Parameter takes a string value. 
+     * Option takes a string value. 
      */
     const TYPE_STRING   = 3;
 
     /**
-     * Array of parameter definitions, indexed by number.
+     * Array of option definitions, indexed by number.
      * This array stores the ezcConsoleOption objects representing
-     * the parameters.
+     * the options.
      *
-     * For lookup of a parameter after it's short or long values the attributes
-     * @link ezcConsoleParameter::$paramShort
-     * @link ezcConsoleParameter::$paramLong
+     * For lookup of a option after it's short or long values the attributes
+     * @link ezcConsoleParameter::$optionShort
+     * @link ezcConsoleParameter::$optionLong
      * are used.
      * 
      * @var array(int => array)
      */
-    private $params = array();
+    private $options = array();
 
     /**
-     * Short paraemeter names. Each references a key in 
-     * {@link ezcConsoleParameter::$params}.
+     * Short option names. Each references a key in 
+     * {@link ezcConsoleParameter::$options}.
      * 
      * @var array(string => int)
      */
-    private $paramShort = array();
+    private $optionShort = array();
 
     /**
-     * Long paraemeter names. Each references a key in 
-     * {@link ezcConsoleParameter::$params}.
+     * Long option names. Each references a key in 
+     * {@link ezcConsoleParameter::$options}.
      * 
      * @var array(string => int)
      */
-    private $paramLong = array();
+    private $optionLong = array();
 
     /**
      * Arguments, if submitted, are stored here. 
@@ -169,92 +169,92 @@ class ezcConsoleParameter
     }
 
     /**
-     * Register a new parameter.
-     * This method adds a new parameter to your parameter collection. If allready a
-     * parameter with the assigned short or long value exists, an exception will
+     * Register a new option.
+     * This method adds a new option to your option collection. If allready a
+     * option with the assigned short or long value exists, an exception will
      * be thrown.
      *
-     * @see ezcConsoleParameter::unregisterParam()
+     * @see ezcConsoleParameter::unregisterOption()
      *
-     * @param ezcConsoleOption $param The parameter to register.
+     * @param ezcConsoleOption $option The option to register.
      *
      */
-    public function registerParam( ezcConsoleOption $param )
+    public function registerOption( ezcConsoleOption $option )
     {
-        foreach ( $this->paramShort as $short => $ref )
+        foreach ( $this->optionShort as $short => $ref )
         {
-            if ( $short === $param->short ) 
+            if ( $short === $option->short ) 
             {
                 throw new ezcConsoleParameterException( 
                     "A parameter with the short name <{$short}> is already registered.",
                     ezcConsoleParameterException::PARAMETER_ALREADY_REGISTERED,
-                    $param
+                    $option
                 );
             }
         }
-        foreach ( $this->paramLong as $long => $ref )
+        foreach ( $this->optionLong as $long => $ref )
         {
-            if ( $long === $param->long ) 
+            if ( $long === $option->long ) 
             {
                 throw new ezcConsoleParameterException( 
                     "A parameter with the long name <{$long}> is already registered.",
                     ezcConsoleParameterException::PARAMETER_ALREADY_REGISTERED,
-                    $param
+                    $option
                 );
             }
         }
-        $this->params[] = $param;
-        $this->paramLong[$param->long] = $param;
-        $this->paramShort[$param->short] = $param;
+        $this->options[] = $option;
+        $this->optionLong[$option->long] = $option;
+        $this->optionShort[$option->short] = $option;
     }
 
     /**
-     * Register an alias to a parameter.
-     * Registers a new alias for an existing parameter. Aliases may
-     * then be used as if they were real parameters.
+     * Register an alias to a option.
+     * Registers a new alias for an existing option. Aliases may
+     * then be used as if they were real option.
      *
      * @see ezcConsoleParameter::unregisterAlias()
      *
      * @param string $short                    Shortcut of the alias
      * @param string $long                     Long version of the alias
-     * @param ezcConsoleOption $param Reference to an existing parameter
+     * @param ezcConsoleOption $option Reference to an existing option
      *
      *
      * @throws ezcConsoleParameterException
-     *         If the referenced parameter does not exist
+     *         If the referenced option does not exist
      *         {@link ezcConsoleParameterException::PARAMETER_NOT_EXISTS}.
      * @throws ezcConsoleParameterException
-     *         If another parameter/alias has taken the provided short or long name
+     *         If another option/alias has taken the provided short or long name
      *         {@link ezcConsoleParameterException::PARAMETER_ALREADY_REGISTERED}.
      */
-    public function registerAlias( $short, $long, $param )
+    public function registerAlias( $short, $long, $option )
     {
         $short = ezcConsoleOption::sanitizeParameterName($short);
         $long = ezcConsoleOption::sanitizeParameterName($long);
-        if ( !isset( $this->paramShort[$param->short] ) || !isset( $this->paramLong[$param->long] ) )
+        if ( !isset( $this->optionShort[$option->short] ) || !isset( $this->optionLong[$option->long] ) )
         {
             throw new ezcConsoleParameterException( 
-                "The referenced parameter <{$param->short}>/<{$param->long}> is not registered so <{$short}>/<{$long}> cannot be made an alias.",
+                "The referenced parameter <{$option->short}>/<{$option->long}> is not registered so <{$short}>/<{$long}> cannot be made an alias.",
                 ezcConsoleParameterException::PARAMETER_NOT_EXISTS,
-                $param
+                $option
             );
         }
-        if ( isset( $this->paramShort[$short] ) || isset( $paramLong[$long] ) )
+        if ( isset( $this->optionShort[$short] ) || isset( $optionLong[$long] ) )
         {
             throw new ezcConsoleParameterException( 
                 "The parameter <{$short}>/<{$long}> does already exist.",
                 ezcConsoleParameterException::PARAMETER_ALREADY_REGISTERED,
-                isset( $this->paramShort[$short] ) ? $this->paramShort[$short] : $this->paramLong[$long]
+                isset( $this->optionShort[$short] ) ? $this->optionShort[$short] : $this->optionLong[$long]
             );
         }
-        $this->shortParam[$short] = $param;
-        $this->longParam[$long] = $param;
+        $this->shortParam[$short] = $option;
+        $this->longParam[$long] = $option;
     }
 
     /**
-     * Registeres parameters according to a string specification.
+     * Registeres options according to a string specification.
      * Accepts a string like used in eZ publis 3.x to define parameters and
-     * registeres all parameters accordingly. String definitions look like
+     * registeres all parameters as options accordingly. String definitions look like
      * this:
      *
      * <code>
@@ -272,14 +272,14 @@ class ezcConsoleParameter
      *         If string is not wellformed
      *         {@link ezcConsoleParameterException::PARAMETER_STRING_NOT_WELLFORMED}.
      */
-    public function fromString( $paramDef ) 
+    public function fromString( $optionDef ) 
     {
         $regex = '/\[([a-z0-9-]+)([:?*+])?([^|]*)\|([a-z0-9-]+)([:?*+])?\]/';
-        if ( preg_match_all( $regex, $paramDef, $matches ) )
+        if ( preg_match_all( $regex, $optionDef, $matches ) )
         {
             foreach ( $matches[1] as $id => $short )
             {
-                $param = null;
+                $option = null;
                 if ( empty( $matches[4][$id] )  ) 
                 {
                     throw new ezcConsoleParameterException( 
@@ -287,23 +287,23 @@ class ezcConsoleParameter
                         ezcConsoleParameterException::PARAMETER_STRING_NOT_WELLFORMED 
                     );
                 }
-                $param = new ezcConsoleOption($short, $matches[4][$id]);
+                $option = new ezcConsoleOption($short, $matches[4][$id]);
                 if ( !empty( $matches[2][$id] ) || !empty( $matches[5][$id] ) )
                 {
                     switch ( !empty( $matches[2][$id] ) ? $matches[2][$id] : $matches[5][$id] )
                     {
                         case '*':
                             // Allows 0 or more occurances
-                            $param->multiple = true;
+                            $option->multiple = true;
                             break;
                         case '+':
                             // Allows 1 or more occurances
-                            $param->multiple = true;
-                            $param->type = self::TYPE_STRING;
+                            $option->multiple = true;
+                            $option->type = self::TYPE_STRING;
                             break;
                         case '?':
-                            $param->type = self::TYPE_STRING;
-                            $param->default = '';
+                            $option->type = self::TYPE_STRING;
+                            $option->default = '';
                             break;
                         default:
                             break;
@@ -311,60 +311,62 @@ class ezcConsoleParameter
                 }
                 if ( !empty( $matches[3][$id] ) )
                 {
-                    $param->default = $matches[3][$id];
+                    $option->default = $matches[3][$id];
                 }
-                $this->registerParam( $param );
+                $this->registerOption( $option );
             }
         }
 
     }
 
     /**
-     * Remove a parameter to be no more supported.
-     * Using this function you will remove a parameter. All dependencies to that 
-     * specific parameter are removed completly from every other registered 
-     * parameter.
+     * Remove a option to be no more supported.
+     * Using this function you will remove a option. All dependencies to that 
+     * specific option are removed completly from every other registered 
+     * option.
      *
-     * @see ezcConsoleParameter::registerParam()
+     * @see ezcConsoleParameter::registerOption()
+     *
+     * @param ezcConsoleOption $option The option object to unregister.
      *
      * @throws ezcConsoleParameterException 
-     *         If requesting a nonexistant parameter
+     *         If requesting a nonexistant option
      *         {@link ezcConsoleParameterException::PARAMETER_NOT_EXISTS}.
      */
-    public function unregisterParam( $param )
+    public function unregisterOption( $option )
     {
         $found = false;
-        foreach ( $this->params as $id => $existParam )
+        foreach ( $this->options as $id => $existParam )
         {
-            if ( $existParam === $param )
+            if ( $existParam === $option )
             {
                 $found = true;
-                unset($this->params[$id]);
+                unset($this->options[$id]);
                 continue;
             }
-            $existParam->removeAllExclusions($param);
-            $existParam->removeAllDependencies($param);
+            $existParam->removeAllExclusions($option);
+            $existParam->removeAllDependencies($option);
         }
         if ( $found === false )
         {
             throw new ezcConsoleParameterException( 
-                "The referenced parameter <{$param->short}>/<{$param->long}> is not registered.",
+                "The referenced parameter <{$option->short}>/<{$option->long}> is not registered.",
                 ezcConsoleParameterException::PARAMETER_NOT_EXISTS,
-                $param
+                $option
             );
         }
-        foreach ( $this->paramLong as $name => $existParam )
+        foreach ( $this->optionLong as $name => $existParam )
         {
-            if ( $existParam === $param )
+            if ( $existParam === $option )
             {
-                unset($this->paramLong[$name]);
+                unset($this->optionLong[$name]);
             }
         }
-        foreach ( $this->paramShort as $name => $existParam )
+        foreach ( $this->optionShort as $name => $existParam )
         {
-            if ( $existParam === $param )
+            if ( $existParam === $option )
             {
-                unset($this->paramShort[$name]);
+                unset($this->optionShort[$name]);
             }
         }
     }
@@ -386,57 +388,57 @@ class ezcConsoleParameter
     {
         $short = ezcConsoleOption::sanitizeParameterName($short);
         $long = ezcConsoleOption::sanitizeParameterName($long);
-        foreach ( $this->params as $id => $param )
+        foreach ( $this->options as $id => $option )
         {
-            if ( $param->short === $short )
+            if ( $option->short === $short )
             {
                 throw new ezcConsoleParameterException( 
                     "The short name <{$short}> refers to a real parameter, not to an alias.",
                     ezcConsoleParameterException::PARAMETER_IS_NO_ALIAS,
-                    $param
+                    $option
                 );
             }
-            if ( $param->long === $long )
+            if ( $option->long === $long )
             {
                 throw new ezcConsoleParameterException( 
                     "The long name <{$long}> refers to a real parameter, not to an alias.",
                     ezcConsoleParameterException::PARAMETER_IS_NO_ALIAS,
-                    $param
+                    $option
                 );
             }
         }
-        if ( isset( $this->paramShort[$short] ) )
+        if ( isset( $this->optionShort[$short] ) )
         {
-            unset($this->paramShort[$short]);
+            unset($this->optionShort[$short]);
         }
-        if ( isset( $this->paramLong[$short] ) )
+        if ( isset( $this->optionLong[$short] ) )
         {
-            unset($this->paramLong[$long]);
+            unset($this->optionLong[$long]);
         }
     }
 
     /**
-     * Returns the options defined for a specific parameter.
-     * This method receives the long or short name of a parameter and
-     * returns the options associated with it.
+     * Returns the definition object for a specific option.
+     * This method receives the long or short name of a option and
+     * returns the ezcConsoleOption object.
      * 
-     * @param string $name Short or long name of the parameter (without - or --).
+     * @param string $name Short or long name of the option - or --).
      * @return ezcConsoleOption The requested option.
      *
      * @throws ezcConsoleParameterException 
      *         If requesting a nonexistant parameter
      *         {@link ezcConsoleParameterException::PARAMETER_NOT_EXISTS}.
      */
-    public function getParam( $name )
+    public function getOption( $name )
     {
         $name = ezcConsoleOption::sanitizeParameterName($name);
-        if ( isset( $this->paramShort[$name] ) )
+        if ( isset( $this->optionShort[$name] ) )
         {
-            return $this->paramShort[$name];
+            return $this->optionShort[$name];
         }
-        if ( isset( $this->paramLong[$name] ) )
+        if ( isset( $this->optionLong[$name] ) )
         {
-            return $this->paramLong[$name];
+            return $this->optionLong[$name];
         }
         throw new ezcConsoleParameterException( 
             "<{$name}> is not a valid parameter long or short name.", 
@@ -447,14 +449,15 @@ class ezcConsoleParameter
 
     /**
      * Process the input parameters.
-     * Actually process the input parameters according to the actual settings.
+     * Actually process the input options and arguments according to the actual 
+     * settings.
      * 
      * Per default this method uses $argc and $argv for processing. You can 
      * override this setting with your own input, if necessary, using the
      * parameters of this method. (Attention, first argument is always the pro
      * gram name itself!)
      *
-     * All exceptions thrown by this method contain an additional attribute "param"
+     * All exceptions thrown by this method contain an additional attribute "option"
      * which specifies the parameter on which the error occured.
      * 
      * @param array(int -> string) $args The arguments
@@ -489,12 +492,12 @@ class ezcConsoleParameter
             // Equalize parameter handling (long params with =)
             if ( substr( $args[$i], 0, 2 ) == '--' )
             {
-                $this->preprocessLongParam( $args, $i );
+                $this->preprocessLongOption( $args, $i );
             }
             // Check for parameter
-            if ( substr( $args[$i], 0, 1) === '-' && $this->parameterExists( $args[$i] ) !== false )
+            if ( substr( $args[$i], 0, 1) === '-' && $this->hasOption( $args[$i] ) !== false )
             {
-                $this->processParameter( $args, $i );
+                $this->processOptions( $args, $i );
             }
             // Looks like parameter, but is not available??
             elseif ( substr( $args[$i], 0, 1) === '-' && trim( $args[$i] ) !== '--' )
@@ -517,17 +520,17 @@ class ezcConsoleParameter
     }
 
     /**
-     * Returns if a parameter with the given name exists.
-     * Checks if a parameter with the given name is registered.
+     * Returns if an option with the given name exists.
+     * Checks if an option with the given name is registered.
      * 
-     * @param string $name Short or long name of the parameter.
-     * @return bool True if parameter exists, otherwise false.
+     * @param string $name Short or long name of the option.
+     * @return bool True if option exists, otherwise false.
      */
-    public function parameterExists( $name )
+    public function hasOption( $name )
     {
         try
         {
-            $param = $this->getParam( $name );
+            $param = $this->getOption( $name );
         }
         catch ( ezcConsoleParameterException $e )
         {
@@ -537,8 +540,8 @@ class ezcConsoleParameter
     }
 
     /**
-     * Returns an array of all registered parameters.
-     * Returns an array of all registered parameter in the following format:
+     * Returns an array of all registered options.
+     * Returns an array of all registered options in the following format:
      * <code>
      * array( 
      *      0 => object(ezcConsoleOption),
@@ -548,16 +551,16 @@ class ezcConsoleParameter
      * );
      * </code>
      *
-     * @return array(string=>object(ezcConsoleOption)) Registered parameters.
+     * @return array(string=>object(ezcConsoleOption)) Registered options.
      */
-    public function getParams()
+    public function getOptions()
     {
-        return $this->params;
+        return $this->options;
     }
 
     /**
      * Returns all values submitted.
-     * Returns an array of all values submitted to the parameters. The array is 
+     * Returns an array of all values submitted to the options. The array is 
      * indexed by the parameters short name (excluding the '-' prefix).
      * 
      * @return array(string => mixed)
@@ -565,7 +568,7 @@ class ezcConsoleParameter
     public function getValues()
     {
         $res = array();
-        foreach ( $this->params as $param )
+        foreach ( $this->options as $param )
         {
             $res[$param->short] = $param->value;
         }
@@ -593,27 +596,27 @@ class ezcConsoleParameter
     }
 
     /**
-     * Get help information for your parameters.
-     * This method returns an array of help information for your parameters,
+     * Get help information for your options.
+     * This method returns an array of help information for your options,
      * indexed by integer. Each helo info has 2 fields:
      *
-     * 0 => The parameters names ("<short> / <long>")
+     * 0 => The options names ("<short> / <long>")
      * 1 => The help text (depending on the $long parameter)
      *
-     * The $long parameter determines if you want to get the short- or longhelp
+     * The $long options determines if you want to get the short- or longhelp
      * texts. The array returned can be used by {@link ezcConsoleTable}.
      *
-     * If using the second parameter, you can filter the parameters shown in the
-     * help output (e.g. to show short help for related parameters). Provide
+     * If using the second options, you can filter the options shown in the
+     * help output (e.g. to show short help for related options). Provide
      * as simple number indexed array of short and/or long values to set a filter.
      * 
      * @param bool $long Set this to true for getting the long help version.
-     * @param array $params Set of parameters to generate help for, default is all.
+     * @param array $params Set of options to generate help for, default is all.
      */
     public function getHelp( $long = false, $params = array() )
     {
         $help = array();
-        foreach ( $this->params as $id => $param )
+        foreach ( $this->options as $id => $param )
         {
             if ( count($params) === 0 || in_array( $param->short, $params ) || in_array( $param->long, $params ) )
             {
@@ -627,37 +630,37 @@ class ezcConsoleParameter
     }
 
     /**
-     * Process a parameter.
-     * This method does the processing of a single parameter. 
+     * Process an option.
+     * This method does the processing of a single option. 
      * 
      * @param array $args The arguments array.
      * @param int $i      The current position in the arguments array.
      * @param int The current index in the $args array.
      */
-    private function processParameter( $args, &$i )
+    private function processOptions( $args, &$i )
     {
-        $param = $this->getParam( $args[$i++] );
+        $option = $this->getOption( $args[$i++] );
         // No value expected
-        if ( $param->type === ezcConsoleParameter::TYPE_NONE )
+        if ( $option->type === ezcConsoleParameter::TYPE_NONE )
         {
             // No value expected
             if ( isset( $args[$i] ) && substr( $args[$i], 0, 1 ) !== '-' )
             {
                 // But one found
                 throw new Exception( 
-                    "Parameter with long name <{$param->long}> does not expect a value but <{$args[$i]}> was submitted.",
+                    "Parameter with long name <{$option->long}> does not expect a value but <{$args[$i]}> was submitted.",
                     ezcConsoleParameterException::PARAMETER_TYPE_RULE_NOT_MET,
-                    $param
+                    $option
                 );
             }
             // Multiple occurance possible
-            if ( $param->multiple === true )
+            if ( $option->multiple === true )
             {
-                $param->value[] = true;
+                $option->value[] = true;
             }
             else
             {
-                $param->value = true;
+                $option->value = true;
             }
             // Everything fine, nothing to do
             return $i;
@@ -666,47 +669,47 @@ class ezcConsoleParameter
         if ( isset( $args[$i] ) && substr( $args[$i], 0, 1 ) !== '-' )
         {
             // Type check
-            if ( $this->correctType( $param, $args[$i] ) === false )
+            if ( $this->correctType( $option, $args[$i] ) === false )
             {
                 throw new ezcConsoleParameterException( 
-                    "Parameter with long name <{$param->long}> of incorrect type.",
+                    "Parameter with long name <{$option->long}> of incorrect type.",
                     ezcConsoleParameterException::PARAMETER_TYPE_RULE_NOT_MET,
-                    $param
+                    $option
                 );
             }
             // Multiple values possible
-            if ( $param->multiple === true )
+            if ( $option->multiple === true )
             {
-                $param->value[] = $args[$i];
+                $option->value[] = $args[$i];
             }
             // Only single value expected, check for multiple
-            elseif ( isset( $param->value ) && $param->value !== false )
+            elseif ( isset( $option->value ) && $option->value !== false )
             {
                 throw new ezcConsoleParameterException( 
-                    "Parameter with long name <{$param->long}> expects only 1 value but multiple have been submitted.",
+                    "Parameter with long name <{$option->long}> expects only 1 value but multiple have been submitted.",
                     ezcConsoleParameterException::TOO_MANY_PARAMETER_VALUES,
-                    $param
+                    $option
                 );
             }
             else
             {
-                $param->value = $args[$i];
+                $option->value = $args[$i];
             }
             $i++;
         }
         // Value found? If not, use default, if available
-        if ( !isset( $param->value ) || $param->value === false || ( is_array( $param->value ) && count( $param->value ) === 0) ) 
+        if ( !isset( $option->value ) || $option->value === false || ( is_array( $option->value ) && count( $option->value ) === 0) ) 
         {
-            if ( isset( $param->default ) ) 
+            if ( isset( $option->default ) ) 
             {
-                $param->value = $param->multiple === true ? array( $param->default ) : $param->default;
+                $option->value = $option->multiple === true ? array( $option->default ) : $option->default;
             }
             else
             {
                 throw new ezcConsoleParameterException( 
-                    "Parameter value missing for parameter with long name <{$param->long}>.",
+                    "Parameter value missing for parameter with long name <{$option->long}>.",
                     ezcConsoleParameterException::MISSING_PARAMETER_VALUE,
-                    $param
+                    $option
                 );
             }
         }
@@ -729,9 +732,9 @@ class ezcConsoleParameter
     }
 
     /**
-     * Check the rules that may be associated with a parameter.
-     * Parameters are allowed to have rules associated for
-     * dependencies to other parameters and exclusion of other parameters or
+     * Check the rules that may be associated with an option.
+     * Optionss are allowed to have rules associated for
+     * dependencies to other options and exclusion of other options or
      * arguments. This method processes the checks.
      * 
      *
@@ -748,22 +751,22 @@ class ezcConsoleParameter
     private function checkRules()
     {
         $values = $this->getValues();
-        foreach ( $this->params as $id => $param )
+        foreach ( $this->options as $id => $option )
         {
-            if ( $param->value === false || is_array( $param->value ) && count( $param->value ) === 0 )
+            if ( $option->value === false || is_array( $option->value ) && count( $option->value ) === 0 )
             {
                 // Parameter was not set so ignore it's rules.
                 continue;
             }
             // Dependencies
-            foreach ( $param->getDependencies() as $dep )
+            foreach ( $option->getDependencies() as $dep )
             {
                 if ( !isset( $values[$dep->option->short] ) || $values[$dep->option->short] === false )
                 {
                     throw new ezcConsoleParameterException( 
-                        "Parameter with long name <{$param->long}> depends on parameter with long name <{$dep->option->long}> which was not submitted.",
+                        "Parameter with long name <{$option->long}> depends on parameter with long name <{$dep->option->long}> which was not submitted.",
                         ezcConsoleParameterException::PARAMETER_DEPENDENCY_RULE_NOT_MET,
-                        $param
+                        $option
                     );
                 }
                 $depVals = $dep->values;
@@ -772,22 +775,22 @@ class ezcConsoleParameter
                     if ( !in_array( $values[$dep->option->short], $depVals ) )
                     {
                         throw new ezcConsoleParameterException( 
-                            "Parameter with long name <{$param->long}> depends on parameter with long name <{$dep->option->long}> to be in a specific value range, but isn't.",
+                            "Parameter with long name <{$option->long}> depends on parameter with long name <{$dep->option->long}> to be in a specific value range, but isn't.",
                             ezcConsoleParameterException::PARAMETER_DEPENDENCY_RULE_NOT_MET,
-                            $param
+                            $option
                         );
                     }
                 }
             }
             // Exclusions
-            foreach ( $param->getExclusions() as $exc )
+            foreach ( $option->getExclusions() as $exc )
             {
                 if ( isset( $values[$exc->option->short] ) && $values[$exc->option->short] !== false )
                 {
                     throw new ezcConsoleParameterException( 
-                        "Parameter with long name <{$param->long}> excludes the parameter with long name <{$exc->option->long}> which was submitted.",
+                        "Parameter with long name <{$option->long}> excludes the parameter with long name <{$exc->option->long}> which was submitted.",
                         ezcConsoleParameterException::PARAMETER_EXCLUSION_RULE_NOT_MET,
-                        $param
+                        $option
                     );
                 }
                 $excVals = $exc->values;
@@ -796,20 +799,20 @@ class ezcConsoleParameter
                     if ( in_array( $values[$exc->option->short], $excVals ) )
                     {
                         throw new ezcConsoleParameterException( 
-                            "Parameter with long name <{$param->long}> excludes parameter with long name <{$exc->option->long}> to be in a specific value range, but it is.",
+                            "Parameter with long name <{$option->long}> excludes parameter with long name <{$exc->option->long}> to be in a specific value range, but it is.",
                             ezcConsoleParameterException::PARAMETER_EXCLUSION_RULE_NOT_MET,
-                            $param
+                            $option
                         );
                     }
                 }
             }
             // Arguments
-            if ( $param->arguments === false && is_array( $this->arguments ) && count( $this->arguments ) > 0 )
+            if ( $option->arguments === false && is_array( $this->arguments ) && count( $this->arguments ) > 0 )
             {
                 throw new ezcConsoleParameterException( 
-                    "Parameter with long name <{$param->long}> excludes the usage of arguments, but arguments have been passed.",
+                    "Parameter with long name <{$option->long}> excludes the usage of arguments, but arguments have been passed.",
                     ezcConsoleParameterException::ARGUMENTS_NOT_ALLOWED,
-                    $param
+                    $option
                 );
             }
         }
@@ -819,14 +822,14 @@ class ezcConsoleParameter
      * Checks if a value is of a given type. Converts the value to the
      * correct PHP type on success.
      *  
-     * @param int $param  The parameter.
+     * @param int $option The option.
      * @param string $val The value to check.
      * @return bool True on succesful check, otherwise false.
      */
-    private function correctType( $param, &$val )
+    private function correctType( $option, &$val )
     {
         $res = false;
-        switch ( $param->type )
+        switch ( $option->type )
         {
             case ezcConsoleParameter::TYPE_STRING:
                 $res = true;
@@ -844,14 +847,14 @@ class ezcConsoleParameter
     }
 
     /**
-     * Split parameter and value for long parameter names. This method checks 
-     * for long parameters, if the value is passed using =. If this is the case
+     * Split parameter and value for long option names. This method checks 
+     * for long options, if the value is passed using =. If this is the case
      * parameter and value get split and replaced in the arguments array.
      * 
      * @param array $args The arguments array
      * @param int $i Current arguments array position
      */
-    private function preprocessLongParam( &$args, $i )
+    private function preprocessLongOption( &$args, $i )
     {
         // Value given?
         if ( preg_match( '/^--\w+\=[^ ]/i', $args[$i] ) )

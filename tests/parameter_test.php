@@ -178,7 +178,7 @@ class ezcConsoleToolsParameterTest extends ezcTestCase
         $this->consoleParameter = new ezcConsoleParameter();
         foreach ( $this->testParams as $paramData )
         {
-            $this->consoleParameter->registerParam( $this->createFakeParam( $paramData ) );
+            $this->consoleParameter->registerOption( $this->createFakeParam( $paramData ) );
         }
     }
 
@@ -191,7 +191,7 @@ class ezcConsoleToolsParameterTest extends ezcTestCase
             {
                 foreach ( $val as $dep )
                 {
-                    $param->addDependency( new ezcConsoleOptionRule( $this->consoleParameter->getParam( $dep ) ) );
+                    $param->addDependency( new ezcConsoleOptionRule( $this->consoleParameter->getOption( $dep ) ) );
                 }
                 continue;
             }
@@ -199,7 +199,7 @@ class ezcConsoleToolsParameterTest extends ezcTestCase
             {
                 foreach ( $val as $dep )
                 {
-                    $param->addExclusion(new ezcConsoleOptionRule( $this->consoleParameter->getParam( $dep ) ) );
+                    $param->addExclusion(new ezcConsoleOptionRule( $this->consoleParameter->getOption( $dep ) ) );
                 }
                 continue;
             }
@@ -230,15 +230,15 @@ class ezcConsoleToolsParameterTest extends ezcTestCase
         foreach ( $this->testParams as $paramData )
         {
             $param = $this->createFakeParam( $paramData );
-            $tmpConsoleParameter->registerParam( $param );
+            $tmpConsoleParameter->registerOption( $param );
             $this->assertEquals( 
                 $param,
-                $tmpConsoleParameter->getParam( $paramData['short'] ),
+                $tmpConsoleParameter->getOption( $paramData['short'] ),
                 'Parameter not registered correctly with short name <' . $paramData['short'] . '>.'
             );
             $this->assertEquals( 
                 $param,
-                $tmpConsoleParameter->getParam( $paramData['long'] ),
+                $tmpConsoleParameter->getOption( $paramData['long'] ),
                 'Parameter not registered correctly with long name <' . $paramData['long'] . '>.'
             );
         }
@@ -284,9 +284,9 @@ class ezcConsoleToolsParameterTest extends ezcTestCase
             array (),
             true
         );
-        $this->assertEquals( $res['a'], $param->getParam( 'a' ), 'Parameter -a not registered correctly.'  );
-        $this->assertEquals( $res['u'], $param->getParam( 'u' ), 'Parameter -u not registered correctly.'  );
-        $this->assertEquals( $res['o'], $param->getParam( 'o' ), 'Parameter -o not registered correctly.'  );
+        $this->assertEquals( $res['a'], $param->getOption( 'a' ), 'Parameter -a not registered correctly.'  );
+        $this->assertEquals( $res['u'], $param->getOption( 'u' ), 'Parameter -u not registered correctly.'  );
+        $this->assertEquals( $res['o'], $param->getOption( 'o' ), 'Parameter -o not registered correctly.'  );
     }
 
     /**
@@ -297,7 +297,7 @@ class ezcConsoleToolsParameterTest extends ezcTestCase
     public function testRegisterAliasSuccess()
     {
         $validParams = array();
-        foreach ( $this->consoleParameter->getParams() as $param )
+        foreach ( $this->consoleParameter->getOptions() as $param )
         {
             $validParams[$param->short] = $param;
         }
