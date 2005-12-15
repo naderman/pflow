@@ -66,15 +66,20 @@ $table[2]->format = 'sum';
 $table->outputTable();
 
 /*
-RESULT ( without color ):
 
-+---------------------------------------------------------+
-| First col | Second col | Third col                      |     // Red surrounding
-+---------------------------------------------------------+
-| Data      | Data       | Very very very very very long  |     // Auto breaking in cells
-|           |            | data                           |     // and auto col sizing
-+---------------------------------------------------------+
-| More      | More green | Smaller data                   |     // Green color in middle text
-+---------------------------------------------------------+
+RESULT (without color):
+
++------------+------------+------------+------------+       //
+| Headline 1 | Headline 2 | Headline 3 | Headline 4 |       // Red bordered line
++------------+------------+------------+------------+       //
+| 1          |            |            |            |
++------------+------------+------------+------------+
+| 2          |            |            |            |       // Content printed in white on blue
++------------+------------+------------+------------+
+| 3          |            |            |            |
++------------+------------+------------+------------+
+| 4          |            |            |            |
++------------+------------+------------+------------+
+
 */
 ?>
