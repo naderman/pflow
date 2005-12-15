@@ -104,17 +104,7 @@ class ezcConsoleToolsTableRowTest extends ezcTestCase
         );
     }
 
-    public function testOntheflyCreationWrite_1()
-    {
-        $row = new ezcConsoleTableRow();
-        $row[0]->content = 'test';
-        $this->assertTrue( 
-            count($row) == 1 && $row[0] instanceof ezcConsoleTableCell && $row[0]->content === 'test',
-            "ezcConsoleTableCell not correctly created on write access."
-        );
-    }
-    
-    public function testOntheflyCreationWrite_2()
+    public function testOntheflyCreationRead_3()
     {
         $row = new ezcConsoleTableRow();
         $row[0]->content = 'test';
@@ -126,6 +116,17 @@ class ezcConsoleToolsTableRowTest extends ezcTestCase
         );
     }
 
+    public function testOntheflyCreationWrite_1()
+    {
+        $row = new ezcConsoleTableRow();
+        $row[0] = new ezcConsoleTableCell();
+        $row[0]->content = 'test';
+        $this->assertTrue( 
+            count($row) == 1 && $row[0] instanceof ezcConsoleTableCell && $row[0]->content === 'test',
+            "ezcConsoleTableCell not correctly created on write access."
+        );
+    }
+    
     public function testNoOntheflyCreationIsset()
     {
         $row = new ezcConsoleTableRow();
@@ -172,10 +173,10 @@ class ezcConsoleToolsTableRowTest extends ezcTestCase
         }
         $this->assertEquals( 
             count( $row ),
-            10,
+            19,
             "ezcConsoleTableCells."
         );
-        foreach ( $row as $id => $cell )
+        foreach ( $row as $id => $cell );
         {
             $this->assertEquals( 
                 'Is ' . $id,
@@ -183,6 +184,39 @@ class ezcConsoleToolsTableRowTest extends ezcTestCase
                 "Cell with wrong content found on iteration."
             );
         }
+    }
+
+    public function testCount_1()
+    {
+        $row = new ezcConsoleTableRow();
+        $row[0]->content = 0;
+        $this->assertEquals( 
+            1,
+            count( $row ),
+            "Did not count number of cells correctly"
+        );
+    }
+
+    public function testCount_2()
+    {
+        $row = new ezcConsoleTableRow();
+        $row[1]->content = 0;
+        $this->assertEquals( 
+            2,
+            count( $row ),
+            "Did not count number of cells correctly"
+        );
+    }
+
+    public function testCount_3()
+    {
+        $row = new ezcConsoleTableRow();
+        $row[10]->content = 0;
+        $this->assertEquals( 
+            11,
+            count( $row ),
+            "Did not count number of cells correctly"
+        );
     }
 
 }

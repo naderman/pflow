@@ -111,9 +111,8 @@ class ezcConsoleTableRow implements Countable, Iterator, ArrayAccess {
     {
         if ( !isset( $offset ) )
         {
-            $cellKeys = array_keys( $this->cells );
-            $offset = end( $cellKeys ) + 1;
-            $this->cells[] = new ezcConsoleTableCell();
+            $offset = count( $this );
+            $this->cells[$offset] = new ezcConsoleTableCell();
         }
         if ( !is_int( $offset ) || $offset < 0 )
         {
@@ -140,22 +139,13 @@ class ezcConsoleTableRow implements Countable, Iterator, ArrayAccess {
         {
             throw new ezcBaseTypeException( 'ezcConsoleTableCell', gettype( $value ) );
         }
+        if ( !isset( $offset ) )
+        {
+            $offset = count( $this );
+        }
         if ( !is_int( $offset ) || $offset < 0 )
         {
             throw new ezcBaseTypeException( 'int+', gettype( $offset ) );
-        }
-        $end = end( array_keys( $offset ) );
-        if ( $offset > $end ) 
-        {
-            // Autocreate missing cells to the left
-            $i = $offset;
-            while ( $i > $end )
-            {
-                if ( !isset( $this->cells[$i] ) )
-                {
-                    $this->cells[$i--] = new ezcConsoleTableCell();
-                }
-            }
         }
         $this->cells[$offset] = $value;
     }
@@ -188,7 +178,8 @@ class ezcConsoleTableRow implements Countable, Iterator, ArrayAccess {
      */
     public function count()
     {
-        return count( $this->cells );
+        $keys = array_keys( $this->cells );
+        return count( $keys ) > 0 ? ( end( $keys ) + 1 ) : 0;
     }
 
     /**
