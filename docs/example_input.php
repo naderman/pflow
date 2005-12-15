@@ -27,22 +27,22 @@ function __autoload( $class_name )
     ezcBase::autoload( $class_name );
 }
 
-$paramHandler = new ezcConsoleParameter();
+$paramHandler = new ezcConsoleInput();
 
 // Register simple parameter -h/--help
-$paramHandler->registerParam( new ezcConsoleOption( 'h', 'help' ) );
+$paramHandler->registerOption( new ezcConsoleOption( 'h', 'help' ) );
 
 // Register complex parameter -f/--file
 $file = new ezcConsoleOption(
  'f',
  'file',
- ezcConsoleParameter::TYPE_STRING,
+ ezcConsoleInput::TYPE_STRING,
  null,
  false,
  'Process a file.',
  'Processes a single file.'
 );
-$paramHandler->registerParam( $file );
+$paramHandler->registerOption( $file );
 
 // Manipulate parameter -f/--file after registration
 $file->multiple = true;
@@ -51,15 +51,15 @@ $file->multiple = true;
 $dir = new ezcConsoleOption(
  'd',
  'dir',
- ezcConsoleParameter::TYPE_STRING,
+ ezcConsoleInput::TYPE_STRING,
  null,
  true,
  'Process a directory.',
  'Processes a complete directory.',
- array( new ezcConsoleOptionRule( $paramHandler->getParam( 'f' ) ) ),
- array( new ezcConsoleOptionRule( $paramHandler->getParam( 'h' ) ) )
+ array( new ezcConsoleOptionRule( $paramHandler->getOption( 'f' ) ) ),
+ array( new ezcConsoleOptionRule( $paramHandler->getOption( 'h' ) ) )
 );
-$paramHandler->registerParam( $dir );
+$paramHandler->registerOption( $dir );
 
 // Register an alias for this parameter
 $paramHandler->registerAlias( 'e', 'extended-dir', $dir );
@@ -67,11 +67,11 @@ $paramHandler->registerAlias( 'e', 'extended-dir', $dir );
 // Process registered parameters and handle errors
 try
 {
-     $paramHandler->process();
+     $paramHandler->process( array( 'example_input.php', '-h' ) );
 }
-catch ( ezcConsoleParameterException $e )
+catch ( ezcConsoleInputException $e )
 {
-     if ( $e->code === ezcConsoleParameterException::PARAMETER_DEPENDENCY_RULE_NOT_MET )
+     if ( $e->getCode() === ezcConsoleInputException::PARAMETER_DEPENDENCY_RULE_NOT_MET )
      {
          $consoleOut->outputText(
              'Parameter ' . isset( $e->param ) ? $e->param->name : 'unknown' . " may not occur here.\n", 'error'
@@ -81,7 +81,7 @@ catch ( ezcConsoleParameterException $e )
 }
 
 // Process a single parameter
-$file = $paramHandler->getParam( 'f' );
+$file = $paramHandler->getOption( 'f' );
 if ( $file->value === false )
 {
      echo "Parameter -{$file->short}/--{$file->long} was not submitted.\n";
