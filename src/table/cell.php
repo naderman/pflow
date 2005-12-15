@@ -121,6 +121,12 @@ class ezcConsoleTableCell {
         throw new ezcBasePropertyNotFoundException( $key );
     }
  
+    /**
+     * Property isset access.
+     * 
+     * @param string $key Name of the property.
+     * @return bool True is the property is set, otherwise false.
+     */
     public function __isset( $key )
     {
         switch ( $key )
