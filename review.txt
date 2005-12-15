@@ -1,6 +1,10 @@
-General:
-- Check directory structure, if you add more structures to Struct directory
-  then there is no real separaration between the different tools. 
+> Comments by: Raymond Bosman (12-12-2005)
+> -------------------------------------
+> General:
+> - Check directory structure, if you add more structures to Struct directory
+>   then there is no real separaration between the different tools. 
+
+There we
 
 Parameter:
 - Should use struct.
