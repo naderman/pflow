@@ -16,18 +16,27 @@
  *
  * $out = new ezcConsoleOutput();
  * 
- * $opt = array(
- *  'emptyChar'     => '-',
- *  'progressChar'  => '#',
- *  'formatString'  => 'Uploading file '.$myFilename.' %act%/%max% kb [%bar%] %fraction%%',
- * );
- * $progress = new ezcConsoleProgressbar( $out, 150, 5 );
- *
- * while ( $file->upload() ) {
- *      $progress->advance();
+ * // Create progress bar itself
+ * $progress = new ezcConsoleProgressbar( $out, 100, 5 );
+ * 
+ * $progress->options->emptyChar = '-';
+ * $progress->options->progressChar = '#';
+ * $progress->options->formatString = "Uploading file </tmp/foobar.tar.bz2>: %act%/%max% kb [%bar%]";
+ * 
+ * // Perform actions
+ * $i = 0;
+ * while( $i++ < 20 ) 
+ * {
+ *     // Do whatever you want to indicate progress for
+ *     usleep( mt_rand( 20000, 2000000 ) );
+ *     // Advance the progressbar by one step ( uploading 5k per run )
+ *     $progress->advance();
  * }
+ * 
+ * // Finish progress bar and jump to next line.
  * $progress->finish();
- * $out->outputText( "Successfully uploaded $myFilename.\n", 'success' );
+ * 
+ * $out->outputText( "Successfully uploaded </tmp/foobar.tar.bz2>.\n", 'success' );
  *
  * </code>
  *  
