@@ -719,7 +719,6 @@ class ezcConsoleInput
     /**
      * Process arguments given to the program. 
      * 
-     * @todo FIXME: Add test for this!
      * @param array $args The arguments array.
      * @param int $i Current index in arguments array.
      */
