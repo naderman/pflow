@@ -179,12 +179,6 @@ class ezcConsoleTableRow implements Countable, Iterator, ArrayAccess {
         }
     }
 
-/*
-    public function append( ezcConsoleTableCell $value )
-    {
-        $this->cells[] = $value;
-    }
-*/
     /**
      * Returns the number of cells in the row.
      * This method is part of the Countable interface to allow the usage of
