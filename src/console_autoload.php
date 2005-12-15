@@ -17,7 +17,7 @@ return array (
     'ezcConsoleOutputException'    => 'ConsoleTools/exceptions/output_exception.php',
     'ezcConsoleParameter'          => 'ConsoleTools/parameter.php',
     'ezcConsoleParameterException' => 'ConsoleTools/exceptions/parameter_exception.php',
-    'ezcConsoleOption'             => 'ConsoleTools/option.php',
+    'ezcConsoleOption'             => 'ConsoleTools/parameter/option.php',
     'ezcConsoleOptionRule'         => 'ConsoleTools/structs/option_rule.php',
     'ezcConsoleTable'              => 'ConsoleTools/table.php',
     'ezcConsoleTableOptions'       => 'ConsoleTools/structs/table_options.php',
