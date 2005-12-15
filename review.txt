@@ -1,23 +1,34 @@
 > Comments by: Raymond Bosman (12-12-2005)
-> -------------------------------------
+> ----------------------------------------
 > General:
 > - Check directory structure, if you add more structures to Struct directory
 >   then there is no real separaration between the different tools. 
 
-There we
+> Parameter:
+> - Should use struct.
 
-Parameter:
-- Should use struct.
-- What does excludes dO?
+Done.
 
-Output:
-- Should use struct instead of the options array.
+> - What does excludes dO?
 
-Progressbar:
-- Should use struct instead of the options array.
+Exclude another parameter, if this one is used. Hope this is clearer now,
+since I updated lots of docs while refactoring.
 
-StatusBar:
-- For sake of compatibility, use struct instead of the options array.
+> Output:
+> - Should use struct instead of the options array.
 
-StatusBar:
-- Use struct instead of the options array.
+Done.
+
+> Progressbar:
+> - Should use struct instead of the options array.
+
+Done.
+
+> StatusBar:
+> - For sake of compatibility, use struct instead of the options array.
+> StatusBar:
+> - Use struct instead of the options array.
+
+# Looks like the same to me...
+I changed that to properties to not use a class for 2 simple types. Please
+object if I should really make a struct.
