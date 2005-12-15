@@ -80,6 +80,14 @@ class ezcConsoleTableRow implements Countable, Iterator, ArrayAccess {
         }
     }
 
+    /**
+     * Returns if the given offset exists.
+     * This method is part of the ArrayAccess interface to allow access to the
+     * data of this object as if it was an array.
+     * 
+     * @param int $offset The offset to check.
+     * @return bool True when the offset exists, otherwise false.
+     */
     public function offsetExists( $offset )
     {
         if ( !is_int( $offset ) || $offset < 0 )
@@ -89,6 +97,16 @@ class ezcConsoleTableRow implements Countable, Iterator, ArrayAccess {
         return isset( $this->cells[$offset] );
     }
 
+    /**
+     * Returns the element with the given offset. 
+     * This method is part of the ArrayAccess interface to allow access to the
+     * data of this object as if it was an array. In case of the
+     * ezcConsoleTableRow class this method always returns a valid cell object
+     * since it creates them on the fly, if a given item does not exist.
+     * 
+     * @param int $offset The offset to check.
+     * @return object(ezcConsoleTableCell)
+     */
     public function offsetGet( $offset )
     {
         if ( !isset( $offset ) )
@@ -108,6 +126,14 @@ class ezcConsoleTableRow implements Countable, Iterator, ArrayAccess {
         return $this->cells[$offset];
     }
 
+    /**
+     * Set the element with the given offset. 
+     * This method is part of the ArrayAccess interface to allow access to the
+     * data of this object as if it was an array. 
+     * 
+     * @param int $offset                 The offset to assign an item to.
+     * @param object(ezcConsoleTableCell) The item to assign.
+     */
     public function offsetSet( $offset, $value )
     {
         if ( !( $value instanceof ezcConsoleTableCell ) )
@@ -134,6 +160,13 @@ class ezcConsoleTableRow implements Countable, Iterator, ArrayAccess {
         $this->cells[$offset] = $value;
     }
 
+    /**
+     * Unset the element with the given offset. 
+     * This method is part of the ArrayAccess interface to allow access to the
+     * data of this object as if it was an array. 
+     * 
+     * @param int $offset The offset to unset the value for.
+     */
     public function offsetUnset( $offset )
     {
         if ( !is_int( $offset ) || $offset < 0 )
@@ -146,36 +179,84 @@ class ezcConsoleTableRow implements Countable, Iterator, ArrayAccess {
         }
     }
 
+/*
     public function append( ezcConsoleTableCell $value )
     {
         $this->cells[] = $value;
     }
-
+*/
+    /**
+     * Returns the number of cells in the row.
+     * This method is part of the Countable interface to allow the usage of
+     * PHP's count() function to check how many cells this row has.
+     *
+     * @returns int Number of cells in this row.
+     */
     public function count()
     {
         return count( $this->cells );
     }
 
+    /**
+     * Returns the currently selected cell.
+     * This method is part of the Iterator interface to allow acces to the 
+     * cells of this row by iterating over it like an array (e.g. using
+     * foreach).
+     * 
+     * @returns object(ezcConsoleTableCell) The currently selected cell.
+     */
     public function current()
     {
         return current( $this->cells );
     }
 
+    /**
+     * Returns the key of the currently selected cell.
+     * This method is part of the Iterator interface to allow acces to the 
+     * cells of this row by iterating over it like an array (e.g. using
+     * foreach).
+     * 
+     * @returns int The key of the currently selected cell.
+     */
     public function key()
     {
         return key( $this->cells );
     }
 
+    /**
+     * Returns the next cell and selects it or false on the last cell.
+     * This method is part of the Iterator interface to allow acces to the 
+     * cells of this row by iterating over it like an array (e.g. using
+     * foreach).
+     *
+     * @returns mixed ezcConsoleTableCell if the next cell exists, or false.
+     */
     public function next()
     {
         return next( $this->cells );
     }
 
+    /**
+     * Selects the very first cell and returns it.
+     * This method is part of the Iterator interface to allow acces to the 
+     * cells of this row by iterating over it like an array (e.g. using
+     * foreach).
+     *
+     * @returns ezcConsoleTableCell The very first cell of this row.
+     */
     public function rewind()
     {
         return reset( $this->cells );
     }
 
+    /**
+     * Returns if the current cell is valid.
+     * This method is part of the Iterator interface to allow acces to the 
+     * cells of this row by iterating over it like an array (e.g. using
+     * foreach).
+     *
+     * @returns ezcConsoleTableCell The very first cell of this row.
+     */
     public function valid()
     {
         return current( $this->cells ) !== false;
