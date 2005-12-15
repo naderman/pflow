@@ -226,19 +226,19 @@ class ezcConsoleToolsParameterTest extends ezcTestCase
     public function testRegisterParam()
     {
         // Using local object to test registration itself.
-        $tmpConsoleParameter = new ezcConsoleInput();
+        $tmpConsoleInput = new ezcConsoleInput();
         foreach ( $this->testParams as $paramData )
         {
             $param = $this->createFakeParam( $paramData );
-            $tmpConsoleParameter->registerOption( $param );
+            $tmpConsoleInput->registerOption( $param );
             $this->assertEquals( 
                 $param,
-                $tmpConsoleParameter->getOption( $paramData['short'] ),
+                $tmpConsoleInput->getOption( $paramData['short'] ),
                 'Parameter not registered correctly with short name <' . $paramData['short'] . '>.'
             );
             $this->assertEquals( 
                 $param,
-                $tmpConsoleParameter->getOption( $paramData['long'] ),
+                $tmpConsoleInput->getOption( $paramData['long'] ),
                 'Parameter not registered correctly with long name <' . $paramData['long'] . '>.'
             );
         }
