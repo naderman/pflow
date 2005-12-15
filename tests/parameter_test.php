@@ -10,7 +10,7 @@
  */
 
 /**
- * Test suite for ezcConsoleParameter class.
+ * Test suite for ezcConsoleInput class.
  * 
  * @package ConsoleTools
  * @subpackage Tests
@@ -40,14 +40,14 @@ class ezcConsoleToolsParameterTest extends ezcTestCase
             'short'     => 'o',
             'long'      => 'original',
             'options'   => array(
-                'type'      => ezcConsoleParameter::TYPE_STRING,
+                'type'      => ezcConsoleInput::TYPE_STRING,
             ),
         ),
         array( 
             'short'     => 'b',
             'long'      => 'build',
             'options'   => array(
-                'type'      => ezcConsoleParameter::TYPE_INT,
+                'type'      => ezcConsoleInput::TYPE_INT,
                 'default'   => 42,
             ),
         ),
@@ -55,7 +55,7 @@ class ezcConsoleToolsParameterTest extends ezcTestCase
             'short'     => 'd',
             'long'      => 'destroy',
             'options'   => array(
-                'type'      => ezcConsoleParameter::TYPE_STRING,
+                'type'      => ezcConsoleInput::TYPE_STRING,
                 'default'   => 'world',
             ),
         ),
@@ -63,7 +63,7 @@ class ezcConsoleToolsParameterTest extends ezcTestCase
             'short'     => 'y',
             'long'      => 'yank',
             'options'   => array(
-                'type'          => ezcConsoleParameter::TYPE_STRING,
+                'type'          => ezcConsoleInput::TYPE_STRING,
                 'multiple'      => true,
                 'shorthelp'     => 'Some stupid short text.',
                 'longhelp'      => 'Some even more stupid, but somewhat longer long describtion.',
@@ -175,7 +175,7 @@ class ezcConsoleToolsParameterTest extends ezcTestCase
      */
     public function setUp()
     {
-        $this->consoleParameter = new ezcConsoleParameter();
+        $this->consoleParameter = new ezcConsoleInput();
         foreach ( $this->testParams as $paramData )
         {
             $this->consoleParameter->registerOption( $this->createFakeParam( $paramData ) );
@@ -226,7 +226,7 @@ class ezcConsoleToolsParameterTest extends ezcTestCase
     public function testRegisterParam()
     {
         // Using local object to test registration itself.
-        $tmpConsoleParameter = new ezcConsoleParameter();
+        $tmpConsoleParameter = new ezcConsoleInput();
         foreach ( $this->testParams as $paramData )
         {
             $param = $this->createFakeParam( $paramData );
@@ -246,12 +246,12 @@ class ezcConsoleToolsParameterTest extends ezcTestCase
 
     public function testFromString()
     {
-        $param = new ezcConsoleParameter();
+        $param = new ezcConsoleInput();
         $param->fromString( '[a:|all:][u?|user?][i|info][o+test|overall+]' );
         $res['a'] = new ezcConsoleOption(
             'a', 
             'all', 
-            ezcConsoleParameter::TYPE_NONE, 
+            ezcConsoleInput::TYPE_NONE, 
             NULL, 
             false, 
             'No help available.', 
@@ -263,7 +263,7 @@ class ezcConsoleToolsParameterTest extends ezcTestCase
         $res['u'] = new ezcConsoleOption(
             'u',
             'user',
-            ezcConsoleParameter::TYPE_STRING,
+            ezcConsoleInput::TYPE_STRING,
             '',
             false,
             'No help available.',
@@ -275,7 +275,7 @@ class ezcConsoleToolsParameterTest extends ezcTestCase
         $res['o'] = new ezcConsoleOption(
             'o',
             'overall',
-            ezcConsoleParameter::TYPE_STRING,
+            ezcConsoleInput::TYPE_STRING,
             'test',
             true,
             'No help available.',
@@ -307,7 +307,7 @@ class ezcConsoleToolsParameterTest extends ezcTestCase
             {
                 $this->consoleParameter->registerAlias( $alias['short'], $alias['long'], $validParams[$alias['ref']]  );
             }
-            catch ( ezcConsoleParameterException $e )
+            catch ( ezcConsoleInputException $e )
             {
                 $this->fail( $e->getMessage() );
             }
@@ -328,9 +328,9 @@ class ezcConsoleToolsParameterTest extends ezcTestCase
             {
                 $this->consoleParameter->registerAlias( $alias['short'], $alias['long'], new ezcConsoleOption('foo', 'bar') );
             }
-            catch ( ezcConsoleParameterException $e )
+            catch ( ezcConsoleInputException $e )
             {
-                if ( $e->getCode() !== ezcConsoleParameterException::PARAMETER_NOT_EXISTS )
+                if ( $e->getCode() !== ezcConsoleInputException::PARAMETER_NOT_EXISTS )
                 {
                     $this->fail( 'Alias registration threw unexpected exception <' . $e->getMessage() . '> when registering alias for unknown parameter.' );
                 }
@@ -641,7 +641,7 @@ class ezcConsoleToolsParameterTest extends ezcTestCase
             'foo.php',
             '-q',
         );
-        $this->commonProcessTestFailure( $args, ezcConsoleParameterException::PARAMETER_NOT_EXISTS );
+        $this->commonProcessTestFailure( $args, ezcConsoleInputException::PARAMETER_NOT_EXISTS );
     }
     
     public function testProcessFailureExistance_2()
@@ -650,7 +650,7 @@ class ezcConsoleToolsParameterTest extends ezcTestCase
             'foo.php',
             '-tools',
         );
-        $this->commonProcessTestFailure( $args, ezcConsoleParameterException::PARAMETER_NOT_EXISTS );
+        $this->commonProcessTestFailure( $args, ezcConsoleInputException::PARAMETER_NOT_EXISTS );
     }
     
     public function testProcessFailureExistance_3()
@@ -659,7 +659,7 @@ class ezcConsoleToolsParameterTest extends ezcTestCase
             'foo.php',
             '-testingaeiou',
         );
-        $this->commonProcessTestFailure( $args, ezcConsoleParameterException::PARAMETER_NOT_EXISTS );
+        $this->commonProcessTestFailure( $args, ezcConsoleInputException::PARAMETER_NOT_EXISTS );
     }
     
     public function testProcessFailureType()
@@ -669,7 +669,7 @@ class ezcConsoleToolsParameterTest extends ezcTestCase
             '-b',
             'not_an_int'
         );
-        $this->commonProcessTestFailure( $args, ezcConsoleParameterException::PARAMETER_TYPE_RULE_NOT_MET );
+        $this->commonProcessTestFailure( $args, ezcConsoleInputException::PARAMETER_TYPE_RULE_NOT_MET );
     }
     
     public function testProcessFailureNovalue()
@@ -678,7 +678,7 @@ class ezcConsoleToolsParameterTest extends ezcTestCase
             'foo.php',
             '-o',
         );
-        $this->commonProcessTestFailure( $args, ezcConsoleParameterException::MISSING_PARAMETER_VALUE );
+        $this->commonProcessTestFailure( $args, ezcConsoleInputException::MISSING_PARAMETER_VALUE );
     }
     
     public function testProcessFailureMultiple()
@@ -691,7 +691,7 @@ class ezcConsoleToolsParameterTest extends ezcTestCase
             'venus',
             
         );
-        $this->commonProcessTestFailure( $args, ezcConsoleParameterException::TOO_MANY_PARAMETER_VALUES );
+        $this->commonProcessTestFailure( $args, ezcConsoleInputException::TOO_MANY_PARAMETER_VALUES );
     }
     
     public function testProcessFailureDependencies()
@@ -708,7 +708,7 @@ class ezcConsoleToolsParameterTest extends ezcTestCase
             'moretext',
             '-c'            // This one depends on -t, -o, -b and -y
         );
-        $this->commonProcessTestFailure( $args, ezcConsoleParameterException::PARAMETER_DEPENDENCY_RULE_NOT_MET );
+        $this->commonProcessTestFailure( $args, ezcConsoleInputException::PARAMETER_DEPENDENCY_RULE_NOT_MET );
     }
     
     public function testProcessFailureExclusions()
@@ -721,7 +721,7 @@ class ezcConsoleToolsParameterTest extends ezcTestCase
             '--build',
             '--edit'            // This one excludes -t and -y
         );
-        $this->commonProcessTestFailure( $args, ezcConsoleParameterException::PARAMETER_EXCLUSION_RULE_NOT_MET );
+        $this->commonProcessTestFailure( $args, ezcConsoleInputException::PARAMETER_EXCLUSION_RULE_NOT_MET );
     }
     
     public function testProcessFailureArguments()
@@ -734,7 +734,7 @@ class ezcConsoleToolsParameterTest extends ezcTestCase
             'bar',
             'someargument',
         );
-        $this->commonProcessTestFailure( $args, ezcConsoleParameterException::ARGUMENTS_NOT_ALLOWED );
+        $this->commonProcessTestFailure( $args, ezcConsoleInputException::ARGUMENTS_NOT_ALLOWED );
     }
 
     public function testGetHelp1()
@@ -901,7 +901,7 @@ class ezcConsoleToolsParameterTest extends ezcTestCase
         {
             $this->consoleParameter->process( $args );
         }
-        catch ( ezcConsoleParameterException $e )
+        catch ( ezcConsoleInputException $e )
         {
             $this->fail( $e->getMessage() );
             return;
@@ -916,7 +916,7 @@ class ezcConsoleToolsParameterTest extends ezcTestCase
         {
             $this->consoleParameter->process( $args );
         }
-        catch ( ezcConsoleParameterException $e )
+        catch ( ezcConsoleInputException $e )
         {
             $this->assertEquals(
                 $code,
@@ -934,7 +934,7 @@ class ezcConsoleToolsParameterTest extends ezcTestCase
         {
             $this->consoleParameter->process( $args );
         }
-        catch ( ezcConsoleParameterException $e )
+        catch ( ezcConsoleInputException $e )
         {
             $this->fail( $e->getMessage() );
             return;

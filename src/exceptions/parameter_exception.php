@@ -1,6 +1,6 @@
 <?php
 /**
- * File containing the ezcConsoleParameterException class.
+ * File containing the ezcConsoleInputException class.
  *
  * @package ConsoleTools
  * @version //autogentag//
@@ -10,14 +10,14 @@
  */
 
 /**
- * General exception for use in {@see ezcConsoleParameter} class.
+ * General exception for use in {@see ezcConsoleInput} class.
  * Adds an additional field 'param' to the exception which indicates
  * with which parameter something went wrong.
  * 
  * @package ConsoleTools
  * @version //autogen//
  */
-class ezcConsoleParameterException extends Exception
+class ezcConsoleInputException extends Exception
 {
     /**
      * Required parameter/alias does not exist.
@@ -68,11 +68,11 @@ class ezcConsoleParameterException extends Exception
      * Parameter this exception is about.
      * Stores the parameter this exception is about. This attribute is optional.
      *
-     * @see ezcConsoleParameter::registerParam()
+     * @see ezcConsoleInput::registerOption()
      *
      * @var ezcConsoleOption
      */
-    public $param;
+    public $option;
     
     /**
      * Constructor
@@ -82,11 +82,11 @@ class ezcConsoleParameterException extends Exception
      *
      * @param string string $message   Error message.
      * @param int $code                Error code.
-     * @param string string $paramName Name of affected parameter
+     * @param string string $optionName Name of affected parameter
      */
-    public function __construct( $message, $code, ezcConsoleOption $param = null )
+    public function __construct( $message, $code, ezcConsoleOption $option = null )
     {
-        $this->param = isset( $param ) ? $param : null;
+        $this->option = isset( $option ) ? $option : null;
         parent::__construct( $message, $code );
     }
 }

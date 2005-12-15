@@ -10,12 +10,12 @@
  */
 
 /**
- * Struct like class to store data about a single option for ezcConsoleParameter.
+ * Struct like class to store data about a single option for ezcConsoleInput.
  *
  * This class represents a single command line option, which can be handled by 
- * the ezcConsoleParameter class. This classes only purpose is the storage of
+ * the ezcConsoleInput class. This classes only purpose is the storage of
  * the parameter data, the handling of options and arguments is done by the
- * class {@link ezcConsoleParameter}.
+ * class {@link ezcConsoleInput}.
  * 
  * @package ConsoleTools
  * @version //autogen//
@@ -35,18 +35,18 @@ class ezcConsoleOption {
     );
 
     /**
-     * Value type of this parameter, default is ezcConsoleParameter::TYPE_NONE.
-     * @see ezcConsoleParameter::TYPE_NONE
-     * @see ezcConsoleParameter::TYPE_INT
-     * @see ezcConsoleParameter::TYPE_STRING
+     * Value type of this parameter, default is ezcConsoleInput::TYPE_NONE.
+     * @see ezcConsoleInput::TYPE_NONE
+     * @see ezcConsoleInput::TYPE_INT
+     * @see ezcConsoleInput::TYPE_STRING
      * 
      * @var int
      */
-    public $type = ezcConsoleParameter::TYPE_NONE;
+    public $type = ezcConsoleInput::TYPE_NONE;
 
     /**
      * Default value if the parameter is submitted without value.
-     * If a parameter is eg. of type ezcConsoleParameter::TYPE_STRING and 
+     * If a parameter is eg. of type ezcConsoleInput::TYPE_STRING and 
      * therefore expects a value when being submitted, it may be submitted
      * without a value and automatically get the default value sepcified here.
      * 
@@ -151,7 +151,7 @@ class ezcConsoleOption {
     public function __construct( 
         $short, 
         $long, 
-        $type = ezcConsoleParameter::TYPE_NONE, 
+        $type = ezcConsoleInput::TYPE_NONE, 
         $default = null, 
         $multiple = false,
         $shorthelp = 'No help available.',

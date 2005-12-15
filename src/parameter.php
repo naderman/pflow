@@ -1,6 +1,6 @@
 <?php
 /**
- * File containing the ezcConsoleParameter class.
+ * File containing the ezcConsoleInput class.
  *
  * @package ConsoleTools
  * @version //autogentag//
@@ -15,7 +15,7 @@
  * to a console based application.
  *
  * <code>
- * $inputHandler = new ezcConsoleParameter();
+ * $inputHandler = new ezcConsoleInput();
  * 
  * // Register simple parameter -h/--help
  * $inputHandler->registerOption( new ezcConsoleOption( 'h', 'help' ) );
@@ -24,7 +24,7 @@
  * $file = new ezcConsoleOption(
  *  'f',
  *  'file',
- *  ezcConsoleParameter::TYPE_STRING,
+ *  ezcConsoleInput::TYPE_STRING,
  *  null,
  *  false,
  *  'Process a file.',
@@ -39,7 +39,7 @@
  * $dir = new ezcConsoleOption(
  *  'd',
  *  'dir',
- *  ezcConsoleParameter::TYPE_STRING,
+ *  ezcConsoleInput::TYPE_STRING,
  *  null,
  *  true,
  *  'Process a directory.',
@@ -57,9 +57,9 @@
  * {
  *      $inputHandler->process();
  * }
- * catch ( ezcConsoleParameterException $e )
+ * catch ( ezcConsoleInputException $e )
  * {
- *      if ( $e->code === ezcConsoleParameterException::PARAMETER_DEPENDENCY_RULE_NOT_MET )
+ *      if ( $e->code === ezcConsoleInputException::PARAMETER_DEPENDENCY_RULE_NOT_MET )
  *      {
  *          $consoleOut->outputText(
  *              'Parameter ' . isset( $e->param ) ? $e->param->name : 'unknown' . " may not occur here.\n", 'error'
@@ -107,7 +107,7 @@
  * @package ConsoleTools
  * @version //autogen//
  */
-class ezcConsoleParameter
+class ezcConsoleInput
 {
     /**
      * Option does not cary a value.
@@ -130,8 +130,8 @@ class ezcConsoleParameter
      * the options.
      *
      * For lookup of a option after it's short or long values the attributes
-     * @link ezcConsoleParameter::$optionShort
-     * @link ezcConsoleParameter::$optionLong
+     * @link ezcConsoleInput::$optionShort
+     * @link ezcConsoleInput::$optionLong
      * are used.
      * 
      * @var array(int => array)
@@ -140,7 +140,7 @@ class ezcConsoleParameter
 
     /**
      * Short option names. Each references a key in 
-     * {@link ezcConsoleParameter::$options}.
+     * {@link ezcConsoleInput::$options}.
      * 
      * @var array(string => int)
      */
@@ -148,7 +148,7 @@ class ezcConsoleParameter
 
     /**
      * Long option names. Each references a key in 
-     * {@link ezcConsoleParameter::$options}.
+     * {@link ezcConsoleInput::$options}.
      * 
      * @var array(string => int)
      */
@@ -174,7 +174,7 @@ class ezcConsoleParameter
      * option with the assigned short or long value exists, an exception will
      * be thrown.
      *
-     * @see ezcConsoleParameter::unregisterOption()
+     * @see ezcConsoleInput::unregisterOption()
      *
      * @param ezcConsoleOption $option The option to register.
      *
@@ -185,9 +185,9 @@ class ezcConsoleParameter
         {
             if ( $short === $option->short ) 
             {
-                throw new ezcConsoleParameterException( 
+                throw new ezcConsoleInputException( 
                     "A parameter with the short name <{$short}> is already registered.",
-                    ezcConsoleParameterException::PARAMETER_ALREADY_REGISTERED,
+                    ezcConsoleInputException::PARAMETER_ALREADY_REGISTERED,
                     $option
                 );
             }
@@ -196,9 +196,9 @@ class ezcConsoleParameter
         {
             if ( $long === $option->long ) 
             {
-                throw new ezcConsoleParameterException( 
+                throw new ezcConsoleInputException( 
                     "A parameter with the long name <{$long}> is already registered.",
-                    ezcConsoleParameterException::PARAMETER_ALREADY_REGISTERED,
+                    ezcConsoleInputException::PARAMETER_ALREADY_REGISTERED,
                     $option
                 );
             }
@@ -213,19 +213,19 @@ class ezcConsoleParameter
      * Registers a new alias for an existing option. Aliases may
      * then be used as if they were real option.
      *
-     * @see ezcConsoleParameter::unregisterAlias()
+     * @see ezcConsoleInput::unregisterAlias()
      *
      * @param string $short                    Shortcut of the alias
      * @param string $long                     Long version of the alias
      * @param ezcConsoleOption $option Reference to an existing option
      *
      *
-     * @throws ezcConsoleParameterException
+     * @throws ezcConsoleInputException
      *         If the referenced option does not exist
-     *         {@link ezcConsoleParameterException::PARAMETER_NOT_EXISTS}.
-     * @throws ezcConsoleParameterException
+     *         {@link ezcConsoleInputException::PARAMETER_NOT_EXISTS}.
+     * @throws ezcConsoleInputException
      *         If another option/alias has taken the provided short or long name
-     *         {@link ezcConsoleParameterException::PARAMETER_ALREADY_REGISTERED}.
+     *         {@link ezcConsoleInputException::PARAMETER_ALREADY_REGISTERED}.
      */
     public function registerAlias( $short, $long, $option )
     {
@@ -233,17 +233,17 @@ class ezcConsoleParameter
         $long = ezcConsoleOption::sanitizeParameterName($long);
         if ( !isset( $this->optionShort[$option->short] ) || !isset( $this->optionLong[$option->long] ) )
         {
-            throw new ezcConsoleParameterException( 
+            throw new ezcConsoleInputException( 
                 "The referenced parameter <{$option->short}>/<{$option->long}> is not registered so <{$short}>/<{$long}> cannot be made an alias.",
-                ezcConsoleParameterException::PARAMETER_NOT_EXISTS,
+                ezcConsoleInputException::PARAMETER_NOT_EXISTS,
                 $option
             );
         }
         if ( isset( $this->optionShort[$short] ) || isset( $optionLong[$long] ) )
         {
-            throw new ezcConsoleParameterException( 
+            throw new ezcConsoleInputException( 
                 "The parameter <{$short}>/<{$long}> does already exist.",
-                ezcConsoleParameterException::PARAMETER_ALREADY_REGISTERED,
+                ezcConsoleInputException::PARAMETER_ALREADY_REGISTERED,
                 isset( $this->optionShort[$short] ) ? $this->optionShort[$short] : $this->optionLong[$long]
             );
         }
@@ -268,9 +268,9 @@ class ezcConsoleParameter
      *
      * @param string $paramDef Parameter definition string.
      * 
-     * @throws ezcConsoleParameterException 
+     * @throws ezcConsoleInputException 
      *         If string is not wellformed
-     *         {@link ezcConsoleParameterException::PARAMETER_STRING_NOT_WELLFORMED}.
+     *         {@link ezcConsoleInputException::PARAMETER_STRING_NOT_WELLFORMED}.
      */
     public function fromString( $optionDef ) 
     {
@@ -282,9 +282,9 @@ class ezcConsoleParameter
                 $option = null;
                 if ( empty( $matches[4][$id] )  ) 
                 {
-                    throw new ezcConsoleParameterException( 
+                    throw new ezcConsoleInputException( 
                         "Missing long parameter name for short parameter <-{$short}>",
-                        ezcConsoleParameterException::PARAMETER_STRING_NOT_WELLFORMED 
+                        ezcConsoleInputException::PARAMETER_STRING_NOT_WELLFORMED 
                     );
                 }
                 $option = new ezcConsoleOption($short, $matches[4][$id]);
@@ -325,13 +325,13 @@ class ezcConsoleParameter
      * specific option are removed completly from every other registered 
      * option.
      *
-     * @see ezcConsoleParameter::registerOption()
+     * @see ezcConsoleInput::registerOption()
      *
      * @param ezcConsoleOption $option The option object to unregister.
      *
-     * @throws ezcConsoleParameterException 
+     * @throws ezcConsoleInputException 
      *         If requesting a nonexistant option
-     *         {@link ezcConsoleParameterException::PARAMETER_NOT_EXISTS}.
+     *         {@link ezcConsoleInputException::PARAMETER_NOT_EXISTS}.
      */
     public function unregisterOption( $option )
     {
@@ -349,9 +349,9 @@ class ezcConsoleParameter
         }
         if ( $found === false )
         {
-            throw new ezcConsoleParameterException( 
+            throw new ezcConsoleInputException( 
                 "The referenced parameter <{$option->short}>/<{$option->long}> is not registered.",
-                ezcConsoleParameterException::PARAMETER_NOT_EXISTS,
+                ezcConsoleInputException::PARAMETER_NOT_EXISTS,
                 $option
             );
         }
@@ -375,11 +375,11 @@ class ezcConsoleParameter
      * Remove a alias to be no more supported.
      * Using this function you will remove an alias.
      *
-     * @see ezcConsoleParameter::registerAlias()
+     * @see ezcConsoleInput::registerAlias()
      * 
-     * @throws ezcConsoleParameterException
+     * @throws ezcConsoleInputException
      *      If the requested short/long name belongs to a real parameter instead
-     *      of an alias {@link ezcConsoleParameterException::PARAMETER_IS_NO_ALIAS}. 
+     *      of an alias {@link ezcConsoleInputException::PARAMETER_IS_NO_ALIAS}. 
      *
      * @param mixed $short 
      * @param mixed $long 
@@ -392,17 +392,17 @@ class ezcConsoleParameter
         {
             if ( $option->short === $short )
             {
-                throw new ezcConsoleParameterException( 
+                throw new ezcConsoleInputException( 
                     "The short name <{$short}> refers to a real parameter, not to an alias.",
-                    ezcConsoleParameterException::PARAMETER_IS_NO_ALIAS,
+                    ezcConsoleInputException::PARAMETER_IS_NO_ALIAS,
                     $option
                 );
             }
             if ( $option->long === $long )
             {
-                throw new ezcConsoleParameterException( 
+                throw new ezcConsoleInputException( 
                     "The long name <{$long}> refers to a real parameter, not to an alias.",
-                    ezcConsoleParameterException::PARAMETER_IS_NO_ALIAS,
+                    ezcConsoleInputException::PARAMETER_IS_NO_ALIAS,
                     $option
                 );
             }
@@ -425,9 +425,9 @@ class ezcConsoleParameter
      * @param string $name Short or long name of the option - or --).
      * @return ezcConsoleOption The requested option.
      *
-     * @throws ezcConsoleParameterException 
+     * @throws ezcConsoleInputException 
      *         If requesting a nonexistant parameter
-     *         {@link ezcConsoleParameterException::PARAMETER_NOT_EXISTS}.
+     *         {@link ezcConsoleInputException::PARAMETER_NOT_EXISTS}.
      */
     public function getOption( $name )
     {
@@ -440,9 +440,9 @@ class ezcConsoleParameter
         {
             return $this->optionLong[$name];
         }
-        throw new ezcConsoleParameterException( 
+        throw new ezcConsoleInputException( 
             "<{$name}> is not a valid parameter long or short name.", 
-            ezcConsoleParameterException::PARAMETER_NOT_EXISTS,
+            ezcConsoleInputException::PARAMETER_NOT_EXISTS,
             null
         );
     }
@@ -462,23 +462,23 @@ class ezcConsoleParameter
      * 
      * @param array(int -> string) $args The arguments
      *
-     * @throws ezcConsoleParameterException 
+     * @throws ezcConsoleInputException 
      *         If dependencies are unmet 
-     *         {@link ezcConsoleParameterException::PARAMETER_DEPENDENCY_RULE_NOT_MET}.
-     * @throws ezcConsoleParameterException 
+     *         {@link ezcConsoleInputException::PARAMETER_DEPENDENCY_RULE_NOT_MET}.
+     * @throws ezcConsoleInputException 
      *         If exclusion rules are unmet 
-     *         {@link ezcConsoleParameterException::PARAMETER_EXCLUSION_RULE_NOT_MET}.
-     * @throws ezcConsoleParameterException 
+     *         {@link ezcConsoleInputException::PARAMETER_EXCLUSION_RULE_NOT_MET}.
+     * @throws ezcConsoleInputException 
      *         If type rules are unmet 
-     *         {@link ezcConsoleParameterException::PARAMETER_TYPE_RULE_NOT_MET}.
-     * @throws ezcConsoleParameterException 
+     *         {@link ezcConsoleInputException::PARAMETER_TYPE_RULE_NOT_MET}.
+     * @throws ezcConsoleInputException 
      *         If a parameter used does not exist
-     *         {@link ezcConsoleParameterException::PARAMETER_NOT_EXISTS}.
-     * @throws ezcConsoleParameterException 
+     *         {@link ezcConsoleInputException::PARAMETER_NOT_EXISTS}.
+     * @throws ezcConsoleInputException 
      *         If arguments are passed although a parameter dissallowed them
-     *         {@link ezcConsoleParameterException::ARGUMENTS_NOT_ALLOWED}.
+     *         {@link ezcConsoleInputException::ARGUMENTS_NOT_ALLOWED}.
      * 
-     * @see ezcConsoleParameterException
+     * @see ezcConsoleInputException
      */ 
     public function process( $args = null )
     {
@@ -502,9 +502,9 @@ class ezcConsoleParameter
             // Looks like parameter, but is not available??
             elseif ( substr( $args[$i], 0, 1) === '-' && trim( $args[$i] ) !== '--' )
             {
-                throw new ezcConsoleParameterException(
+                throw new ezcConsoleInputException(
                     "Unknown parameter <{$args[$i]}>.",
-                    ezcConsoleParameterException::PARAMETER_NOT_EXISTS,
+                    ezcConsoleInputException::PARAMETER_NOT_EXISTS,
                     null
                 );
             }
@@ -532,7 +532,7 @@ class ezcConsoleParameter
         {
             $param = $this->getOption( $name );
         }
-        catch ( ezcConsoleParameterException $e )
+        catch ( ezcConsoleInputException $e )
         {
             return false;
         }
@@ -641,7 +641,7 @@ class ezcConsoleParameter
     {
         $option = $this->getOption( $args[$i++] );
         // No value expected
-        if ( $option->type === ezcConsoleParameter::TYPE_NONE )
+        if ( $option->type === ezcConsoleInput::TYPE_NONE )
         {
             // No value expected
             if ( isset( $args[$i] ) && substr( $args[$i], 0, 1 ) !== '-' )
@@ -649,7 +649,7 @@ class ezcConsoleParameter
                 // But one found
                 throw new Exception( 
                     "Parameter with long name <{$option->long}> does not expect a value but <{$args[$i]}> was submitted.",
-                    ezcConsoleParameterException::PARAMETER_TYPE_RULE_NOT_MET,
+                    ezcConsoleInputException::PARAMETER_TYPE_RULE_NOT_MET,
                     $option
                 );
             }
@@ -671,9 +671,9 @@ class ezcConsoleParameter
             // Type check
             if ( $this->correctType( $option, $args[$i] ) === false )
             {
-                throw new ezcConsoleParameterException( 
+                throw new ezcConsoleInputException( 
                     "Parameter with long name <{$option->long}> of incorrect type.",
-                    ezcConsoleParameterException::PARAMETER_TYPE_RULE_NOT_MET,
+                    ezcConsoleInputException::PARAMETER_TYPE_RULE_NOT_MET,
                     $option
                 );
             }
@@ -685,9 +685,9 @@ class ezcConsoleParameter
             // Only single value expected, check for multiple
             elseif ( isset( $option->value ) && $option->value !== false )
             {
-                throw new ezcConsoleParameterException( 
+                throw new ezcConsoleInputException( 
                     "Parameter with long name <{$option->long}> expects only 1 value but multiple have been submitted.",
-                    ezcConsoleParameterException::TOO_MANY_PARAMETER_VALUES,
+                    ezcConsoleInputException::TOO_MANY_PARAMETER_VALUES,
                     $option
                 );
             }
@@ -706,9 +706,9 @@ class ezcConsoleParameter
             }
             else
             {
-                throw new ezcConsoleParameterException( 
+                throw new ezcConsoleInputException( 
                     "Parameter value missing for parameter with long name <{$option->long}>.",
-                    ezcConsoleParameterException::MISSING_PARAMETER_VALUE,
+                    ezcConsoleInputException::MISSING_PARAMETER_VALUE,
                     $option
                 );
             }
@@ -738,15 +738,15 @@ class ezcConsoleParameter
      * arguments. This method processes the checks.
      * 
      *
-     * @throws ezcConsoleParameterException 
+     * @throws ezcConsoleInputException 
      *         If dependencies are unmet 
-     *         {@link ezcConsoleParameterException::PARAMETER_DEPENDENCY_RULE_NOT_MET}.
-     * @throws ezcConsoleParameterException 
+     *         {@link ezcConsoleInputException::PARAMETER_DEPENDENCY_RULE_NOT_MET}.
+     * @throws ezcConsoleInputException 
      *         If exclusion rules are unmet 
-     *         {@link ezcConsoleParameterException::PARAMETER_EXCLUSION_RULE_NOT_MET}.
-     * @throws ezcConsoleParameterException 
+     *         {@link ezcConsoleInputException::PARAMETER_EXCLUSION_RULE_NOT_MET}.
+     * @throws ezcConsoleInputException 
      *         If arguments are passed although a parameter dissallowed them
-     *         {@link ezcConsoleParameterException::ARGUMENTS_NOT_ALLOWED}.
+     *         {@link ezcConsoleInputException::ARGUMENTS_NOT_ALLOWED}.
      */
     private function checkRules()
     {
@@ -763,9 +763,9 @@ class ezcConsoleParameter
             {
                 if ( !isset( $values[$dep->option->short] ) || $values[$dep->option->short] === false )
                 {
-                    throw new ezcConsoleParameterException( 
+                    throw new ezcConsoleInputException( 
                         "Parameter with long name <{$option->long}> depends on parameter with long name <{$dep->option->long}> which was not submitted.",
-                        ezcConsoleParameterException::PARAMETER_DEPENDENCY_RULE_NOT_MET,
+                        ezcConsoleInputException::PARAMETER_DEPENDENCY_RULE_NOT_MET,
                         $option
                     );
                 }
@@ -774,9 +774,9 @@ class ezcConsoleParameter
                 {
                     if ( !in_array( $values[$dep->option->short], $depVals ) )
                     {
-                        throw new ezcConsoleParameterException( 
+                        throw new ezcConsoleInputException( 
                             "Parameter with long name <{$option->long}> depends on parameter with long name <{$dep->option->long}> to be in a specific value range, but isn't.",
-                            ezcConsoleParameterException::PARAMETER_DEPENDENCY_RULE_NOT_MET,
+                            ezcConsoleInputException::PARAMETER_DEPENDENCY_RULE_NOT_MET,
                             $option
                         );
                     }
@@ -787,9 +787,9 @@ class ezcConsoleParameter
             {
                 if ( isset( $values[$exc->option->short] ) && $values[$exc->option->short] !== false )
                 {
-                    throw new ezcConsoleParameterException( 
+                    throw new ezcConsoleInputException( 
                         "Parameter with long name <{$option->long}> excludes the parameter with long name <{$exc->option->long}> which was submitted.",
-                        ezcConsoleParameterException::PARAMETER_EXCLUSION_RULE_NOT_MET,
+                        ezcConsoleInputException::PARAMETER_EXCLUSION_RULE_NOT_MET,
                         $option
                     );
                 }
@@ -798,9 +798,9 @@ class ezcConsoleParameter
                 {
                     if ( in_array( $values[$exc->option->short], $excVals ) )
                     {
-                        throw new ezcConsoleParameterException( 
+                        throw new ezcConsoleInputException( 
                             "Parameter with long name <{$option->long}> excludes parameter with long name <{$exc->option->long}> to be in a specific value range, but it is.",
-                            ezcConsoleParameterException::PARAMETER_EXCLUSION_RULE_NOT_MET,
+                            ezcConsoleInputException::PARAMETER_EXCLUSION_RULE_NOT_MET,
                             $option
                         );
                     }
@@ -809,9 +809,9 @@ class ezcConsoleParameter
             // Arguments
             if ( $option->arguments === false && is_array( $this->arguments ) && count( $this->arguments ) > 0 )
             {
-                throw new ezcConsoleParameterException( 
+                throw new ezcConsoleInputException( 
                     "Parameter with long name <{$option->long}> excludes the usage of arguments, but arguments have been passed.",
-                    ezcConsoleParameterException::ARGUMENTS_NOT_ALLOWED,
+                    ezcConsoleInputException::ARGUMENTS_NOT_ALLOWED,
                     $option
                 );
             }
@@ -831,11 +831,11 @@ class ezcConsoleParameter
         $res = false;
         switch ( $option->type )
         {
-            case ezcConsoleParameter::TYPE_STRING:
+            case ezcConsoleInput::TYPE_STRING:
                 $res = true;
                 $val = preg_replace( '/^(["\'])(.*)\1$/', '\2', $val );
                 break;
-            case ezcConsoleParameter::TYPE_INT:
+            case ezcConsoleInput::TYPE_INT:
                 $res = preg_match( '/^[0-9]+$/', $val ) ? true : false;
                 if ( $res )
                 {
