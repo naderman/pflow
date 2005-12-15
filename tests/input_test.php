@@ -1,6 +1,6 @@
 <?php
 /**
- * ezcConsoleToolsParameterTest
+ * ezcConsoleToolsInputTest
  * 
  * @package ConsoleTools
  * @subpackage Tests
@@ -15,7 +15,7 @@
  * @package ConsoleTools
  * @subpackage Tests
  */
-class ezcConsoleToolsParameterTest extends ezcTestCase
+class ezcConsoleToolsInputTest extends ezcTestCase
 {
     private $testParams = array( 
         array( 
@@ -165,7 +165,7 @@ class ezcConsoleToolsParameterTest extends ezcTestCase
 
 	public static function suite()
 	{
-		return new ezcTestSuite( "ezcConsoleToolsParameterTest" );
+		return new ezcTestSuite( "ezcConsoleToolsInputTest" );
 	}
 
     /**

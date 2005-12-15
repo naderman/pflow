@@ -10,43 +10,43 @@
  */
 
 /**
- * Require test suite for ConsoleOutput class.
+ * Require test suite for ezcConsoleOutput class.
  */
 require_once 'output_test.php';
 /**
- * Require test suite for ConsoleOutputFormat class.
+ * Require test suite for ezcConsoleOutputFormat class.
  */
 require_once 'output_format_test.php';
 /**
- * Require test suite for ConsoleOutputFormats class.
+ * Require test suite for ezcConsoleOutputFormats class.
  */
 require_once 'output_formats_test.php';
 /**
- * Require test suite for ConsoleOutputOptions class.
+ * Require test suite for ezcConsoleOutputOptions class.
  */
 require_once 'output_options_test.php';
 /**
- * Require test suite for ConsoleParameter class.
+ * Require test suite for ezcConsoleInput class.
  */
-require_once 'parameter_test.php';
+require_once 'input_test.php';
 /**
- * Require test suite for ConsoleTable class.
+ * Require test suite for ezcConsoleTable class.
  */
 require_once 'table_test.php';
 /**
- * Require test suite for ConsoleTable class.
+ * Require test suite for ezcConsoleTable class.
  */
 require_once 'table_row_test.php';
 /**
- * Require test suite for ConsoleTable class.
+ * Require test suite for ezcConsoleTable class.
  */
 require_once 'table_cell_test.php';
 /**
- * Require test suite for ConsoleProgressbar class.
+ * Require test suite for ezcConsoleProgressbar class.
  */
 require_once 'progressbar_test.php';
 /**
- * Require test suite for ConsoleStatusbar class.
+ * Require test suite for ezcConsoleStatusbar class.
  */
 require_once 'statusbar_test.php';
     
@@ -67,7 +67,7 @@ class ezcConsoleToolsSuite extends ezcTestSuite
 		$this->addTest( ezcConsoleToolsOutputFormatTest::suite() );
 		$this->addTest( ezcConsoleToolsOutputFormatsTest::suite() );
 		$this->addTest( ezcConsoleToolsOutputOptionsTest::suite() );
-		$this->addTest( ezcConsoleToolsParameterTest::suite() );
+		$this->addTest( ezcConsoleToolsInputTest::suite() );
 		$this->addTest( ezcConsoleToolsTableCellTest::suite() );
 		$this->addTest( ezcConsoleToolsTableRowTest::suite() );
 		$this->addTest( ezcConsoleToolsTableTest::suite() );
