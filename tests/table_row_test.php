@@ -219,5 +219,45 @@ class ezcConsoleToolsTableRowTest extends ezcTestCase
         );
     }
 
+    public function testSetAllCellsProperties_1()
+    {
+        $row = new ezcConsoleTableRow();
+        for ( $i = 0; $i < 10; $i++ )
+        {
+            $row[$i]->content = $i;
+        }
+        
+        $row->align = ezcConsoleTable::ALIGN_CENTER;
+        
+        foreach ( $this as $cell )
+        {
+            $this->assertEquals( 
+                ezcConsoleTable::ALIGN_CENTER,
+                $cell->align,
+                "Did not set alignment correctly for all contained cells."
+            );
+        }
+    }
+
+    public function testSetAllCellsProperties_2()
+    {
+        $row = new ezcConsoleTableRow();
+        for ( $i = 0; $i < 10; $i++ )
+        {
+            $row[$i]->content = $i;
+        }
+        
+        $row->format = 'headline';
+        
+        foreach ( $this as $cell )
+        {
+            $this->assertEquals( 
+                'headline',
+                $cell->format,
+                "Did not set alignment correctly for all contained cells."
+            );
+        }
+    }
+
 }
 ?>
