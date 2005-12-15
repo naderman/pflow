@@ -160,8 +160,8 @@ class ezcConsoleOption {
         array $exclusions = array(), 
         $arguments = true
     ) {
-        $this->properties['short'] = ezcConsoleOption::sanitizeOptionName($short);
-        $this->properties['long'] = ezcConsoleOption::sanitizeOptionName($long);
+        $this->properties['short'] = ezcConsoleOption::sanitizeOptionName( $short );
+        $this->properties['long'] = ezcConsoleOption::sanitizeOptionName( $long );
         $this->type = $type;
         $this->default = isset( $default ) ? $default : null;
         $this->multiple = $multiple;

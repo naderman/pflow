@@ -80,13 +80,13 @@
  * }
  * else
  * {
- *      echo "Option -{$file->short}/--{$file->long} was submitted with value <".var_export($file->value, true).">.\n";
+ *      echo "Option -{$file->short}/--{$file->long} was submitted with value <".var_export( $file->value, true ).">.\n";
  * }
  * 
  * // Process all option values at once:
  * foreach ( $inputHandler->getValues() as $paramShort => $val )
  * {
- *      switch (true)
+ *      switch ( true )
  *      {
  *          case $val === false:
  *              echo "Option $paramShort was not submitted.\n";
@@ -94,8 +94,8 @@
  *          case $val === true:
  *              echo "Option $paramShort was submitted without a value.\n";
  *              break;
- *          case is_array($val):
- *              echo "Option $paramShort was submitted multiple times with value: <".implode(', ', $val).">.\n";
+ *          case is_array( $val ):
+ *              echo "Option $paramShort was submitted multiple times with value: <".implode( ', ', $val ).">.\n";
  *              break;
  *          default:
  *              echo "Option $paramShort was submitted with value: <$val>.\n";
@@ -229,8 +229,8 @@ class ezcConsoleInput
      */
     public function registerAlias( $short, $long, $option )
     {
-        $short = ezcConsoleOption::sanitizeOptionName($short);
-        $long = ezcConsoleOption::sanitizeOptionName($long);
+        $short = ezcConsoleOption::sanitizeOptionName( $short );
+        $long = ezcConsoleOption::sanitizeOptionName( $long );
         if ( !isset( $this->optionShort[$option->short] ) || !isset( $this->optionLong[$option->long] ) )
         {
             throw new ezcConsoleInputException( 
@@ -839,7 +839,7 @@ class ezcConsoleInput
                 $res = preg_match( '/^[0-9]+$/', $val ) ? true : false;
                 if ( $res )
                 {
-                    $val = (int)$val;
+                    $val = ( int ) $val;
                 }
                 break;
         }

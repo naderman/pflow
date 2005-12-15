@@ -369,7 +369,7 @@ class ezcConsoleTable implements Countable, Iterator, ArrayAccess
      */
     public function __get( $key )
     {
-        switch ($key) 
+        switch ( $key )
         {
             case 'options':
                 return $this->$key;
@@ -397,7 +397,7 @@ class ezcConsoleTable implements Countable, Iterator, ArrayAccess
      */
     public function __set( $key, $val )
     {
-        switch ($key) 
+        switch ( $key )
         {
             case 'options':
                 if ( !( $val instanceof ezcConsoleTableOptions ) )
@@ -430,7 +430,7 @@ class ezcConsoleTable implements Countable, Iterator, ArrayAccess
      */
     public function __isset( $key )
     {
-        switch ($key) 
+        switch ( $key )
         {
             case 'options':
             case 'width':

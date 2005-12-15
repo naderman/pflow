@@ -344,7 +344,7 @@ class ezcConsoleProgressbar
     protected function calculateMeasures()
     {
         // Calc number of steps bar goes through
-        $this->numSteps = (int)round( $this->max / $this->step );
+        $this->numSteps = ( int ) round( $this->max / $this->step );
         // Calculate measures
         $this->measures['fixedCharSpace'] = strlen( $this->stripEscapeSequences( $this->insertValues() ) );
         if ( strpos( $this->options->formatString,'%max%' ) !== false )

@@ -282,7 +282,7 @@ class ezcConsoleOutput
     {
         if ( $this->options->verboseLevel >= $verboseLevel ) 
         {
-            if ( is_int($this->options->autobreak) && $this->options->autobreak > 0 )
+            if ( is_int( $this->options->autobreak ) && $this->options->autobreak > 0 )
             {
                 $textLines = explode( "\n", $text );
                 foreach ( $textLines as $id => $textLine )

@@ -48,11 +48,11 @@ class ezcConsoleOutputFormat {
      * @param array(string) $style Names of style values.
      * @param string $bgcolor      Name of a bgcolor value.
      */
-    public function __construct($color = 'default', array $style = null, $bgcolor = 'default')
+    public function __construct( $color = 'default', array $style = null, $bgcolor = 'default' )
     {
-        $this->__set('color', $color);
-        $this->__set('style', isset( $style ) ? $style : array( 'default' ) );
-        $this->__set('bgcolor', $bgcolor);
+        $this->__set( 'color', $color );
+        $this->__set( 'style', isset( $style ) ? $style : array( 'default' ) );
+        $this->__set( 'bgcolor', $bgcolor );
     }
 
     
