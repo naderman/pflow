@@ -20,7 +20,7 @@
 class ezcConsoleTableOptions {
 
     /**
-     * Column width, either a fixed integer value (number of chars)  or 'auto'.
+     * Column width, either a fixed int value (number of chars)  or 'auto'.
      * 
      * @var mixed
      */

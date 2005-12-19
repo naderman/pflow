@@ -115,7 +115,7 @@ class ezcConsoleInput
     const TYPE_NONE     = 1;
 
     /**
-     * Option takes an integer value.
+     * Option takes an int value.
      */
     const TYPE_INT      = 2;
 
@@ -578,7 +578,7 @@ class ezcConsoleInput
     /**
      * Returns arguments provided to the program.
      * This method returns all arguments provided to a program in an
-     * integer indexed array. Arguments are sorted in the way
+     * int indexed array. Arguments are sorted in the way
      * they are submitted to the program. You can disable arguments
      * through the 'arguments' flag of a parameter, if you want
      * to disallow arguments.
@@ -598,7 +598,7 @@ class ezcConsoleInput
     /**
      * Get help information for your options.
      * This method returns an array of help information for your options,
-     * indexed by integer. Each helo info has 2 fields:
+     * indexed by int. Each helo info has 2 fields:
      *
      * 0 => The options names ("<short> / <long>")
      * 1 => The help text (depending on the $long parameter)
