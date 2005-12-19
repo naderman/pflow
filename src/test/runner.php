@@ -238,7 +238,7 @@ class ezcTestRunner extends PHPUnit2_TextUI_TestRunner
     /**
      * Runs a specific test suite from a package and release.
      *
-     * @return boolean True if the test has been run, false if not.
+     * @return bool True if the test has been run, false if not.
      */
     protected function getTestSuite( $dir, $package, $release )
     {
