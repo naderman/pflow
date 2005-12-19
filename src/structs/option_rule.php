@@ -29,14 +29,19 @@ class ezcConsoleOptionRule {
      * 
      * @var ezcConsoleOption
      */
-    protected $option;
+    public $option;
 
     /**
      * Values the refered parameter may accept. 
      * 
      * @var array(string)
      */
-    protected $values = array();
+    public $values = array();
+
+    protected $properties = array( 
+        'option' => null,
+        'values' => array(),
+    );
 
     /**
      * Create a new parameter rule.
@@ -61,8 +66,10 @@ class ezcConsoleOptionRule {
      */
     public function __construct( ezcConsoleOption $option, array $values = array() )
     {
-        $this->option = $option;
-        $this->values = $values;
+        unset( $this->option );
+        $this->__set( 'option', $option );
+        unset( $this->values );
+        $this->__set( 'values', $values );
     }
     
     /**
@@ -80,10 +87,10 @@ class ezcConsoleOptionRule {
         switch ( $key )
         {
             case 'option':
-                return $this->option;
+                return $this->properties['option'];
                 break;
             case 'values':
-                return $this->values;
+                return $this->properties['values'];
                 break;
         }
         throw new ezcBasePropertyNotFoundException( $key );
@@ -108,7 +115,7 @@ class ezcConsoleOptionRule {
                 {
                     throw new ezcBaseTypeException( 'ezcConsoleOption', gettype( $val ) );
                 }
-                $this->option = $val;
+                $this->properties['option'] = $val;
                 return;
                 break;
             case 'values':
@@ -116,7 +123,7 @@ class ezcConsoleOptionRule {
                 {
                     throw new ezcBaseTypeException( 'array', gettype( $val ) );
                 }
-                $this->values = $val;
+                $this->properties['values'] = $val;
                 return;
                 break;
         }

@@ -24,21 +24,28 @@ class ezcConsoleOutputFormat {
      * 
      * @var string
      */
-    protected $color = 'default';
+    public $color = 'default';
 
     /**
      * Names of styles that are used for this format.
      * 
      * @var array(string)
      */
-    protected $style = array( 'default' );
+    public $style = array( 'default' );
 
     /**
      * Name of the bgcolor that is used for this format.
      * 
      * @var string
      */
-    protected $bgcolor = 'default';
+    public $bgcolor = 'default';
+
+
+    protected $properties = array( 
+        'color'     => 'default',
+        'style'     => 'default',
+        'bgcolor'   => 'default',
+    );
 
     /**
      * Create a new ezcConsoleOutputFormat object.
@@ -50,8 +57,11 @@ class ezcConsoleOutputFormat {
      */
     public function __construct( $color = 'default', array $style = null, $bgcolor = 'default' )
     {
+        unset( $this->color );
         $this->__set( 'color', $color );
+        unset( $this->style );
         $this->__set( 'style', isset( $style ) ? $style : array( 'default' ) );
+        unset( $this->bgcolor );
         $this->__set( 'bgcolor', $bgcolor );
     }
 
@@ -64,9 +74,9 @@ class ezcConsoleOutputFormat {
      */
     public function __get( $key )
     {
-        if ( isset( $this->$key ) )
+        if ( isset( $this->properties[$key] ) )
         {
-            return $this->$key;
+            return $this->properties[$key];
         }
     }
 
@@ -86,7 +96,7 @@ class ezcConsoleOutputFormat {
      */
     public function __set( $key, $val )
     {
-        if ( !isset( $this->$key ) )
+        if ( !isset( $this->properties[$key] ) )
         {
             throw new ezcBaseConfigException( 
                 $key,
@@ -109,7 +119,7 @@ class ezcConsoleOutputFormat {
                     );
                 }
             }
-            $this->style = $val;
+            $this->properties['style'] = $val;
             return;
         }
         // Continue normal handling
@@ -121,7 +131,7 @@ class ezcConsoleOutputFormat {
                 $val
             );
         }
-        $this->$key = $val;
+        $this->properties[$key] = $val;
     }
  
     /**
@@ -132,7 +142,7 @@ class ezcConsoleOutputFormat {
      */
     public function __isset( $key )
     {
-        return isset( $this->$key );
+        return isset( $this->properties[$key] );
     }
     
 }

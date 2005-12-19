@@ -229,8 +229,8 @@ class ezcConsoleInput
      */
     public function registerAlias( $short, $long, $option )
     {
-        $short = ezcConsoleOption::sanitizeOptionName( $short );
-        $long = ezcConsoleOption::sanitizeOptionName( $long );
+        $short = $short;
+        $long = $long;
         if ( !isset( $this->optionShort[$option->short] ) || !isset( $this->optionLong[$option->long] ) )
         {
             throw new ezcConsoleInputException( 
@@ -386,8 +386,8 @@ class ezcConsoleInput
      */
     public function unregisterAlias( $short, $long )
     {
-        $short = ezcConsoleOption::sanitizeOptionName($short);
-        $long = ezcConsoleOption::sanitizeOptionName($long);
+        $short = $short;
+        $long = $long;
         foreach ( $this->options as $id => $option )
         {
             if ( $option->short === $short )
@@ -431,7 +431,7 @@ class ezcConsoleInput
      */
     public function getOption( $name )
     {
-        $name = ezcConsoleOption::sanitizeOptionName($name);
+        $name = $name;
         if ( isset( $this->optionShort[$name] ) )
         {
             return $this->optionShort[$name];
@@ -495,7 +495,7 @@ class ezcConsoleInput
                 $this->preprocessLongOption( $args, $i );
             }
             // Check for parameter
-            if ( substr( $args[$i], 0, 1) === '-' && $this->hasOption( $args[$i] ) !== false )
+            if ( substr( $args[$i], 0, 1) === '-' && $this->hasOption( preg_replace( '/^-*/', '', $args[$i] ) ) !== false )
             {
                 $this->processOptions( $args, $i );
             }
@@ -639,7 +639,7 @@ class ezcConsoleInput
      */
     private function processOptions( $args, &$i )
     {
-        $option = $this->getOption( $args[$i++] );
+        $option = $this->getOption( preg_replace( '/^-+/', '', $args[$i++] ) );
         // No value expected
         if ( $option->type === ezcConsoleInput::TYPE_NONE )
         {

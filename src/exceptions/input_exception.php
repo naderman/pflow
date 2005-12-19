@@ -63,6 +63,10 @@ class ezcConsoleInputException extends Exception
      * The parameter refered to is a real parameter, not an alias. 
      */
     const PARAMETER_IS_NO_ALIAS = 11;
+    /**
+     * The given parameter name is invalid. Maybe you prefixed the name with '-' / '--'?
+     */
+    const PARAMETER_NAME_INVALID = 12;
 
     /**
      * Parameter this exception is about.

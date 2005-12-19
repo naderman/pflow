@@ -160,8 +160,22 @@ class ezcConsoleOption {
         array $exclusions = array(), 
         $arguments = true
     ) {
-        $this->properties['short'] = ezcConsoleOption::sanitizeOptionName( $short );
-        $this->properties['long'] = ezcConsoleOption::sanitizeOptionName( $long );
+        if ( !self::validateOptionName( $short ) )
+        {
+            throw new ezcConsoleInputException(  
+                "Invalid parameter name: <$short>.",
+                ezcConsoleInputException::PARAMETER_NAME_INVALID 
+            );
+        }
+        $this->properties['short'] = $short;
+        if ( !self::validateOptionName( $long ) )
+        {
+            throw new ezcConsoleInputException(  
+                "Invalid parameter name: <$long>.",
+                ezcConsoleInputException::PARAMETER_NAME_INVALID 
+            );
+        }
+        $this->properties['long'] = $long;
         $this->type = $type;
         $this->default = isset( $default ) ? $default : null;
         $this->multiple = $multiple;
@@ -428,22 +442,22 @@ class ezcConsoleOption {
     }
 
     /**
-     * Sanitize the name of parameters.
-     * Remove whitespaces from parameter names and remove non
-     * alphanumeric chars from the beginning (if someone submits
-     * the name including '-' prefixes).
+     * Returns if a given name if valid for use as a parameter name a paremeter. 
+     * Checks if a given parameter name is generaly valid for use. It checks a)
+     * that the name does not start with '-' or '--' and b) if it contains
+     * whitespaces. Note, that this method does not check any conflicts with already
+     * used parameter names.
      * 
-     * 
-     * @param string $name The name to sanitize.
-     * @return string The sanitized name.
+     * @param string $name The name to check.
+     * @return bool True if the name is valid, otherwise false.
      */
-    public static function sanitizeOptionName( $name )
+    public static function validateOptionName( $name )
     {
-        return preg_replace( 
-            array( '/^[^a-z0-9]*/i', '/\s*/' ),
-            '',
-            $name
-        );
+        if ( substr( $name, 0, 1 ) === '-' || strpos( $name, ' ' ) !== false )
+        {
+            return false;
+        }
+        return true;
     }
 }
 

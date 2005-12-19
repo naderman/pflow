@@ -24,42 +24,51 @@ class ezcConsoleProgressbarOptions {
      *
      * @var string
      */
-    protected $barChar = '+';
+    public $barChar = '+';
     
     /**
      * Char to fill empty space in progress bar with.
      *
      * @var string
      */
-    protected $emptyChar = '-';     
+    public $emptyChar = '-';     
     
     /**
      * Right most char of the progress bar filling (indicating the progress level).
      *
      * @var string
      */
-    protected $progressChar = '>';     
+    public $progressChar = '>';     
     
     /**
      * sprintf() like format string, representing the complete progressbar area.
      *
      * @var string
      */
-    protected $formatString = '%act% / %max% [%bar%] %fraction%%';
+    public $formatString = '%act% / %max% [%bar%] %fraction%%';
     
     /**
      * Maximum width of the progressbar area in characters.
      *
      * @var int
      */
-    protected $width = 100;
+    public $width = 100;
     
     /**
      * sprintf() like format string for the fraction to display.
      *
      * @var string
      */
-    protected $fractionFormat = '%01.2f';
+    public $fractionFormat = '%01.2f';
+    
+    protected $properties = array( 
+        'barChar' => '+',
+        'emptyChar' => '-',
+        'progressChar' => '>',
+        'formatString' => '%act% / %max% [%bar%] %fraction%%',
+        'width' => 100,
+        'fractionFormat' => '%01.2f',
+    );
 
     /**
      * Create a new ezcConsoleProgressbarOptions struct. 
@@ -78,6 +87,12 @@ class ezcConsoleProgressbarOptions {
         $fractionFormat = '%01.2f'
     )
     {
+        unset( $this->barChar );
+        unset( $this->emptyChar );
+        unset( $this->progressChar );
+        unset( $this->formatString );
+        unset( $this->width );
+        unset( $this->fractionFormat );
         $this->__set( 'barChar', $barChar );
         $this->__set( 'emptyChar', $emptyChar );
         $this->__set( 'progressChar', $progressChar );
@@ -99,7 +114,7 @@ class ezcConsoleProgressbarOptions {
     {
         if ( isset( $this->$key ) )
         {
-            return $this->$key;
+            return $this->properties[$key];
         }
         throw new ezcBasePropertyNotFoundException( $key );
     }
@@ -139,7 +154,7 @@ class ezcConsoleProgressbarOptions {
             default:
                 throw new ezcBasePropertyNotFoundException( $key );
         }
-        $this->$key = $val;
+        $this->properties[$key] = $val;
     }
  
     /**
@@ -150,7 +165,7 @@ class ezcConsoleProgressbarOptions {
      */
     public function __isset( $key )
     {
-        return isset( $this->$key );
+        return isset( $this->properties[$key] );
     }
 
 }
