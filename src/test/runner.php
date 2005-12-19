@@ -161,7 +161,7 @@ class ezcTestRunner extends PHPUnit2_TextUI_TestRunner
     /**
      * @param string $dir Absolute or relative path to directory to look in.
      *
-     * @returns array Package names.
+     * @return array Package names.
      */
     protected function getPackages( $dir )
     {
@@ -210,7 +210,7 @@ class ezcTestRunner extends PHPUnit2_TextUI_TestRunner
     }
 
     /**
-     * @returns array Releases from a package.
+     * @return array Releases from a package.
      */
     protected function getReleases( $dir, $package )
     {
@@ -238,7 +238,7 @@ class ezcTestRunner extends PHPUnit2_TextUI_TestRunner
     /**
      * Runs a specific test suite from a package and release.
      *
-     * @returns boolean True if the test has been run, false if not.
+     * @return boolean True if the test has been run, false if not.
      */
     protected function getTestSuite( $dir, $package, $release )
     {
