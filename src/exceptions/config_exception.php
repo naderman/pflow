@@ -32,7 +32,7 @@ class ezcBaseConfigException extends Exception
      *
      * @param string  $settingName The name of the setting where something was
      *                wrong with.
-     * @param integer $exceptionType The type of exception (use one of the
+     * @param int $exceptionType The type of exception (use one of the
      *                class' constants for this)
      * @param mixed   $value The value that the option was tried to be set too
      */
