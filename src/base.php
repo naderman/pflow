@@ -41,7 +41,7 @@ class ezcBase
      *
      * @param string $className  The name of the class that should be loaded.
      *
-     * @return boolean
+     * @return bool
      */
     public static function autoload( $className )
     {
@@ -134,7 +134,7 @@ class ezcBase
      * @param string $fileName    Name of the autoload file.
      * @param string $className   Name of the class that should be autoloaded.
      *
-     * @return boolean  True is returned when the file is correctly loaded.
+     * @return bool  True is returned when the file is correctly loaded.
      *                   Otherwise false is returned.
      */
     protected static function requireFile( $fileName, $className )
