@@ -109,6 +109,15 @@ class ezcConsoleOption {
     public $arguments = true;
 
     /**
+     * Wether a parameter is mandatory to be set.
+     * If this flag is true, the parameter must be submitted whenever the 
+     * program is run.
+     * 
+     * @var bool
+     */
+    public $mandatory = false;
+
+    /**
      * The value the parameter was assigned to when being submitted.
      * Boolean false indicates the parameter was not submitted, boolean
      * true means the parameter was submitted, but did not have a value.

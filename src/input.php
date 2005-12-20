@@ -745,11 +745,24 @@ class ezcConsoleInput
         $values = $this->getValues();
         foreach ( $this->options as $id => $option )
         {
+            // Mandatory
+            if ( $option->mandatory === true && $option->value === false )
+            {
+                throw new ezcConsoleInputException( 
+                    "Parameter with long name <{$option->long}> is mandatory but was not submitted.",
+                    ezcConsoleInputException::MISSING_PARAMETER_VALUE,
+                    $option
+                );
+            }
+            // Not set and not mandatory? No checking.
             if ( $option->value === false || is_array( $option->value ) && count( $option->value ) === 0 )
             {
                 // Parameter was not set so ignore it's rules.
                 continue;
             }
+
+            // Option was set, so check further on
+
             // Dependencies
             foreach ( $option->getDependencies() as $dep )
             {

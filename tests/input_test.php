@@ -639,6 +639,53 @@ class ezcConsoleToolsInputTest extends ezcTestCase
         );
         $this->commonProcessTestSuccess( $args, $res );
     }
+    
+    public function testProcessSuccessMandatory()
+    {
+        $args = array(
+            'foo.php',
+            '-q',
+        );
+        $this->consoleParameter->registerOption(
+            $this->createFakeParam(
+                array( 
+                    'short'     => 'q',
+                    'long'      => 'quite',
+                    'options'   => array(
+                        'mandatory' => true,
+                    ),
+                )
+            )
+        );
+        $res = array( 
+            'q' => true,
+        );
+        $this->commonProcessTestSuccess( $args, $res );
+    }
+    
+    public function testProcessSuccessMandatoryDefault()
+    {
+        $args = array(
+            'foo.php',
+            '-q',
+        );
+        $this->consoleParameter->registerOption(
+            $this->createFakeParam(
+                array( 
+                    'short'     => 'q',
+                    'long'      => 'quite',
+                    'options'   => array(
+                        'default'   => 'test',
+                        'mandatory' => true,
+                    ),
+                )
+            )
+        );
+        $res = array( 
+            'q' => true,
+        );
+        $this->commonProcessTestSuccess( $args, $res );
+    }
 
     public function testProcessFailureExistance_1()
     {
@@ -742,6 +789,26 @@ class ezcConsoleToolsInputTest extends ezcTestCase
             'someargument',
         );
         $this->commonProcessTestFailure( $args, ezcConsoleInputException::ARGUMENTS_NOT_ALLOWED );
+    }
+    
+    public function testProcessFailureMandatory()
+    {
+        $args = array(
+            'foo.php',
+            '-s',
+        );
+        $this->consoleParameter->registerOption(
+            $this->createFakeParam(
+                array( 
+                    'short'     => 'q',
+                    'long'      => 'quite',
+                    'options'   => array(
+                        'mandatory' => true,
+                    ),
+                )
+            )
+        );
+        $this->commonProcessTestFailure( $args, ezcConsoleInputException::MISSING_PARAMETER_VALUE );
     }
 
     public function testGetHelp1()
