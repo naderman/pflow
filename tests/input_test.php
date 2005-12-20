@@ -395,8 +395,8 @@ class ezcConsoleToolsInputTest extends ezcTestCase
         );
         $this->commonProcessTestSuccess( $args, $res );
     }
-
-    public function testProcessSuccessSingleShortDefault()
+    
+    public function testProcessFailureSingleShortDefault()
     {
         $args = array(
             'foo.php',
@@ -405,10 +405,11 @@ class ezcConsoleToolsInputTest extends ezcTestCase
         $res = array( 
             'b' => 42,
         );
-        $this->commonProcessTestSuccess( $args, $res );
+        $this->commonProcessTestFailure( $args, 6 );
     }
+
     
-    public function testProcessSuccessSingleLongDefault()
+    public function testProcessFailureSingleLongDefault()
     {
         $args = array(
             'foo.php',
@@ -417,8 +418,9 @@ class ezcConsoleToolsInputTest extends ezcTestCase
         $res = array( 
             'b' => 42,
         );
-        $this->commonProcessTestSuccess( $args, $res );
+        $this->commonProcessTestFailure( $args, 6 );
     }
+
 
     public function testProcessSuccessSingleShortNoValueArguments()
     {
@@ -512,8 +514,9 @@ class ezcConsoleToolsInputTest extends ezcTestCase
         );
         $this->commonProcessTestSuccess( $args, $res );
     }
-    
-    public function testProcessSuccessMultipleShortDefault()
+
+
+    public function testProcessFailureMultipleShortDefault()
     {
         $args = array(
             'foo.php',
@@ -524,10 +527,10 @@ class ezcConsoleToolsInputTest extends ezcTestCase
             'b' => 42,
             'd' => 'world',
         );
-        $this->commonProcessTestSuccess( $args, $res );
+        $this->commonProcessTestFailure( $args, 6 );
     }
-    
-    public function testProcessSuccessMultipleLongDefault()
+
+    public function testProcessFailureMultipleLongDefault()
     {
         $args = array(
             'foo.php',
@@ -538,9 +541,9 @@ class ezcConsoleToolsInputTest extends ezcTestCase
             'b' => 42,
             'd' => 'world',
         );
-        $this->commonProcessTestSuccess( $args, $res );
+        $this->commonProcessTestFailure( $args, 6 );
     }
-    
+
     public function testProcessSuccessMultipleLongSameNoValue()
     {
         $args = array(
@@ -573,7 +576,7 @@ class ezcConsoleToolsInputTest extends ezcTestCase
         );
         $this->argumentsProcessTestSuccess( $args, $res );
     }
-    
+
     public function testProcessSuccessDependencies()
     {
         $args = array(
@@ -582,6 +585,7 @@ class ezcConsoleToolsInputTest extends ezcTestCase
             '-o',
             'bar',
             '--build',
+            23,
             '-y',
             'text',
             '--yank',
@@ -591,7 +595,7 @@ class ezcConsoleToolsInputTest extends ezcTestCase
         $res = array( 
             't' => true,
             'o' => 'bar',
-            'b' => 42,
+            'b' => 23,
             'y' => array( 
                 'text',
                 'moretext'
@@ -608,16 +612,17 @@ class ezcConsoleToolsInputTest extends ezcTestCase
             '-o',
             'bar',
             '--build',
+            23,
             '--edit'            // This one exclude -t and -y
         );
         $res = array( 
             'o' => 'bar',
-            'b' => 42,
+            'b' => 23,
             'e' => true,
         );
         $this->commonProcessTestSuccess( $args, $res );
     }
-    
+
     public function testProcessSuccessDependenciesExclusions()
     {
         $args = array(
@@ -702,6 +707,7 @@ class ezcConsoleToolsInputTest extends ezcTestCase
 //            '-o',
 //            'bar',
             '--build',
+            23,
             '-y',
             'text',
             '--yank',
@@ -719,6 +725,7 @@ class ezcConsoleToolsInputTest extends ezcTestCase
             '-o',
             'bar',
             '--build',
+            23,
             '--edit'            // This one excludes -t and -y
         );
         $this->commonProcessTestFailure( $args, ezcConsoleInputException::PARAMETER_EXCLUSION_RULE_NOT_MET );
@@ -910,18 +917,17 @@ class ezcConsoleToolsInputTest extends ezcTestCase
         $this->assertTrue( count( array_diff( $res, $values ) ) == 0, 'Parameters processed incorrectly.' );
     }
     
-    private function commonProcessTestFailure( $args, $code )
+    private function commonProcessTestFailure( $args, $code, $exceptionClass = 'ezcConsoleInputException' )
     {
         try 
         {
             $this->consoleParameter->process( $args );
         }
-        catch ( ezcConsoleInputException $e )
+        catch ( Exception $e )
         {
-            $this->assertEquals(
-                $code,
-                $e->getCode(),
-                'Wrong exception thrown for invalid parameter submission.'
+            $this->assertTrue(
+                $code == $e->getCode() && $e instanceof $exceptionClass,
+                'Wrong exception thrown for invalid parameter submission. Expected code <'.$code.'>, received <'.$e->getCode().'>. Expected class <'.$exceptionClass.'>, received <'.get_class( $e ).'>'
             );
             return;
         }

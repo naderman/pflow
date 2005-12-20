@@ -700,18 +700,11 @@ class ezcConsoleInput
         // Value found? If not, use default, if available
         if ( !isset( $option->value ) || $option->value === false || ( is_array( $option->value ) && count( $option->value ) === 0) ) 
         {
-            if ( isset( $option->default ) ) 
-            {
-                $option->value = $option->multiple === true ? array( $option->default ) : $option->default;
-            }
-            else
-            {
-                throw new ezcConsoleInputException( 
-                    "Parameter value missing for parameter with long name <{$option->long}>.",
-                    ezcConsoleInputException::MISSING_PARAMETER_VALUE,
-                    $option
-                );
-            }
+            throw new ezcConsoleInputException( 
+                "Parameter value missing for parameter with long name <{$option->long}>.",
+                ezcConsoleInputException::MISSING_PARAMETER_VALUE,
+                $option
+            );
         }
         return $i;
     }
