@@ -8,6 +8,7 @@
  */
 
 return array(
+    'ezcBasePropertyException'             => 'Base/exceptions/property_exception.php',
     'ezcBasePropertyNotFoundException'     => 'Base/exceptions/property_not_found_exception.php',
     'ezcBasePropertyReadOnlyException'     => 'Base/exceptions/property_read_only_exception.php',
     'ezcBaseTypeException'                 => 'Base/exceptions/type_exception.php',
