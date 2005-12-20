@@ -13,34 +13,22 @@
  * Struct class to store formating entities used by ezcConsoleOutput.
  *
  * Struct class to store formating entities used by ezcConsoleOutput.
- * 
+ *
+ * The ezcConsoleOptionRule class has the following properties:
+ * - <b>color</b> <i>string</i>, contains the color for this format.
+ * - <b>style</b> <i>array(string)</i>, contains the lists of styles that are associated with this format.
+ * - <b>bgcolor</b> <i>string</i>, contains the background color for this format.
+ *
  * @package ConsoleTools
  * @version //autogen//
  */
-class ezcConsoleOutputFormat {
-
+class ezcConsoleOutputFormat
+{
     /**
-     * Name of the color that is used for this format.
-     * 
-     * @var string
+     * Array that defines this class' properties.
+     *
+     * @var array
      */
-    public $color = 'default';
-
-    /**
-     * Names of styles that are used for this format.
-     * 
-     * @var array(string)
-     */
-    public $style = array( 'default' );
-
-    /**
-     * Name of the bgcolor that is used for this format.
-     * 
-     * @var string
-     */
-    public $bgcolor = 'default';
-
-
     protected $properties = array( 
         'color'     => 'default',
         'style'     => 'default',
@@ -57,35 +45,28 @@ class ezcConsoleOutputFormat {
      */
     public function __construct( $color = 'default', array $style = null, $bgcolor = 'default' )
     {
-        unset( $this->color );
         $this->__set( 'color', $color );
-        unset( $this->style );
         $this->__set( 'style', isset( $style ) ? $style : array( 'default' ) );
-        unset( $this->bgcolor );
         $this->__set( 'bgcolor', $bgcolor );
     }
-
     
     /**
      * Overloaded __get() method to gain read-only access to some attributes.
      * 
-     * @param string $key Name of the property to read.
+     * @param string $propertyName Name of the property to read.
      * @return mixed Desired value if exists, otherwise null.
      */
-    public function __get( $key )
+    public function __get( $propertyName )
     {
-        if ( isset( $this->properties[$key] ) )
+        if ( isset( $this->properties[$propertyName] ) )
         {
-            return $this->properties[$key];
+            return $this->properties[$propertyName];
         }
     }
 
     /**
-     * Overloaded __set() method to gain read-only access to some attributes 
-     * and perform checks on setting others.
-     * 
-     * @param string $key Name of the attrinbute to access.
-     * @param string $val The value to set.
+     * Overloaded __set() method to gain read-only access to properties.
+     * It also performs checks on setting others.
      *
      * @throws ezcBaseConfigException
      *         If the setting you try to access does not exists
@@ -93,27 +74,31 @@ class ezcConsoleOutputFormat {
      * @throws ezcBaseConfigException
      *         If trying to set an invalid value for a setting.
      *         {@link VALUE_OUT_OF_RANGE}
+     * 
+     * @param string $propertyName Name of the attrinbute to access.
+     * @param string $val The value to set.
+     * @return void
      */
-    public function __set( $key, $val )
+    public function __set( $propertyName, $val )
     {
-        if ( !isset( $this->properties[$key] ) )
+        if ( !isset( $this->properties[$propertyName] ) )
         {
             throw new ezcBaseConfigException( 
-                $key,
+                $propertyName,
                 ezcBaseConfigException::UNKNOWN_CONFIG_SETTING,
                 $val
             );
         }
         // Extry handling of multi styles
-        if ( $key === 'style' )
+        if ( $propertyName === 'style' )
         {
             if ( !is_array( $val ) ) $val = array( $val );
             foreach ( $val as $style )
             {
-                if ( !ezcConsoleOutput::isValidFormatCode( $key, $style ) )
+                if ( !ezcConsoleOutput::isValidFormatCode( $propertyName, $style ) )
                 {
                     throw new ezcBaseConfigException( 
-                        $key,
+                        $propertyName,
                         ezcBaseConfigException::VALUE_OUT_OF_RANGE,
                         $style
                     );
@@ -123,26 +108,26 @@ class ezcConsoleOutputFormat {
             return;
         }
         // Continue normal handling
-        if ( !ezcConsoleOutput::isValidFormatCode( $key, $val ) )
+        if ( !ezcConsoleOutput::isValidFormatCode( $propertyName, $val ) )
         {
             throw new ezcBaseConfigException( 
-                $key,
+                $propertyName,
                 ezcBaseConfigException::VALUE_OUT_OF_RANGE,
                 $val
             );
         }
-        $this->properties[$key] = $val;
+        $this->properties[$propertyName] = $val;
     }
  
     /**
      * Property isset access.
      * 
-     * @param string $key Name of the property.
+     * @param string $propertyName Name of the property.
      * @return bool True is the property is set, otherwise false.
      */
-    public function __isset( $key )
+    public function __isset( $propertyName )
     {
-        return isset( $this->properties[$key] );
+        return isset( $this->properties[$propertyName] );
     }
     
 }

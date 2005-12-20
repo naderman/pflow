@@ -17,14 +17,14 @@
  * @package ConsoleTools
  * @version //autogen//
  */
-class ezcConsoleOutputOptions {
-
+class ezcConsoleOutputOptions
+{
     /**
      * Determines the level of verbosity. 
      * 
      * @var int
      */
-    public $verboseLevel = 1;
+    public $verbosityLevel = 1;
 
     /**
      * Determins, whether text is automatically wrapped after a specific amount
@@ -46,14 +46,14 @@ class ezcConsoleOutputOptions {
      * Create a new ezcConsoleOutputOptions struct. 
      * Create a new ezcConsoleOutputOptions struct for use with {@link ezcConsoleOutput}. 
      * 
-     * @param int $verboseLevel Verbosity of the output to show.
+     * @param int $verbosityLevel Verbosity of the output to show.
      * @param int $autobreak    Auto wrap lines after num chars (0 = unlimited)
      * @param bool $useFormats  Whether to enable formated output
      * @return void
      */
-    public function __construct( $verboseLevel = 1, $autobreak = 0, $useFormats = true )
+    public function __construct( $verbosityLevel = 1, $autobreak = 0, $useFormats = true )
     {
-        $this->verboseLevel = $verboseLevel;
+        $this->verbosityLevel = $verbosityLevel;
         $this->autobreak = $autobreak;
         $this->useFormats = $useFormats;
     }

@@ -22,7 +22,7 @@
  * $out = new ezcConsoleOutput();
  * 
  * // Set the verbosity to level 10
- * $out->options->verboseLevel = 10;
+ * $out->options->verbosityLevel = 10;
  * // Enable auto wrapping of lines after 40 characters
  * $out->options->autobreak    = 40;
  * 
@@ -52,9 +52,11 @@
  * $out->formats->success->color = 'green';
  * $out->formats->default->color = 'blue';
  *
- * // This is visible, since we set verboseLevel to 10, and printed in default format (now blue)
+ * // This is visible, since we set verbosityLevel to 10, and printed in
+ * // default format (now blue)
  * $out->outputText( "Some verbose output.\n", null, 10 );
- * // This is visible, since we set verboseLevel to 10, and printed in format 'failure'
+ * // This is visible, since we set verbosityLevel to 10, and printed in format
+ * // 'failure'
  * $out->outputText( "And some not so verbose, failure output.\n", 'failure', 5 );
  *
  * </code>
@@ -79,8 +81,7 @@ class ezcConsoleOutput
     protected $formats;
 
     /**
-     * Whether a position has been stored before, using the
-     * storePos() method.
+     * Whether a position has been stored before, using the storePos() method.
      *
      * @see ezcConsoleOutput::storePos()
      * @var bool
@@ -91,7 +92,7 @@ class ezcConsoleOutput
      * Stores the mapping of color names to their escape
      * sequence values.
      *
-     * @var array(string => int)
+     * @var array(string=>int)
      */
     protected static $color = array(
     	'gray'          => 30,
@@ -109,7 +110,7 @@ class ezcConsoleOutput
      * Stores the mapping of bgcolor names to their escape
      * sequence values.
      * 
-     * @var array(string => int)
+     * @var array(string=>int)
      */
     protected static $bgcolor = array(
         'black'      => 40,
@@ -127,7 +128,7 @@ class ezcConsoleOutput
      * Stores the mapping of styles names to their escape
      * sequence values.
      * 
-     * @var array(string => int)
+     * @var array(string=>int)
      */
     protected static $style = array( 
         'default'           => '0',
@@ -166,8 +167,8 @@ class ezcConsoleOutput
      * @see ezcConsoleOutput::$formats
      * @see ezcConsoleOutputFormats
      *
-     * @param ezcConsoleOutputOptions $options Options.
-     * @param ezcConsoleOutputFormats $formats Formats.
+     * @param ezcConsoleOutputOptions $options
+     * @param ezcConsoleOutputFormats $formats
      */
     public function __construct( ezcConsoleOutputOptions $options = null, ezcConsoleOutputFormats $formats = null )
     {
@@ -179,16 +180,16 @@ class ezcConsoleOutput
 
     /**
      * Property read access.
-     * 
-     * @param string $key Name of the property.
-     * @return mixed Value of the property or null.
      *
-     * @throws ezcBasePropertyNotFoundException
-     *         If the the desired property is not found.
+     * @throws ezcBasePropertyNotFoundException if the the desired property is
+     *         not found.
+     * 
+     * @param string $propertyName Name of the property.
+     * @return mixed Value of the property or null.
      */
-    public function __get( $key )
+    public function __get( $propertyName )
     {
-        switch ($key) 
+        switch ($propertyName) 
         {
             case 'options':
                 return $this->options;
@@ -199,23 +200,22 @@ class ezcConsoleOutput
             default:
                 break;
         }
-        throw new ezcBasePropertyNotFoundException( $key );
+        throw new ezcBasePropertyNotFoundException( $propertyName );
     }
 
     /**
      * Property write access.
      * 
-     * @param string $key Name of the property.
+     * @param string $propertyName Name of the property.
      * @param mixed $val  The value for the property.
      *
-     * @throws ezcBaseConfigException
-     *         If a the value for the property options is not an instance of
-     *         ezcConsoleOutputOptions
+     * @throws ezcBaseConfigException if a the value for the property options
+     *         is not an instance of ezcConsoleOutputOptions. See also
      *         {@link ezcBaseConfigException::VALUE_OUT_OF_RANGE}.
      */
-    public function __set( $key, $val )
+    public function __set( $propertyName, $val )
     {
-        switch ($key) 
+        switch ($propertyName) 
         {
             case 'options':
                 if ( !( $val instanceof ezcConsoleOutputOptions ) )
@@ -244,18 +244,18 @@ class ezcConsoleOutput
             default:
                 break;
         }
-        throw new ezcBasePropertyNotFoundException( $key );
+        throw new ezcBasePropertyNotFoundException( $propertyName );
     }
  
     /**
      * Property isset access.
      * 
-     * @param string $key Name of the property.
+     * @param string $propertyName Name of the property.
      * @return bool True is the property is set, otherwise false.
      */
-    public function __isset( $key )
+    public function __isset( $propertyName )
     {
-        switch ( $key )
+        switch ( $propertyName )
         {
             case 'options':
             case 'formats':
@@ -269,18 +269,20 @@ class ezcConsoleOutput
 
     /**
      * Print text to the console.
+     *
      * Output a string to the console. If $format parameter is ommited, 
      * the default style is chosen. Style can either be a special style
      * {@link eczConsoleOutput::$options}, a style name 
      * {@link ezcConsoleOutput$formats} or 'none' to print without any styling.
      *
-     * @param string $text       The text to print.
-     * @param string $format     Format chosen for printing.
-     * @param int $verboseLevel On which verbose level to output this message.
+     * @param string $text        The text to print.
+     * @param string $format      Format chosen for printing.
+     * @param int $verbosityLevel On which verbose level to output this message.
+     * @return void
      */
-    public function outputText( $text, $format = 'default', $verboseLevel = 1 ) 
+    public function outputText( $text, $format = 'default', $verbosityLevel = 1 ) 
     {
-        if ( $this->options->verboseLevel >= $verboseLevel ) 
+        if ( $this->options->verbosityLevel >= $verbosityLevel ) 
         {
             if ( is_int( $this->options->autobreak ) && $this->options->autobreak > 0 )
             {
@@ -297,28 +299,29 @@ class ezcConsoleOutput
 
     /**
      * Print text to the console and automatically append a line break.
-     * This method acts similar to {@link ezcConsoleOutput::outputText()}, in 
-     * fact it even uses it. The difference is, that outputLine() automattically
-     * appends a manual line break to the printed text. Beside that you can 
-     * leave out the $text parameter of outputLine() to simply print a line 
-     * break.
+     *
+     * This method acts similar to {@link ezcConsoleOutput::outputText()}, in
+     * fact it even uses it. The difference is, that outputLine()
+     * automatically appends a manual line break to the printed text. Besides
+     * that, you can leave out the $text parameter of outputLine() to only
+     * print a line break.
      * 
-     * @param string $text       The text to print.
-     * @param string $format     Format chosen for printing.
-     * @param int $verboseLevel On which verbose level to output this message.
+     * @param string $text        The text to print.
+     * @param string $format      Format chosen for printing.
+     * @param int $verbosityLevel On which verbose level to output this message.
+     * @return void
      */
-    public function outputLine( $text = '', $format = 'default', $verboseLevel = 1 )
+    public function outputLine( $text = '', $format = 'default', $verbosityLevel = 1 )
     {
-        $this->outputText( $text . PHP_EOL, $format, $verboseLevel );
+        $this->outputText( $text . PHP_EOL, $format, $verbosityLevel );
     }
 
     /**
      * Returns a formated version of the text.
-     * Receive a formated version of the input text. If $format parameter is 
-     * ommited, the default style is chosen. The format must be a valid 
-     * regigistered format definition.
      *
-     * {@link ezcConsoleOutput::$formats}
+     * If $format parameter is omited, the default style is chosen. The format
+     * must be a valid registered format definition.  For information on the
+     * formats, see {@link ezcConsoleOutput::$formats}.
      *
      * @param string $text   Text to apply style to.
      * @param string $format Format chosen to be applied.
@@ -330,12 +333,14 @@ class ezcConsoleOutput
     }
 
     /**
-     * Store the current cursor position.
+     * Stores the current cursor position.
+     *
      * Saves the current cursor position to return to it using 
      * {@link ezcConsoleOutput::restorePos()}. Multiple calls
      * to this method will override each other. Only the last
      * position is saved.
      *
+     * @return void
      */
     public function storePos() 
     {
@@ -344,13 +349,15 @@ class ezcConsoleOutput
     }
 
     /**
-     * Restore a cursor position.
-     * Restores the cursor position last saved using
-     * {@link ezcConsoleOutput::storePos()}.
+     * Restores a cursor position.
      *
+     * Restores the cursor position last saved using {@link
+     * ezcConsoleOutput::storePos()}.
      *
-     * @throws ezcConsoleOutputException If no position saved.
      * @todo Gnome terminal does not recognize this codes. Solution??
+     *
+     * @throws ezcConsoleOutputException If no position is saved.
+     * @return void
      */
     public function restorePos() 
     {
@@ -363,10 +370,12 @@ class ezcConsoleOutput
 
     /**
      * Move the cursor to a specific column of the current line.
-     * Moves the cursor to a specific column index of the current line (
-     * default is 1).
+     *
+     * Moves the cursor to a specific column index of the current line (default
+     * is 1).
      * 
      * @param int $col Column to jump to.
+     * @return void
      */
     public function toPos( $col = 1 ) 
     {
@@ -375,8 +384,9 @@ class ezcConsoleOutput
 
     /**
      * Returns if a format code is valid for ta specific formating option.
-     * This method determines, if a given code is valid for a specific formating
-     * option ('color', 'bgcolor' or 'style').
+     *
+     * This method determines if a given code is valid for a specific
+     * formatting option ('color', 'bgcolor' or 'style').
      * 
      * @see ezcConsoleOutput::getFormatCode();
      *
@@ -391,11 +401,12 @@ class ezcConsoleOutput
 
     /**
      * Returns the escape sequence for a specific format.
-     * Returns the default format escape sequence, if the requested format does 
+     *
+     * Returns the default format escape sequence, if the requested format does
      * not exist.
      * 
      * @param string $format Name of the format.
-     * @return string The escpe sequence.
+     * @return string The escape sequence.
      */
     protected function buildSequence( $format = 'default' )
     {
@@ -432,13 +443,14 @@ class ezcConsoleOutput
 
     /**
      * Returns the code for a given formating option of a given type.
-     * $type is the type of formating ('color', 'bgcolor' or 'style'),
-     * $key the name of the format to lookup. Returns the numeric code for
-     * the requested format or 0 if format or type do not exist.
+     *
+     * $type is the type of formating ('color', 'bgcolor' or 'style'), $key the
+     * name of the format to lookup. Returns the numeric code for the requested
+     * format or 0 if format or type do not exist.
      * 
      * @see ezcConsoleOutput::isValidFormatCode()
      * 
-     * @param string $type Formating type.
+     * @param string $type Formatting type.
      * @param string $key  Format option name.
      * @return int The code representation.
      */

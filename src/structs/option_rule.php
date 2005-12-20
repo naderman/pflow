@@ -17,36 +17,32 @@
  * refered parameter may have assigned. Rules may be used for dependencies and 
  * exclusions between parameters.
  *
+ * The ezcConsoleOptionRule class has the following properties:
+ * - <b>option</b> <i>ezcConsoleOption</i>, contains the parameter that this rule refers to.
+ * - <b>values</b> <i>array(string)</i>, contains a list of values that are accepted.
+ *
  * @see ezcConsoleOption
  * 
  * @package ConsoleTools
  * @version //autogen//
  */
-class ezcConsoleOptionRule {
-
+class ezcConsoleOptionRule
+{
     /**
-     * The parameter this rule refers to. 
-     * 
-     * @var ezcConsoleOption
+     * Property array containing this class' properties.
+     *
+     * @var array
      */
-    public $option;
-
-    /**
-     * Values the refered parameter may accept. 
-     * 
-     * @var array(string)
-     */
-    public $values = array();
-
     protected $properties = array( 
         'option' => null,
         'values' => array(),
     );
 
     /**
-     * Create a new parameter rule.
+     * Creates a new parameter rule.
+     *
      * Creates a new parameter rule. Per default the $values parameter
-     * is an empty array, which determines, that the parameter may accept any
+     * is an empty array, which determines that the parameter may accept any
      * value. To indicate that a parameter may only have certain values,
      * place them inside tha $values array. For example to indicate a parameter
      * may have the values 'a', 'b' and 'c' use:
@@ -66,25 +62,23 @@ class ezcConsoleOptionRule {
      */
     public function __construct( ezcConsoleOption $option, array $values = array() )
     {
-        unset( $this->option );
         $this->__set( 'option', $option );
-        unset( $this->values );
         $this->__set( 'values', $values );
     }
     
     /**
      * Property read access overloading.
      * Gain read access to properties.
-     * 
-     * @param string $key Name of the property to access.
-     * @return mixed Value of the property.
      *
      * @throws ezcBasePropertyNotFoundException
      *         If the property tried to access does not exist.
+     * 
+     * @param string $propertyName Name of the property to access.
+     * @return mixed Value of the property.
      */
-    public function __get( $key ) 
+    public function __get( $propertyName ) 
     {
-        switch ( $key )
+        switch ( $propertyName )
         {
             case 'option':
                 return $this->properties['option'];
@@ -93,22 +87,22 @@ class ezcConsoleOptionRule {
                 return $this->properties['values'];
                 break;
         }
-        throw new ezcBasePropertyNotFoundException( $key );
+        throw new ezcBasePropertyNotFoundException( $propertyName );
     }
     
     /**
      * Property read access overloading.
      * Gain read access to properties.
-     * 
-     * @param string $key Name of the property to access.
-     * @return mixed Value of the property.
      *
      * @throws ezcBasePropertyNotFoundException
      *         If the property tried to access does not exist.
+     * 
+     * @param string $propertyName Name of the property to access.
+     * @return mixed Value of the property.
      */
-    public function __set( $key, $val ) 
+    public function __set( $propertyName, $val ) 
     {
-        switch ( $key )
+        switch ( $propertyName )
         {
             case 'option':
                 if ( !( $val instanceof ezcConsoleOption ) )
@@ -127,18 +121,18 @@ class ezcConsoleOptionRule {
                 return;
                 break;
         }
-        throw new ezcBasePropertyNotFoundException( $key );
+        throw new ezcBasePropertyNotFoundException( $propertyName );
     }
  
     /**
      * Property isset access.
      * 
-     * @param string $key Name of the property.
+     * @param string $propertyName Name of the property.
      * @return bool True is the property is set, otherwise false.
      */
-    public function __isset( $key )
+    public function __isset( $propertyName )
     {
-        switch ( $key )
+        switch ( $propertyName )
         {
             case 'option':
             case 'values':

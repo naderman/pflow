@@ -116,3 +116,17 @@ Fixed by the whole refactoring.
 > - Similar issue as setOptions, also no documentation of which settings one can set.
 
 Fixed by the whole refactoring.
+
+
+Comments by Derick
+==================
+ezcConsoleTableOptions::__construct has no good documentation for the
+parameters.
+
+ezcConsoleOutputFormats should not be in the structs directory as it is no
+struct.
+
+ezcConsoleOptionRule, ezcConsoleOutputFormat and ezcConsoleProgressbarOptions
+are not real structs so they should not go into the structs directory. They are
+not real structs because they have additional checks for value's ranges. Also
+change the word "struct" in its docs to "class".

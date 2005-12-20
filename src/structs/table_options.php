@@ -17,8 +17,8 @@
  * @package ConsoleTools
  * @version //autogen//
  */
-class ezcConsoleTableOptions {
-
+class ezcConsoleTableOptions
+{
     /**
      * Column width, either a fixed int value (number of chars)  or 'auto'.
      * 
@@ -37,7 +37,9 @@ class ezcConsoleTableOptions {
     public $colWrap = ezcConsoleTable::WRAP_AUTO;
 
     /**
-     * Standard column alignment, applied to cells that have to explicit alignment assigned.
+     * Standard column alignment, applied to cells that have to explicit
+     * alignment assigned.
+     *
      * @see ezcConsoleTable::ALIGN_LEFT
      * @see ezcConsoleTable::ALIGN_RIGHT
      * @see ezcConsoleTable::ALIGN_CENTER
@@ -48,14 +50,16 @@ class ezcConsoleTableOptions {
     public $defaultAlign = ezcConsoleTable::ALIGN_LEFT;
 
     /**
-     * Standard column content format, applied to cells that have 'default' as the content format.
+     * Standard column content format, applied to cells that have 'default' as
+     * the content format.
      * 
      * @var string
      */
     public $defaultFormat = 'default';
 
     /**
-     * Standard border format, applied to rows that have 'default' as the border format.
+     * Standard border format, applied to rows that have 'default' as the
+     * border format.
      * 
      * @var string
      */
@@ -81,6 +85,7 @@ class ezcConsoleTableOptions {
      * @var string
      */
     public $lineVertical = '-';
+
     /**
      * Character to use for drawing hozizontal lines. 
      * 
@@ -101,6 +106,7 @@ class ezcConsoleTableOptions {
      * @var string
      */
     public $lineFormat = 'default';
+
     /**
      * Format name to draw head rows in. 
      * 
@@ -110,11 +116,11 @@ class ezcConsoleTableOptions {
 
     /**
      * Create a new ezcConsoleProgressbarOptions struct. 
-     * Create a new ezcConsoleProgressbarOptions struct for use with {@link ezcConsoleOutput}. 
+     *
+     * Create a new ezcConsoleProgressbarOptions struct for use with {@link
+     * ezcConsoleOutput}. 
      * 
-     * @param int $verboseLevel Verbosity of the output to show.
-     * @param int $autobreak    Auto wrap lines after num chars (0 = unlimited)
-     * @param bool $useFormats  Whether to enable formated output
+     * @todo documentation missing!
      */
     public function __construct( 
         $colWidth = 'auto',
@@ -129,16 +135,16 @@ class ezcConsoleTableOptions {
         $lineFormatHead = 'default'
     )
     {
-        $this->colWidth  = $colWidth ;
-        $this->colWrap  = $colWrap ;
-        $this->colAlign  = $colAlign ;
-        $this->colPadding  = $colPadding ;
-        $this->widthType  = $widthType ;
-        $this->lineVertical  = $lineVertical ;
-        $this->lineHorizontal  = $lineHorizontal ;
-        $this->corner  = $corner ;
-        $this->lineFormat  = $lineFormat ;
-        $this->lineFormatHead  = $lineFormatHead ;
+        $this->colWidth = $colWidth;
+        $this->colWrap = $colWrap;
+        $this->colAlign = $colAlign;
+        $this->colPadding = $colPadding;
+        $this->widthType = $widthType;
+        $this->lineVertical = $lineVertical;
+        $this->lineHorizontal = $lineHorizontal;
+        $this->corner = $corner;
+        $this->lineFormat = $lineFormat;
+        $this->lineFormatHead = $lineFormatHead;
     }
 
 }

@@ -732,10 +732,10 @@ class ezcConsoleInput
 
     /**
      * Check the rules that may be associated with an option.
-     * Optionss are allowed to have rules associated for
+     *
+     * Options are allowed to have rules associated for
      * dependencies to other options and exclusion of other options or
      * arguments. This method processes the checks.
-     * 
      *
      * @throws ezcConsoleInputException 
      *         If dependencies are unmet 

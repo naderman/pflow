@@ -10,16 +10,16 @@
  */
 
 /**
- * Struct class to store the collection for formating classes.
+ * Class to store the collection for formating classes.
  *
- * This struct stores objects of {@link ezcConsoleOutputFormat}, which represents
- * a format option set for {@link ezcConsoleOutput}.
+ * This class stores objects of {@link ezcConsoleOutputFormat}, which
+ * represents a format option set for {@link ezcConsoleOutput}.
  * 
  * @package ConsoleTools
  * @version //autogen//
  */
-class ezcConsoleOutputFormats {
-
+class ezcConsoleOutputFormats
+{
     /**
      * Array of ezcConsoleOutputFormat.
      * 
@@ -29,54 +29,56 @@ class ezcConsoleOutputFormats {
 
     /**
      * Create a new ezcConsoleOutputFormats object.
-     * Creates a new, empty object of this class.
-     * 
+     *
+     * Creates a new, empty object of this class. It also adds a default
+     * format.
      */
     public function __construct()
     {
         $this->formats['default'] = new ezcConsoleOutputFormat();
     }
-
     
     /**
      * Read access to the formats.
+     *
      * Formats are accessed directly like properties of this object. If a
      * format does not exist, it is created on the fly (using default values),
      * 
-     * @param string $key Name of the format to read.
+     * @param string $formatName
      * @return ezcConsoleOutputFormat The format.
      */
-    public function __get( $key )
+    public function __get( $formatName )
     {
-        if ( !isset( $this->formats[$key] ) )
+        if ( !isset( $this->formats[$formatName] ) )
         {
-            $this->formats[$key] = new ezcConsoleOutputFormat();
+            $this->formats[$formatName] = new ezcConsoleOutputFormat();
         }
-        return $this->formats[$key];
+        return $this->formats[$formatName];
     }
 
     /**
      * Write access to the formats.
+     *
      * Formats are accessed directly like properties of this object. If a
      * format does not exist, it is created on the fly (using default values),
      * 
-     * @param string $key            Name of the format to set.
-     * @param ezcConsoleOutputFormat The format defintion.
+     * @param string $formatName
+     * @param ezcConsoleOutputFormat $val The format defintion.
      */
-    public function __set( $key, ezcConsoleOutputFormat $val )
+    public function __set( $formatName, ezcConsoleOutputFormat $val )
     {
-        $this->formats[$key] = $val;
+        $this->formats[$formatName] = $val;
     }
  
     /**
      * Property isset access.
      * 
-     * @param string $key Name of the property.
+     * @param string $formatName Name of the property.
      * @return bool True is the property is set, otherwise false.
      */
-    public function __isset( $key )
+    public function __isset( $formatName )
     {
-        return isset( $this->formats[$key] );
+        return isset( $this->formats[$formatName] );
     }
 
 }
