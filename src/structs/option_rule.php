@@ -82,10 +82,8 @@ class ezcConsoleOptionRule
         {
             case 'option':
                 return $this->properties['option'];
-                break;
             case 'values':
                 return $this->properties['values'];
-                break;
         }
         throw new ezcBasePropertyNotFoundException( $propertyName );
     }
@@ -111,7 +109,6 @@ class ezcConsoleOptionRule
                 }
                 $this->properties['option'] = $val;
                 return;
-                break;
             case 'values':
                 if ( !is_array( $val ) )
                 {
@@ -119,7 +116,6 @@ class ezcConsoleOptionRule
                 }
                 $this->properties['values'] = $val;
                 return;
-                break;
         }
         throw new ezcBasePropertyNotFoundException( $propertyName );
     }
@@ -137,7 +133,6 @@ class ezcConsoleOptionRule
             case 'option':
             case 'values':
                 return true;
-                break;
         }
         return false;
     }

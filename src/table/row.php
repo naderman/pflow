@@ -301,7 +301,6 @@ class ezcConsoleTableRow implements Countable, Iterator, ArrayAccess {
             case 'borderFormat':
                 $this->$key = $val;
                 return;
-                break;
             case 'align':
                 if ( $val !== ezcConsoleTable::ALIGN_LEFT && $val !== ezcConsoleTable::ALIGN_CENTER && $val !== ezcConsoleTable::ALIGN_RIGHT )
                 {
@@ -313,7 +312,6 @@ class ezcConsoleTableRow implements Countable, Iterator, ArrayAccess {
                 }
                 $this->align = $val;
                 return;
-                break;
         }
         throw new ezcBasePropertyNotFoundException( $key );
     }
@@ -332,8 +330,8 @@ class ezcConsoleTableRow implements Countable, Iterator, ArrayAccess {
             case 'format':
             case 'align':
                 return true;
-                break;
             default:
+                break;
         }
         return false;
     }

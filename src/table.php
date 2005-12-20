@@ -373,11 +373,9 @@ class ezcConsoleTable implements Countable, Iterator, ArrayAccess
         {
             case 'options':
                 return $this->$key;
-                break;
             case 'width':
             case 'cols':
                 return $this->settings[$key];
-                break;
             default:
                 break;
         }
@@ -406,7 +404,6 @@ class ezcConsoleTable implements Countable, Iterator, ArrayAccess
                 }
                 $this->options = $val;
                 return;
-                break;
             case 'width':
             case 'cols':
                 if ( $val < 1 )
@@ -415,7 +412,6 @@ class ezcConsoleTable implements Countable, Iterator, ArrayAccess
                 }
                 $this->settings[$key] = $val; 
                 return;
-                break;
             default:
                 break;
         }
@@ -436,7 +432,6 @@ class ezcConsoleTable implements Countable, Iterator, ArrayAccess
             case 'width':
             case 'cols':
                 return true;
-                break;
             default:
                 break;
         }

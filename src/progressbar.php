@@ -159,11 +159,9 @@ class ezcConsoleProgressbar
         {
             case 'options':
                 return $this->options;
-                break;
             case 'max':
             case 'step':
                 return $this->settings[$key];
-                break;
             default:
                 break;
         }
@@ -222,7 +220,6 @@ class ezcConsoleProgressbar
             case 'max':
             case 'step':
                 return true;
-                break;
             default:
         }
         return false;

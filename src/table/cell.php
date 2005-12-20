@@ -104,7 +104,6 @@ class ezcConsoleTableCell {
             case 'format':
                 $this->$key = $val;
                 return;
-                break;
             case 'align':
                 if ( $val !== ezcConsoleTable::ALIGN_LEFT 
                   && $val !== ezcConsoleTable::ALIGN_CENTER 
@@ -120,7 +119,6 @@ class ezcConsoleTableCell {
                 }
                 $this->align = $val;
                 return;
-                break;
         }
         throw new ezcBasePropertyNotFoundException( $key );
     }
@@ -139,8 +137,8 @@ class ezcConsoleTableCell {
             case 'format':
             case 'align':
                 return true;
-                break;
             default:
+                break;
         }
         return false;
     }

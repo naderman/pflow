@@ -171,7 +171,6 @@ class ezcConsoleStatusbar
             default:
                 trigger_error( 'Unknown status '.var_export( $status, true ).'.', E_USER_WARNING );
                 return;
-                break;
         }
         $this->counter[$status]++;
     }

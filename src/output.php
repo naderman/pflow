@@ -193,10 +193,8 @@ class ezcConsoleOutput
         {
             case 'options':
                 return $this->options;
-                break;
             case 'formats':
                 return $this->formats;
-                break;
             default:
                 break;
         }
@@ -228,7 +226,6 @@ class ezcConsoleOutput
                 }
                 $this->options = $val;
                 return;
-                break;
             case 'formats':
                 if ( !( $val instanceof ezcConsoleOutputFormats ) )
                 {
@@ -240,7 +237,6 @@ class ezcConsoleOutput
                 }
                 $this->formats = $val;
                 return;
-                break;
             default:
                 break;
         }
@@ -260,7 +256,6 @@ class ezcConsoleOutput
             case 'options':
             case 'formats':
                 return true;
-                break;
             default:
                 break;
         }
