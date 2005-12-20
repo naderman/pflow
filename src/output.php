@@ -207,9 +207,10 @@ class ezcConsoleOutput
      * @param string $propertyName Name of the property.
      * @param mixed $val  The value for the property.
      *
-     * @throws ezcBaseConfigException if a the value for the property options
-     *         is not an instance of ezcConsoleOutputOptions. See also
-     *         {@link ezcBaseConfigException::VALUE_OUT_OF_RANGE}.
+     * @throws ezcBasePropertyException if a the value for the property options
+     *         is not an instance of ezcConsoleOutputOptions. 
+     * @throws ezcBasePropertyException if a the value for the property formats
+     *         is not an instance of ezcConsoleOutputFormats. 
      */
     public function __set( $propertyName, $val )
     {
@@ -218,10 +219,10 @@ class ezcConsoleOutput
             case 'options':
                 if ( !( $val instanceof ezcConsoleOutputOptions ) )
                 {
-                    throw new ezcBaseConfigException( 
+                    throw new ezcBasePropertyException( 
                         'options',
-                        ezcBaseConfigException::VALUE_OUT_OF_RANGE,
-                        is_object( $val ) ? get_class( $val ) : gettype( $val )
+                        'type:' . is_object( $val ) ? get_class( $val ) : gettype( $val ),
+                        'type:ezcConsoleOutputOptions' 
                     );
                 }
                 $this->options = $val;
@@ -229,10 +230,10 @@ class ezcConsoleOutput
             case 'formats':
                 if ( !( $val instanceof ezcConsoleOutputFormats ) )
                 {
-                    throw new ezcBaseConfigException( 
-                        'formats',
-                        ezcBaseConfigException::VALUE_OUT_OF_RANGE,
-                        is_object( $val ) ? get_class( $val ) : gettype( $val )
+                    throw new ezcBasePropertyException( 
+                        'format',
+                        'type:' . is_object( $val ) ? get_class( $val ) : gettype( $val ),
+                        'type:ezcConsoleOutputFormats' 
                     );
                 }
                 $this->formats = $val;

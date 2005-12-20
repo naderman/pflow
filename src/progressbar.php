@@ -176,9 +176,8 @@ class ezcConsoleProgressbar
      *
      * @throws ezcBasePropertyNotFoundException
      *         If a desired property could not be found.
-     * @throws ezcBaseConfigException
-     *         If a desired property value is out of range
-     *         {@link ezcBaseConfigException::VALUE_OUT_OF_RANGE}.
+     * @throws ezcBasePropertyException
+     *         If a desired property value is out of range.
      */
     public function __set( $key, $val )
     {
@@ -187,14 +186,22 @@ class ezcConsoleProgressbar
             case 'options':
                 if ( !( $val instanceof ezcConsoleProgressbarOptions ) )
                 {
-                    throw new ezcBaseTypeException( 'ezcConsoleProgressbarOptions', gettype( $val ) );
+                    throw new ezcBasePropertyException( 
+                        'options',
+                        'type:' . is_object( $val ) ? get_class( $val ) : gettype( $val ),
+                        'type:ezcConsoleProgressbarOptions' 
+                    );
                 };
                 break;
             case 'max':
             case 'step':
                 if ( !is_int( $val ) || $val < 0 )
                 {
-                    throw new ezcBaseConfigException( $key, ezcBaseConfigException::VALUE_OUT_OF_RANGE, $val );
+                    throw new ezcBasePropertyException( 
+                        $key,
+                        $val,
+                        'value >= 0'
+                    );
                 }
                 break;
             default:

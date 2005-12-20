@@ -56,7 +56,7 @@ class ezcConsoleToolsTableCellTest extends ezcTestCase
         {
             $cell = new ezcConsoleTableCell( 'test', 'success', 42 );
         }
-        catch ( ezcBaseConfigException $e )
+        catch ( ezcBasePropertyException $e )
         {
             $this->assertTrue(true);
             return;

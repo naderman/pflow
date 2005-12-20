@@ -388,10 +388,10 @@ class ezcConsoleTable implements Countable, Iterator, ArrayAccess
      * @param string $key Name of the property.
      * @param mixed $val  The value for the property.
      *
-     * @throws ezcBaseConfigException
+     * @throws ezcBasePropertyNotFoundException
      *         If a the value for the property options is not an instance of
-     *         ezcConsoleOutputOptions
-     *         {@link ezcBaseConfigException::VALUE_OUT_OF_RANGE}.
+     * @throws ezcBasePropertyNotFoundException
+     *         If a the value for a property is out of range.
      */
     public function __set( $key, $val )
     {
@@ -400,7 +400,11 @@ class ezcConsoleTable implements Countable, Iterator, ArrayAccess
             case 'options':
                 if ( !( $val instanceof ezcConsoleTableOptions ) )
                 {
-                    throw new ezcBaseTypeException( 'ezcConsoleTableOptions', gettype( $val ) );
+                    throw new ezcBasePropertyException( 
+                        'options',
+                        'type:' . is_object( $val ) ? get_class( $val ) : gettype( $val ),
+                        'type:ezcConsoleTableOptions' 
+                    );
                 }
                 $this->options = $val;
                 return;
@@ -408,7 +412,7 @@ class ezcConsoleTable implements Countable, Iterator, ArrayAccess
             case 'cols':
                 if ( $val < 1 )
                 {
-                    throw new ezcBaseConfigException( $key, ezcBaseConfigException::VALUE_OUT_OF_RANGE, $val );
+                    throw new ezcBasePropertyException( $key, $val, 'value > 0' );
                 }
                 $this->settings[$key] = $val; 
                 return;

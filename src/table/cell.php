@@ -90,10 +90,13 @@ class ezcConsoleTableCell {
      * @param string $key Name of the property.
      * @param mixed $val  The value for the property.
      *
-     * @throws ezcBaseConfigException
-     *         If a the value for the property options is not an instance of
-     *         ezcConsoleOutputOptions
-     *         {@link ezcBaseConfigException::VALUE_OUT_OF_RANGE}.
+     * @throws ezcBasePropertyException
+     *         If a the value submitted for the align is not in the range of
+     *         {@link ezcConsoleTable::ALIGN_LEFT},
+     *         {@link ezcConsoleTable::ALIGN_CENTER},
+     *         {@link ezcConsoleTable::ALIGN_RIGHT},
+     *         {@link ezcConsoleTable::ALIGN_DEFAULT}
+     *
      */
     public function __set( $key, $val )
     {
@@ -111,10 +114,10 @@ class ezcConsoleTableCell {
                   && $val !== ezcConsoleTable::ALIGN_DEFAULT 
                 )
                 {
-                    throw new ezcBaseConfigException( 
+                    throw new ezcBasePropertyException( 
                         'align',
-                        ezcBaseConfigException::VALUE_OUT_OF_RANGE,
-                        $val
+                        $val,
+                        'ezcConsoleTable::ALIGN_DEFAULT, ezcConsoleTable::ALIGN_LEFT, ezcConsoleTable::ALIGN_CENTER, ezcConsoleTable::ALIGN_RIGHT'
                     );
                 }
                 $this->align = $val;

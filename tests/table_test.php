@@ -195,16 +195,15 @@ class ezcConsoleToolsTableTest extends ezcTestCase
         {
             $table = new ezcConsoleTable( $this->output, null, 100 );
         }
-        catch (ezcBaseConfigException $e)
+        catch (ezcBasePropertyException $e)
         {
-            $this->assertEquals( 
-                ezcBaseConfigException::VALUE_OUT_OF_RANGE,
-                $e->getCode(),
+            $this->assertTrue( 
+                true,
                 'Wrong exception code thrown on missing <cols> setting.'
             );
             return;
         }
-        $this->fail( 'No exception thrown on missing <cols> setting.' );
+        $this->fail( 'No or wrong exception thrown on missing <cols> setting.' );
     }
     
     public function testTableConfigurationFailure2 ()
@@ -214,16 +213,15 @@ class ezcConsoleToolsTableTest extends ezcTestCase
         {
             $table = new ezcConsoleTable( $this->output, 'test', 100 );
         }
-        catch (ezcBaseConfigException $e)
+        catch (ezcBasePropertyException $e)
         {
-            $this->assertEquals( 
-                ezcBaseConfigException::VALUE_OUT_OF_RANGE,
-                $e->getCode(),
-                'Wrong exception code thrown on wrong type for <cols> setting.'
+            $this->assertTrue( 
+                true,
+                'Wrong exception code thrown on missing <cols> setting.'
             );
             return;
         }
-        $this->fail( 'No exception thrown on wrong type for <cols> setting.' );
+        $this->fail( 'No or wrong exception thrown on wrong type for <cols> setting.' );
     }
 
     public function testTableConfigurationFailure3 ()
@@ -233,16 +231,15 @@ class ezcConsoleToolsTableTest extends ezcTestCase
         {
             $table = new ezcConsoleTable( $this->output, -10, 100 );
         }
-        catch (ezcBaseConfigException $e)
+        catch (ezcBasePropertyException $e)
         {
-            $this->assertEquals( 
-                ezcBaseConfigException::VALUE_OUT_OF_RANGE,
-                $e->getCode(),
-                'Wrong exception code thrown on invalid value of <cols> setting.'
+            $this->assertTrue( 
+                true,
+                'Wrong exception code thrown on missing <cols> setting.'
             );
             return;
         }
-        $this->fail( 'No exception thrown on invalid value of <cols> setting.' );
+        $this->fail( 'No or wrong exception thrown on invalid value of <cols> setting.' );
     }
     
     public function testTableConfigurationFailure5 ()
@@ -252,16 +249,15 @@ class ezcConsoleToolsTableTest extends ezcTestCase
         {
             $table = new ezcConsoleTable( $this->output, 10, false );
         }
-        catch (ezcBaseConfigException $e)
+        catch (ezcBasePropertyException $e)
         {
-            $this->assertEquals( 
-                ezcBaseConfigException::VALUE_OUT_OF_RANGE,
-                $e->getCode(),
-                'Wrong exception code thrown on wrong type for <width> setting.'
+            $this->assertTrue( 
+                true,
+                'Wrong exception code thrown on missing <cols> setting.'
             );
             return;
         }
-        $this->fail( 'No exception thrown on wrong type for <width> setting.' );
+        $this->fail( 'No or wrong exception thrown on wrong type for <width> setting.' );
     }
 
     public function testTableConfigurationFailure6 ()
@@ -271,16 +267,15 @@ class ezcConsoleToolsTableTest extends ezcTestCase
         {
             $table = new ezcConsoleTable( $this->output, 10, -10 );
         }
-        catch (ezcBaseConfigException $e)
+        catch (ezcBasePropertyException $e)
         {
-            $this->assertEquals( 
-                ezcBaseConfigException::VALUE_OUT_OF_RANGE,
-                $e->getCode(),
-                'Wrong exception code thrown on invalid value of <width> setting.'
+            $this->assertTrue( 
+                true,
+                'Wrong exception code thrown on missing <cols> setting.'
             );
             return;
         }
-        $this->fail( 'No exception thrown on invalid value of <width> setting.' );
+        $this->fail( 'No or wrong exception thrown on invalid value of <width> setting.' );
     }
 
     public function testArrayAccess()

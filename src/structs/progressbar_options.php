@@ -91,9 +91,8 @@ class ezcConsoleProgressbarOptions
      * 
      * @throws ezcBasePropertyNotFoundException
      *         If a desired property could not be found.
-     * @throws ezcBaseConfigException
-     *         If a desired property value is out of range
-     *         {@link ezcBaseConfigException::VALUE_OUT_OF_RANGE}.
+     * @throws ezcBasePropertyException
+     *         If a desired property value is out of range.
      *
      * @param string $propertyName Name of the property.
      * @param mixed $val  The value for the property.
@@ -109,13 +108,13 @@ class ezcConsoleProgressbarOptions
             case 'fractionFormat':
                 if ( strlen( $val ) < 1 )
                 {
-                    throw new ezcBaseConfigException( $propertyName, ezcBaseConfigException::VALUE_OUT_OF_RANGE, $val );
+                    throw new ezcBasePropertyException( $propertyName, $val, 'value > 0' );
                 }
                 break;
             case 'width':
                 if ( !is_int( $val ) || $val < 5 )
                 {
-                    throw new ezcBaseConfigException( $propertyName, ezcBaseConfigException::VALUE_OUT_OF_RANGE, $val );
+                    throw new ezcBasePropertyException( $propertyName, $val, 'value > 5' );
                 }
                 break;
             default:

@@ -68,12 +68,10 @@ class ezcConsoleOutputFormat
      * Overloaded __set() method to gain read-only access to properties.
      * It also performs checks on setting others.
      *
-     * @throws ezcBaseConfigException
+     * @throws ezcBasePropertyNotFoundException
      *         If the setting you try to access does not exists
-     *         {@link UNKNOWN_CONFIG_SETTING}
-     * @throws ezcBaseConfigException
+     * @throws ezcBasePropertyException
      *         If trying to set an invalid value for a setting.
-     *         {@link VALUE_OUT_OF_RANGE}
      * 
      * @param string $propertyName Name of the attrinbute to access.
      * @param string $val The value to set.
@@ -83,10 +81,8 @@ class ezcConsoleOutputFormat
     {
         if ( !isset( $this->properties[$propertyName] ) )
         {
-            throw new ezcBaseConfigException( 
-                $propertyName,
-                ezcBaseConfigException::UNKNOWN_CONFIG_SETTING,
-                $val
+            throw new ezcBasePropertyNotFoundException( 
+                $propertyName
             );
         }
         // Extry handling of multi styles
@@ -97,9 +93,8 @@ class ezcConsoleOutputFormat
             {
                 if ( !ezcConsoleOutput::isValidFormatCode( $propertyName, $style ) )
                 {
-                    throw new ezcBaseConfigException( 
+                    throw new ezcBasePropertyException( 
                         $propertyName,
-                        ezcBaseConfigException::VALUE_OUT_OF_RANGE,
                         $style
                     );
                 }
@@ -110,9 +105,8 @@ class ezcConsoleOutputFormat
         // Continue normal handling
         if ( !ezcConsoleOutput::isValidFormatCode( $propertyName, $val ) )
         {
-            throw new ezcBaseConfigException( 
+            throw new ezcBasePropertyException( 
                 $propertyName,
-                ezcBaseConfigException::VALUE_OUT_OF_RANGE,
                 $val
             );
         }
