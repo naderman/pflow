@@ -247,7 +247,7 @@ class ezcConsoleToolsInputTest extends ezcTestCase
     public function testFromString()
     {
         $param = new ezcConsoleInput();
-        $param->fromString( '[a:|all:][u?|user?][i|info][o+test|overall+]' );
+        $param->registerOptionString( '[a:|all:][u?|user?][i|info][o+test|overall+]' );
         $res['a'] = new ezcConsoleOption(
             'a', 
             'all', 

@@ -272,7 +272,7 @@ class ezcConsoleInput
      *         If string is not wellformed
      *         {@link ezcConsoleInputException::PARAMETER_STRING_NOT_WELLFORMED}.
      */
-    public function fromString( $optionDef ) 
+    public function registerOptionString( $optionDef ) 
     {
         $regex = '/\[([a-z0-9-]+)([:?*+])?([^|]*)\|([a-z0-9-]+)([:?*+])?\]/';
         if ( preg_match_all( $regex, $optionDef, $matches ) )
