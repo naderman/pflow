@@ -48,6 +48,10 @@ Just for completness. I learned it that way "no case without break" and that
 rule was quite usefull in many cases. If it disturbs you, let me know and I
 will remove it.
 
+Update 20-12-2005:
+
+Removed the break.
+
 > ezcConsoleParameter::getValues
 > - I think maybe the name should be getResult, getOptionResult or getOptionValues
 > - Alternatively the process() method could return a result object which has the
@@ -77,6 +81,10 @@ This is already implemented by the move to use of ezcConsoleOption.
 
 Like before, the naming does not really matter to me. Please let me know, if I
 should finally change that.
+
+Update 20-12-2005:
+
+Renamed the method.
 
 > ezcConsoleStatusbar
 >  I'm not sure what the purpose of this is. I think we should have a class 
