@@ -1,3 +1,69 @@
 1.0beta1 - [RELEASEDATE]
 
-- Initial release of this package.
+1.0beta2 - [RELEASEDATE]
+
+Global changes
+==============
+
+- Refactored the whole package to fit into the unified layout.
+- Switched to the use of structs where it made sense: ezcConsoleOptionRule, 
+ezcConsoleOutputFormat, ezcConsoleOutputFormats, ezcConsoleOutputOptions,
+ezcConsoleProgressbarOptions, eczConsoleTableOptions.
+- Migrated to use overloading property access - __get(),__set(),__isset() - where 
+possible (more convenient).
+
+Class based changes
+===================
+
+ezcConsoleOutput
+----------------
+
+- Renamed ezcConsoleOutput::styleText() to ezcConsoleOutput::formatText().
+- Added convenience method outputLine() to ezcConsoleOutput. This one adds a
+line break after outputting the desired text and works even without any
+parameters.
+
+ezcConsoleParamter
+------------------
+
+- Unified handling of parameter names, short and long parameters are now
+handled equally without their prefix everywhere.
+- Enhanced eczConsoleParameter::getHelp() method by a filter parameter.
+- Fix bug with argument handling and non-value parameters.
+- Fixed bug with submitting multiple parameters of the same name without value.
+- Added a new class ezcConsoleOption to represent an option (instead of using
+an array).
+- Renamed ezcConsoleParameter to ezcConsoleInput (makes more sense, since
+Parameter sounded like an acronym for Option).
+- Migrated ezcConsoleParameter class to use the new structs.
+- Reworked handling of default values for ezcComponentOption.
+- Added new setting "mandatory" to indicate that an option has to be submitted
+on every use of a program.
+- Renamed fromString() to registerOptionString().
+
+ezcConsoleTable
+---------------
+
+- Implemented classes ezcConsoleTableRow and ezcConsoleTableCell. These allow
+a new, innovative and very convenient way to create and customize console
+based tables: "$table[0][];" creates a new cell, "$table[2][]->format =
+'important';" creates a new cell and set's it's format to 'important',
+"$table[2]->align = ezcConsoleTable::ALIGN_CENTER;" set's the default
+alignment for row 3 to be center oriented. 
+- Implemented cell, row and table based format and alignment settings.
+- Implemented real inheritence of format and alignment values. The inheritence
+works like this: "Is the value not 'default' on cell level" ? true: "Use this
+value" false: "Is the value not 'default' on row level? true: "Use this value"
+false: "Use the value defined as table default".
+- Added borderFormat property to rows to set a specific format for use of the
+row border.
+
+ezcConsoleStatusbar
+-------------------
+
+- Updated to use new structs.
+
+ezcConsoleProgressbar
+---------------------
+
+- Updated to use new structs.
