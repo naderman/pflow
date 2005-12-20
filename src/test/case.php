@@ -32,8 +32,12 @@ abstract class ezcTestCase extends PHPUnit2_Framework_TestCase
      *                        set to false, the temporary directory will
      *                        probably placed in the /tmp directory.
      */
-    protected function createTempDir( $prefix, $path = false )
+    protected function createTempDir( $prefix, $path = 'run-tests-tmp' )
     {
+        if ( !is_dir( $path ) )
+        {
+            mkdir( $path );
+        }
         if ( $tempname = tempnam( $path, $prefix ))
         {
             unlink( $tempname );
