@@ -154,8 +154,17 @@ class ezcConsoleOption {
      * attribute is set to it's default value. You can simply manipulate
      * those attributes by accessing them directly.
      * 
-     * @param string $short Short name of the parameter without '-' (eg. 'f').
-     * @param string $long  Long name of the parameter without '--' (eg. 'file').
+     * @param string $short     Short name of the parameter without '-' (eg. 'f').
+     * @param string $long      Long name of the parameter without '--' (eg. 'file').
+     * @param int $type         Value type of the parameter. One of ezcConsoleInput::TYPE_*.
+     * @param mixed $default    Default value the parameter holds if not submitted.
+     * @param bool $multiple    If the parameter may be submitted multiple times.
+     * @param string $shorthelp Short help text.
+     * @param string $longhelp  Long help text.
+     * @param array(int=>ezcConsoleOptionRule) $dependencies Dependency rules.
+     * @param array(int=>ezcConsoleOptionRule) $exclusions   Exclusion rules.
+     * @param bool $arguments   Whether supplying arguments is allowed when this parameter is set.
+     * @param bool $mandatory   Whether the parameter must be always submitted.
      */
     public function __construct( 
         $short, 
