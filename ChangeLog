@@ -1,3 +1,9 @@
+1.0beta2 - Wednesday 21 December 2005
+
+- Added the ezcBasePropertyException that can be used by components to signal
+  that an property was assigned a value which it does not allows.
+
+
 1.0beta1 - Tuesday 22 November 2005
 
 - Initial release of this package.
