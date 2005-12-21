@@ -563,7 +563,9 @@ class ezcConsoleInput
     /**
      * Returns all values submitted.
      * Returns an array of all values submitted to the options. The array is 
-     * indexed by the parameters short name (excluding the '-' prefix).
+     * indexed by the parameters short name (excluding the '-' prefix). The array
+     * does not contain any parameter, whiches value is 'false' (meaning: the
+     * parameter was not submitted).
      * 
      * @return array(string => mixed)
      */
@@ -572,7 +574,10 @@ class ezcConsoleInput
         $res = array();
         foreach ( $this->options as $param )
         {
-            $res[$param->short] = $param->value;
+            if ( $param->value !== false ) 
+            {
+                $res[$param->short] = $param->value;
+            }
         }
         return $res;
     }
