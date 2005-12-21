@@ -421,7 +421,6 @@ class ezcConsoleOption {
      * </code>
      * 
      * @return array Exclusion definition as described or an empty array.
-     * @return void
      */
     public function getExclusions()
     {

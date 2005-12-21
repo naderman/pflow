@@ -152,7 +152,6 @@ class ezcConsoleProgressbar
      *
      * @throws ezcBasePropertyNotFoundException
      *         If the the desired property is not found.
-     * @return mixed Value of the desired property.
      */
     public function __get( $key )
     {

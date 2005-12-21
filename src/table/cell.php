@@ -75,7 +75,6 @@ class ezcConsoleTableCell {
      *
      * @throws ezcBasePropertyNotFoundException
      *         If the the desired property is not found.
-     * @return mixed The value of the desired property.
      */
     public function __get( $key )
     {
