@@ -1,70 +1,43 @@
 1.0beta2 - [RELEASEDATE]
 
-Global changes
-==============
+- Added convenience method ezcConsoleOutput::outputLine(). This one adds a
+  line break after outputting the desired text and works also without any
+  text to print a blank line (similar to Pascals writeln()).
+- Added option filter parameter to eczConsoleParameter::getHelp().
+- Added a new class ezcConsoleOption to represent a single option (former
+named parameter and used an array for the structure).
+- Added new setting "mandatory" to ezcConsoleOption to indicate that an 
+  option has to be submitted always.
+- Added cell, row and table based format and alignment settings to
+  ezcConsoleTable.
+- Added real inheritence of format and alignment through ezcConsoleTable. 
+- Added <borderFormat> property to rows to set a specific format for use when
+  printing the row border.
 
-- Refactored the whole package to fit into the unified layout.
-- Switched to the use of structs where it made sense: ezcConsoleOptionRule,
-  ezcConsoleOutputFormat, ezcConsoleOutputFormats, ezcConsoleOutputOptions,
-  ezcConsoleProgressbarOptions, eczConsoleTableOptions.
-- Migrated to use overloading property access - __get(),__set(),__isset() -
-  where possible (more convenient).
-
-Class based changes
-===================
-
-ezcConsoleOutput
-----------------
-
-- Renamed ezcConsoleOutput::styleText() to ezcConsoleOutput::formatText().
-- Added convenience method outputLine() to ezcConsoleOutput. This one adds a
-  line break after outputting the desired text and works even without any
-  parameters.
-
-ezcConsoleParamter
-------------------
-
-- Unified handling of parameter names, short and long parameters are now
+- Refactored the whole package to fit into the unified layout and provide a
+  much more convenient API.
+- Changed to the use of structs, where it made sense, instead of complex array
+  structures: ezcConsoleOptionRule, ezcConsoleOutputFormat, ezcConsoleOutputFormats, 
+  ezcConsoleOutputOptions, ezcConsoleProgressbarOptions, eczConsoleTableOptions.
+- Changed handling of parameter names in ezcConsoleInput, short and long parameters are now
   handled equally without their prefix everywhere.
-- Enhanced eczConsoleParameter::getHelp() method by a filter parameter.
-- Fix bug with argument handling and non-value parameters.
-- Fixed bug with submitting multiple parameters of the same name without value.
-- Added a new class ezcConsoleOption to represent an option (instead of using
-  an array).
-- Renamed ezcConsoleParameter to ezcConsoleInput (makes more sense, since
-  Parameter sounded like an acronym for Option).
-- Migrated ezcConsoleParameter class to use the new structs.
-- Reworked handling of default values for ezcComponentOption.
-- Added new setting "mandatory" to indicate that an option has to be submitted
-  on every use of a program.
-- Renamed fromString() to registerOptionString().
-
-ezcConsoleTable
----------------
-
-- Implemented classes ezcConsoleTableRow and ezcConsoleTableCell. These allow
-  a new, innovative and very convenient way to create and customize console
+- Changed to use overloading property access - __get(),__set(),__isset() -
+  where possible (more convenient API).
+- Changed handling of default values for ezcComponentOption.
+- Changed handling ot table structure to classes ezcConsoleTableRow and ezcConsoleTableCell. 
+  # These allow a new, innovative and very convenient way to create and customize console
   based tables: "$table[0][];" creates a new cell, "$table[2][]->format =
   'important';" creates a new cell and set's it's format to 'important',
   "$table[2]->align = ezcConsoleTable::ALIGN_CENTER;" set's the default
-  alignment for row 3 to be center oriented. 
-- Implemented cell, row and table based format and alignment settings.
-- Implemented real inheritence of format and alignment values. The inheritence
-  works like this: "Is the value not 'default' on cell level" ? true: "Use
-  this value" false: "Is the value not 'default' on row level? true: "Use this
-  value" false: "Use the value defined as table default".
-- Added borderFormat property to rows to set a specific format for use of the
-  row border.
+- Renamed ezcConsoleParameter to ezcConsoleInput (makes more sense, since
+  Parameter sounded like an acronym for Option). Options are now handled
+  through the ezcConsoleOption class.
+- Renamed ezcConsoleOutput::styleText() to ezcConsoleOutput::formatText().
+- Renamed ezcConsoleInput::fromString() to ezcConsoleInput::registerOptionString().
 
-ezcConsoleStatusbar
--------------------
-
-- Updated to use new structs.
-
-ezcConsoleProgressbar
----------------------
-
-- Updated to use new structs.
+- Fixed bug with argument handling and non-value parameters in ezcConsoleInput.
+- Fixed bug with submitting multiple parameters of the same name without value
+in ezcConsoleInput.
 
 
 1.0beta1 - [RELEASEDATE]
