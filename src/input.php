@@ -178,6 +178,7 @@ class ezcConsoleInput
      *
      * @param ezcConsoleOption $option The option to register.
      *
+     * @return ezcConsoleOption The recently registered option.
      */
     public function registerOption( ezcConsoleOption $option )
     {
@@ -206,6 +207,7 @@ class ezcConsoleInput
         $this->options[] = $option;
         $this->optionLong[$option->long] = $option;
         $this->optionShort[$option->short] = $option;
+        return $option;
     }
 
     /**
