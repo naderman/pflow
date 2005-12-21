@@ -20,7 +20,7 @@
  * - <b>progressChar</b> <i>string</i>, contains the character for the right most position of the progress bar's progress.
  * - <b>formatString</b> <i>string</i>, contains the format for the complete progress bar.
  * - <b>width</b> <i>string</i>, contains the width of the progress bar in characters.
- * - <b>fractionFormat<b> <i>string</i>, contains an sprintf() format for the fraction display.
+ * - <b>fractionFormat</b> <i>string</i>, contains an sprintf() format for the fraction display.
  * 
  * @package ConsoleTools
  * @version //autogen//
