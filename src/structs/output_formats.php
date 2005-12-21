@@ -36,6 +36,12 @@ class ezcConsoleOutputFormats
     public function __construct()
     {
         $this->formats['default'] = new ezcConsoleOutputFormat();
+        $this->formats['success'] = new ezcConsoleOutputFormat();
+        $this->formats['success']->color = 'green';
+        $this->formats['success']->style = array( 'bold' );
+        $this->formats['failure'] = new ezcConsoleOutputFormat();
+        $this->formats['failure']->color = 'red';
+        $this->formats['failure']->style = array( 'bold' );
     }
     
     /**
