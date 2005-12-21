@@ -96,7 +96,7 @@ else
 }
 
 // Process all parameters at once:
-foreach ( $paramHandler->getValues() as $paramShort => $val )
+foreach ( $paramHandler->getOptionValues() as $paramShort => $val )
 {
      switch (true)
      {
