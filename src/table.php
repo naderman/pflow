@@ -183,6 +183,8 @@ class ezcConsoleTable implements Countable, Iterator, ArrayAccess
     /**
      * Output the table.
      * Prints the complete table to the console.
+     *
+     * @return void
      */
     public function outputTable() 
     {
@@ -243,6 +245,7 @@ class ezcConsoleTable implements Countable, Iterator, ArrayAccess
      * 
      * @param int $offset                 The offset to assign an item to.
      * @param object(ezcConsoleTableCell) The item to assign.
+     * @return void
      */
     public function offsetSet( $offset, $value )
     {
@@ -267,6 +270,7 @@ class ezcConsoleTable implements Countable, Iterator, ArrayAccess
      * data of this object as if it was an array. 
      * 
      * @param int $offset The offset to unset the value for.
+     * @return void
      */
     public function offsetUnset( $offset )
     {
@@ -392,6 +396,7 @@ class ezcConsoleTable implements Countable, Iterator, ArrayAccess
      *         If a the value for the property options is not an instance of
      * @throws ezcBasePropertyNotFoundException
      *         If a the value for a property is out of range.
+     * @return void
      */
     public function __set( $key, $val )
     {
@@ -630,6 +635,8 @@ class ezcConsoleTable implements Countable, Iterator, ArrayAccess
 
     /**
      * Determine width of each single column. 
+     *
+     * @return void
      */
     private function getColWidths()
     {

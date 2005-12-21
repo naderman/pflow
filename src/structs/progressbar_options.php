@@ -96,6 +96,7 @@ class ezcConsoleProgressbarOptions
      *
      * @param string $propertyName Name of the property.
      * @param mixed $val  The value for the property.
+     * @return void
      */
     public function __set( $propertyName, $val )
     {

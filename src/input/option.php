@@ -224,6 +224,7 @@ class ezcConsoleOption {
      * the submitted rule will be added to the parameter as a dependency.
      *
      * @param ezcConsoleOptionRule $rule The rule to add.
+     * @return void
      */
     public function addDependency( ezcConsoleOptionRule $rule )
     {
@@ -243,6 +244,7 @@ class ezcConsoleOption {
      * not registered with the parameter, the method call will simply be ignored.
      * 
      * @param ezcConsoleOptionRule $rule The rule to be removed.
+     * @return void
      */
     public function removeDependency( ezcConsoleOptionRule $rule )
     {
@@ -262,6 +264,7 @@ class ezcConsoleOption {
      * method call will simply be ignored.
      * 
      * @param ezcConsoleOption $param The param to be check for rules.
+     * @return void
      */
     public function removeAllDependencies( ezcConsoleOption $param )
     {
@@ -317,6 +320,8 @@ class ezcConsoleOption {
     /**
      * Reset existing dependency rules.
      * Deletes all registered dependency rules from the parameter definition.
+     * 
+     * @return void
      */
     public function resetDependencies() 
     {
@@ -329,6 +334,7 @@ class ezcConsoleOption {
      * the submitted rule will be added to the parameter as a exclusion.
      *
      * @param ezcConsoleOptionRule $rule The rule to add.
+     * @return void
      */
     public function addExclusion( ezcConsoleOptionRule $rule )
     {
@@ -348,6 +354,7 @@ class ezcConsoleOption {
      * not registered with the parameter, the method call will simply be ignored.
      * 
      * @param ezcConsoleOptionRule $rule The rule to be removed.
+     * @return void
      */
     public function removeExclusion( ezcConsoleOptionRule $rule )
     {
@@ -367,6 +374,7 @@ class ezcConsoleOption {
      * method call will simply be ignored.
      * 
      * @param ezcConsoleOption $param The param to be check for rules.
+     * @return void
      */
     public function removeAllExclusions( ezcConsoleOption $param )
     {
@@ -413,6 +421,7 @@ class ezcConsoleOption {
      * </code>
      * 
      * @return array Exclusion definition as described or an empty array.
+     * @return void
      */
     public function getExclusions()
     {
@@ -422,6 +431,8 @@ class ezcConsoleOption {
     /**
      * Reset existing exclusion rules.
      * Deletes all registered exclusion rules from the parameter definition.
+     *
+     * @return void
      */
     public function resetExclusions() 
     {
@@ -451,6 +462,7 @@ class ezcConsoleOption {
      *
      * @throws ezcBasePropertyReadOnlyException
      *         If the property you try to access is read-only.
+     * @return void
      */
     public function __set( $key, $val )
     {

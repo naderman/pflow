@@ -70,6 +70,7 @@ class ezcConsoleOutputFormats
      * 
      * @param string $formatName
      * @param ezcConsoleOutputFormat $val The format defintion.
+     * @return void
      */
     public function __set( $formatName, ezcConsoleOutputFormat $val )
     {

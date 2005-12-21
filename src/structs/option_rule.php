@@ -96,7 +96,7 @@ class ezcConsoleOptionRule
      *         If the property tried to access does not exist.
      * 
      * @param string $propertyName Name of the property to access.
-     * @return mixed Value of the property.
+     * @return void
      */
     public function __set( $propertyName, $val ) 
     {

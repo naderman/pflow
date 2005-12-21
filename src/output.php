@@ -211,6 +211,7 @@ class ezcConsoleOutput
      *         is not an instance of ezcConsoleOutputOptions. 
      * @throws ezcBasePropertyException if a the value for the property formats
      *         is not an instance of ezcConsoleOutputFormats. 
+     * @return void
      */
     public function __set( $propertyName, $val )
     {

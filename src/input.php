@@ -228,6 +228,7 @@ class ezcConsoleInput
      * @throws ezcConsoleInputException
      *         If another option/alias has taken the provided short or long name
      *         {@link ezcConsoleInputException::PARAMETER_ALREADY_REGISTERED}.
+     * @return void
      */
     public function registerAlias( $short, $long, $option )
     {
@@ -273,6 +274,7 @@ class ezcConsoleInput
      * @throws ezcConsoleInputException 
      *         If string is not wellformed
      *         {@link ezcConsoleInputException::PARAMETER_STRING_NOT_WELLFORMED}.
+     * @return void
      */
     public function registerOptionString( $optionDef ) 
     {
@@ -334,6 +336,7 @@ class ezcConsoleInput
      * @throws ezcConsoleInputException 
      *         If requesting a nonexistant option
      *         {@link ezcConsoleInputException::PARAMETER_NOT_EXISTS}.
+     * @return void
      */
     public function unregisterOption( $option )
     {
@@ -385,6 +388,7 @@ class ezcConsoleInput
      *
      * @param mixed $short 
      * @param mixed $long 
+     * @return void
      */
     public function unregisterAlias( $short, $long )
     {
@@ -463,6 +467,7 @@ class ezcConsoleInput
      * which specifies the parameter on which the error occured.
      * 
      * @param array(int -> string) $args The arguments
+     * @return void
      *
      * @throws ezcConsoleInputException 
      *         If dependencies are unmet 
@@ -567,7 +572,7 @@ class ezcConsoleInput
      * does not contain any parameter, whiches value is 'false' (meaning: the
      * parameter was not submitted).
      * 
-     * @return array(string => mixed)
+     * @return array(string=>mixed)
      */
     public function getOptionValues()
     {
@@ -595,7 +600,7 @@ class ezcConsoleInput
      * method which is commonly used on Unix (if the last parameter
      * accepts multiple values this is required).
      *
-     * @return array(int => string) Arguments.
+     * @return array(int=>string) Arguments.
      */
     public function getArguments()
     {
@@ -619,6 +624,7 @@ class ezcConsoleInput
      * 
      * @param bool $long Set this to true for getting the long help version.
      * @param array $params Set of options to generate help for, default is all.
+     * @return array(int=>array(int=>string)) Table structure as explained.
      */
     public function getHelp( $long = false, $params = array() )
     {
@@ -645,8 +651,8 @@ class ezcConsoleInput
      * is set, only the option names listed in this array are listed in the
      * synopsis.
      * 
-     * @param array $options 
-     * @return void
+     * @param array(int=>string) $options Names of options to include.
+     * @return string The generated synopsis
      */
     public function getSynopsis( array $optionNames = null )
     {
@@ -674,9 +680,9 @@ class ezcConsoleInput
      * determines the actual deps in the option dependency recursion to 
      * terminate that after 2 recursions.
      * 
-     * @param ezcConsoleOption $option The option to generate the synopsis for.
-     * @param mixed $usedOptions       Array of used option short names.
-     * @param int $depth               Current recursion depth.
+     * @param ezcConsoleOption $option        The option to include.
+     * @param array(int=>string) $usedOptions Array of used option short names.
+     * @param int $depth                      Current recursion depth.
      * @return string The synopsis for this parameter.
      */
     protected function createOptionSynopsis( ezcConsoleOption $option, &$usedOptions, $depth = 0 )
@@ -738,6 +744,7 @@ class ezcConsoleInput
      * @param array $args The arguments array.
      * @param int $i      The current position in the arguments array.
      * @param int The current index in the $args array.
+     * @return void
      */
     private function processOptions( $args, &$i )
     {
@@ -771,7 +778,7 @@ class ezcConsoleInput
         if ( isset( $args[$i] ) && substr( $args[$i], 0, 1 ) !== '-' )
         {
             // Type check
-            if ( $this->correctType( $option, $args[$i] ) === false )
+            if ( $this->isCorrectType( $option, $args[$i] ) === false )
             {
                 throw new ezcConsoleInputException( 
                     "Parameter with long name <{$option->long}> of incorrect type.",
@@ -814,8 +821,9 @@ class ezcConsoleInput
     /**
      * Process arguments given to the program. 
      * 
-     * @param array $args The arguments array.
+     * @param array(int=>string) $args The arguments array.
      * @param int $i Current index in arguments array.
+     * @return void
      */
     private function processArguments( $args, &$i )
     {
@@ -841,6 +849,7 @@ class ezcConsoleInput
      * @throws ezcConsoleInputException 
      *         If arguments are passed although a parameter dissallowed them
      *         {@link ezcConsoleInputException::ARGUMENTS_NOT_ALLOWED}.
+     * @return void
      */
     private function checkRules()
     {
@@ -933,7 +942,7 @@ class ezcConsoleInput
      * @param string $val The value to check.
      * @return bool True on succesful check, otherwise false.
      */
-    private function correctType( $option, &$val )
+    private function isCorrectType( $option, &$val )
     {
         $res = false;
         switch ( $option->type )
@@ -960,6 +969,7 @@ class ezcConsoleInput
      * 
      * @param array $args The arguments array
      * @param int $i Current arguments array position
+     * @return void
      */
     private function preprocessLongOption( &$args, $i )
     {

@@ -152,6 +152,7 @@ class ezcConsoleProgressbar
      *
      * @throws ezcBasePropertyNotFoundException
      *         If the the desired property is not found.
+     * @return mixed Value of the desired property.
      */
     public function __get( $key )
     {
@@ -178,6 +179,7 @@ class ezcConsoleProgressbar
      *         If a desired property could not be found.
      * @throws ezcBasePropertyException
      *         If a desired property value is out of range.
+     * @return void
      */
     public function __set( $key, $val )
     {
@@ -238,6 +240,7 @@ class ezcConsoleProgressbar
      * No output will be done yet. Call {@link ezcConsoleProgressbar::output()}
      * to print the bar.
      * 
+     * @return void
      */
     public function start() 
     {
@@ -250,6 +253,8 @@ class ezcConsoleProgressbar
      * Draw the progress bar.
      * Prints the progressbar to the screen. If start() has not been called 
      * yet, the current line is used for {@link ezcConsolProgressbar::start()}.
+     *
+     * @return void
      */
     public function output()
     {
@@ -268,6 +273,7 @@ class ezcConsoleProgressbar
      * the {@link ezcConsoleProgressbar::output()} method.
      *
      * @param bool Whether to redraw the bar immediatelly.
+     * @return void
      */
     public function advance( $redraw = true ) 
     {
@@ -283,6 +289,8 @@ class ezcConsoleProgressbar
      * Finishes the bar (jump to 100% if not happened yet,...) and jumps
      * to the next line to allow new output. Also resets the values of the
      * output handler used, if changed.
+     *
+     * @return void
      */
     public function finish()
     {
@@ -293,6 +301,7 @@ class ezcConsoleProgressbar
     /**
      * Generate all values to be replaced in the format string. 
      * 
+     * @return void
      */
     protected function generateValues()
     {
@@ -339,6 +348,7 @@ class ezcConsoleProgressbar
     /**
      * Insert values into bar format string. 
      * 
+     * @return void
      */
     protected function insertValues()
     {
@@ -353,6 +363,7 @@ class ezcConsoleProgressbar
     /**
      * Calculate several measures necessary to generate a bar. 
      * 
+     * @return void
      */
     protected function calculateMeasures()
     {
@@ -380,6 +391,7 @@ class ezcConsoleProgressbar
      * Strip all escape sequences from a string to measure it's size correctly. 
      * 
      * @param mixed $str 
+     * @return void
      */
     protected function stripEscapeSequences( $str )
     {

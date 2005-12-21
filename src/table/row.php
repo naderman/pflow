@@ -149,6 +149,7 @@ class ezcConsoleTableRow implements Countable, Iterator, ArrayAccess {
      * 
      * @param int $offset                 The offset to assign an item to.
      * @param object(ezcConsoleTableCell) The item to assign.
+     * @return void
      */
     public function offsetSet( $offset, $value )
     {
@@ -173,6 +174,7 @@ class ezcConsoleTableRow implements Countable, Iterator, ArrayAccess {
      * data of this object as if it was an array. 
      * 
      * @param int $offset The offset to unset the value for.
+     * @return void
      */
     public function offsetUnset( $offset )
     {
@@ -272,6 +274,7 @@ class ezcConsoleTableRow implements Countable, Iterator, ArrayAccess {
      *
      * @throws ezcBasePropertyNotFoundException
      *         If the the desired property is not found.
+     * @return mixed Value of the desired property.
      */
     public function __get( $key )
     {
@@ -294,6 +297,7 @@ class ezcConsoleTableRow implements Countable, Iterator, ArrayAccess {
      *         {@link ezcConsoleTable::ALIGN_RIGHT},
      *         {@link ezcConsoleTable::ALIGN_DEFAULT}
      *
+     * @return void
      */
     public function __set( $key, $val )
     {

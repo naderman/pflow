@@ -98,6 +98,7 @@ class ezcConsoleStatusbar
      *
      * @throws ezcBasePropertyNotFoundException
      *         If the the desired property is not found.
+     * @return mixed The value of the desired property.
      */
     public function __get( $key )
     {
@@ -118,6 +119,7 @@ class ezcConsoleStatusbar
      *         If a desired property could not be found.
      * @throws ezcBasePropertyException
      *         If a desired property value is out of range.
+     * @return void
      */
     public function __set( $key, $val )
     {
@@ -158,6 +160,7 @@ class ezcConsoleStatusbar
      * the next line.
      *
      * @param bool $status Print successChar on true, failureChar on false.
+     * @return void
      */
     public function add( $status )
     {
@@ -181,6 +184,7 @@ class ezcConsoleStatusbar
     /**
      * Reset the state of the statusbar object to its initial one. 
      * 
+     * @return void
      */
     public function reset()
     {
