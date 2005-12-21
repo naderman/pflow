@@ -167,7 +167,8 @@ class ezcConsoleOption {
         $longhelp = 'Sorry, there is no help text available for this parameter.', 
         array $dependencies = array(),
         array $exclusions = array(), 
-        $arguments = true
+        $arguments = true,
+        $mandatory = false
     ) {
         if ( !self::validateOptionName( $short ) )
         {
@@ -198,6 +199,7 @@ class ezcConsoleOption {
         {
             $this->addExclusion( $exc );
         }
+        $this->mandatory = $mandatory;
     }
 
     /* Add a new dependency for a parameter.
