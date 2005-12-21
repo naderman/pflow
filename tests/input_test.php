@@ -980,7 +980,7 @@ class ezcConsoleToolsInputTest extends ezcTestCase
             $this->fail( $e->getMessage() );
             return;
         }
-        $values = $this->consoleParameter->getValues();
+        $values = $this->consoleParameter->getOptionValues();
         $this->assertTrue( count( array_diff( $res, $values ) ) == 0, 'Parameters processed incorrectly.' );
     }
     

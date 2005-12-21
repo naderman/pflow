@@ -84,7 +84,7 @@
  * }
  * 
  * // Process all parameters at once:
- * foreach ( $paramHandler->getValues() as $paramShort => $val )
+ * foreach ( $paramHandler->getOptionValues() as $paramShort => $val )
  * {
  *      switch (true)
  *      {
@@ -569,7 +569,7 @@ class ezcConsoleInput
      * 
      * @return array(string => mixed)
      */
-    public function getOptionsValues()
+    public function getOptionValues()
     {
         $res = array();
         foreach ( $this->options as $param )
@@ -749,7 +749,7 @@ class ezcConsoleInput
      */
     private function checkRules()
     {
-        $values = $this->getValues();
+        $values = $this->getOptionValues();
         foreach ( $this->options as $id => $option )
         {
             // Mandatory
