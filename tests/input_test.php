@@ -968,6 +968,15 @@ class ezcConsoleToolsInputTest extends ezcTestCase
         );
         
     }
+    
+    public function testGetSynopsis()
+    {
+        $this->assertEquals( 
+            '$ '.$_SERVER['argv'][0].' [-t] [-s] [-v] [-o <string>] [-b 42] [-d "world"] [-y <string>] [-c] [-e] [-n]  [[--] <args>]',
+            $this->consoleParameter->getSynopsis(),
+            'Program synopsis not generated correctly.'
+        );
+    }
 
     private function commonProcessTestSuccess( $args, $res )
     {

@@ -187,6 +187,7 @@ class ezcConsoleOption {
             );
         }
         $this->properties['short'] = $short;
+        
         if ( !self::validateOptionName( $long ) )
         {
             throw new ezcConsoleInputException(  
@@ -195,20 +196,26 @@ class ezcConsoleOption {
             );
         }
         $this->properties['long'] = $long;
-        $this->type = $type;
-        $this->default = isset( $default ) ? $default : null;
-        $this->multiple = $multiple;
-        $this->shorthelp = $shorthelp;
-        $this->longhelp = $longhelp;
+        
+        $this->type      = $type         !== null ? $type      : ezcConsoleInput::TYPE_NONE ;
+        $this->default   = $default      !== null ? $default   : null;
+        $this->multiple  = $multiple     !== null ? $multiple  : false ;
+        $this->shorthelp = $shorthelp    !== null ? $shorthelp : 'No help available.';
+        $this->longhelp  = $longhelp     !== null ? $longhelp  : 'Sorry, there is no help text available for this parameter.';
+        
+        $dependencies    = $dependencies !== null && is_array( $dependencies ) ? $dependencies : array();
         foreach ( $dependencies as $dep )
         {
             $this->addDependency( $dep );
         }
+        
+        $exclusions = $exclusions !== null && is_array( $exclusions ) ? $exclusions : array();
         foreach( $exclusions as $exc )
         {
             $this->addExclusion( $exc );
         }
-        $this->mandatory = $mandatory;
+
+        $this->mandatory = $mandatory !== null ? $mandatory : false;
     }
 
     /* Add a new dependency for a parameter.

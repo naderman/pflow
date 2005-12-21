@@ -637,6 +637,101 @@ class ezcConsoleInput
     }
 
     /**
+     * Returns a synopsis string for the program.
+     * This gives you a synopsis definition for the options and arguments 
+     * defined with this instance of ezcConsoleInput. You can filter the 
+     * options named in the synopsis by submitting their short names in an
+     * array as the parameter of this method. If the parameter $options
+     * is set, only the option names listed in this array are listed in the
+     * synopsis.
+     * 
+     * @param array $options 
+     * @return void
+     */
+    public function getSynopsis( array $optionNames = null )
+    {
+        $usedOptions = array();
+        $allowsArgs = true;
+        $synopsis = '$ ' . ( isset( $argv ) && sizeoff( $argv ) > 0 ? $argv[0] : $_SERVER['argv'][0] ) . ' ';
+        foreach ( $this->getOptions() as $option )
+        {
+            if ( $optionNames === null || is_array( $optionNames ) && ( in_array( $optionNames, $option->short ) ||  in_array( $optionNames, $option->long ) ) )
+            {
+                $synopsis .= $this->createOptionSynopsis( $option, $usedOptions, $allowsArgs );
+            }
+        }
+        $synopsis .= " [[--] <args>]";
+        return $synopsis;
+    }
+
+    /**
+     * Returns the synopsis string for a single option and it's dependencies.
+     * This method returns a part of the program synopsis, specifically for a
+     * certain parameter. The method recursively adds depending parameters up
+     * to the 2nd depth level to the synopsis. The second parameter is used
+     * to store the short names of all options that have already been used in 
+     * the synopsis (to avoid adding an option twice). The 3rd parameter 
+     * determines the actual deps in the option dependency recursion to 
+     * terminate that after 2 recursions.
+     * 
+     * @param ezcConsoleOption $option The option to generate the synopsis for.
+     * @param mixed $usedOptions       Array of used option short names.
+     * @param int $depth               Current recursion depth.
+     * @return string The synopsis for this parameter.
+     */
+    protected function createOptionSynopsis( ezcConsoleOption $option, &$usedOptions, $depth = 0 )
+    {
+        $synopsis = '';
+
+        // Break after a nesting level of 2
+        if ( $depth++ > 2 || in_array( $option->short, $usedOptions ) ) return $synopsis;
+        
+        $usedOptions[] = $option->short;
+        
+        $synopsis .= "-{$option->short}";
+
+        if ( isset( $option->default ) )
+        {
+            $synopsis .= " " . ( $option->type === ezcConsoleInput::TYPE_STRING ? '"' : '' ) . $option->default . ( $option->type === ezcConsoleInput::TYPE_STRING ? '"' : '' );
+        }
+        else if ( $option->type !== ezcConsoleInput::TYPE_NONE )
+        {
+            $synopsis .= " ";
+            switch ( $option->type )
+            {
+                case ezcConsoleInput::TYPE_STRING:
+                    $synopsis .= "<string>";
+                    break;
+                case ezcConsoleInput::TYPE_INT:
+                    $synopsis .= "<string>";
+                    break;
+                default:
+                    $synopsis .= "<unknown>";
+                    break;
+            }
+        }
+
+        foreach ( $option->getDependencies() as $rule )
+        {
+            $deeperSynopsis = $this->createOptionSynopsis( $rule->option, $usedOptions, $depth );
+            $synopsis .= strlen( trim( $deeperSynopsis ) ) > 0 ? ' ' . $deeperSynopsis : '';
+        }
+        
+        if ( $option->arguments === false )
+        {
+            $allowsArgs = false;
+        }
+        
+        // Make the whole thing optional?
+        if ( $option->mandatory === false )
+        {
+            $synopsis = "[$synopsis]";
+        }
+
+        return $synopsis . ' ';
+    }
+
+    /**
      * Process an option.
      * This method does the processing of a single option. 
      * 
@@ -654,7 +749,7 @@ class ezcConsoleInput
             if ( isset( $args[$i] ) && substr( $args[$i], 0, 1 ) !== '-' )
             {
                 // But one found
-                throw new Exception( 
+                throw new ezcConsoleInputException( 
                     "Parameter with long name <{$option->long}> does not expect a value but <{$args[$i]}> was submitted.",
                     ezcConsoleInputException::PARAMETER_TYPE_RULE_NOT_MET,
                     $option
