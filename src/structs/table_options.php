@@ -125,7 +125,7 @@ class ezcConsoleTableOptions
     public function __construct( 
         $colWidth = 'auto',
         $colWrap = ezcConsoleTable::WRAP_AUTO,
-        $colAlign = ezcConsoleTable::ALIGN_LEFT,
+        $defaultAlign = ezcConsoleTable::ALIGN_LEFT,
         $colPadding = ' ',
         $widthType = ezcConsoleTable::WIDTH_MAX,
         $lineVertical = '-',
@@ -137,7 +137,7 @@ class ezcConsoleTableOptions
     {
         $this->colWidth = $colWidth;
         $this->colWrap = $colWrap;
-        $this->colAlign = $colAlign;
+        $this->defaultAlign = $defaultAlign;
         $this->colPadding = $colPadding;
         $this->widthType = $widthType;
         $this->lineVertical = $lineVertical;
