@@ -193,7 +193,7 @@ class ezcConsoleToolsTableTest extends ezcTestCase
         // Missing 'cols' setting
         try
         {
-            $table = new ezcConsoleTable( $this->output, null, 100 );
+            $table = new ezcConsoleTable( $this->output, null );
         }
         catch (ezcBasePropertyException $e)
         {
@@ -211,7 +211,7 @@ class ezcConsoleToolsTableTest extends ezcTestCase
         // 'cols' setting wrong type
         try
         {
-            $table = new ezcConsoleTable( $this->output, 'test', 100 );
+            $table = new ezcConsoleTable( $this->output, 'test' );
         }
         catch (ezcBasePropertyException $e)
         {
@@ -229,7 +229,7 @@ class ezcConsoleToolsTableTest extends ezcTestCase
         // 'cols' setting out of range
         try
         {
-            $table = new ezcConsoleTable( $this->output, -10, 100 );
+            $table = new ezcConsoleTable( $this->output, -10 );
         }
         catch (ezcBasePropertyException $e)
         {
@@ -241,46 +241,10 @@ class ezcConsoleToolsTableTest extends ezcTestCase
         }
         $this->fail( 'No or wrong exception thrown on invalid value of <cols> setting.' );
     }
-    
-    public function testTableConfigurationFailure5 ()
-    {
-        // 'width' setting wrong type
-        try
-        {
-            $table = new ezcConsoleTable( $this->output, 10, false );
-        }
-        catch (ezcBasePropertyException $e)
-        {
-            $this->assertTrue( 
-                true,
-                'Wrong exception code thrown on missing <cols> setting.'
-            );
-            return;
-        }
-        $this->fail( 'No or wrong exception thrown on wrong type for <width> setting.' );
-    }
-
-    public function testTableConfigurationFailure6 ()
-    {
-        // 'width' setting out of range
-        try
-        {
-            $table = new ezcConsoleTable( $this->output, 10, -10 );
-        }
-        catch (ezcBasePropertyException $e)
-        {
-            $this->assertTrue( 
-                true,
-                'Wrong exception code thrown on missing <cols> setting.'
-            );
-            return;
-        }
-        $this->fail( 'No or wrong exception thrown on invalid value of <width> setting.' );
-    }
 
     public function testArrayAccess()
     {
-        $table = new ezcConsoleTable( $this->output, 100, 10 );
+        $table = new ezcConsoleTable( $this->output, 100 );
         $table[0];
     }
     
@@ -288,8 +252,7 @@ class ezcConsoleToolsTableTest extends ezcTestCase
     {
         $table =  new ezcConsoleTable( 
             $this->output,
-            $settings['width'],
-            $settings['cols']
+            $settings['width']
         );
         
         // Set options

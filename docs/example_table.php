@@ -37,7 +37,7 @@ $out->formats->sum->color = 'blue';
 $out->formats->sum->style = array( 'negative' );
 
 // Create a new table
-$table = new ezcConsoleTable( $out, 60, 1 );
+$table = new ezcConsoleTable( $out, 60 );
 
 // Create first row and in it the first cell
 $table[0][0]->content = 'Headline 1';
@@ -64,7 +64,7 @@ $table[0]->borderFormat = 'headline';
 $table[2]->format = 'sum';
 
 $table->outputTable();
-
+echo "\n";
 /*
 
 RESULT (without color):

@@ -24,7 +24,7 @@
  * $out->formats->sum->style = array( 'negative' );
  * 
  * // Create a new table
- * $table = new ezcConsoleTable( $out, 60, 1 );
+ * $table = new ezcConsoleTable( $out, 60 );
  * 
  * // Create first row and in it the first cell
  * $table[0][0]->content = 'Headline 1';
@@ -110,7 +110,6 @@ class ezcConsoleTable implements Countable, Iterator, ArrayAccess
      * <code>
      * array(
      *  'width' => <int>,       // Width of the table
-     *  'cols'  => <int>,       // Number of columns
      * );
      * </code>
      *
@@ -118,7 +117,6 @@ class ezcConsoleTable implements Countable, Iterator, ArrayAccess
      */
     protected $settings = array( 
         'width' => 100,
-        'cols'  => 1,
     );
 
     /**
@@ -147,7 +145,6 @@ class ezcConsoleTable implements Countable, Iterator, ArrayAccess
      *
      * @param ezcConsoleOutput $outHandler    Output handler to utilize
      * @param int $width                      Overall width of the table (chars).
-     * @param int $cols                       Number of columns in a row.
      * @param ezcConsoleTableOptions $options Options
      *
      * @see ezcConsoleTable::$settings
@@ -155,11 +152,10 @@ class ezcConsoleTable implements Countable, Iterator, ArrayAccess
      *
      * @throws ezcBaseConfigException On an invalid setting.
      */
-    public function __construct( ezcConsoleOutput $outHandler, $width, $cols, ezcConsoleTableOptions $options = null ) 
+    public function __construct( ezcConsoleOutput $outHandler, $width, ezcConsoleTableOptions $options = null ) 
     {
         $this->outputHandler = $outHandler;
         $this->__set( 'width', $width );
-        $this->__set( 'cols', $cols );
         $this->__set( 'options', isset( $options ) ? $options : new ezcConsoleTableOptions() );
     }
 
@@ -644,10 +640,16 @@ class ezcConsoleTable implements Countable, Iterator, ArrayAccess
         {
             return $this->options->colWidth;
         }
+        // Determine number of columns:
+        $colCount = 0;
+        foreach ( $this->rows as $row )
+        {
+            $colCount = max( sizeof( $row ), $colCount );
+        }
         // Subtract border and padding chars from global width
-        $globalWidth = $this->width - ( $this->cols * ( 2 * strlen( $this->options->colPadding ) + 1 ) ) - 1;
+        $globalWidth = $this->width - ( $colCount * ( 2 * strlen( $this->options->colPadding ) + 1 ) ) - 1;
         // Width of a column if each is made equal
-        $colNormWidth = round( $globalWidth / $this->cols );
+        $colNormWidth = round( $globalWidth / $colCount );
         $colMaxWidth = array();
         // Determine the longest data for each column
         foreach ( $this->rows as $row => $cells )
