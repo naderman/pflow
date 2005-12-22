@@ -12,15 +12,15 @@
 - Added new setting "mandatory" to ezcConsoleOption.
   This indicates that an option should always have submitted. Normally all
   options are optional.
-- Added cell, row and table based format and alignment settings to ezcConsoleTable.
-  This allows you to let rows and cells inherit their format and alignment
-  settings. Rows inherit the format, align and (new) borderFormat
-  value that were set globally, but only if they have no explicit value set.
-  Cells inherit their row's format and alignment settings if they are not
-  explicitly set.
+- Added cell, row and table based format and alignment settings to
+  ezcConsoleTable.  This allows you to let rows and cells inherit their format
+  and alignment settings. Rows inherit the format, align and (new)
+  borderFormat value that were set globally, but only if they have no explicit
+  value set.  Cells inherit their row's format and alignment settings if they
+  are not explicitly set.
 - Added <borderFormat> property to rows.
-  This allows a more flexible way to specify the format that a row's border should
-  have, instead of just saying "this is a headline row".
+  This allows a more flexible way to specify the format that a row's border
+  should have, instead of just saying "this is a headline row".
 
 - Refactored the whole package to fit into the unified layout and provide a
   much more convenient API.
@@ -29,7 +29,8 @@
     between options - former parameters).
   * ezcConsoleOutputFormat (to define format options).
   * ezcConsoleOutputOptions (stores the options for ezcConsoleOutput).
-  * ezcConsoleProgressbarOptions (stores the options for ezcConsoleProgressbar).
+  * ezcConsoleProgressbarOptions (stores the options for
+    ezcConsoleProgressbar).
   * eczConsoleTableOptions (stores the options for ezcConsoleTable).
 
 - Changed to the use of "extended structs" where it made sense to avoid
@@ -43,18 +44,19 @@
   for short names and "--" for long names) everywhere.
 - Changed to use overloading property access - __get(),__set(),__isset().
   To unify access to object properties and in different other places, which
-  are explicitly mentioned above (see e.g. ezcConsoleTable) where possible (more 
-  convenient API).
+  are explicitly mentioned above (see e.g. ezcConsoleTable) where possible.
 - Changed handling of default values for ezcComponentOption.
   Default values are now set, if the parameter is not submitted at all. If an
   option that expects a value is submitted without, this results in an
   exception.
-- Changed handling of table structure to classes ezcConsoleTableRow and ezcConsoleTableCell. 
-  These allow a new, innovative and very convenient way to create and customize console
-  based tables: 
+- Changed handling of table structure to classes ezcConsoleTableRow and
+  ezcConsoleTableCell.  These allow a new, innovative and very convenient way
+  to create and customize console based tables: 
   * $table[0][]; // creates a new cell 
-  * $table[2][]->format = 'important'; // creates a new cell and set's it's format to 'important',
-  * $table[2]->align = ezcConsoleTable::ALIGN_CENTER; // set's the default align
+  * $table[2][]->format = 'important'; // creates a new cell and set's it's
+    format to 'important',
+  * $table[2]->align = ezcConsoleTable::ALIGN_CENTER; // set's the default
+    align
 
 - Renamed ezcConsoleParameter to ezcConsoleInput.
 - Renamed methods:
