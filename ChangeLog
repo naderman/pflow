@@ -1,4 +1,4 @@
-1.0beta2 - [RELEASEDATE]
+1.0beta2 - Friday 23 December 2005
 
 - Added convenience method ezcConsoleOutput::outputLine(). 
   This one adds a line break after outputting the desired text and works also
