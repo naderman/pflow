@@ -31,7 +31,7 @@ class ezcConsoleOutputFormat
      */
     protected $properties = array( 
         'color'     => 'default',
-        'style'     => 'default',
+        'style'     => array( 'default' ),
         'bgcolor'   => 'default',
     );
 
