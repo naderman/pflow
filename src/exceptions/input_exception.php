@@ -10,7 +10,7 @@
  */
 
 /**
- * General exception for use in {@see ezcConsoleInput} class.
+ * General exception for use in {@link ezcConsoleInput} class.
  * Adds an additional field 'param' to the exception which indicates
  * with which parameter something went wrong.
  * 

@@ -10,7 +10,7 @@
  */
 
 /**
- * General exception for use in {@see ezcConsoleOutput} class.
+ * General exception for use in {@link ezcConsoleOutput} class.
  * 
  * @package ConsoleTools
  * @version //autogen//
