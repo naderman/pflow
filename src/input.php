@@ -230,7 +230,7 @@ class ezcConsoleInput
      *         {@link ezcConsoleInputException::PARAMETER_ALREADY_REGISTERED}.
      * @return void
      */
-    public function registerAlias( $short, $long, $option )
+    public function registerAlias( $short, $long, ezcConsoleOption $option )
     {
         $short = $short;
         $long = $long;
@@ -338,7 +338,7 @@ class ezcConsoleInput
      *         {@link ezcConsoleInputException::PARAMETER_NOT_EXISTS}.
      * @return void
      */
-    public function unregisterOption( $option )
+    public function unregisterOption( ezcConsoleOption $option )
     {
         $found = false;
         foreach ( $this->options as $id => $existParam )
@@ -487,7 +487,7 @@ class ezcConsoleInput
      * 
      * @see ezcConsoleInputException
      */ 
-    public function process( $args = null )
+    public function process( array $args = null )
     {
         if ( !isset( $args ) )
         {
@@ -626,7 +626,7 @@ class ezcConsoleInput
      * @param array(int=>string) $params Set of option names to generate help for, default is all.
      * @return array(int=>array(int=>string)) Table structure as explained.
      */
-    public function getHelp( $long = false, $params = array() )
+    public function getHelp( $long = false, array $params = array() )
     {
         $help = array();
         foreach ( $this->options as $id => $param )
@@ -745,7 +745,7 @@ class ezcConsoleInput
      * @param int $i                   The current position in the arguments array.
      * @return void
      */
-    private function processOptions( $args, &$i )
+    private function processOptions( array $args, &$i )
     {
         $option = $this->getOption( preg_replace( '/^-+/', '', $args[$i++] ) );
         // No value expected
@@ -824,7 +824,7 @@ class ezcConsoleInput
      * @param int $i                   Current index in arguments array.
      * @return void
      */
-    private function processArguments( $args, &$i )
+    private function processArguments( array $args, &$i )
     {
         while ( $i < count( $args ) )
         {
@@ -937,11 +937,11 @@ class ezcConsoleInput
      * Checks if a value is of a given type. Converts the value to the
      * correct PHP type on success.
      *  
-     * @param int $option The option.
-     * @param string $val The value to check.
+     * @param ezcConsoleInputException $option The option.
+     * @param string $val                      The value to check.
      * @return bool True on succesful check, otherwise false.
      */
-    private function isCorrectType( $option, &$val )
+    private function isCorrectType( ezcConsoleOption $option, &$val )
     {
         $res = false;
         switch ( $option->type )
@@ -970,7 +970,7 @@ class ezcConsoleInput
      * @param int $i                   Current arguments array position
      * @return void
      */
-    private function preprocessLongOption( &$args, $i )
+    private function preprocessLongOption( array &$args, $i )
     {
         // Value given?
         if ( preg_match( '/^--\w+\=[^ ]/i', $args[$i] ) )
