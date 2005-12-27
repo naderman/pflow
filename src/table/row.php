@@ -11,31 +11,32 @@
 
 /**
  * Structure representing a table row in ezcConsoleTable.
- * This class represents a row in an object. You can access
+ * This class represents a row in a table object. You can access
  * the properties of the row directly, but also access the cells of 
- * the row directly as an array (index 0..).
+ * the row directly, as if the object was an array (index 0..).
  *
  * <code>
+ * // Create new table row
  * $row = new ezcConsoleTableRow();
  * 
- * // Set format of the row lines
+ * // Set default format of the row's cells
  * $row->format = 'headline';
  * 
- * // On the fly create the cell 0:0
+ * // On the fly create the cell no 0
  * $row[0]->content = 'Name';
- * // On the fly create the cell 0:1
+ * // On the fly create the cell no 1
  * $row[1]->content = 'Cellphone';
  *
- * // Change a setting on a cell
+ * // Change a setting on cell 0
  * $row[0]->align = ezcConsoleTable::ALIGN_CENTER;
  * 
- * // Traverse through the row.
+ * // Iterate through the row's cells.
  * foreach ($row as $cell)
  * {
  *     var_dump($cell);
  * }
  *
- * // Set the align property for all cells in a row
+ * // Set the default align property for all cells in the row
  * $row->align = ezcConsoleTable::ALIGN_CENTER;
  * 
  * </code>

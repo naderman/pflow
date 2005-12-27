@@ -14,6 +14,22 @@
  *
  * This class stores objects of {@link ezcConsoleOutputFormat}, which
  * represents a format option set for {@link ezcConsoleOutput}.
+ *
+ * <code>
+ * // New ezcConsoleOutput 
+ * // $output->format is instance of ezcConsoleOutputFormats.
+ * $output = new ezcConsoleOutput();
+ * 
+ * // Default format - color = blue
+ * $output->formats->default->color = 'blue';
+ * // Default format - weight = bold
+ * $output->formats->default->style = array( 'bold' );
+ *
+ * // New format "important" - color = red
+ * $output->formats->important->color = 'red';
+ * // Format "important" - background color = black
+ * $output->formats->important->bgcolor = 'black';
+ * </code>
  * 
  * @package ConsoleTools
  * @version //autogen//

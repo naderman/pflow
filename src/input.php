@@ -269,7 +269,7 @@ class ezcConsoleInput
      * -u / --user
      * -a / --all
      *
-     * @param string $paramDef Parameter definition string.
+     * @param string $optionDef Option definition string.
      * 
      * @throws ezcConsoleInputException 
      *         If string is not wellformed
@@ -386,8 +386,8 @@ class ezcConsoleInput
      *      If the requested short/long name belongs to a real parameter instead
      *      of an alias {@link ezcConsoleInputException::PARAMETER_IS_NO_ALIAS}. 
      *
-     * @param mixed $short 
-     * @param mixed $long 
+     * @param string $short Short name of the alias
+     * @param string $long  Long name of the alias.
      * @return void
      */
     public function unregisterAlias( $short, $long )
@@ -428,7 +428,7 @@ class ezcConsoleInput
      * This method receives the long or short name of a option and
      * returns the ezcConsoleOption object.
      * 
-     * @param string $name Short or long name of the option - or --).
+     * @param string $name Short or long name of the option (without - or --).
      * @return ezcConsoleOption The requested option.
      *
      * @throws ezcConsoleInputException 
@@ -623,7 +623,7 @@ class ezcConsoleInput
      * as simple number indexed array of short and/or long values to set a filter.
      * 
      * @param bool $long Set this to true for getting the long help version.
-     * @param array $params Set of options to generate help for, default is all.
+     * @param array(int=>string) $params Set of option names to generate help for, default is all.
      * @return array(int=>array(int=>string)) Table structure as explained.
      */
     public function getHelp( $long = false, $params = array() )
@@ -651,7 +651,7 @@ class ezcConsoleInput
      * is set, only the option names listed in this array are listed in the
      * synopsis.
      * 
-     * @param array(int=>string) $options Names of options to include.
+     * @param array(int=>string) $optionNames Names of options to include.
      * @return string The generated synopsis
      */
     public function getSynopsis( array $optionNames = null )
@@ -741,9 +741,8 @@ class ezcConsoleInput
      * Process an option.
      * This method does the processing of a single option. 
      * 
-     * @param array $args The arguments array.
-     * @param int $i      The current position in the arguments array.
-     * @param int The current index in the $args array.
+     * @param array(int=>string) $args The arguments array.
+     * @param int $i                   The current position in the arguments array.
      * @return void
      */
     private function processOptions( $args, &$i )
@@ -822,7 +821,7 @@ class ezcConsoleInput
      * Process arguments given to the program. 
      * 
      * @param array(int=>string) $args The arguments array.
-     * @param int $i Current index in arguments array.
+     * @param int $i                   Current index in arguments array.
      * @return void
      */
     private function processArguments( $args, &$i )
@@ -967,8 +966,8 @@ class ezcConsoleInput
      * for long options, if the value is passed using =. If this is the case
      * parameter and value get split and replaced in the arguments array.
      * 
-     * @param array $args The arguments array
-     * @param int $i Current arguments array position
+     * @param array(int=>string) $args The arguments array
+     * @param int $i                   Current arguments array position
      * @return void
      */
     private function preprocessLongOption( &$args, $i )
