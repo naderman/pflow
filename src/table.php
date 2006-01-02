@@ -243,8 +243,12 @@ class ezcConsoleTable implements Countable, Iterator, ArrayAccess
      * @param object(ezcConsoleTableCell) The item to assign.
      * @return void
      */
-    public function offsetSet( $offset, ezcConsoleTableCell $value )
+    public function offsetSet( $offset, $value )
     {
+        if ( !( $value instanceof ezcConsoleTableCell ) )
+        {
+            throw new ezcBaseTypeException( 'ezcConsoleTableCell', gettype( $value ) );
+        }
         if ( !isset( $offset ) )
         {
             $offset = count( $this );
