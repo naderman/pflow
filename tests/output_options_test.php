@@ -41,4 +41,3 @@ class ezcConsoleToolsOutputOptionsTest extends ezcTestCase
 }
 
 ?>
-
