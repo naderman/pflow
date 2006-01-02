@@ -8,20 +8,21 @@
  * @license http://ez.no/licenses/new_bsd New BSD License
  */
 /**
- * ezcPropertyNotFoundException is thrown whenever a non existent property
+ * ezcBasePropertyNotFoundException is thrown whenever a non existent property
  * is accessed in the Components library.
  *
  * @package Base
+ * @version //autogen//
  */
 class ezcBasePropertyNotFoundException extends Exception
 {
     /**
-     * Constructs a new ezcPropertyNotFoundException on the property
+     * Constructs a new ezcPropertyNotFoundException for the property
      * $name.
      */
     function __construct( $name )
     {
-        parent::__construct( "No such propertyname <{$name}>", 0 );
+        parent::__construct( "No such property name <{$name}>.", 0 );
     }
 }
 ?>

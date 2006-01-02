@@ -12,15 +12,16 @@
  * as expected.
  *
  * @package Base
+ * @version //autogen//
  */
 class ezcBaseTypeException extends Exception
 {
     /**
-     * Constructs a new ezcTypeException on the 
+     * Constructs a new ezcBaseTypeException on the 
      */
     function __construct( $expectedType, $gotType )
     {
-        parent::__construct( "Expected type '$expectedType' but got type '$gotType'", 0 );
+        parent::__construct( "Expected type <{$expectedType}> but got type <{$gotType}> for argument." );
     }
 }
 ?>

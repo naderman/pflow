@@ -8,20 +8,22 @@
  * @license http://ez.no/licenses/new_bsd New BSD License
  */
 /**
- * ezcPropertyException is thrown whenever a property is tried to be set with
- * an iligal value Components library.
+ * ezcBasePropertyException is thrown whenever a property is tried to be set
+ * with an illegal value.
  *
  * @package Base
+ * @version //autogen//
  */
 class ezcBasePropertyException extends Exception
 {
     /**
-     * Constructs a new ezcPropertyException on the property $name for the value $value. 
+     * Constructs a new ezcBasePropertyException for the property $name for the value $value. 
      * Optionally specify the $range you would have expected the parameter to be in.
      */
-    function __construct( $name, $value, $range = 'unknown' )
+    function __construct( $name, $value, $range = null )
     {
-        parent::__construct( "The value <$value> is ilegal for the property <{$name}> (expected <>).", 0 );
+        $rangePart = $range == NULL ? '' : " (expected <{$range}>)";
+        parent::__construct( "The value <{$value}> is illegal for the property <{$name}>$rangePart.", 0 );
     }
 }
 ?>
