@@ -56,7 +56,7 @@ class ezcConsoleProgressbarOptions
         $emptyChar = '-', 
         $progressChar = '>',
         $formatString = '%act% / %max% [%bar%] %fraction%%',
-        $width = 100,
+        $width = 78,
         $fractionFormat = '%01.2f'
     )
     {

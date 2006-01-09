@@ -62,7 +62,7 @@ class ezcConsoleProgressbar
     /**
      * Options
      *
-     * @var object(ezcConsoleProgressbarOptions)
+     * @var ezcConsoleProgressbarOptions
      */
     protected $options;
 
@@ -305,7 +305,7 @@ class ezcConsoleProgressbar
     protected function generateValues()
     {
         // Bar
-        $barFilledSpace = ceil( $this->measures['barSpace'] / $this->numSteps ) * $this->currentStep;
+        $barFilledSpace = ceil( $this->measures['barSpace'] / $this->numSteps * $this->currentStep );
         // Sanitize value if it gets to large by rounding
         $barFilledSpace = $barFilledSpace > $this->measures['barSpace'] ? $this->measures['barSpace'] : $barFilledSpace;
         $bar = str_pad( 
@@ -324,7 +324,7 @@ class ezcConsoleProgressbar
         // Fraction
         $fractionVal = sprintf( 
             $this->options->fractionFormat,
-            ( $fractionVal = round( ( $this->step * $this->currentStep ) / $this->max * 100 ) ) > 100 ? 100 : $fractionVal
+            ( $fractionVal = ( $this->step * $this->currentStep ) / $this->max * 100 ) > 100 ? 100 : $fractionVal
         );
         $this->valueMap['fraction'] = str_pad( 
             $fractionVal, 
