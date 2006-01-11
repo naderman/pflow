@@ -1,3 +1,9 @@
+1.0rc1 - [RELEASEDATE]
+
+- Added the ezcBaseException that all exceptions in the components library
+  should descent from.
+
+
 1.0beta2 - Wednesday 21 December 2005
 
 - Added the ezcBasePropertyException that can be used by components to signal
