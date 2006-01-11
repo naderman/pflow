@@ -22,24 +22,6 @@ class ezcConsoleToolsProgressbarTest extends ezcTestCase
 		return new ezcTestSuite( "ezcConsoleToolsProgressbarTest" );
 	}
 
-    /**
-     * setUp 
-     * 
-     * @access public
-     */
-    public function setUp()
-    {
-    }
-
-    /**
-     * tearDown 
-     * 
-     * @access public
-     */
-    public function tearDown()
-    {
-    }
-
     public function testProgress1()
     {
         $this->commonProgressbarTest( __FUNCTION__, 42, 13, array () );
