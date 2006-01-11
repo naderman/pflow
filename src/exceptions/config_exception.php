@@ -13,7 +13,7 @@
  *
  * @package Base
  */
-class ezcBaseConfigException extends Exception
+class ezcBaseConfigException extends ezcBaseException
 {
     /**
      * Used for when a config setting was unknown

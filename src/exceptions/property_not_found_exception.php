@@ -14,7 +14,7 @@
  * @package Base
  * @version //autogen//
  */
-class ezcBasePropertyNotFoundException extends Exception
+class ezcBasePropertyNotFoundException extends ezcBaseException
 {
     /**
      * Constructs a new ezcPropertyNotFoundException for the property

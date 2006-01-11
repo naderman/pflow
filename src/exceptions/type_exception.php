@@ -14,7 +14,7 @@
  * @package Base
  * @version //autogen//
  */
-class ezcBaseTypeException extends Exception
+class ezcBaseTypeException extends ezcBaseException
 {
     /**
      * Constructs a new ezcBaseTypeException on the 

@@ -14,7 +14,7 @@
  * @package Base
  * @version //autogen//
  */
-class ezcBasePropertyReadOnlyException extends Exception
+class ezcBasePropertyReadOnlyException extends ezcBaseException
 {
     /**
      * Constructs a new ezcPropertyReadOnlyException for the property

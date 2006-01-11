@@ -14,7 +14,7 @@
  * @package Base
  * @version //autogen//
  */
-class ezcBasePropertyException extends Exception
+class ezcBasePropertyException extends ezcBaseException
 {
     /**
      * Constructs a new ezcBasePropertyException for the property $name for the value $value. 
