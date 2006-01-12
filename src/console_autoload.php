@@ -26,10 +26,9 @@ return array (
     'ezcConsoleStatusbar'                           => 'ConsoleTools/statusbar.php',
 
     'ezcConsoleException'                           => 'ConsoleTools/exceptions/exception.php',
-   
-    'ezcConsoleNoPositionStoredException'           => 'ConsoleTools/exceptions/exception.php',
+    'ezcConsoleNoPositionStoredException'           => 'ConsoleTools/exceptions/no_position_stored.php',
 
-    'ezcConsoleOptionAlreadyRegistereException'     => 'ConsoleTools/exceptions/option_already_registered.php',
+    'ezcConsoleOptionAlreadyRegisteredException'    => 'ConsoleTools/exceptions/option_already_registered.php',
     'ezcConsoleOptionNoAliasException'              => 'ConsoleTools/exceptions/option_no_alias.php',
     'ezcConsoleOptionStringNotWellformedException'  => 'ConsoleTools/exceptions/option_string_not_wellformed.php',
     
