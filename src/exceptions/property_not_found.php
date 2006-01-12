@@ -1,6 +1,6 @@
 <?php
 /**
- * File containing the ezcPropertyReadOnlyException class
+ * File containing the ezcPropertyNotFoundException class
  *
  * @package Base
  * @version //autogen//
@@ -8,21 +8,21 @@
  * @license http://ez.no/licenses/new_bsd New BSD License
  */
 /**
- * ezcBasePropertyReadOnlyException is thrown whenever a read-only property
+ * ezcBasePropertyNotFoundException is thrown whenever a non existent property
  * is accessed in the Components library.
  *
  * @package Base
  * @version //autogen//
  */
-class ezcBasePropertyReadOnlyException extends ezcBaseException
+class ezcBasePropertyNotFoundException extends ezcBaseException
 {
     /**
-     * Constructs a new ezcPropertyReadOnlyException for the property
+     * Constructs a new ezcPropertyNotFoundException for the property
      * $name.
      */
     function __construct( $name )
     {
-        parent::__construct( "The property <{$name}> is read-only.", 0 );
+        parent::__construct( "No such property name <{$name}>." );
     }
 }
 ?>

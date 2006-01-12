@@ -190,24 +190,5 @@ class ezcBase
 
         require( ezcBase::$packageDir . $file );
     }
-
-
-    /**
-     * Throws an ezcBaseTypeException when the given instance is not from 
-     * expected type. If the instance is from the given type, nothing happens.
-     *
-     * @param object $instance  Instance that should be of the type $type.
-     * @param string $type      The expected type of the instance.
-     *
-     * @throws ezcBaseTypeException
-     */
-    public static function assertType( $instance, $type )
-    {
-        if ( !( $instance instanceof $type ) ) 
-        {
-            throw new ezcBaseTypeException( $type, gettype( $instance ) );
-        }
-    }
 }
-
 ?>

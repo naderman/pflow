@@ -8,11 +8,16 @@
  */
 
 return array(
-    'ezcBaseException'                     => 'Base/exceptions/base_exception.php',
-    'ezcBasePropertyException'             => 'Base/exceptions/property_exception.php',
-    'ezcBasePropertyNotFoundException'     => 'Base/exceptions/property_not_found_exception.php',
-    'ezcBasePropertyReadOnlyException'     => 'Base/exceptions/property_read_only_exception.php',
-    'ezcBaseTypeException'                 => 'Base/exceptions/type_exception.php',
-    'ezcBaseConfigException'               => 'Base/exceptions/config_exception.php',
+    'ezcBaseException'                     => 'Base/exceptions/exception.php',
+    'ezcBaseFileException'                 => 'Base/exceptions/file_exception.php',
+
+    'ezcBaseFileNotFoundException'         => 'Base/exceptions/file_not_found.php',
+    'ezcBaseFileIoException'               => 'Base/exceptions/file_io.php',
+    'ezcBaseFilePermissionException'       => 'Base/exceptions/file_permission.php',
+    'ezcBasePropertyPermissionException'   => 'Base/exceptions/property_permission.php',
+    'ezcBasePropertyNotFoundException'     => 'Base/exceptions/property_not_found.php',
+    'ezcBaseSettingNotFoundException'      => 'Base/exceptions/setting_not_found.php',
+    'ezcBaseSettingValueException'         => 'Base/exceptions/setting_value.php',
+    'ezcBaseValueException'                => 'Base/exceptions/value.php',
 );
 ?>
