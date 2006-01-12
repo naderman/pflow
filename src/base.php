@@ -15,6 +15,16 @@
 class ezcBase
 {
     /**
+     * Used for dependency checking, to check for a PHP extension.
+     */
+    const DEP_PHP_EXTENSION = "extension";
+
+    /**
+     * Used for dependency checking, to check for a PHP version.
+     */
+    const DEP_PHP_VERSION = "version";
+    
+    /**
      * Indirectly it determines the path where the autoloads are stored.
      */
     const libraryMode = "devel";
@@ -189,6 +199,35 @@ class ezcBase
         }
 
         require( ezcBase::$packageDir . $file );
+    }
+
+    public static function checkDependency( $type, $value )
+    {
+        switch ( $type )
+        {
+            case self::DEP_PHP_EXTENSION:
+                if ( extension_loaded( $value ) )
+                {
+                    return;
+                }
+                else
+                {
+                    die( "\nThis component depends on the PHP extension <{$value}>, which is not loaded.\n" );
+                }
+                break;
+
+            case self::DEP_PHP_VERSION:
+                $phpVersion = phpversion();
+                if ( version_compare( $phpVersion, $value, '>=' ) )
+                {
+                    return;
+                }
+                else
+                {
+                    die( "\nThis component depends on the PHP version <{$value}>, but the current version is <{$phpVersion}>.\n" );
+                }
+                break;
+        }
     }
 }
 ?>
