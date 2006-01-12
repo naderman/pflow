@@ -181,8 +181,8 @@ class ezcConsoleOutput
     /**
      * Property read access.
      *
-     * @throws ezcBasePropertyNotFoundException if the the desired property is
-     *         not found.
+     * @throws ezcBasePropertyNotFoundException 
+     *         If the the desired property is not found.
      * 
      * @param string $propertyName Name of the property.
      * @return mixed Value of the property or null.
@@ -207,10 +207,12 @@ class ezcConsoleOutput
      * @param string $propertyName Name of the property.
      * @param mixed $val  The value for the property.
      *
-     * @throws ezcBasePropertyException if a the value for the property options
-     *         is not an instance of ezcConsoleOutputOptions. 
-     * @throws ezcBasePropertyException if a the value for the property formats
-     *         is not an instance of ezcConsoleOutputFormats. 
+     * @throws ezcBasePropertyException 
+     *         If a the value for the property options is not an instance of 
+     *         ezcConsoleOutputOptions. 
+     * @throws ezcBasePropertyException 
+     *         If a the value for the property formats is not an instance of 
+     *         ezcConsoleOutputFormats. 
      * @return void
      */
     public function __set( $propertyName, $val )
@@ -353,14 +355,15 @@ class ezcConsoleOutput
      *
      * @todo Gnome terminal does not recognize this codes. Solution??
      *
-     * @throws ezcConsoleOutputException If no position is saved.
+     * @throws ezcConsoleNoPositionStoredException 
+     *         If no position is saved.
      * @return void
      */
     public function restorePos() 
     {
         if ( $this->positionStored === false )
         {
-            throw new ezcConsoleOutputException( 'Cannot restore position, if no position has been stored before.',  ezcConsoleOutputException::NO_POSITION_STORED );
+            throw new ezcConsoleNoPositionStoredException();
         }
         echo "\033[u";
     }

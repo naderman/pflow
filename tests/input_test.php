@@ -307,7 +307,7 @@ class ezcConsoleToolsInputTest extends ezcTestCase
             {
                 $this->consoleParameter->registerAlias( $alias['short'], $alias['long'], $validParams[$alias['ref']]  );
             }
-            catch ( ezcConsoleInputException $e )
+            catch ( ezcConsoleException $e )
             {
                 $this->fail( $e->getMessage() );
             }
@@ -328,12 +328,8 @@ class ezcConsoleToolsInputTest extends ezcTestCase
             {
                 $this->consoleParameter->registerAlias( $alias['short'], $alias['long'], new ezcConsoleOption('foo', 'bar') );
             }
-            catch ( ezcConsoleInputException $e )
+            catch ( ezcConsoleOptionNotExistsException $e )
             {
-                if ( $e->getCode() !== ezcConsoleInputException::PARAMETER_NOT_EXISTS )
-                {
-                    $this->fail( 'Alias registration threw unexpected exception <' . $e->getMessage() . '> when registering alias for unknown parameter.' );
-                }
                 $exceptionCount++;
             }
         }
@@ -405,7 +401,7 @@ class ezcConsoleToolsInputTest extends ezcTestCase
         $res = array( 
             'b' => 42,
         );
-        $this->commonProcessTestFailure( $args, 6 );
+        $this->commonProcessTestFailure( $args, 'ezcConsoleOptionMissingValueException' );
     }
 
     
@@ -418,7 +414,7 @@ class ezcConsoleToolsInputTest extends ezcTestCase
         $res = array( 
             'b' => 42,
         );
-        $this->commonProcessTestFailure( $args, 6 );
+        $this->commonProcessTestFailure( $args, 'ezcConsoleOptionMissingValueException' );
     }
 
 
@@ -527,7 +523,7 @@ class ezcConsoleToolsInputTest extends ezcTestCase
             'b' => 42,
             'd' => 'world',
         );
-        $this->commonProcessTestFailure( $args, 6 );
+        $this->commonProcessTestFailure( $args, 'ezcConsoleOptionMissingValueException' );
     }
 
     public function testProcessFailureMultipleLongDefault()
@@ -541,7 +537,7 @@ class ezcConsoleToolsInputTest extends ezcTestCase
             'b' => 42,
             'd' => 'world',
         );
-        $this->commonProcessTestFailure( $args, 6 );
+        $this->commonProcessTestFailure( $args, 'ezcConsoleOptionMissingValueException' );
     }
 
     public function testProcessSuccessMultipleLongSameNoValue()
@@ -693,7 +689,7 @@ class ezcConsoleToolsInputTest extends ezcTestCase
             'foo.php',
             '-q',
         );
-        $this->commonProcessTestFailure( $args, ezcConsoleInputException::PARAMETER_NOT_EXISTS );
+        $this->commonProcessTestFailure( $args, 'ezcConsoleOptionNotExistsException' );
     }
     
     public function testProcessFailureExistance_2()
@@ -702,7 +698,7 @@ class ezcConsoleToolsInputTest extends ezcTestCase
             'foo.php',
             '-tools',
         );
-        $this->commonProcessTestFailure( $args, ezcConsoleInputException::PARAMETER_NOT_EXISTS );
+        $this->commonProcessTestFailure( $args, 'ezcConsoleOptionNotExistsException' );
     }
     
     public function testProcessFailureExistance_3()
@@ -711,7 +707,7 @@ class ezcConsoleToolsInputTest extends ezcTestCase
             'foo.php',
             '-testingaeiou',
         );
-        $this->commonProcessTestFailure( $args, ezcConsoleInputException::PARAMETER_NOT_EXISTS );
+        $this->commonProcessTestFailure( $args, 'ezcConsoleOptionNotExistsException' );
     }
     
     public function testProcessFailureType()
@@ -721,7 +717,7 @@ class ezcConsoleToolsInputTest extends ezcTestCase
             '-b',
             'not_an_int'
         );
-        $this->commonProcessTestFailure( $args, ezcConsoleInputException::PARAMETER_TYPE_RULE_NOT_MET );
+        $this->commonProcessTestFailure( $args, 'ezcConsoleOptionTypeViolationException' );
     }
     
     public function testProcessFailureNovalue()
@@ -730,7 +726,7 @@ class ezcConsoleToolsInputTest extends ezcTestCase
             'foo.php',
             '-o',
         );
-        $this->commonProcessTestFailure( $args, ezcConsoleInputException::MISSING_PARAMETER_VALUE );
+        $this->commonProcessTestFailure( $args, 'ezcConsoleOptionMissingValueException' );
     }
     
     public function testProcessFailureMultiple()
@@ -743,7 +739,7 @@ class ezcConsoleToolsInputTest extends ezcTestCase
             'venus',
             
         );
-        $this->commonProcessTestFailure( $args, ezcConsoleInputException::TOO_MANY_PARAMETER_VALUES );
+        $this->commonProcessTestFailure( $args, 'ezcConsoleOptionTooManyValuesException' );
     }
     
     public function testProcessFailureDependencies()
@@ -761,7 +757,7 @@ class ezcConsoleToolsInputTest extends ezcTestCase
             'moretext',
             '-c'            // This one depends on -t, -o, -b and -y
         );
-        $this->commonProcessTestFailure( $args, ezcConsoleInputException::PARAMETER_DEPENDENCY_RULE_NOT_MET );
+        $this->commonProcessTestFailure( $args, 'ezcConsoleOptionDependencyViolationException' );
     }
     
     public function testProcessFailureExclusions()
@@ -775,7 +771,7 @@ class ezcConsoleToolsInputTest extends ezcTestCase
             23,
             '--edit'            // This one excludes -t and -y
         );
-        $this->commonProcessTestFailure( $args, ezcConsoleInputException::PARAMETER_EXCLUSION_RULE_NOT_MET );
+        $this->commonProcessTestFailure( $args, 'ezcConsoleOptionExclusionViolationException' );
     }
     
     public function testProcessFailureArguments()
@@ -788,7 +784,7 @@ class ezcConsoleToolsInputTest extends ezcTestCase
             'bar',
             'someargument',
         );
-        $this->commonProcessTestFailure( $args, ezcConsoleInputException::ARGUMENTS_NOT_ALLOWED );
+        $this->commonProcessTestFailure( $args, 'ezcConsoleOptionArgumentsViolationException' );
     }
     
     public function testProcessFailureMandatory()
@@ -808,7 +804,7 @@ class ezcConsoleToolsInputTest extends ezcTestCase
                 )
             )
         );
-        $this->commonProcessTestFailure( $args, ezcConsoleInputException::MISSING_PARAMETER_VALUE );
+        $this->commonProcessTestFailure( $args, 'ezcConsoleOptionMandatoryViolationException' );
     }
 
     public function testGetHelp1()
@@ -984,7 +980,7 @@ class ezcConsoleToolsInputTest extends ezcTestCase
         {
             $this->consoleParameter->process( $args );
         }
-        catch ( ezcConsoleInputException $e )
+        catch ( ezcConsoleException $e )
         {
             $this->fail( $e->getMessage() );
             return;
@@ -993,17 +989,18 @@ class ezcConsoleToolsInputTest extends ezcTestCase
         $this->assertTrue( count( array_diff( $res, $values ) ) == 0, 'Parameters processed incorrectly.' );
     }
     
-    private function commonProcessTestFailure( $args, $code, $exceptionClass = 'ezcConsoleInputException' )
+    private function commonProcessTestFailure( $args, $exceptionClass )
     {
         try 
         {
             $this->consoleParameter->process( $args );
         }
-        catch ( Exception $e )
+        catch ( ezcConsoleException $e )
         {
-            $this->assertTrue(
-                $code == $e->getCode() && $e instanceof $exceptionClass,
-                'Wrong exception thrown for invalid parameter submission. Expected code <'.$code.'>, received <'.$e->getCode().'>. Expected class <'.$exceptionClass.'>, received <'.get_class( $e ).'>'
+            $this->assertSame(
+                $exceptionClass,
+                get_class( $e ),
+                'Wrong exception thrown for invalid parameter submission. Expected class <'.$exceptionClass.'>, received <'.get_class( $e ).'>'
             );
             return;
         }
@@ -1016,7 +1013,7 @@ class ezcConsoleToolsInputTest extends ezcTestCase
         {
             $this->consoleParameter->process( $args );
         }
-        catch ( ezcConsoleInputException $e )
+        catch ( ezcConsoleException $e )
         {
             $this->fail( $e->getMessage() );
             return;
