@@ -19,8 +19,7 @@ class ezcConsoleOptionDependencyViolationException extends ezcConsoleOptionExcep
 {
     function __construct( ezcConsoleOption $dependingOption, ezcConsoleOption $dependantOption, $valueRange = null )
     {
-        $message  = "The option with long name <{$dependingOption->long}> ";
-        $message .= "depends on the usage of the option with long name <{$dependantOption->long}> ";
+        $message  = "The option with long name <{$dependingOption->long}> depends on the usage of the option with long name <{$dependantOption->long}> ";
         if ( $valueRange !== null )
         {
             $message .= "being the value range <{$valueRange}> ";

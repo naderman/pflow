@@ -19,8 +19,7 @@ class ezcConsoleOptionExclusionViolationException extends ezcConsoleOptionExcept
 {
     function __construct( ezcConsoleOption $excludingOption, ezcConsoleOption $excludedOption, $value = null )
     {
-        $message  = "The option with long name <{$excludingOption->long}> ";
-        $message .= "excludes the usage of the option with long name <{$excludedOption->long}> ";
+        $message = "The option with long name <{$excludingOption->long}> excludes the usage of the option with long name <{$excludedOption->long}> ";
         if ( $value !== null )
         {
             $message .= "having the value <{$value}> ";
