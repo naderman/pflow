@@ -40,11 +40,11 @@ class ezcBaseTest extends ezcTestCase
     {
         try
         {
-            throw new ezcBaseSettingValueException( 'broken', 42, "40 to 48" );
+            throw new ezcBaseSettingValueException( 'broken', 42, "int, 40 - 48" );
         }
         catch ( ezcBaseSettingValueException $e )
         {
-            $this->assertEquals( "The value <42> that you were trying to assign to setting <broken> is invalid. Allowed values are: 40 to 48", $e->getMessage() );
+            $this->assertEquals( "The value <42> that you were trying to assign to setting <broken> is invalid. Allowed values are: int, 40 - 48", $e->getMessage() );
         }
     }
 
