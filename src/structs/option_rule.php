@@ -94,6 +94,8 @@ class ezcConsoleOptionRule
      *
      * @throws ezcBasePropertyNotFoundException
      *         If the property tried to access does not exist.
+     * @throws ezcBaseValueException
+     *         If the value for a property is not in the correct range.
      * 
      * @param string $propertyName Name of the property to access.
      * @return void
@@ -105,14 +107,14 @@ class ezcConsoleOptionRule
             case 'option':
                 if ( !( $val instanceof ezcConsoleOption ) )
                 {
-                    throw new ezcBaseTypeException( 'ezcConsoleOption', gettype( $val ) );
+                    throw new ezcBaseValueException( $propertyName, $val, 'ezcConsoleOption' );
                 }
                 $this->properties['option'] = $val;
                 return;
             case 'values':
                 if ( !is_array( $val ) )
                 {
-                    throw new ezcBaseTypeException( 'array', gettype( $val ) );
+                    throw new ezcBaseValueException( $propertyName, $val, 'array' );
                 }
                 $this->properties['values'] = $val;
                 return;

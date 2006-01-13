@@ -81,17 +81,23 @@ class ezcConsoleTableRow implements Countable, Iterator, ArrayAccess {
     /**
      * Create a new ezcConsoleProgressbarRow. 
      * Creates a new ezcConsoleProgressbarRow. 
+     *
+     * This method takes any number of {@link ezcConsoleTableCell} objects as
+     * parameter, which will be added as table cells to the row in their 
+     * specified order.
      * 
+     * @throws ezcBaseValueException
+     *         If a paremeter is not of type {@link ezcConsoleTableCell}.
      */
     public function __construct()
     {
         if ( func_num_args() > 0 )
         {
-            foreach ( func_get_args() as $arg )
+            foreach ( func_get_args() as $id => $arg )
             {
                 if ( !( $arg instanceof ezcConsoleTableCell ) )
                 {
-                    throw new ezcBaseTypeException( 'ezcConsoleTableCell', gettype( $arg ) );
+                    throw new ezcBaseValueException( 'Parameter'.$id, $arg, 'ezcConsoleTableCell' );
                 }
                 $this->cells[] = $arg;
             }
@@ -105,12 +111,15 @@ class ezcConsoleTableRow implements Countable, Iterator, ArrayAccess {
      * 
      * @param int $offset The offset to check.
      * @return bool True when the offset exists, otherwise false.
+     * 
+     * @throws ezcBaseValueException
+     *         If a non numeric cell ID is requested.
      */
     public function offsetExists( $offset )
     {
         if ( !is_int( $offset ) || $offset < 0 )
         {
-            throw new ezcBaseTypeException( 'int+', gettype( $offset ) );
+            throw new ezcBaseValueException( 'offset', $offset, 'int >= 0' );
         }
         return isset( $this->cells[$offset] );
     }
@@ -124,6 +133,9 @@ class ezcConsoleTableRow implements Countable, Iterator, ArrayAccess {
      * 
      * @param int $offset The offset to check.
      * @return object(ezcConsoleTableCell)
+     *
+     * @throws ezcBaseValueException
+     *         If a non numeric cell ID is requested.
      */
     public function offsetGet( $offset )
     {
@@ -134,7 +146,7 @@ class ezcConsoleTableRow implements Countable, Iterator, ArrayAccess {
         }
         if ( !is_int( $offset ) || $offset < 0 )
         {
-            throw new ezcBaseTypeException( 'int+', gettype( $offset ) );
+            throw new ezcBaseValueException( 'offset', $offset, 'int >= 0' );
         }
         if ( !isset( $this->cells[$offset] ) )
         {
@@ -151,12 +163,17 @@ class ezcConsoleTableRow implements Countable, Iterator, ArrayAccess {
      * @param int $offset                 The offset to assign an item to.
      * @param object(ezcConsoleTableCell) The item to assign.
      * @return void
+     *
+     * @throws ezcBaseValueException
+     *         If a non numeric cell ID is requested.
+     * @throws ezcBaseValueException
+     *         If the provided value is not of type {@ling ezcConsoleTableCell}.
      */
     public function offsetSet( $offset, $value )
     {
         if ( !( $value instanceof ezcConsoleTableCell ) )
         {
-            throw new ezcBaseTypeException( 'ezcConsoleTableCell', gettype( $value ) );
+            throw new ezcBaseValueException( 'value', $value, 'ezcConsoleTableCell' );
         }
         if ( !isset( $offset ) )
         {
@@ -164,7 +181,7 @@ class ezcConsoleTableRow implements Countable, Iterator, ArrayAccess {
         }
         if ( !is_int( $offset ) || $offset < 0 )
         {
-            throw new ezcBaseTypeException( 'int+', gettype( $offset ) );
+            throw new ezcBaseValueException( 'offset', $offset, 'int >= 0' );
         }
         $this->cells[$offset] = $value;
     }
@@ -176,12 +193,15 @@ class ezcConsoleTableRow implements Countable, Iterator, ArrayAccess {
      * 
      * @param int $offset The offset to unset the value for.
      * @return void
+     * 
+     * @throws ezcBaseValueException
+     *         If a non numeric cell ID is requested.
      */
     public function offsetUnset( $offset )
     {
         if ( !is_int( $offset ) || $offset < 0 )
         {
-            throw new ezcBaseTypeException( 'int+', gettype( $offset ) );
+            throw new ezcBaseValueException( 'offset', $offset, 'int >= 0' );
         }
         if ( isset( $this->cells[$offset] ) )
         {

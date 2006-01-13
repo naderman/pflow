@@ -459,13 +459,13 @@ class ezcConsoleOption {
      * @param string $key Name of the property.
      * @param mixed $val  The value for the property.
      *
-     * @throws ezcBasePropertyReadOnlyException
+     * @throws ezcBasePropertyPermissionException
      *         If the property you try to access is read-only.
      * @return void
      */
     public function __set( $key, $val )
     {
-        throw new ezcBasePropertyReadOnlyException( $key );
+        throw new ezcBasePropertyPermissionException( $key, ezcBasePropertyPermissionException::READ );
     }
  
     /**

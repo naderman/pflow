@@ -150,7 +150,7 @@ class ezcConsoleTable implements Countable, Iterator, ArrayAccess
      * @see ezcConsoleTable::$settings
      * @see ezcConsoleTable::$options
      *
-     * @throws ezcBaseConfigException On an invalid setting.
+     * @throws ezcBaseValueException On an invalid setting.
      */
     public function __construct( ezcConsoleOutput $outHandler, $width, ezcConsoleTableOptions $options = null ) 
     {
@@ -194,12 +194,15 @@ class ezcConsoleTable implements Countable, Iterator, ArrayAccess
      * 
      * @param int $offset The offset to check.
      * @return bool True when the offset exists, otherwise false.
+     * 
+     * @throws ezcBaseValueException
+     *         If a non numeric row ID is requested.
      */
     public function offsetExists( $offset )
     {
         if ( !is_int( $offset ) || $offset < 0 )
         {
-            throw new ezcBaseTypeException( 'int+', gettype( $offset ) );
+            throw new ezcBaseValueException( 'offset', $offset, 'int >= 0' );
         }
         return isset( $this->rows[$offset] );
     }
@@ -215,6 +218,9 @@ class ezcConsoleTable implements Countable, Iterator, ArrayAccess
      * 
      * @param int $offset The offset to check.
      * @return object(ezcConsoleTableCell)
+     *
+     * @throws ezcBaseValueException
+     *         If a non numeric row ID is requested.
      */
     public function offsetGet( $offset )
     {
@@ -225,7 +231,7 @@ class ezcConsoleTable implements Countable, Iterator, ArrayAccess
         }
         if ( !is_int( $offset ) || $offset < 0 )
         {
-            throw new ezcBaseTypeException( 'int+', gettype( $offset ) );
+            throw new ezcBaseValueException( 'offset', $offset, 'int >= 0' );
         }
         if ( !isset( $this->rows[$offset] ) )
         {
@@ -242,12 +248,17 @@ class ezcConsoleTable implements Countable, Iterator, ArrayAccess
      * @param int $offset                 The offset to assign an item to.
      * @param object(ezcConsoleTableCell) The item to assign.
      * @return void
+     *
+     * @throws ezcBaseValueException
+     *         If a non numeric row ID is requested.
+     * @throws ezcBaseValueException
+     *         If the provided value is not of type {@ling ezcConsoleTableRow}.
      */
     public function offsetSet( $offset, $value )
     {
-        if ( !( $value instanceof ezcConsoleTableCell ) )
+        if ( !( $value instanceof ezcConsoleTableRow ) )
         {
-            throw new ezcBaseTypeException( 'ezcConsoleTableCell', gettype( $value ) );
+            throw new ezcBaseValueException( 'value', $value, 'ezcConsoleTableRow' );
         }
         if ( !isset( $offset ) )
         {
@@ -255,7 +266,7 @@ class ezcConsoleTable implements Countable, Iterator, ArrayAccess
         }
         if ( !is_int( $offset ) || $offset < 0 )
         {
-            throw new ezcBaseTypeException( 'int+', gettype( $offset ) );
+            throw new ezcBaseValueException( 'offset', $offset, 'int >= 0' );
         }
         $this->rows[$offset] = $value;
     }
@@ -267,12 +278,15 @@ class ezcConsoleTable implements Countable, Iterator, ArrayAccess
      * 
      * @param int $offset The offset to unset the value for.
      * @return void
+     *
+     * @throws ezcBaseValueException
+     *         If a non numeric row ID is requested.
      */
     public function offsetUnset( $offset )
     {
         if ( !is_int( $offset ) || $offset < 0 )
         {
-            throw new ezcBaseTypeException( 'int+', gettype( $offset ) );
+            throw new ezcBaseValueException( 'offset', $offset, 'int >= 0' );
         }
         if ( isset( $this->rows[$offset] ) )
         {
