@@ -290,7 +290,7 @@ class ezcConsoleTableRow implements Countable, Iterator, ArrayAccess {
      * @param string $key Name of the property.
      * @param mixed $val  The value for the property.
      *
-     * @throws ezcBasePropertyException
+     * @throws ezcBaseValueException
      *         If a the value submitted for the align is not in the range of
      *         {@link ezcConsoleTable::ALIGN_LEFT},
      *         {@link ezcConsoleTable::ALIGN_CENTER},
@@ -315,11 +315,7 @@ class ezcConsoleTableRow implements Countable, Iterator, ArrayAccess {
                   && $val !== ezcConsoleTable::ALIGN_DEFAULT 
                 )
                 {
-                    throw new ezcBasePropertyException( 
-                        'align',
-                        $val,
-                        'ezcConsoleTable::ALIGN_DEFAULT, ezcConsoleTable::ALIGN_LEFT, ezcConsoleTable::ALIGN_CENTER, ezcConsoleTable::ALIGN_RIGHT'
-                    );
+                    throw new ezcBaseValueException( $key, $val, 'ezcConsoleTable::ALIGN_DEFAULT, ezcConsoleTable::ALIGN_LEFT, ezcConsoleTable::ALIGN_CENTER, ezcConsoleTable::ALIGN_RIGHT' );
                 }
                 $this->align = $val;
                 return;

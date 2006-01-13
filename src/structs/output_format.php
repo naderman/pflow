@@ -70,7 +70,7 @@ class ezcConsoleOutputFormat
      *
      * @throws ezcBasePropertyNotFoundException
      *         If the setting you try to access does not exists
-     * @throws ezcBasePropertyException
+     * @throws ezcBaseValueException
      *         If trying to set an invalid value for a setting.
      * 
      * @param string $propertyName Name of the attrinbute to access.
@@ -93,10 +93,7 @@ class ezcConsoleOutputFormat
             {
                 if ( !ezcConsoleOutput::isValidFormatCode( $propertyName, $style ) )
                 {
-                    throw new ezcBasePropertyException( 
-                        $propertyName,
-                        $style
-                    );
+                    throw new ezcBaseValueException( $propertyName, $style, 'valid ezcConsoleOutput format code' );
                 }
             }
             $this->properties['style'] = $val;
@@ -105,10 +102,7 @@ class ezcConsoleOutputFormat
         // Continue normal handling
         if ( !ezcConsoleOutput::isValidFormatCode( $propertyName, $val ) )
         {
-            throw new ezcBasePropertyException( 
-                $propertyName,
-                $val
-            );
+            throw new ezcBaseValueException( $propertyName, $style, 'valid ezcConsoleOutput format code' );
         }
         $this->properties[$propertyName] = $val;
     }

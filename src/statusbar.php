@@ -116,7 +116,7 @@ class ezcConsoleStatusbar
      *
      * @throws ezcBasePropertyNotFoundException
      *         If a desired property could not be found.
-     * @throws ezcBasePropertyException
+     * @throws ezcBaseValueException
      *         If a desired property value is out of range.
      * @return void
      */
@@ -128,11 +128,7 @@ class ezcConsoleStatusbar
             case 'failureChar':
                 if ( strlen( $val ) < 1 )
                 {
-                    throw new ezcBasePropertyException( 
-                        $key, 
-                        $val,
-                        'length > 1'
-                    );
+                    throw new ezcBasePropertyException( $key, $val, 'string, not empty' );
                 }
                 break;
             default:

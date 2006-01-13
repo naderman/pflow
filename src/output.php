@@ -207,7 +207,7 @@ class ezcConsoleOutput
      * @param string $propertyName Name of the property.
      * @param mixed $val  The value for the property.
      *
-     * @throws ezcBasePropertyException 
+     * @throws ezcBaseValueException 
      *         If a the value for the property options is not an instance of 
      *         ezcConsoleOutputOptions. 
      * @throws ezcBasePropertyException 
@@ -222,22 +222,14 @@ class ezcConsoleOutput
             case 'options':
                 if ( !( $val instanceof ezcConsoleOutputOptions ) )
                 {
-                    throw new ezcBasePropertyException( 
-                        'options',
-                        'type:' . is_object( $val ) ? get_class( $val ) : gettype( $val ),
-                        'type:ezcConsoleOutputOptions' 
-                    );
+                    throw new ezcBasePropertyException( $key, $val, 'ezcConsoleOutputOptions' );
                 }
                 $this->options = $val;
                 return;
             case 'formats':
                 if ( !( $val instanceof ezcConsoleOutputFormats ) )
                 {
-                    throw new ezcBasePropertyException( 
-                        'format',
-                        'type:' . is_object( $val ) ? get_class( $val ) : gettype( $val ),
-                        'type:ezcConsoleOutputFormats' 
-                    );
+                    throw new ezcBasePropertyException( $key, $val, 'ezcConsoleOutputFormats' );
                 }
                 $this->formats = $val;
                 return;

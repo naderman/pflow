@@ -195,7 +195,7 @@ class ezcConsoleToolsTableTest extends ezcTestCase
         {
             $table = new ezcConsoleTable( $this->output, null );
         }
-        catch (ezcBasePropertyException $e)
+        catch (ezcBaseValueException $e)
         {
             $this->assertTrue( 
                 true,
@@ -213,7 +213,7 @@ class ezcConsoleToolsTableTest extends ezcTestCase
         {
             $table = new ezcConsoleTable( $this->output, 'test' );
         }
-        catch (ezcBasePropertyException $e)
+        catch (ezcBaseValueException $e)
         {
             $this->assertTrue( 
                 true,
@@ -231,7 +231,7 @@ class ezcConsoleToolsTableTest extends ezcTestCase
         {
             $table = new ezcConsoleTable( $this->output, -10 );
         }
-        catch (ezcBasePropertyException $e)
+        catch (ezcBaseValueException $e)
         {
             $this->assertTrue( 
                 true,
