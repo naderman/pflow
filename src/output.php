@@ -210,7 +210,7 @@ class ezcConsoleOutput
      * @throws ezcBaseValueException 
      *         If a the value for the property options is not an instance of 
      *         ezcConsoleOutputOptions. 
-     * @throws ezcBasePropertyException 
+     * @throws ezcBaseValueException 
      *         If a the value for the property formats is not an instance of 
      *         ezcConsoleOutputFormats. 
      * @return void
@@ -222,14 +222,14 @@ class ezcConsoleOutput
             case 'options':
                 if ( !( $val instanceof ezcConsoleOutputOptions ) )
                 {
-                    throw new ezcBasePropertyException( $key, $val, 'ezcConsoleOutputOptions' );
+                    throw new ezcBaseValueException( $key, $val, 'ezcConsoleOutputOptions' );
                 }
                 $this->options = $val;
                 return;
             case 'formats':
                 if ( !( $val instanceof ezcConsoleOutputFormats ) )
                 {
-                    throw new ezcBasePropertyException( $key, $val, 'ezcConsoleOutputFormats' );
+                    throw new ezcBaseValueException( $key, $val, 'ezcConsoleOutputFormats' );
                 }
                 $this->formats = $val;
                 return;

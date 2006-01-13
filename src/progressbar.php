@@ -194,7 +194,7 @@ class ezcConsoleProgressbar
             case 'step':
                 if ( !is_int( $val ) || $val < 0 )
                 {
-                    throw new ezcBasePropertyException( $key, $val, 'int >= 0' );
+                    throw new ezcBaseValueException( $key, $val, 'int >= 0' );
                 }
                 break;
             default:

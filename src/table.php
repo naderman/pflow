@@ -403,7 +403,7 @@ class ezcConsoleTable implements Countable, Iterator, ArrayAccess
             case 'options':
                 if ( !( $val instanceof ezcConsoleTableOptions ) )
                 {
-                    throw new ezcBasePropertyException( $key, $val, 'ezcConsoleTableOptions' );
+                    throw new ezcBaseValueException( $key, $val, 'ezcConsoleTableOptions' );
                 }
                 $this->options = $val;
                 return;

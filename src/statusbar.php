@@ -128,7 +128,7 @@ class ezcConsoleStatusbar
             case 'failureChar':
                 if ( strlen( $val ) < 1 )
                 {
-                    throw new ezcBasePropertyException( $key, $val, 'string, not empty' );
+                    throw new ezcBaseValueException( $key, $val, 'string, not empty' );
                 }
                 break;
             default:
