@@ -42,6 +42,9 @@ class ezcBaseFilePermissionException extends ezcBaseFileException
             case ezcBaseFileException::CHANGE:
                 $operation = "The permissions for <{$path}> can not be changed";
                 break;
+            case (ezcBaseFileException::READ || ezcBaseFileException::WRITE):
+                $operation = "The file <{$path}> can not be opened for reading and writing";
+                break;
         }
         
         $messagePart = '';

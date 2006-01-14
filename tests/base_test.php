@@ -168,6 +168,18 @@ class ezcBaseTest extends ezcTestCase
         }
     }
 
+    public function testFilePermissionException5()
+    {
+        try
+        {
+            throw new ezcBaseFilePermissionException( 'testfile.php', ezcBaseFilePermissionException::READ | ezcBaseFilePermissionException::WRITE, "Extra extra" );
+        }
+        catch ( ezcBaseException $e )
+        {
+            $this->assertEquals( "The file <testfile.php> can not be opened for reading and writing. (Extra extra)", $e->getMessage() );
+        }
+    }
+
     public function testPropertyNotFoundException()
     {
         try
