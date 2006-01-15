@@ -96,10 +96,10 @@ class ezcConsoleToolsProgressbarTest extends ezcTestCase
     private function commonProgressbarTest( $refFile, $max, $step, $options )
     {
         $out = new ezcConsoleOutput();
-        $bar = new ezcConsoleProgressbar( $out, $max, $step );
-        foreach ( $options as $name => $val )
+        $bar = new ezcConsoleProgressbar( $out, $max, $options );
+        if ( $step != 1 )
         {
-            $bar->options->$name = $val;
+            $bar->options->step = $step;
         }
         $res = array();
         for ( $i = 0; $i < $max; $i+= $step) 

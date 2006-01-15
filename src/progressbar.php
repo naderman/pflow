@@ -129,23 +129,41 @@ class ezcConsoleProgressbar
     /**
      * Creates a new progress bar.
      *
-     * @param ezcConsoleOutput $outHandler Handler to utilize for output
-     * @param int $max                     Maximum value, where progressbar 
-     *                                     reaches 100%.
-     * @param int $step                    The ammount of $max that is consumed 
-     *                                     each time {@link ezcConsoleProgressbar::advance()}
-     *                                     is called.
-     * @param array(string=>string) $options       Options
+     * @param ezcConsoleOutput $outHandler   Handler to utilize for output
+     * @param int $max                       Maximum value, where progressbar 
+     *                                       reaches 100%.
+     * @param int $step                      The ammount of $max that is 
+     *                                       consumed each time 
+     *                                       {@link ezcConsoleProgressbar::advance()}
+     *                                       is called.
+     * @param array(string=>string) $options Options
      *
      * @see ezcConsoleTable::$settings
      * @see ezcConsoleTable::$options
      */
-    public function __construct( ezcConsoleOutput $outHandler, $max, $step, ezcConsoleProgressbarOptions $options = null )
+    public function __construct( ezcConsoleOutput $outHandler, $max, array $options = array() )
     {
         $this->output = $outHandler;
         $this->__set( 'max', $max );
-        $this->__set( 'step', $step );
-        $this->__set( 'options', isset( $options ) ? $options : new ezcConsoleProgressbarOptions() );
+        $this->options = new ezcConsoleProgressbarOptions();
+        $this->setOptions( $options );
+    }
+
+    /**
+     * Set options.
+     * Set the options of the progressbar.
+     *
+     * @see ezcConsoleProgressbarOptions
+     * 
+     * @param array(string=>string) $options The options to set.
+     * @return void
+     */
+    public function setOptions( array $options )
+    {
+        foreach ( $options as $name => $value )
+        {
+            $this->options->$name = $value;
+        }
     }
 
     /**
@@ -164,7 +182,6 @@ class ezcConsoleProgressbar
             case 'options':
                 return $this->options;
             case 'max':
-            case 'step':
                 return $this->settings[$key];
             default:
                 break;
@@ -320,7 +337,7 @@ class ezcConsoleProgressbar
         // Fraction
         $fractionVal = sprintf( 
             $this->options->fractionFormat,
-            ( $fractionVal = ( $this->step * $this->currentStep ) / $this->max * 100 ) > 100 ? 100 : $fractionVal
+            ( $fractionVal = ( $this->options->step * $this->currentStep ) / $this->max * 100 ) > 100 ? 100 : $fractionVal
         );
         $this->valueMap['fraction'] = str_pad( 
             $fractionVal, 
@@ -330,7 +347,7 @@ class ezcConsoleProgressbar
         );
 
         // Act / max
-        $actVal = ( $actVal = $this->currentStep * $this->step ) > $this->max ? $this->max : $actVal;
+        $actVal = ( $actVal = $this->currentStep * $this->options->step ) > $this->max ? $this->max : $actVal;
         $this->valueMap['act'] = str_pad( 
             $actVal, 
             strlen( $this->max ),
@@ -363,7 +380,7 @@ class ezcConsoleProgressbar
     protected function calculateMeasures()
     {
         // Calc number of steps bar goes through
-        $this->numSteps = ( int ) round( $this->max / $this->step );
+        $this->numSteps = ( int ) round( $this->max / $this->options->step );
         // Calculate measures
         $this->measures['fixedCharSpace'] = strlen( $this->stripEscapeSequences( $this->insertValues() ) );
         if ( strpos( $this->options->formatString,'%max%' ) !== false )

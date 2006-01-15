@@ -35,11 +35,12 @@ class ezcConsoleProgressbarOptions
     protected $properties = array( 
         'barChar' => '+',
         'emptyChar' => '-',
-        'progressChar' => '>',
         'formatString' => '%act% / %max% [%bar%] %fraction%%',
-        'width' => 78,
         'fractionFormat' => '%01.2f',
+        'progressChar' => '>',
         'redrawFrequency' => 1,
+        'step' => 1,
+        'width' => 78,
     );
 
     /**
@@ -59,7 +60,8 @@ class ezcConsoleProgressbarOptions
         $formatString = '%act% / %max% [%bar%] %fraction%%',
         $width = 78,
         $fractionFormat = '%01.2f',
-        $redrawFrequency = 1
+        $redrawFrequency = 1,
+        $step = 1
     )
     {
         $this->__set( 'barChar', $barChar );
@@ -69,6 +71,7 @@ class ezcConsoleProgressbarOptions
         $this->__set( 'width', $width );
         $this->__set( 'fractionFormat', $fractionFormat );
         $this->__set( 'redrawFrequency', $redrawFrequency );
+        $this->__set( 'step', $step );
     }
 
     /**
@@ -112,19 +115,20 @@ class ezcConsoleProgressbarOptions
             case 'fractionFormat':
                 if ( strlen( $val ) < 1 )
                 {
-                    throw new ezcBaseValueException( $propertyName, 'string, not empty', '' );
+                    throw new ezcBaseValueException( $propertyName, $val, 'string, not empty' );
                 }
                 break;
             case 'width':
                 if ( !is_int( $val ) || $val < 5 )
                 {
-                    throw new ezcBaseValueException( $propertyName, 'int >= 5', $val );
+                    throw new ezcBaseValueException( $propertyName, $val, 'int >= 5' );
                 }
                 break;
             case 'redrawFrequency':
+            case 'step':
                 if ( !is_int( $val ) || $val < 1 )
                 {
-                    throw new ezcBaseValueException( $propertyName, 'int > 0', $val );
+                    throw new ezcBaseValueException( $propertyName, $val, 'int > 0' );
                 }
                 break;
             default:

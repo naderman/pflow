@@ -18,7 +18,7 @@
  * $status = new ezcConsoleStatusbar( new ezcConsoleOutput() );
  *
  * // Set option
- * $status->successChar = '*';
+ * $status->options->successChar = '*';
  *
  * // Run statusbar
  * foreach ( $files as $file )
@@ -83,11 +83,10 @@ class ezcConsoleStatusbar
      *
      * @see ezcConsoleStatusbar::$options
      */
-    public function __construct( ezcConsoleOutput $outHandler, $successChar = '+', $failureChar = '-' )
+    public function __construct( ezcConsoleOutput $outHandler, array $options = array() )
     {
         $this->outputHandler = $outHandler;
-        $this->__set( 'successChar', $successChar );
-        $this->__set( 'failureChar', $failureChar );
+        $this->setOptions( $options );
     }
 
     /**
@@ -101,11 +100,43 @@ class ezcConsoleStatusbar
      */
     public function __get( $key )
     {
-        if ( isset( $this->options[$key] ) )
+        switch ( $key )
         {
-            return $this->options[$key];
+            case 'options':
+                return $this->options;
+                break;
         }
         throw new ezcBasePropertyNotFoundException( $key );
+    }
+
+    /**
+     * Set options.
+     * Set the options of the statusbar.
+     * 
+     * @see ezcConsoleStatusbar::$options
+     * 
+     * @param array(string=>string) $options The optiosn to set.
+     * @return void
+     */
+    public function setOptions( array $options )
+    {
+        foreach ( $options as $name => $value )
+        {
+            switch ( $name )
+            {
+                case 'successChar':
+                case 'failureChar':
+                    if ( !is_string( $value ) || strlen( $value ) < 1 )
+                    {
+                        throw new ezcBaseSettingValueException( $name, $value, 'string, not empty' );
+                    }
+                    break;
+                default:
+                    throw new ezcBaseSettingNotFoundException( $name );
+                    break;
+            }
+            $this->options[$name] = $value;
+        }
     }
 
     /**
@@ -162,11 +193,11 @@ class ezcConsoleStatusbar
         switch ( $status )
         {
             case true:
-                $this->outputHandler->outputText( $this->successChar, 'success' );
+                $this->outputHandler->outputText( $this->options['successChar'], 'success' );
                 break;
 
             case false:
-                $this->outputHandler->outputText( $this->failureChar, 'failure' );
+                $this->outputHandler->outputText( $this->options['failureChar'], 'failure' );
                 break;
             
             default:

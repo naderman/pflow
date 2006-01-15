@@ -152,11 +152,20 @@ class ezcConsoleTable implements Countable, Iterator, ArrayAccess
      *
      * @throws ezcBaseValueException On an invalid setting.
      */
-    public function __construct( ezcConsoleOutput $outHandler, $width, ezcConsoleTableOptions $options = null ) 
+    public function __construct( ezcConsoleOutput $outHandler, $width, array $options = array() ) 
     {
         $this->outputHandler = $outHandler;
         $this->__set( 'width', $width );
-        $this->__set( 'options', isset( $options ) ? $options : new ezcConsoleTableOptions() );
+        $this->options = new ezcConsoleTableOptions();
+        $this->setOptions( $options );
+    }
+
+    public function setOptions( array $options )
+    {
+        foreach ( $options as $name => $value )
+        {
+            $this->options->$name = $value;
+        }
     }
 
     /**
