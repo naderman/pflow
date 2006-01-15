@@ -167,10 +167,10 @@ class ezcConsoleOutput
      * @see ezcConsoleOutput::$formats
      * @see ezcConsoleOutputFormats
      *
-     * @param array(string=>string) $options   Options to set.
      * @param ezcConsoleOutputFormats $formats Formats to be used for output.
+     * @param array(string=>string) $options   Options to set.
      */
-    public function __construct( array $options = array(), ezcConsoleOutputFormats $formats = null )
+    public function __construct( ezcConsoleOutputFormats $formats = null, array $options = array() )
     {
         $options = isset( $options ) ? $options : new ezcConsoleOutputOptions();
         $formats = isset( $formats ) ? $formats : new ezcConsoleOutputFormats();
