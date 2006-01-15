@@ -3,10 +3,18 @@
 - Added redrawFrequency option to ezcConsoleProgressbar to allow less redraws
   than advance() is called. This allows the progress measuring of huge numbers
   without redrawing the bar each time advance() is called.
+- Added setOptions() method to ezcConsoleOutput, ezcConsoleTable,
+  ezcConsoleProgressbar and ezcConsoleStatusbar.
 
 - Changed exception behavior. All errors will now throw a different exception
   class.
 - Changed default progressbar size to 78 characters (standard console width).
+- Changed submittion of options to ezcConsoleOutput, ezcConsoleTable,
+  ezcConsoleProgressbar and ezcConsoleStatusbar to be an array.
+- Changed value "step" to be an option in ezcConsoleProgressbar with default
+  value = 1 (was a setting before).
+- Changed "successChar" and "failureChar" to be an option in
+  ezcConsoleStatusbar (were properties before).
 
 - Fixed unreported bug regarding rounding problems when calculating different
   measures.

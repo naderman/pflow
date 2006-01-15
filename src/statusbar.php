@@ -226,7 +226,7 @@ class ezcConsoleStatusbar
      * 
      * @return int Number of successes.
      */
-    public function getSuccesses()
+    public function getSuccessCount()
     {
         return $this->counter[true];
     }
@@ -237,7 +237,7 @@ class ezcConsoleStatusbar
      * 
      * @return int Number of failures.
      */
-    public function getFailures()
+    public function getFailureCount()
     {
         return $this->counter[false];
     }
