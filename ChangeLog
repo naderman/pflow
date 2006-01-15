@@ -1,3 +1,14 @@
+1.0rc1 - [RELEASEDATE]
+
+- Changed exception behavior. All errors will now throw a different exception
+  class.
+- Changed default progressbar size to 78 characters (standard console width).
+
+- Fixed unreported bug regarding rounding problems when calculating different
+  measures.
+
+
+
 1.0beta2 - Friday 23 December 2005
 
 - Added convenience method ezcConsoleOutput::outputLine(). 
