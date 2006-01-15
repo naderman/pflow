@@ -113,7 +113,7 @@ class ezcConsoleTable implements Countable, Iterator, ArrayAccess
      * );
      * </code>
      *
-     * @var array(string)
+     * @var array(string=>string)
      */
     protected $settings = array( 
         'width' => 100,
@@ -136,7 +136,7 @@ class ezcConsoleTable implements Countable, Iterator, ArrayAccess
     /**
      * Collection of the rows that are contained in the table. 
      * 
-     * @var array
+     * @var array(int=>ezcConsoleTableRow)
      */
     protected $rows;
 
@@ -458,7 +458,7 @@ class ezcConsoleTable implements Countable, Iterator, ArrayAccess
     /**
      * Generate the complete table as an array. 
      * 
-     * @return array The table.
+     * @return array(int=>string) The table.
      */
     private function generateTable()
     {
@@ -482,7 +482,7 @@ class ezcConsoleTable implements Countable, Iterator, ArrayAccess
     /**
      * Generate top/bottom borders of rows. 
      * 
-     * @param array $colWidth Array of column width.
+     * @param array(int=>int) $colWidth Array of column width.
      * @return string The Border string.
      */
     private function generateBorder( $colWidth, $format )
@@ -501,8 +501,8 @@ class ezcConsoleTable implements Countable, Iterator, ArrayAccess
      * Generate a single physical row.
      * This method generates the string for a single physical table row.
      * 
-     * @param array $cells    Cells of the row.
-     * @param array $colWidth Calculated columns widths.
+     * @param array(int=>string) $cells Cells of the row.
+     * @param array(int=>int) $colWidth Calculated columns widths.
      * @return string The row.
      */
     private function generateRow( $cells, $colWidth, $row )
@@ -594,9 +594,9 @@ class ezcConsoleTable implements Countable, Iterator, ArrayAccess
      * class. In this case, the data can be automatically wrapped. The table 
      * row then spans over multiple physical console lines.
      * 
-     * @param array $cells    Array of cells in one row.
-     * @param array $colWidth Columns widths array.
-     * @return array Physical rows generated out of this row.
+     * @param array(int=>string) $cells Array of cells in one row.
+     * @param array(int=>int) $colWidth Columns widths array.
+     * @return array(int=>string) Physical rows generated out of this row.
      */
     private function breakRows( $cells, $colWidth ) 
     {

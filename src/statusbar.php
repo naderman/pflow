@@ -50,7 +50,7 @@ class ezcConsoleStatusbar
      * );
      * </code>
      *
-     * @var array(string)
+     * @var array(string=>string)
      */
     protected $options = array(
         'successChar' => '+',     // Char to indicate success
@@ -67,7 +67,7 @@ class ezcConsoleStatusbar
     /**
      * Counter for success and failure outputs. 
      * 
-     * @var array
+     * @var array(bool=>int)
      */
     protected $counter = array( 
         true  => 0,
@@ -78,8 +78,8 @@ class ezcConsoleStatusbar
      * Creates a new status bar.
      *
      * @param ezcConsoleOutput $outHandler Handler to utilize for output
-     * @param array(string) $settings      Settings
-     * @param array(string) $options       Options
+     * @param array(string=>string) $settings      Settings
+     * @param array(string=>string) $options       Options
      *
      * @see ezcConsoleStatusbar::$options
      */

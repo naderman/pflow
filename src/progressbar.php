@@ -55,7 +55,7 @@ class ezcConsoleProgressbar
      * $ptogress->step;     // The step size to raise the progress.
      * </code>
      * 
-     * @var array
+     * @var array(string=>int)
      */
     protected $settings;
 
@@ -130,8 +130,8 @@ class ezcConsoleProgressbar
      * Creates a new progress bar.
      *
      * @param ezcConsoleOutput $outHandler Handler to utilize for output
-     * @param array(string) $settings      Settings
-     * @param array(string) $options       Options
+     * @param array(string=>string) $settings      Settings
+     * @param array(string=>string) $options       Options
      *
      * @see ezcConsoleTable::$settings
      * @see ezcConsoleTable::$options

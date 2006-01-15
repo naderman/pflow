@@ -422,7 +422,7 @@ class ezcConsoleInput
      * All exceptions thrown by this method contain an additional attribute "option"
      * which specifies the parameter on which the error occured.
      * 
-     * @param array(int -> string) $args The arguments
+     * @param array(int=>string) $args The arguments
      * @return void
      *
      * @throws ezcConsoleOptionNotExistsException 

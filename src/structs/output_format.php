@@ -27,7 +27,7 @@ class ezcConsoleOutputFormat
     /**
      * Array that defines this class' properties.
      *
-     * @var array
+     * @var array(string=>string)
      */
     protected $properties = array( 
         'color'     => 'default',
@@ -39,9 +39,9 @@ class ezcConsoleOutputFormat
      * Create a new ezcConsoleOutputFormat object.
      * Creates a new object of this class.
      * 
-     * @param string $color        Name of a color value.
-     * @param array(string) $style Names of style values.
-     * @param string $bgcolor      Name of a bgcolor value.
+     * @param string $color             Name of a color value.
+     * @param array(int=>string) $style Names of style values.
+     * @param string $bgcolor           Name of a bgcolor value.
      */
     public function __construct( $color = 'default', array $style = null, $bgcolor = 'default' )
     {
