@@ -124,7 +124,7 @@ class ezcConsoleProgressbarOptions
             case 'redrawFrequency':
                 if ( !is_int( $val ) || $val < 1 )
                 {
-                    throw new ezcBaseValueException( $propertyName, 'int>0', $val );
+                    throw new ezcBaseValueException( $propertyName, 'int > 0', $val );
                 }
                 break;
             default:
