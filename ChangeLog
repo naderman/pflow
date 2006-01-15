@@ -1,5 +1,9 @@
 1.0rc1 - [RELEASEDATE]
 
+- Added redrawFrequency option to ezcConsoleProgressbar to allow less redraws
+  than advance() is called. This allows the progress measuring of huge numbers
+  without redrawing the bar each time advance() is called.
+
 - Changed exception behavior. All errors will now throw a different exception
   class.
 - Changed default progressbar size to 78 characters (standard console width).
