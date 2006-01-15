@@ -130,7 +130,11 @@ class ezcConsoleProgressbar
      * Creates a new progress bar.
      *
      * @param ezcConsoleOutput $outHandler Handler to utilize for output
-     * @param array(string=>string) $settings      Settings
+     * @param int $max                     Maximum value, where progressbar 
+     *                                     reaches 100%.
+     * @param int $step                    The ammount of $max that is consumed 
+     *                                     each time {@link ezcConsoleProgressbar::advance()}
+     *                                     is called.
      * @param array(string=>string) $options       Options
      *
      * @see ezcConsoleTable::$settings
@@ -269,7 +273,7 @@ class ezcConsoleProgressbar
     public function advance( $redraw = true ) 
     {
         $this->currentStep += 1;
-        if ( $redraw === true )
+        if ( $redraw === true && $this->currentStep % $this->options->redrawFrequency === 0 )
         {
             $this->output();
         }

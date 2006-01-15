@@ -88,6 +88,11 @@ class ezcConsoleToolsProgressbarTest extends ezcTestCase
        );
     }
     
+    public function testProgress10()
+    {
+        $this->commonProgressbarTest( __FUNCTION__, 100, 1, array ( 'redrawFrequency' => 10 ) );
+    }
+    
     private function commonProgressbarTest( $refFile, $max, $step, $options )
     {
         $out = new ezcConsoleOutput();
@@ -101,7 +106,11 @@ class ezcConsoleToolsProgressbarTest extends ezcTestCase
         {
             ob_start();
             $bar->advance();
-            $res[] = ob_get_contents();
+            $resTmp = ob_get_contents();
+            if (trim($resTmp) !== '')
+            {
+                $res[] = $resTmp;
+            }
             ob_end_clean();
         }
         $this->assertEquals(

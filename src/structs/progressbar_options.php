@@ -39,6 +39,7 @@ class ezcConsoleProgressbarOptions
         'formatString' => '%act% / %max% [%bar%] %fraction%%',
         'width' => 78,
         'fractionFormat' => '%01.2f',
+        'redrawFrequency' => 1,
     );
 
     /**
@@ -57,7 +58,8 @@ class ezcConsoleProgressbarOptions
         $progressChar = '>',
         $formatString = '%act% / %max% [%bar%] %fraction%%',
         $width = 78,
-        $fractionFormat = '%01.2f'
+        $fractionFormat = '%01.2f',
+        $redrawFrequency = 1
     )
     {
         $this->__set( 'barChar', $barChar );
@@ -66,6 +68,7 @@ class ezcConsoleProgressbarOptions
         $this->__set( 'formatString', $formatString );
         $this->__set( 'width', $width );
         $this->__set( 'fractionFormat', $fractionFormat );
+        $this->__set( 'redrawFrequency', $redrawFrequency );
     }
 
     /**
@@ -116,6 +119,12 @@ class ezcConsoleProgressbarOptions
                 if ( !is_int( $val ) || $val < 5 )
                 {
                     throw new ezcBaseValueException( $propertyName, 'int >= 5', $val );
+                }
+                break;
+            case 'redrawFrequency':
+                if ( !is_int( $val ) || $val < 1 )
+                {
+                    throw new ezcBaseValueException( $propertyName, 'int>0', $val );
                 }
                 break;
             default:
