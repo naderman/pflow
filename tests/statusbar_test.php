@@ -81,12 +81,12 @@ class ezcConsoleToolsStatusbarTest extends ezcTestCase
         $res = ob_get_contents();
         ob_end_clean();
         $this->assertEquals(
-            file_get_contents( dirname( __FILE__ ) . '/dat/testStatusbar1.dat' ),
+            file_get_contents( dirname( __FILE__ ) . '/data/testStatusbar1.dat' ),
             $res,
             "Formated statusbar not generated correctly."
         );
         // To prepare test files use this:
-        // file_put_contents( dirname( __FILE__ ) . '/dat/testStatusbar1.dat', $res );
+        // file_put_contents( dirname( __FILE__ ) . '/data/testStatusbar1.dat', $res );
     }
     
     public function testStatusbar2()
@@ -102,12 +102,12 @@ class ezcConsoleToolsStatusbarTest extends ezcTestCase
         $res = ob_get_contents();
         ob_end_clean();
         $this->assertEquals(
-            file_get_contents( dirname( __FILE__ ) . '/dat/testStatusbar2.dat' ),
+            file_get_contents( dirname( __FILE__ ) . '/data/testStatusbar2.dat' ),
             $res,
             "Unformated statusbar not generated correctly."
         );
         // To prepare test files use this:
-        // file_put_contents( dirname( __FILE__ ) . '/dat/testStatusbar2.dat', $res );
+        // file_put_contents( dirname( __FILE__ ) . '/data/testStatusbar2.dat', $res );
     }
 }
 ?>

@@ -114,12 +114,12 @@ class ezcConsoleToolsProgressbarTest extends ezcTestCase
             ob_end_clean();
         }
         $this->assertEquals(
-            file_get_contents( dirname( __FILE__ ) . '/dat/' . $refFile . '.dat' ),
+            file_get_contents( dirname( __FILE__ ) . '/data/' . $refFile . '.dat' ),
             implode( "\n", $res ),
             'Table not correctly generated for ' . $refFile . '.'
         );
         // Use the following line to regenerate test reference files
-        // file_put_contents( dirname( __FILE__ ) . '/dat/' . $refFile . '.dat', implode( "\n", $res ) );
+        // file_put_contents( dirname( __FILE__ ) . '/data/' . $refFile . '.dat', implode( "\n", $res ) );
     }
 }
 ?>

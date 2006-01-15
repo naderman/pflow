@@ -280,12 +280,12 @@ class ezcConsoleToolsTableTest extends ezcTestCase
         }
         
         $this->assertEquals(
-            file_get_contents( dirname( __FILE__ ) . '/dat/' . $refFile . '.dat' ),
+            file_get_contents( dirname( __FILE__ ) . '/data/' . $refFile . '.dat' ),
             implode( "\n", $table->getTable() ),
             'Table not correctly generated for ' . $refFile . '.'
         );
         // To prepare test files use this:
-        // file_put_contents( dirname( __FILE__ ) . '/dat/' . $refFile . '.dat', implode( "\n", $table->getTable() ) );
+        // file_put_contents( dirname( __FILE__ ) . '/data/' . $refFile . '.dat', implode( "\n", $table->getTable() ) );
     }
 }
 ?>
