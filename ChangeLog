@@ -1,4 +1,4 @@
-1.0rc1 - [RELEASEDATE]
+1.0rc1 - Monday 16 January 2006
 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
 - Added redrawFrequency option to ezcConsoleProgressbar to allow less redraws
