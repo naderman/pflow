@@ -19,10 +19,10 @@ class ezcConsoleOptionDependencyViolationException extends ezcConsoleOptionExcep
 {
     function __construct( ezcConsoleOption $dependingOption, ezcConsoleOption $dependantOption, $valueRange = null )
     {
-        $message  = "The option <{$dependingOption->long}> depends on the option <{$dependantOption->long}>, but this was not submitted.";
+        $message  = "The option <{$dependingOption->long}> depends on the option <{$dependantOption->long}> ";
         if ( $valueRange !== null )
         {
-            $message .= "being the value range <{$valueRange}> ";
+            $message .= " to have a value in <{$valueRange}> ";
         }
         $message .= "but this one was not submitted.";
         parent::__construct( $message );

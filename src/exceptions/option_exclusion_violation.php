@@ -17,12 +17,12 @@
  */
 class ezcConsoleOptionExclusionViolationException extends ezcConsoleOptionException
 {
-    function __construct( ezcConsoleOption $excludingOption, ezcConsoleOption $excludedOption, $value = null )
+    function __construct( ezcConsoleOption $excludingOption, ezcConsoleOption $excludedOption, $valueRange = null )
     {
-        $message = "The option <{$excludingOption->long}> excludes the option <{$excludedOption->long}>, but this was submitted.";
+        $message = "The option <{$excludingOption->long}> excludes the option <{$excludedOption->long}>" ;
         if ( $value !== null )
         {
-            $message .= "having the value <{$value}> ";
+            $message .= "to have a value in <{$valueRange}> ";
         }
         $message .= "but this one was submitted.";
         parent::__construct( $message );

@@ -1,4 +1,2 @@
 - Fix issue with Gnome terminal not recognizing position restore sequence.
-- Finally fix review comments by Amos (see http://lists.ez.no/pipermail/components/2005-December/000819.html).
-- Check with Derick regarding default value handling in ezcConsoleInput.
-(- Recheck documentation and code beauty.)
+- Add generation of help tables.
