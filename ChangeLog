@@ -37,6 +37,7 @@
   used to structure option properties.
   Therefore changed / removed the following methods in ezcConsoleParameter
   (now ezcConsoleInput):
+
   * getParamDef() -> Deprecated & removed, since getOption() now returns the 
     complete option object, including settings and value.
   * getDefaults() -> Deprecated & removed, since getOption() now returns the
@@ -66,6 +67,7 @@
   Reflects it's purpose much better and avoids conflicts with the acronym
   "option", which is now used in ezcConsoleOption.
   Renamed the cooperating types and methods:
+
   * ezcConsoleParameter::registerParam() to ezcConsoleInput::registerOption().
   * ezcConsoleParameter::unregisterParam() 
     to ezcConsoleInput::unregisterOption().
@@ -73,6 +75,7 @@
   * ezcConsoleParameter::getParams() to ezcConsoleInput::getOptions().
 
 - Changed to the use of structs instead of complex array structures: 
+
   * ezcConsoleOptionRule (replaces old handling of dependencies and exclusions
     between options - former parameters).
   * ezcConsoleOutputFormat (to define format options).
@@ -83,9 +86,10 @@
 
 - Changed to the use of "extended structs" where it made sense to avoid
   complex arrays:
+
   * ezcConsoleOutputFormats (iteration and on-the-fly creation of format
     definitions in ezcConsoleOutput through
-	$out->formats->{formatname}->{formatoption} = ...;)
+    $out->formats->{formatname}->{formatoption} = ...;)
 
 - Changed handling of parameter names in ezcConsoleInput. 
   Short and long parameters are now also handled without their prefixes ("-"
@@ -101,6 +105,7 @@
 - Changed handling of table structure to classes ezcConsoleTableRow and
   ezcConsoleTableCell.  These allow a convenient way to create and customize
   console based tables: 
+  
   * $table[0][]; // creates a new cell 
   * $table[2][]->format = 'important'; // creates a new cell and set's it's
     format to 'important',
@@ -112,6 +117,7 @@
   rendered.
 - Renamed ezcConsoleParameter to ezcConsoleInput.
 - Renamed methods (consistency):
+
   * ezcConsoleOutput::styleText() to ezcConsoleOutput::formatText().
   * ezcConsoleInput::fromString() to ezcConsoleInput::registerOptionString().
   * ezcConsoleInput::getValues() to ezcConsoleInput::getOptionsValues().
