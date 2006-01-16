@@ -108,7 +108,10 @@ class ezcBase
             trigger_error( "Couldn't find autoload directory '$path'", E_USER_ERROR );
         }
         /* FIXME: this should go away - only for development */
-        trigger_error( "Couldn't find autoload file for '$className' in '$realPath'", E_USER_WARNING );
+        if ( self::libraryMode == 'devel' )
+        {
+            trigger_error( "Couldn't find autoload file for '$className' in '$realPath'", E_USER_WARNING );
+        }
         return false;
     }
 
