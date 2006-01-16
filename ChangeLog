@@ -1,4 +1,4 @@
-1.0rc1 - [RELEASEDATE]
+1.0rc1 - Monday 16 January 2006
 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
 - Added the ezcBaseException that all exceptions in the components library
