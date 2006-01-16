@@ -1,4 +1,5 @@
 1.0rc1 - [RELEASEDATE]
+^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
 - Added redrawFrequency option to ezcConsoleProgressbar to allow less redraws
   than advance() is called. This allows the progress measuring of huge numbers
@@ -9,11 +10,11 @@
 - Changed exception behavior. All errors will now throw a different exception
   class.
 - Changed default progressbar size to 78 characters (standard console width).
-- Changed submittion of options to ezcConsoleOutput, ezcConsoleTable,
+- Changed submission of options to ezcConsoleOutput, ezcConsoleTable,
   ezcConsoleProgressbar and ezcConsoleStatusbar to be an array.
 - Changed value "step" to be an option in ezcConsoleProgressbar with default
   value = 1 (was a setting before).
-- Changed "successChar" and "failureChar" to be an option in
+- Changed "successChar" and "failureChar" to be options in
   ezcConsoleStatusbar (were properties before).
 - Changed getSuccesses() to getSuccessCount() and getFailures() to
   getFailureCount() in ezcConsoleStatusbar.
@@ -22,8 +23,8 @@
   measures.
 
 
-
 1.0beta2 - Friday 23 December 2005
+^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
 - Added convenience method ezcConsoleOutput::outputLine(). 
   This one adds a line break after outputting the desired text and works also
@@ -123,5 +124,6 @@
 
 
 1.0beta1 - Friday 25 November 2005
+^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
 - Initial release of this package.
