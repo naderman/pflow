@@ -505,7 +505,7 @@ class ezcConsoleInput
      * );
      * </code>
      *
-     * @return array(string=>object(ezcConsoleOption)) Registered options.
+     * @return array(string=>ezcConsoleOption) Registered options.
      */
     public function getOptions()
     {
