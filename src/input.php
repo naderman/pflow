@@ -498,9 +498,9 @@ class ezcConsoleInput
      * Returns an array of all registered options in the following format:
      * <code>
      * array( 
-     *      0 => object(ezcConsoleOption),
-     *      1 => object(ezcConsoleOption),
-     *      2 => object(ezcConsoleOption),
+     *      0 => ezcConsoleOption,
+     *      1 => ezcConsoleOption,
+     *      2 => ezcConsoleOption,
      *      ...
      * );
      * </code>

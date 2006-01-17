@@ -304,9 +304,9 @@ class ezcConsoleOption {
      * For example:
      * <code>
      * array(
-     *      0 => object(ezcConsoleOptionRule),
-     *      1 => object(ezcConsoleOptionRule),
-     *      2 => object(ezcConsoleOptionRule),
+     *      0 => ezcConsoleOptionRule,
+     *      1 => ezcConsoleOptionRule,
+     *      2 => ezcConsoleOptionRule,
      * );
      * </code>
      * 
@@ -414,9 +414,9 @@ class ezcConsoleOption {
      * For example:
      * <code>
      * array(
-     *      0 => object(ezcConsoleOptionRule),
-     *      1 => object(ezcConsoleOptionRule),
-     *      2 => object(ezcConsoleOptionRule),
+     *      0 => ezcConsoleOptionRule,
+     *      1 => ezcConsoleOptionRule,
+     *      2 => ezcConsoleOptionRule,
      * );
      * </code>
      * 

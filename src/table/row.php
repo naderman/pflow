@@ -132,7 +132,7 @@ class ezcConsoleTableRow implements Countable, Iterator, ArrayAccess {
      * since it creates them on the fly, if a given item does not exist.
      * 
      * @param int $offset The offset to check.
-     * @return object(ezcConsoleTableCell)
+     * @return ezcConsoleTableCell
      *
      * @throws ezcBaseValueException
      *         If a non numeric cell ID is requested.
@@ -160,8 +160,8 @@ class ezcConsoleTableRow implements Countable, Iterator, ArrayAccess {
      * This method is part of the ArrayAccess interface to allow access to the
      * data of this object as if it was an array. 
      * 
-     * @param int $offset                 The offset to assign an item to.
-     * @param object(ezcConsoleTableCell) The item to assign.
+     * @param int $offset         The offset to assign an item to.
+     * @param ezcConsoleTableCell The cell to assign.
      * @return void
      *
      * @throws ezcBaseValueException
@@ -228,7 +228,7 @@ class ezcConsoleTableRow implements Countable, Iterator, ArrayAccess {
      * cells of this row by iterating over it like an array (e.g. using
      * foreach).
      * 
-     * @return object(ezcConsoleTableCell) The currently selected cell.
+     * @return ezcConsoleTableCell The currently selected cell.
      */
     public function current()
     {

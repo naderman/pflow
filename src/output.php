@@ -69,14 +69,14 @@ class ezcConsoleOutput
     /**
      * Options
      * 
-     * @var object(ezcConsoleOutputOptions)
+     * @var ezcConsoleOutputOptions
      */
     protected $options;
 
     /**
      * Formats 
      * 
-     * @var object(ezcConsoleOutputFormats)
+     * @var ezcConsoleOutputFormats
      */
     protected $formats;
 
