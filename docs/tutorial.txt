@@ -96,3 +96,11 @@ printing text to the console. Let's look at a basic example:
 
 
 .. _Introduction: http://ez.no/community/articles/an_introduction_to_ez_components
+
+
+..
+   Local Variables:
+   mode: rst
+   fill-column: 79
+   End:
+   vim: et syn=rst tw=79
