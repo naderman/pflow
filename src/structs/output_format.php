@@ -19,6 +19,52 @@
  * - <b>style</b> <i>array(string)</i>, contains the lists of styles that are associated with this format.
  * - <b>bgcolor</b> <i>string</i>, contains the background color for this format.
  *
+ * Possible values of {@link ezcConsoleOutputFormat::$color} are:
+ * - gray	
+ * - red	
+ * - green	
+ * - yellow	
+ * - blue	
+ * - magenta	
+ * - cyan	
+ * - white	
+ * - default (representing the consoles default color)
+ *
+ * For {@link ezcConsoleOutputFormat::$bgcolor} the following values are valid:
+ * - black
+ * - red
+ * - green
+ * - yellow
+ * - blue
+ * - magenta
+ * - cyan
+ * - white
+ * - default (representing the consoles default background color)
+ *
+ * The {@link ezcConsoleOutputFormat::$style} attribute takes an array of 
+ * (possibly) multiple attributes. Choose from the lists below:
+ *
+ * - default (resets all attributes to default)
+ *
+ * - bold
+ * - faint
+ * - normal
+ *
+ * - italic
+ * - notitalic
+ *
+ * - underlined
+ * - doubleunderlined
+ * - notunderlined
+ *
+ * - blink
+ * - blinkfast
+ * - noblink
+ *
+ * - negative
+ * - positive
+ *
+ *
  * @package ConsoleTools
  * @version //autogen//
  */

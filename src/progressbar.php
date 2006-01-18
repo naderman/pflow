@@ -132,10 +132,6 @@ class ezcConsoleProgressbar
      * @param ezcConsoleOutput $outHandler   Handler to utilize for output
      * @param int $max                       Maximum value, where progressbar 
      *                                       reaches 100%.
-     * @param int $step                      The ammount of $max that is 
-     *                                       consumed each time 
-     *                                       {@link ezcConsoleProgressbar::advance()}
-     *                                       is called.
      * @param array(string=>string) $options Options
      *
      * @see ezcConsoleTable::$settings
