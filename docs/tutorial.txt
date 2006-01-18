@@ -1,0 +1,98 @@
+eZ components - ConsoleTools
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+
+Introduction
+============
+
+The ConsoleTools components provides several useful tools to build
+applications that run on a computers console (sometimes also called Shell or
+command line). Usually one would not expect to see a component like this for a
+language like PHP, but since PHP4 more and more features were included in PHP
+which make the language quite neat as a shell scripting language. Indeed you
+can find many situations, where a console based application extends the
+functionality of a web application perfectly or where a pure shell application
+makes sense to be written in PHP. For example eZ publish has several shell
+scripts included, which perform tasks like clearing caches.
+
+The ConsoleTools package will be used for eZ publish 4.0 to realize this
+applications. But until then, they can offer you a solid and comfortable basis
+for your shell scripts also. The ConsoleTools components offers several
+(mostly independant) classes to perform different tasks. The main classes are:
+
+Class overview
+==============
+
+This section gives you an overview on all classes, that are intended to be
+used directly.
+
+ezcConsoleOutput
+  This class is responsible for printing on the console. It allows you to
+  print texts in different colors and using different background colors.
+  Beside that, it can apply other styling information to the text, like making
+  it bold or underlined. Another feature is, that can automatically wrap text
+  for you, after a certain amount of characters, if you want, and handle
+  output of different verbosity levels.
+
+ezcConsoleInput
+  Using this little tool, you can handle the options and arguments provided to
+  your shell application. It is capable of handling and validating 3 types of
+  option data types (string, int and none), can handle optional and mandatory
+  options, as well as rules to define relations between those. Rules include
+  dependencies and exclusions between options. ezcConsoleInput will keep track
+  of your options, validate the submitted values and the defined rules.
+
+ezcConsoleTable
+  This handy class let's you easily create tables to be displayed on the
+  console. It has a very convenient interface to create a table and manage the
+  data it contains. Beside that it is highly configurable on how the table
+  will look like later (like different color and style information for content
+  and borders on a per-cell basis, character selection for borders, variable
+  width of the table). ezcConsoleTable will also take care of measuring the best 
+  width for the table columns (to make your content fit best), automatically
+  wrapping too long content and aligning the content in the cells as you like.
+
+ezcConsoleProgressbar
+  Most often you will use a console application in favor of a web application,
+  when it comes to batch-processing or very time consuming tasks. To indicate
+  to the user of an application mostlikely a kind of "status indicator" will
+  be used, which is most commonly a progress bar. ezcConsoleProgressbar gives
+  you an easy to use interface to realize this very fast. It will keep track
+  of redrawing the bar as needed, showing actual and maximum values, as well
+  as the fraction of the current status. It is fully configurable in respect
+  to it's visual appearance.
+
+ezcConsoleStatusbar
+  This small and handy tool is the little brother of ezcConsoleProgressbar. It
+  also allows you to display the progress of a time consuming action, but does
+  not use a fixed bar-like appearance. Instead it simple indicates succeeded
+  and failed operation by displaying a specific character and keeps track of
+  the count of successes and failures for you. 
+
+Getting it run
+==============
+
+Before we can go
+----------------
+
+All following code examples asume, that you have already installed version
+1.0rc1 of the ConsoleTools package on your system. Beside that, you need to
+set your include path correctly and have the eZ components autoload feature
+activated in each of the example files.
+
+To get further instructions on how to set up the eZ components environment,
+please refer to this Introduction_.
+
+Printing text to the console
+----------------------------
+
+As already mentioned, the class ezcConsoleOutput is the tool of choice for
+printing text to the console. Let's look at a basic example:
+
+
+
+
+
+
+
+
+.. _Introduction: http://ez.no/community/articles/an_introduction_to_ez_components
