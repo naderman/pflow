@@ -89,6 +89,215 @@ printing text to the console. Let's look at a basic example:
 .. include:: tutorial_example_01.php
    :literal:
 
+As you can see, the ezcConsoleOutput object is simply instanciated. If you
+like to, you can submit further options and predefined formating options to
+it's constructor, but this can also be done later.
+
+In line 7 you see how a format is defined. Formats are created on the fly, as
+soon as you access them (for reading or writing) through the $output->formats
+attribute. We create a format called "info" and assign the color value "blue"
+to it. This will make all text printed with the format "info" occur in blue.
+
+Finally we print some text using this format on line 9. 
+
+As easy as this was, we can define more formats and assign more attributes to
+them, as the next example shows:
+
+.. include:: tutorial_example_02.php
+   :literal:
+
+As seen before, we start with the simple "info" format. After that, we create
+a format named "error". This format does have style attribute set, which makes
+it appear bold. As you can see, style attributes are set using an array,
+because you can assign multiple style options to a format. The last format in
+this example is even more extensive: "fatal" will be printed with red
+foreground color, it will appear bold and have an underlining, and it's
+backhground will be bold.
+
+After defining the formats, we print some text with them. In lines 16-18 you
+can see, that the ezcConsoleOutput::outputText() method does not add a line
+break after the text. This allows you to display differntly styled text in 1
+line. You can also print manual line breaks with outputText() as shown in line
+19.
+
+A nice convenience method is ezcConsoleOutput::outputLine(), which
+automatically adds a line break after your text, which is feasible for the
+system your program runs on. Last we print some standard text in line 23,
+which uses the default format of the console.
+
+Two things are left to show for ezcConsoleOutput:
+
+.. include:: tutorial_example_03.php
+   :literal:
+
+Again we define a format for later use. After that, we now set some options
+for ezcConsoleOutput, what is new in this example. The "autobreak" option
+makes ezcConsoleOutput wrap your printed text automatically after a certain
+number of characters (78 in this case). The "verbosityLevel" option defines,
+what text will be printed or not.
+
+Let's first see how "autobreak" works. In line 17 you see a very long text
+submitted to ezcConsoleOutput::outputLine() method. Since in most cases, the
+console of the user running your program will not be that long, your text will
+propably be wrapped by the console automatically. The issue here is, that the
+console will not take any kind of respect regarding your word boundaries. So
+it's most likely to happen, that your text will be wrapped in the middle of a
+word. Using "autobreak" prevents this issue, because then ezcConsoleOutput
+will take care of wrapping your texts  nicely for you. After we had some 
+auto-wrapped text, we print an explicit newline. 
+
+On line 20 and 22 you see 2 examples for the optional "verbosityLevel" option,
+both output*() options can take. We remeber, that we set the current
+"verbosityLevel" before in our options. In this place we submit the level of
+verbosity, when a text will be displayed to the user. The first text will not
+be diplayed, if the verbosity is set to a level below 10. We chose 3, so this
+will definitly be kept back. But the text printed on line 22 will be visible,
+since 2 is smaller then the currently set "verbosityLevel".
+
+Mastering options and arguments
+-------------------------------
+
+After we saw how to print information to the user, we will take a look how we
+can request it from him. This can be done using the class ezcConsoleInput.
+Let's start again by looking at an example.
+
+.. include:: tutorial_example_04.php
+   :literal:
+   
+First we again create an instance of ezcConsoleInput. After that (line 7), we
+register our first option. Registering an option means, that this option will
+be available for the user to submit, when he runs our program from the
+console. An option itself is represented by an object of type
+ezcConsoleOption. What every option must have, is at least a "shortname" and a
+"longname" (the first 2 parameters for ezcConsoleOption). Out first registered
+option will therefore be available later using "-h" or "--help". The
+ezcConsoleInput::registerOption() method returns the registered object again,
+so we can store it for later access.
+
+After we succesfully registered the option, we tell ezcConsoleInput to
+parse the options submitted by the user (line 16). Although we did not set any
+option so far, that could potentially make the call to
+ezcConsoleInput::process() throw an exception (we'll see when this may occur a
+little bit later in this article), we wrap it in a try block. Usually one
+would expect to catch all ezcConsoleInput exceptions here. We don't do that,
+since the a special exception type exists, that is thrown, whenever an issue
+with user supplied options occurs. That way, we leave exceptions thrown
+because we maybe made a mistake while programming untouched.
+
+Finally, we check what the user has submitted to our program. If an option was
+submitted, it's value attribute is generally (we'll see in a few seconds, what
+this means) set to bool true. If it was not submitted, it's value is false.
+You see, by default, all options are optional.
+
+So, this was a very basic example, so let's go on to some more advanced
+things, ezcConsoleInput can do for you:
+
+.. include:: tutorial_example_05.php
+   :literal:
+
+Again we register the -h/--help option as you've seen in the previous example.
+Next we register a second option which will be available as -i/--input to the
+user. For this option we provide a type attribute, that makes the option take
+a string value. This is the first case, where ezcConsoleInput::process() can
+throw an exception that derives from ezcConsoleOptionException. This will
+happen, if the user provided -i or --input to our program, without giving it a
+value (e.g. "--input=/some/path" or "-i /some/path").
+
+The third option we create (-o/--output, see line 22) has also the type
+string, but this time we set it after creating the option itself, by accessing
+the ezcConsoleOption::$type attribute. After that, we see an even more
+advanced feature of ezcConsoleInput: The ability to manage dependencies. A
+dependency is always an object of ezcConsoleOptionRule, because you can also
+define a rule for an option to be excluded, using almost the same syntax, and
+even depend on a certain value of an option. But this topic would go to far
+for this tutorial. So, basically we make the --input and --output option
+depend on each other.
+
+Now it's time to process the options again. In this example, the try-catch
+block really makes sense, since ezcConsoleInput::process() may possibly throw
+exceptions now. The first case has already been mentioned: If an option that
+has a different value type than ezcConsoleInput::TYPE_NONE (which is the
+default) is submitted without a value, ezcConsoleInput::process() will throw
+an exception about this, that is derived from ezcConsoleOptionException. So
+basically, I lied a bit to you in the first example for option handling,
+because if -h/--help (which has the value type "none") is submitted with a
+value, ezcConsoleInput::process() will also throw an exception, because it
+does not expect that. In this sense, we were right in the earlier example to
+have the try-catch block in place. Another case where
+ezcConsoleInput::process() will throw an exception is, when one of these
+parameters is submitted, without the other, or if one does not have a value
+assigned.
+
+Next we check the --help option again. If help is requested, we print out some
+help. First of all we will display the synopsis of our program.
+ezcConsoleInput will generate it for us, so we just need to print it out. The
+synopsis includes all possible option (by default) and indicates if parameters
+may cary values and much more information. If you request help, the synopsis
+printed may for example look like this:
+
+    ::
+      $ ./tutorial_example_05.php [-h] [-i <string> [-o <string>] ]  [[--] <args>] 
+
+As you can see, all options we defined are available, the types of values are
+indicated and even the dependencies are reflected. Beside that, we have an
+indicator that one may also suply arguments to the program. More on that a
+little bit later.
+
+After printint the synopsis we iterate through all of our options and out
+the ezcConsoleOption::$shorthelp attribute. But huh? The "shorthelp"? But we
+did not set anything like this? True, so the output will be "No help
+available." right now. We could (and should) have set this before to a
+sensible help text, explaining the means of the option in short. The
+counterpart to ezcConsoleOption::$shorthelp is ezcConsoleOption::$longhelp,
+which takes a longer description of the options meaning.
+
+Last but not least we print out information about the --input and --output
+options, if they were submitted. We only have to care for the $outputOption
+(or the $inputOption, as you like) here, since ezcConsoleInput already asures
+that both are set, if one of them is set. In the same place we also print
+information about the arguments passed to our application. We can access the
+arguments passed by calling ezcConsoleInput::getArguments(), which will return
+an array of all submitted options.
+
+To make this more clear, here is an exmaple call, including it's output:
+
+  ::
+    $ ./tutorial_example_05.php -i /var/www -o /tmp foo bar 
+
+  ::
+    Input: /var/www, Output: /tmp
+    Arguments: foo, bar
+   
+As you can already see in these 2 simple exmaples, ezcConsoleInput provides
+you a powerful way to manage the options and arguments provided to a console
+base application. We only touched a few of the many possibilities offered.
+For further information, please read on in the API documentation of
+ezcConsoleInput_.
+
+.. _ezcConsoleInput: http://ez.no/doc/components/view/(file)/1.0rc1/ConsoleTools/ezcConsoleInput.html
+
+Progress should happen
+----------------------
+
+Next, let's take a look on indicating progress to the user, by providing a
+progressbar:
+
+.. include:: tutorial_example_06.php
+   :literal:
+
+In the example we first create an output handler to print text on the console.
+This is necessary, because ezcConsoleProgressbar utilizes it to print the
+progressbar. The second parameter provided is the number to which the
+progressbar shall count to. This meanst, that we have to call 15 times the
+ezcConsoleProgressbar::advance() (line 11) method until the progressbar reaches 
+the 100% value. That is basically all you have to do, to create a basic 
+progressbar, which will look like this after we called advance() for the first 
+time:
+
+ 1 / 15 [+++>--------------------------------------------------------]   6.67%
+
+The bar will then constantly move forward, everytime you call advance() and
+reach it's end (and the 100% value) when you call advance() for the 15th time.
 
 
 
