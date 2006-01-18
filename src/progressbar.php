@@ -52,7 +52,6 @@ class ezcConsoleProgressbar
      *
      * <code>
      * $progress->max;      // The maximum progress value to reach.
-     * $ptogress->step;     // The step size to raise the progress.
      * </code>
      * 
      * @var array(string=>int)
@@ -134,8 +133,8 @@ class ezcConsoleProgressbar
      *                                       reaches 100%.
      * @param array(string=>string) $options Options
      *
-     * @see ezcConsoleTable::$settings
-     * @see ezcConsoleTable::$options
+     * @see ezcConsoleProgressbar::$settings
+     * @see ezcConsoleProgressbar::$options
      */
     public function __construct( ezcConsoleOutput $outHandler, $max, array $options = array() )
     {
