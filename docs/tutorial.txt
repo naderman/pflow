@@ -9,17 +9,15 @@ Introduction
 The ConsoleTools components provides several useful tools to build
 applications that run on a computers console (sometimes also called Shell or
 command line). Usually one would not expect to see a component like this for a
-language like PHP, but since PHP4 more and more features were included in PHP
+language like PHP, but since PHP 4 more and more features were included in PHP
 which make the language quite neat as a shell scripting language. Indeed you
 can find many situations, where a console based application extends the
 functionality of a web application perfectly or where a pure shell application
 makes sense to be written in PHP. For example eZ publish has several shell
 scripts included, which perform tasks like clearing caches.
 
-The ConsoleTools package will be used for eZ publish 4.0 to realize this
-applications. But until then, they can offer you a solid and comfortable basis
-for your shell scripts also. The ConsoleTools components offers several
-(mostly independant) classes to perform different tasks. The main classes are:
+The ConsoleTools components offers several (mostly independant) classes to 
+perform different tasks. The main classes are:
 
 Class overview
 ==============
@@ -88,7 +86,8 @@ Printing text to the console
 As already mentioned, the class ezcConsoleOutput is the tool of choice for
 printing text to the console. Let's look at a basic example:
 
-
+.. include:: tutorial_example_01.php
+   :literal
 
 
 
@@ -99,5 +98,5 @@ printing text to the console. Let's look at a basic example:
    Local Variables:
    mode: rst
    fill-column: 79
-   End:
+   End: 
    vim: et syn=rst tw=79
