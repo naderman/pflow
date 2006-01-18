@@ -87,7 +87,7 @@ As already mentioned, the class ezcConsoleOutput is the tool of choice for
 printing text to the console. Let's look at a basic example:
 
 .. include:: tutorial_example_01.php
-   :literal
+   :literal:
 
 
 
