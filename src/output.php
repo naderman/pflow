@@ -17,7 +17,6 @@
  * with console text output.
  *
  * <code>
- *
  * // Create the output handler
  * $out = new ezcConsoleOutput();
  * 
@@ -58,8 +57,10 @@
  * // This is visible, since we set verbosityLevel to 10, and printed in format
  * // 'failure'
  * $out->outputText( "And some not so verbose, failure output.\n", 'failure', 5 );
- *
  * </code>
+ *
+ * For a list of valid colors, style attributes and background colors, please 
+ * refer to {@link ezcConsoleOutputFormat}.
  * 
  * @package ConsoleTools
  * @version //autogen//
@@ -322,7 +323,8 @@ class ezcConsoleOutput
      */
     public function outputLine( $text = '', $format = 'default', $verbosityLevel = 1 )
     {
-        $this->outputText( $text . PHP_EOL, $format, $verbosityLevel );
+        $this->outputText( $text, $format, $verbosityLevel );
+        $this->outputText( PHP_EOL, null, $verbosityLevel );
     }
 
     /**
