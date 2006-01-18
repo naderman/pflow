@@ -1,6 +1,8 @@
 eZ components - ConsoleTools
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
+.. contents:: Table of Contents
+
 Introduction
 ============
 
@@ -68,19 +70,17 @@ ezcConsoleStatusbar
   and failed operation by displaying a specific character and keeps track of
   the count of successes and failures for you. 
 
-Getting it run
-==============
+Installation
+============
 
-Before we can go
-----------------
+This tutorial assumes that you have set-up an eZ components enviroment. For
+information on how to do this, please refer to the ComponentsIntroduction_.
 
-All following code examples asume, that you have already installed version
-1.0rc1 of the ConsoleTools package on your system. Beside that, you need to
-set your include path correctly and have the eZ components autoload feature
-activated in each of the example files.
+.. _ComponentsIntroduction: http://ez.no/community/articles/an_introduction_to_ez_components
 
-To get further instructions on how to set up the eZ components environment,
-please refer to this Introduction_.
+
+Some header
+===========
 
 Printing text to the console
 ----------------------------
@@ -93,9 +93,6 @@ printing text to the console. Let's look at a basic example:
 
 
 
-
-
-.. _Introduction: http://ez.no/community/articles/an_introduction_to_ez_components
 
 
 ..
