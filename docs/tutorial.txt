@@ -30,43 +30,44 @@ ezcConsoleOutput
   you to print texts in different colors and using different background colors.
   Beside that, it can apply other styling information to the text, like making
   it bold or underlined. Another feature is, that it can automatically wrap text
-  for you after a certain amount of characters, if you want, and handle
-  output of different verbosity levels.
+  for you after a certain amount of characters were printed (keeping words
+  intact) and handle output of different verbosity levels.
 
 ezcConsoleInput
   Using this little tool, you can handle the options and arguments provided to
   your shell application. It is capable of handling and validating 3 types of
-  option data types (string, int and none), can handle optional and mandatory
-  options, as well as rules to define relations between those. Rules include
-  dependencies and exclusions between options. ezcConsoleInput will keep track
-  of your options, validate the submitted values and the defined rules.
+  option data-types (string, int and none), can handle optional and mandatory
+  options as well as rules to define relations between those. Rules can include
+  dependencies and exclusions between options.
+
+ezcConsoleProgressbar
+  Most often you will use a console application in favor of a web application,
+  when it comes to processing of very time consuming tasks. To indicate the
+  current progress to the user of an application mostlike a kind of "status 
+  indicator" will be used, which is most commonly a progress bar. 
+  ezcConsoleProgressbar gives you an easy to use interface to realize this 
+  very fast. It will keep track of redrawing the bar as needed, showing actual 
+  and maximum values, as well as the fraction of the current status. It is 
+  fully configurable in respect to it's visual appearance.
+
+ezcConsoleStatusbar
+  ezcConsoleStatusbar is the little brother of ezcConsoleProgressbar. It
+  also allows you to display the progress of a time consuming action, but does
+  not use a fixed bar-like appearance. Instead it simple indicates succeeded
+  and failed operation by displaying a specific character and keeps track of
+  the count of successes and failures for you. This allows you to indicate
+  progress of a process where yoi don't know the number of actions to be 
+  performed before you do it.
 
 ezcConsoleTable
   This handy class let's you easily create tables to be displayed on the
   console. It has a very convenient interface to create a table and manage the
   data it contains. Beside that it is highly configurable on how the table
-  will look like later (like different color and style information for content
+  will look like (like different color and style information for content
   and borders on a per-cell basis, character selection for borders, variable
-  width of the table). ezcConsoleTable will also take care of measuring the best 
-  width for the table columns (to make your content fit best), automatically
+  width of the table,...). ezcConsoleTable will also take care of measuring the 
+  best width for the table columns (to make your content fit best), automatically
   wrapping too long content and aligning the content in the cells as you like.
-
-ezcConsoleProgressbar
-  Most often you will use a console application in favor of a web application,
-  when it comes to batch-processing or very time consuming tasks. To indicate
-  to the user of an application mostlike a kind of "status indicator" will
-  be used, which is most commonly a progress bar. ezcConsoleProgressbar gives
-  you an easy to use interface to realize this very fast. It will keep track
-  of redrawing the bar as needed, showing actual and maximum values, as well
-  as the fraction of the current status. It is fully configurable in respect
-  to it's visual appearance.
-
-ezcConsoleStatusbar
-  This small and handy tool is the little brother of ezcConsoleProgressbar. It
-  also allows you to display the progress of a time consuming action, but does
-  not use a fixed bar-like appearance. Instead it simple indicates succeeded
-  and failed operation by displaying a specific character and keeps track of
-  the count of successes and failures for you. 
 
 Installation
 ============
@@ -296,7 +297,7 @@ consuming action here.
 This is basically all you have to do, to create a basic progressbar, which will 
 look like this after we called advance() for the a couple of times:
 
-.. image:: img/tutorial_example_06.png
+.. image:: img/consoletools_tutorial_example_06.png
 
 The bar will then constantly move forward, every time you call advance() and
 reach it's end (and the 100% value) when you call advance() for the 15th time.
@@ -323,7 +324,7 @@ The "formatString" option is a little bit more complex. It contains the string
 into which the progressbar is rendered later. To make that a bit more clear,
 see here, how the progressbar will look like, when you render it: 
 
-.. image:: img/tutorial_example_07.png
+.. image:: img/consoletools_tutorial_example_07.png
 
 As you can see, we have the fraction value displayed at the beginning this
 time, followed by the progressbar itself (which looks quite different to the
@@ -375,7 +376,7 @@ calling ezcConsoleStatusbar::getSuccessCount() and
 ezcConsoleStatusbar::getFailureCount() to display them to the user. Take a
 look at the result here:
 
-.. image:: img/tutorial_example_08.png
+.. image:: img/consoletools_tutorial_example_08.png
 
 If you want to know more about indicating progress to the user from your shell
 application, take a look at the API documentation of ezcConsoleProgressbar_ and
@@ -395,7 +396,7 @@ package also has a class to generate tables: ezcConsoleTable. Before we look
 at some example code, let me first show you, how the table will look like,
 that we want to create:
 
-.. image:: img/tutorial_example_09.png
+.. image:: img/consoletools_tutorial_example_09.png
 
 As you can see, a table with a nice headline is created. Now, guess how much
 code you need for just generating such a table? No idea? So, here we go:
@@ -483,7 +484,7 @@ format and align values (this time we don't set those on the row, but on the
 cell, so it is individual for each cell) are set randomly, so we will get a
 very colorful picture from it. Let's take a look at this:
 
-.. image:: img/tutorial_example_10.png
+.. image:: img/consoletools_tutorial_example_10.png
 
 Conclusion
 ==========
