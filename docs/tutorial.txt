@@ -397,6 +397,106 @@ that we want to create:
 
 .. image:: img/tutorial_example_09.png
 
+As you can see, a table with a nice headline is created. Now, guess how much
+code you need for just generating such a table? No idea? So, here we go:
+
+.. include:: tutorial_example_09.php
+   :literal:
+
+Also this example looks quite long, you will see that it is not the generation
+of the table itself, which makes it that long. From line 5 to 12 we define an
+array of data we want to display in the table. As you can see, the array
+already reflects the later table structure here, which might in the real world
+not be the case. After that, we define the formats we want to use in the table
+(lines 14-20). You already know how that works pretty well by now.
+
+Now the real table creation starts. We instanciate a new ezcConsoleTable
+object in line 22, providing the maximal width, the table may have on the
+console. After that, we define the default format for table borders. These
+will later appear gray on the console. So far, the code should be nothing
+special.
+
+So, let's see what's next. The lines 26-28 might look confusing to you in the
+first place. The $table variable contains an object of type ezcConsoleTable,
+so why do we access it like an array here? The answer is simple and lies in a
+new interfaces, provided by the PHP extension SPL_, which is called
+ArrayAccess_. This allows you to provide array like access to your object, by
+implementing the necessary methods. So, when accessing $table[0] (for the
+first time), you automatically create an instance of ezcConsoleTableRow in your 
+table.
+
+.. _SPL:         http://php.net/spl
+.. _ArrayAccess: http://www.php.net/~helly/php/ext/spl/interfaceArrayAccess.html
+
+Knowning this, we see, that in line 26 the first table row is created and it's
+"borderFormat" property is set to our "headBorder". On lines 27 and 28 we
+access this table row again, while it already exists there. With setting the
+"format" property of a row, we define which format will be applied to the
+content of the cells contained in that row (we'll see more in a bit).
+Actually, this is just the default format for those cells and might be
+overwritten in the cell object itself. The same applies to the alignment
+value, we set on line 28 for the first row in our table. Alignment values may
+indicate left, right and center directed alignements.
+
+So, we formated our head row accordingly and can start on adding data to our
+table. The 2 nested foreach loops iterate through our array (imagine this are
+database results in a result object). On line 34 we actually set the content
+of our cells. As you can see, the ezcConsoleTableCell objects, containes in a
+row, are also accessable using the ArrayAccess_ interface. So we are creating
+a cell for every element of our nested array. The data contained in a cell is
+stored in it's "content" property.
+
+So, we are at the end, yet. On line 38 we print out some additional data and
+line 39 prints our table to the console. A finishing newline ends our example.
+That was quite easy, wasn't it?
+
+Let's see, if we can also produce something funny with ezcConsoleTable:
+
+.. include:: tutorial_example_10.php
+   :literal:
+
+As you already might have guessed, the code does not really make much sense in
+general, but it shows some more of the handling of console based tables and
+the result looks quite funny. So, let's dig into it.
+
+We again define some formats, namely "blue", "red" and "green" to have a
+rainbow-like color mixture. Then we define 2 arrays, 1 containing all the
+names of the formats we recently defined, the other one containing all
+possible alignment values, offered by ezcConsoleTable. Then we create our
+table object again, with the same width as the previous one.
+
+So far nothing new. In the lines 19-22 we see some more options of
+ezcConsoleTable. The "corner", "lineVertical" and "lineHorizontal" values
+specify, which characters are used to render the table borders. As you have
+seen, the default for the "corner" character is '+', the "lineHorizontal" is
+represented by '|' and the vertical lines are rendered using '-'. In our
+example we replace each of these with a simple space. The last option we set
+is "widthType". This indicates, how ezcConsoleTable should deal with the width
+value we provided to it's constructor. The default value here would be
+ezcConsoleTable::WIDTH_MAX, which allows ezcConsoleTable to render a table
+with a smaller width, if the content fits. In this example we disallow this
+and tell ezcConsoleTable to always make the table 78 character wide.
+
+So, next we fill our table with content. This time we use 2 nestes for loops
+which generate us a 10x10 table. For the content we always use a '*'. The
+format and align values (this time we don't set those on the row, but on the
+cell, so it is individual for each cell) are set randomly, so we will get a
+very colorful picture from it. Let's take a look at this:
+
+.. image:: img/tutorial_example_10.png
+
+Conclusion
+==========
+
+The ConsoleTools component offers you a variaty of powerful tools to create
+shell based applications more comfortable. Having this tools playing together
+you are able to create shell scripts and even complete applications for the
+console very fast and comfortable. I hope you got a detailed introduction into
+this component here. If you have any feedback you want to provide, if you have
+ideas for new features or how to improve ConsoleTools or if you want to throw
+critics at it, please don't hesitate to start a discussion in our Forum_.
+
+.. _Forum: http://ez.no/community/forum/ez_components
 
 
 ..
