@@ -5,24 +5,23 @@ require_once 'tutorial_autoload.php';
 $output = new ezcConsoleOutput();
 
 $output->formats->success->color = 'green';
-$output->formats->success->style = array( 'bold' );
-
 $output->formats->failure->color = 'red';
-$output->formats->failure->style = array( 'bold' );
 
-$bar = new ezcConsoleStatusbar( $output );
+$options = array( 
+    'successChar' => $output->formatText( '+', 'success' ),
+    'failureChar' => $output->formatText( '-', 'failure' ),
+);
 
-$bar->options->successChar = $output->formatText( '+', 'success' );
-$bar->options->failureChar = $output->formatText( '-', 'failure' );
+$status = new ezcConsoleStatusbar( $output, $options );
 
-for ( $i = 0; $i < 1024; $i++ )
+for ( $i = 0; $i < 120; $i++ )
 {
-    $bar->advance();
+    $nextStatus = ( bool )mt_rand( 0,1 );
+    $status->add( $nextStatus );
     usleep(  mt_rand( 200, 2000 ) );
 }
 
-$bar->finish();
-
 $output->outputLine();
+$output->outputLine( 'Successes: ' . $status->getSuccessCount() . ', Failures: ' . $status->getFailureCount() );
 
 ?>

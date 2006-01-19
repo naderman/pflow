@@ -289,9 +289,12 @@ This is necessary, because ezcConsoleProgressbar utilizes it to print the
 progressbar. The second parameter provided is the number to which the
 progressbar shall count to. This meanst, that we have to call 15 times the
 ezcConsoleProgressbar::advance() (line 11) method until the progressbar reaches 
-the 100% value. That is basically all you have to do, to create a basic 
-progressbar, which will look like this after we called advance() for the first 
-time:
+the 100% value. Note, that we are emulating some action here, by making the
+program sleep for a random time. In the real world you would have some time
+consuming action here.
+
+This is basically all you have to do, to create a basic progressbar, which will 
+look like this after we called advance() for the a couple of times:
 
 .. image:: img/tutorial_example_06.png
 
@@ -350,6 +353,48 @@ the values displayed would definitly not be readable any more.
 
 So, let's take a look at the little brother of ezcConsoleProgressbar, the
 ezcConsoleStatusbar:
+
+.. include:: tutorial_example_08.php
+   :literal:
+
+As usual, we define some output format, this time one called "success" and the
+other one called "failure". These formats are directly used in the $options
+array we define for our ezcConsoleStatusbar. This simple class takes only 2
+possible options: "successChar" will be used to indicate a successful action
+and "failureChar" will be used to indicate a failed action.
+
+Then we instanciate the statusbar object (line 15) using this options and our
+ezcConsoleOutput object and the options. Again we emulate some action by using
+a for-loop and some random sleeping (line 21) time and this time we also emulate 
+random success and failure values (line 19). Adding success and failure values to 
+the statusbar is easy: We just call the ezcConsoleStatusbar::add() method and
+submit either true (indicating success) or false to it.
+
+Finally we get the number of successes and failures from the statusbar by
+calling ezcConsoleStatusbar::getSuccessCount() and
+ezcConsoleStatusbar::getFailureCount() to display them to the user. Take a
+look at the result here:
+
+.. image:: img/tutorial_example_08.png
+
+If you want to know more about indicating progress to the user from your shell
+application, take a look at the API documentation of ezcConsoleProgressbar_ and
+ezcConsoleStatusbar_.
+
+.. _ezcConsoleProgressbar: http://ez.no/doc/components/view/(file)/1.0rc1/ConsoleTools/ezcConsoleProgressbar.html
+.. _ezcConsoleStatusbar: http://ez.no/doc/components/view/(file)/1.0rc1/ConsoleTools/ezcConsoleStatusbar.html
+
+Large data served on a table
+----------------------------
+
+Actually it should have been "in a table", but this way it sounded funnier. ;)
+Anyway: Whenever you want to display a large amount of structured data, a
+table layout is what you need. While this can easily be achieved in HTML, it's
+pretty hard to create a table on the console. Therefore, the ConsoleTools
+package also has a class to generate tables: ezcConsoleTable. Before we look
+at some example code, let me first show you, how the table will look like,
+that we want to create:
+
 
 
 
