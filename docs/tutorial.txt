@@ -146,7 +146,7 @@ word. Using "autobreak" prevents this issue, because then ezcConsoleOutput
 will take care of wrapping your texts  nicely for you. After we had some 
 auto-wrapped text, we print an explicit newline. 
 
-On line 20 and 22 you see 2 examples for the optional "verbosityLevel" option,
+On line 23 and 25 you see 2 examples for the optional "verbosityLevel" option,
 both output*() options can take. We remeber, that we set the current
 "verbosityLevel" before in our options. In this place we submit the level of
 verbosity, when a text will be displayed to the user. The first text will not
@@ -233,10 +233,9 @@ help. First of all we will display the synopsis of our program.
 ezcConsoleInput will generate it for us, so we just need to print it out. The
 synopsis includes all possible option (by default) and indicates if parameters
 may cary values and much more information. If you request help, the synopsis
-printed may for example look like this:
+printed may for example look like this: ::
 
-    ::
-      $ ./tutorial_example_05.php [-h] [-i <string> [-o <string>] ]  [[--] <args>] 
+  $ ./tutorial_example_05.php [-h] [-i <string> [-o <string>] ]  [[--] <args>] 
 
 As you can see, all options we defined are available, the types of values are
 indicated and even the dependencies are reflected. Beside that, we have an
@@ -259,14 +258,14 @@ information about the arguments passed to our application. We can access the
 arguments passed by calling ezcConsoleInput::getArguments(), which will return
 an array of all submitted options.
 
-To make this more clear, here is an exmaple call, including it's output:
+To make this more clear, here is an exmaple call, including it's output: ::
 
-  ::
-    $ ./tutorial_example_05.php -i /var/www -o /tmp foo bar 
+  $ ./tutorial_example_05.php -i /var/www -o /tmp foo bar 
 
-  ::
-    Input: /var/www, Output: /tmp
-    Arguments: foo, bar
+Will give you: ::
+
+  Input: /var/www, Output: /tmp
+  Arguments: foo, bar
    
 As you can already see in these 2 simple exmaples, ezcConsoleInput provides
 you a powerful way to manage the options and arguments provided to a console
@@ -294,11 +293,63 @@ the 100% value. That is basically all you have to do, to create a basic
 progressbar, which will look like this after we called advance() for the first 
 time:
 
- 1 / 15 [+++>--------------------------------------------------------]   6.67%
+.. image:: img/tutorial_example_06.png
 
 The bar will then constantly move forward, everytime you call advance() and
 reach it's end (and the 100% value) when you call advance() for the 15th time.
+The bar itself will alway stay on the same line and will redraw itself on
+every call to ezcConsoleProgressbar::advance() automatically. You can even
+output some text before starting the bar and this will stay in front of the
+bar.
 
+But usually one wants to customize a progressbar to fit ones own special
+needs. This can be done easily with ezcConsoleProgressbar, too. Take a look at
+the following example:
+
+.. include:: tutorial_example_07.php
+   :literal:
+
+This time, we define a format to be applied to the bar itself and call it
+"bar" (lines 7+8). Then we create an array of options for ezcConsoleProgressbar. 
+The first 2 values define, how the bar itself will look like. The "emptyChar"
+defines, which character is used to fill the "not yet covered space" of the
+bar. The "barChar" value indicates the character that is used to fill the bar
+up. 
+
+The "formatString" option is a little bit more complex. It contains the string
+into which the progressbar is rendered later. To make that a bit more clear,
+see here, how the progressbar will look like, when you render it: 
+
+.. image:: img/tutorial_example_07.png
+
+As you can see, we have the fraction value displayed at the beginning this
+time, followed by the progressbar itself (which looks quite different to the
+last one we generated), followed by 2 values which indicate the progress in
+kilobyte so far. So, if you compare the output with the definition of the
+"formatString" you can easily see how we did that. The "formatString" value 
+is a simple string, that may contain any character (sure, you should avoid
+newlines) and beside of that, a number of placeholders where
+ezcConsoleProgressbar will fill in the specific values. "%fraction%" is the
+placeholder for the fraction value, "%bar%" indicates, in which place the bar
+itself will be rendered.
+
+The example code also shows you another method of ezcConsoleOutput, which we
+did not see, yet: ezcConsoleOutput::formatText(). This method can be used to
+apply a format to a string without printing it directly. As you can see in the
+example result, this makes the bar itself appear in blue (as defined for the
+"bar" format). 
+
+The last option, "redrawFrequency", indicates, that ezcConsoleProgressbar
+should not redraw the progressbar on every call to
+ezcConsoleProgressbar::advance(), but only every 50th time. When your maximum
+value is very high and you indicate steps frequently (as you may already have
+guessed, the example emulates uploading a 1MB file kilobytewise, so we have
+1024 calls to ezcConsoleProgressbar::advance()), this makes a lot of sense.
+The bar would else be updated so frequently, that it would maybe jitter and
+the values displayed would definitly not be readable any more.
+
+So, let's take a look at the little brother of ezcConsoleProgressbar, the
+ezcConsoleStatusbar:
 
 
 
