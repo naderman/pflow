@@ -14,4 +14,6 @@ for ( $i = 0; $i < 15; $i++ )
 
 $bar->finish();
 
+$output->outputLine();
+
 ?>
