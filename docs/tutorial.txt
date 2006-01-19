@@ -77,8 +77,8 @@ information on how to do this, please refer to the ComponentsIntroduction_.
 .. _ComponentsIntroduction: http://ez.no/community/articles/an_introduction_to_ez_components
 
 
-Some header
-===========
+Usage
+=====
 
 Printing text to the console
 ----------------------------
