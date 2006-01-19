@@ -6,8 +6,8 @@ eZ components - ConsoleTools
 Introduction
 ============
 
-The ConsoleTools components provides several useful tools to build
-applications that run on a computers console (sometimes also called Shell or
+The ConsoleTools component provides several useful tools to build
+applications that run on a computers console (sometimes also called shell or
 command line). Usually one would not expect to see a component like this for a
 language like PHP, but since PHP 4 more and more features were included in PHP
 which make the language quite neat as a shell scripting language. Indeed you
@@ -26,11 +26,11 @@ This section gives you an overview on all classes, that are intended to be
 used directly.
 
 ezcConsoleOutput
-  This class is responsible for printing on the console. It allows you to
-  print texts in different colors and using different background colors.
+  ezcConsoleOutput is responsible for printing text to the console. It allows 
+  you to print texts in different colors and using different background colors.
   Beside that, it can apply other styling information to the text, like making
-  it bold or underlined. Another feature is, that can automatically wrap text
-  for you, after a certain amount of characters, if you want, and handle
+  it bold or underlined. Another feature is, that it can automatically wrap text
+  for you after a certain amount of characters, if you want, and handle
   output of different verbosity levels.
 
 ezcConsoleInput
