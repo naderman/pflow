@@ -50,22 +50,6 @@ class ezcConsoleTableOptions
     public $defaultAlign = ezcConsoleTable::ALIGN_LEFT;
 
     /**
-     * Standard column content format, applied to cells that have 'default' as
-     * the content format.
-     * 
-     * @var string
-     */
-    public $defaultFormat = 'default';
-
-    /**
-     * Standard border format, applied to rows that have 'default' as the
-     * border format.
-     * 
-     * @var string
-     */
-    public $defaultBorderFormat = 'default';
-
-    /**
      * Padding characters for side padding between data and lines. 
      * 
      * @var string
@@ -99,20 +83,22 @@ class ezcConsoleTableOptions
      * @var string
      */
     public $corner = '+';
-
+    
     /**
-     * Format name to draw normal row lines in.
+     * Standard column content format, applied to cells that have 'default' as
+     * the content format.
      * 
      * @var string
      */
-    public $lineFormat = 'default';
+    public $defaultFormat = 'default';
 
     /**
-     * Format name to draw head rows in. 
+     * Standard border format, applied to rows that have 'default' as the
+     * border format.
      * 
      * @var string
      */
-    public $lineFormatHead = 'default';
+    public $defaultBorderFormat = 'default';
 
     /**
      * Create a new ezcConsoleProgressbarOptions struct. 
@@ -131,8 +117,8 @@ class ezcConsoleTableOptions
         $lineVertical = '-',
         $lineHorizontal = '|',
         $corner = '+',
-        $lineFormat = 'default',
-        $lineFormatHead = 'default'
+        $defaultFormat = 'default',
+        $defaultBorderFormat = 'default'
     )
     {
         $this->colWidth = $colWidth;
@@ -143,8 +129,8 @@ class ezcConsoleTableOptions
         $this->lineVertical = $lineVertical;
         $this->lineHorizontal = $lineHorizontal;
         $this->corner = $corner;
-        $this->lineFormat = $lineFormat;
-        $this->lineFormatHead = $lineFormatHead;
+        $this->defaultFormat = $defaultFormat;
+        $this->defaultBorderFormat = $defaultBorderFormat;
     }
 
 }
