@@ -395,7 +395,7 @@ package also has a class to generate tables: ezcConsoleTable. Before we look
 at some example code, let me first show you, how the table will look like,
 that we want to create:
 
-
+.. image:: img/tutorial_example_09.png
 
 
 
