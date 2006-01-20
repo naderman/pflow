@@ -31,7 +31,7 @@ ezcConsoleOutput
 ezcConsoleInput
   Using this little tool, you can handle the options and arguments provided to
   your shell application. It is capable of handling and validating 3 types of
-  option data-types (string, int and none), can handle optional and mandatory
+  option data-types (string, int and none) and can handle optional and mandatory
   options as well as rules to define relations between those. Rules can include
   dependencies and exclusions between options.
 
@@ -55,7 +55,7 @@ ezcConsoleStatusbar
   performed before you do it.
 
 ezcConsoleTable
-  This handy class let's you easily create tables to be displayed on the
+  This class lets you easily create tables to be displayed on the
   console. It has a very convenient interface to create a table and manage the
   data it contains. Beside that it is highly configurable on how the table
   will look like (like different color and style information for content
@@ -124,15 +124,15 @@ printing it.
 
 This example shows some of the options ezcConsoleOutput supports:
 
-"autobreak"
- Will wrap lines automatically after the set amount of characters, keeping
- word boundaries in tact.
+autobreak
+  Will wrap lines automatically after the set amount of characters, keeping
+  word boundaries in tact.
 
-"verbosityLevel"
- Allows you to specify a 3rd parameter to ezcConsoleOutput::outputLine() and
- ezcConsoleOutput::outputText() to indicate a verbosity level, when the text
- should be printed. By setting the "verbosityLevel" option for ezcConsoleOutput
- you define, which texts will be printed and which not.
+verbosityLevel
+  Allows you to specify a 3rd parameter to ezcConsoleOutput::outputLine() and
+  ezcConsoleOutput::outputText() to indicate a verbosity level, when the text
+  should be printed. By setting the "verbosityLevel" option for ezcConsoleOutput
+  you define, which texts will be printed and which not.
 
 In our example the call on line 23 would not print out text with the
 "verbosityLevel" option set to 3, but the call on line 25 will.
@@ -190,7 +190,7 @@ information. It has a resonable default value set.
 
 On line 49 the submittion of the "-o" option is checked. Because this has a
 dependency on the "-i" option, a check for this one is not necessary. Line 52
-shows how one can access the arguments submitted to the program.
+shows how you can access the arguments submitted to the program.
 ezcConsoleInput::getArguments() always returns an array (empty if no arguments
 are submitted).
 
@@ -236,7 +236,7 @@ The defined options array demonstrates only a small subset of options. For
 detailed information look at ezcConsoleProgressbar::$options. The "emptyChar"
 value defines the character to prefill the bar, the "barChar" option the
 character to fill the bar with while calling ezcConsoleProgressbar::advance().
-Using the "formatString" option, one defines the appearance of the whole bar.
+Using the "formatString" option, you defines the appearance of the whole bar.
 Here the substitution of several placeholders (like "%fraction%" and "%bar%")
 is permitted. "The formatString" must contain the "%bar%" placeholder, all
 other values are optional. Any other printable character is permitted, too.
@@ -249,24 +249,24 @@ The resulting progressbar will look like this:
 
 .. image:: img/consoletools_tutorial_example_07.png
 
-Using ezcConsoleStatusbar one can indicate progress of a time consuming action
+With the ezcConsoleStatusbar you can indicate progress of a time consuming action
 in a simpler way. Here is an example:
 
 .. include:: tutorial_example_08.php
    :literal:
 
-This variant of idicating progress only displays success or failure indicators
+This variant of indicating progress only displays success or failure indicators
 for an action and allows you to run any number of actions, without specifiying,
 how many you will perform before. The "successChar" and "failureChar" options
-indicate, which string to print on a successful or failed action. Formating
+indicate which string to print on a successful or failed action. Formatting
 these strings is allowed here (lines 11 and 12).
 
 Indicating a status is done using ezcConsoleStatusbar::add(), which expects
-bool true for a succeeded action and false for a failed one (line 20). You can 
+true for a succeeded action and false for a failed one (line 20). You can 
 access the number of successes and failures through
 ezcConsoleStatusbar::getSuccessCount() and
 ezcConsoleStatusbar::getFailureCount(). To make ezcConsoleStatusbar
-wrap a line after a certain amount of stati, one can use 
+wrap a line after a certain amount of statuses, you can use 
 ezcConsoleOutput::$autobreak.
 
 Here the result of the example:
@@ -291,8 +291,8 @@ The source code for it is printed here:
 .. include:: tutorial_example_09.php
    :literal:
 
-ezcConsoleTable uses (like ezcConsoleStatusbar and ezcConsoleProgressbar) the
-ezcConsoleOutput class to print to the console. To create a table one just
+ezcConsoleTable (like ezcConsoleStatusbar and ezcConsoleProgressbar) uses the
+ezcConsoleOutput class to print to the console. To create a table you just
 needs to submit the maximal width of the table to it's constructor:
 ezcConsoleTable::__construct(). Options for the table formating are inherited
 from the table itself, to the table rows and from there to the table cells.
@@ -322,13 +322,13 @@ ezcConsoleTableCell::$align. Possible align values are:
 
 The content of a cell is stored in the ezcConsoleTableCell::$content property
 (line 34). The usage of formated text in a cell is possible, but not recommended. 
-If you want to define the format of cell cotent, use the 
+If you want to define the format of cell content, use the 
 ezcConsoleTableCell::$format property.
 
 .. _SPL:         http://php.net/spl
 .. _ArrayAccess: http://www.php.net/~helly/php/ext/spl/interfaceArrayAccess.html
 
-A more advanced (but in a way senseless) example to show the handling of tables
+A more advanced (but in a way useles) example to show the handling of tables
 a bit more:
 
 .. include:: tutorial_example_10.php
@@ -348,10 +348,6 @@ table:
 For more information, see the ezcConsoleTable_ API documentation.
 
 .. _ezcConsoleTable: http://ez.no/doc/components/view/(file)/1.0rc1/ConsoleTools/ezcConsoleTable.html
-
-Questions and feedback can be stated in the eZ components Forum_.
-
-.. _Forum: http://ez.no/community/forum/ez_components
 
 
 ..
