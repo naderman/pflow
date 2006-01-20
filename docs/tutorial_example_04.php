@@ -20,7 +20,7 @@ catch ( ezcConsoleOptionException $e )
     die( $e->getMessage() );
 }
 
-if ( $helpOption->value === true )
+if ( $helpOption->value !== false )
 {
     echo "Help requested.";
 }

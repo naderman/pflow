@@ -8,13 +8,8 @@ Introduction
 
 The ConsoleTools component provides several useful tools to build
 applications that run on a computers console (sometimes also called shell or
-command line). Usually one would not expect to see a component like this for a
-language like PHP. Since PHP 4 there are more features added to PHP
-which make the language quite neat as a shell scripting language. Indeed you
-can find many situations, where a console based application extends the
-functionality of a Web application perfectly or where a pure shell application
-makes sense to be written in PHP. For example eZ publish has several shell
-scripts included, that perform tasks like clearing caches.
+command line). For example eZ publish has several shell
+scripts included, which perform tasks like clearing caches.
 
 The ConsoleTools components offers several (mostly independent) classes to 
 perform different tasks. The main classes are:
@@ -22,49 +17,50 @@ perform different tasks. The main classes are:
 Class overview
 ==============
 
-This section gives you an overview of all classes in the component:
+This section gives you an overview on all classes, that are intended to be
+used directly.
 
 ezcConsoleOutput
   ezcConsoleOutput is responsible for printing text to the console. It allows 
-  you to print texts in different foreground and background colors.
-  Beside that, it can apply other styling information to the text, for example making
-  it bold or underlined. Another feature is that it can automatically wrap text
+  you to print texts in different colors and using different background colors.
+  Beside that, it can apply other styling information to the text, like making
+  it bold or underlined. Another feature is, that it can automatically wrap text
   for you after a certain amount of characters were printed (keeping words
   intact) and handle output of different verbosity levels.
 
 ezcConsoleInput
   Using this little tool, you can handle the options and arguments provided to
   your shell application. It is capable of handling and validating 3 types of
-  option data-types (string, int and none). It can handle optional and mandatory
+  option data-types (string, int and none), can handle optional and mandatory
   options as well as rules to define relations between those. Rules can include
-  dependencies and exclusions between different options.
+  dependencies and exclusions between options.
 
 ezcConsoleProgressbar
-  Most often you will use a console application instead of a Web application,
-  when your are performing very time consuming tasks. The status of the
-  current progress should be communicated to the user. For this kind of
-  feedback it is custom to use a progress bar. 
-  ezcConsoleProgressbar gives you an easy to use interface to create such a
-  progressbar quickly. It will keep track of redrawing the bar as needed, showing actual 
+  Most often you will use a console application in favor of a web application,
+  when it comes to processing of very time consuming tasks. To indicate the
+  current progress to the user of an application mostlike a kind of "status 
+  indicator" will be used, which is most commonly a progress bar. 
+  ezcConsoleProgressbar gives you an easy to use interface to realize this 
+  very fast. It will keep track of redrawing the bar as needed, showing actual 
   and maximum values, as well as the fraction of the current status. It is 
-  fully configurable in respect to its visual appearance.
+  fully configurable in respect to it's visual appearance.
 
 ezcConsoleStatusbar
   ezcConsoleStatusbar is the little brother of ezcConsoleProgressbar. It
   also allows you to display the progress of a time consuming action, but does
-  not use a fixed bar. Instead it simple indicates succeeded
-  and failed operations by displaying a specific character. It also keeps track of
-  the number of successes and failures for you. This allows you to indicate
-  progress of a process where you don't know the number of actions to be 
+  not use a fixed bar-like appearance. Instead it simple indicates succeeded
+  and failed operation by displaying a specific character and keeps track of
+  the count of successes and failures for you. This allows you to indicate
+  progress of a process where yoi don't know the number of actions to be 
   performed before you do it.
 
 ezcConsoleTable
   This handy class let's you easily create tables to be displayed on the
   console. It has a very convenient interface to create a table and manage the
-  data it contains. Beside that, it is highly configurable on how the table
+  data it contains. Beside that it is highly configurable on how the table
   will look like (like different color and style information for content
   and borders on a per-cell basis, character selection for borders, variable
-  width of the table, etc.). ezcConsoleTable will also take care of measuring the 
+  width of the table,...). ezcConsoleTable will also take care of measuring the 
   best width for the table columns (to make your content fit best), automatically
   wrapping too long content and aligning the content in the cells as you like.
 
@@ -83,186 +79,122 @@ Usage
 Printing text to the console
 ----------------------------
 
-The class ezcConsoleOutput is the tool of choice for
+As already mentioned, the class ezcConsoleOutput is the tool of choice for
 printing text to the console. Let's look at a basic example:
 
 .. include:: tutorial_example_01.php
    :literal:
 
-As you can see, the ezcConsoleOutput object is simply instantiated. If you
-like to, you can submit further options and predefined formating options to
-it's constructor, but this can also be done later.
+The ezcConsoleOutput object is simply instantiated. You can optionally submit
+options and predefined formating options to it's constructor, but this can also 
+be done later.
 
 In line 7 you see how a format is defined. Formats are created on the fly, as
 soon as you access them (for reading or writing) through the $output->formats
 attribute. We create a format called "info" and assign the color value "blue"
-to it. This will make all text printed with the format "info" occur in blue.
+to it in this case. This will make all text printed with this format occur in 
+blue. In line 9 you can see how the format is applied to a text while printing 
+it. 
 
-Finally we print some text using this format on line 9. 
-
-As easy as this was, we can define more formats and assign more attributes to
-them, as the next example shows:
+The second example shows some more advanced code:
 
 .. include:: tutorial_example_02.php
    :literal:
 
-As seen before, we start with the simple "info" format. After that, we create
-a format named "error". This format does have style attribute set, which makes
-it appear bold. As you can see, style attributes are set using an array,
-because you can assign multiple style options to a format. The last format in
-this example is even more extensive: "fatal" will be printed with red
-foreground color, it will appear bold and have an underlining, additionally 
-its background will be black.
+In this example 2 more formats are defined: "error" and "fatal". These formats 
+have additonal style attribute set, which makes them both appear bold. The
+"fatal" format will additionally shown underlined text and will give it a
+black background color.
 
-After defining the formats, we print some text with them. In lines 16-18 you
-can see, that the ezcConsoleOutput::outputText() method does not add a line
-break after the text. This allows you to display differently styled text in 1
-line. You can also print manual line breaks with outputText() as shown in line
-19. This is not recommended, since it may extend your formatting to the next
-line, which will look strange for background colors.
+The difference between ezcConsoleOutput::outputText() and
+ezcConsoleOutput::outputLine() is, that the latter one automatically adds a
+newline value to your text. The newline sequence used here is adjusted to
+the operating system. The use of ezcConsoleOutput::outputLine() is recommended
+over the direct output of e.g "\n".
 
-A nice convenience method is ezcConsoleOutput::outputLine(), which
-automatically adds a line break after your text, which is feasible for the
-system your program runs on. Last we print some standard text in line 23,
-which uses the default format of the console (by simply leaving out the format
-parameter).
-
-Two things are left to show for ezcConsoleOutput:
+If you leave the second parameter of ezcConsoleOutput::outputText() and
+ezcConsoleOutput::outputLine() out, the "default" format will use. Per default
+this is set to your consoles default setting, but you can also change this as
+for any other format you define. A third variant to format text is
+ezcConsoleOutput::formatText(), which returns the formated string instead of
+printing it.
 
 .. include:: tutorial_example_03.php
    :literal:
 
-Again we define a format for later use. After that, we now set some options
-for ezcConsoleOutput, what is new in this example. The "autobreak" option
-makes ezcConsoleOutput wrap your printed text automatically after a certain
-number of characters (78 in this case). The "verbosityLevel" option defines,
-what text will be printed or not.
+This example shows some of the options ezcConsoleOutput supports:
 
-Let's first see how "autobreak" works. In line 17 you see a very long text
-submitted to ezcConsoleOutput::outputLine() method. Since in most cases, the
-console of the user running your program will not be that long, your text will
-probably be wrapped by the console automatically. The issue here is, that the
-console will not take any kind of respect regarding your word boundaries. So
-it's most likely to happen, that your text will be wrapped in the middle of a
-word. Using "autobreak" prevents this issue, because then ezcConsoleOutput
-will take care of wrapping your texts nicely for you. After we have printed some 
-auto-wrapped text, we print an explicit newline in the example.
+"autobreak"
+ Will wrap lines automatically after the set amount of characters, keeping
+ word boundaries in tact.
 
-On lines 23 and 25 you see 2 examples for the optional "verbosityLevel"
-parameter, which both output*() options can take optionally. We remember, that
-we set the "verbosityLevel" option earlier in our options. In this place we 
-submit the level of verbosity, to indicate when a text will be displayed to the 
-user or not. The first text will not be displayed, if the verbosity is set to a 
-level below 10. We chose 3, so this will not be printed out. But the text 
-printed on line 22 will be visible, since 2 is smaller then the currently
-defined "verbosityLevel".
+"verbosityLevel"
+ Allows you to specify a 3rd parameter to ezcConsoleOutput::outputLine() and
+ ezcConsoleOutput::outputText() to indicate a verbosity level, when the text
+ should be printed. By setting the "verbosityLevel" option for ezcConsoleOutput
+ you define, which texts will be printed and which not.
+
+In our example the call on line 23 would not print out text with the
+"verbosityLevel" option set to 3, but the call on line 25 will.
 
 Mastering options and arguments
 -------------------------------
 
-After we saw how to print information to the user, we will take a look at how 
-we can request it from him. This can be done using the class ezcConsoleInput.
-Let's start again by looking at an example.
+A simple example for ezcConsoleInput:
 
 .. include:: tutorial_example_04.php
    :literal:
    
-First we create a simple instance of ezcConsoleInput. After that (line 7), we
-register our first option. Registering an option means, that this option will
-be available for the user to submit when he runs our program from the
-console. An option itself is represented by an object of type
-ezcConsoleOption. Every option should atleast have a "shortname" and a
-"longname" (the first 2 parameters for ezcConsoleOption::__construct()). Our first 
-registered option will therefore be available later using "-h" or "--help". The
-ezcConsoleInput::registerOption() method returns the registered object again,
-so we can store it for later access.
+After instantiating a new ezcConsoleInput object to handle the options, an
+option is registered on lines 7-12. This option will be available as "-h" and
+"--help". The ezcConsoleInput::process() call makes ezcConsoleInput work up the
+options submitted by the user. If any error occurs with the submitted user
+data, the method will throw an exception of type ezcConsoleOptionException. By
+default all options are registered with the value type
+ezcConsoleInput::TYPE_NONE, which indicates that they don't  expect a value
+form the user. If a value is submitted anyway, ezcConsoleInput::process() will
+throw a ezcConsoleOptionTypeViolationException. 
 
-After we have successfully registered the option, we tell ezcConsoleInput to
-parse the options submitted by the user (line 16). Although we did not
-register any option so far, that could potentially make the call to
-ezcConsoleInput::process() throw an exception (we'll see when this may occur a
-little bit later in this article), we wrap it in a try block. Usually one
-would expect to catch all ezcConsoleInput exceptions here. We don't do that,
-since a special exception type exists. This exception type is thrown whenever an issue
-with user supplied options occurs. This way, we ignore all other exceptions
-that are thrown.
+On line 23 a check if an option was submitted is performed. If an option was not 
+submitted, it's $value property will contain bool false. Depending on the $type
+set, it can contain different value types if it was submitted. If you use the 
+(not shown here) ezcConsoleOption::$multiple property, the value will be an array 
+containing the specified value types.
 
-Finally, we check what the user has submitted to our program. If an option was
-submitted, it's value attribute is generally (we'll see in a few seconds, what
-generally means) set to bool true. If it was not submitted, its value is false.
-As you see, all options are optional by default.
-
-This was a very basic example, so let's dig into some more advanced things
-ezcConsoleInput can do for you:
+The next example is more advanced:
 
 .. include:: tutorial_example_05.php
    :literal:
 
-Again we register the -h/--help option as you've seen in the previous example.
-Next we register a second option which will be available as -i/--input to the
-user. For this option we provide a type attribute, that makes the option take
-a string value. This is the first case, where ezcConsoleInput::process() can
-throw an exception that derives from ezcConsoleOptionException (as mentioned
-earlier). This will happen, if the user provided -i or --input to our program, 
-without giving it a value (e.g. "--input=/some/path" or "-i /some/path").
+2 options are registered here: "-i"/"--input" and "-o"/"--output". For the
+first one additional properties for the ezcConsoleOption object are submitted
+through the constructor. For the second ezcConsoleOption object you see how to
+provide additional properties after construction. We change the type of both
+options to expect a string value from the user (lines 13 and 20).
 
-The third option we create (-o/--output, see line 22) has also the type
-string, but this time we set it after creating the option itself, by accessing
-the ezcConsoleOption::$type attribute. After that, we see an even more
-advanced feature of ezcConsoleInput: The ability to manage dependencies. A
-dependency is always an object of ezcConsoleOptionRule, because you can also
-define a rule for an option to be excluded, using almost the same syntax, and
-even depend on a certain value of an option. But this topic would go to far
-for this tutorial. So, basically we make the --input and --output option
-depend on each other.
+In line 25 and 28 we make both parameters depend on each other. If one of them
+is submitted without the other on, ezcConsoleInput::process() will throw an
+ezcConsoleOptionDependencyViolationException. Beside dependency rules, you can
+also define exclusion rules, using ezcConsoleOption::addExclusion().
 
-Now it's time to process the options again. In this example, the try-catch
-block really makes sense, since ezcConsoleInput::process() may possibly throw
-exceptions now. The first case has already been mentioned: If an option that
-has a different value type than ezcConsoleInput::TYPE_NONE (which is the
-default one) is submitted without a value, ezcConsoleInput::process() will throw
-an exception about this, that is derived from ezcConsoleOptionException. So
-basically, I lied a bit to you in the first example for option handling,
-because if -h/--help (which has the value type "none") is submitted with a
-value assigned, ezcConsoleInput::process() will also throw an exception, because it
-does not expect that. In this sense, we were right in the earlier example to
-have the try-catch block in place. Another case where
-ezcConsoleInput::process() will throw an exception is when one of these
-parameters is submitted, without the other one.
-
-Next we check the --help option again. If help is requested, we print out some
-help: First of all we will display the synopsis of our program.
-ezcConsoleInput will generate it for us, so we just need to print it out. The
-synopsis includes all possible options (by default, you can also change that) 
-and indicates if parameters may carry values, of which type they must be and 
-much more information. If you request help, the synopsis printed may for 
-example look like this: ::
+On line 43 the method ezcConsoleInput::getSynopsis() is used to retrieve a
+synopsis string for the program. The synopsis for our example would look like
+this: ::
 
   $ ./tutorial_example_05.php [-h] [-i <string> [-o <string>] ]  [[--] <args>] 
 
-As you can see, all options we defined are available. The types of values are
-indicated and even the dependencies are reflected. Besides that, we have an
-indicator that one may also supply arguments to the program. More on that a
-little bit later in this example.
+The synopsis will reflect the option value types, if they are optional, the
+inter-option dependencies and default values (if set). On line 46 the property 
+ezcConsoleOption::$shorthelp is accessed, where you can store a short help
+information. It has a resonable default value set.
 
-After printing the synopsis we iterate through all of our options and print out
-their ezcConsoleOption::$shorthelp attribute. Huh? The "shorthelp" attribute? 
-But we did not assign anything like this? True, so the output will be "No help
-available." right now. We could (and should) have set this before to a
-sensible help text, explaining the means of the option in short. The
-counterpart to ezcConsoleOption::$shorthelp is ezcConsoleOption::$longhelp,
-which takes a longer description of the options meaning and stores it for you.
+On line 49 the submittion of the "-o" option is checked. Because this has a
+dependency on the "-i" option, a check for this one is not necessary. Line 52
+shows how one can access the arguments submitted to the program.
+ezcConsoleInput::getArguments() always returns an array (empty if no arguments
+are submitted).
 
-Last but not least we print out information about the --input and --output
-options, in case they were submitted. We only have to care to check if the 
-$outputOption (or the $inputOption, as you like) was set in this case, since 
-ezcConsoleInput already assures that both are present, if one of them is set. 
-In the same place we also print information about the arguments that were 
-passed to our application. We can access the arguments passed to the program by 
-calling ezcConsoleInput::getArguments(). This method will return an array of all 
-submitted arguments.
-
-To make this more clear, here is an example call, including its output: ::
+Here is an example how the defined program would be called: ::
 
   $ ./tutorial_example_05.php -i /var/www -o /tmp foo bar 
 
@@ -271,9 +203,6 @@ For this input the program will print: ::
   Input: /var/www, Output: /tmp
   Arguments: foo, bar
    
-As you can already see in these 2 simple examples, ezcConsoleInput provides
-you a powerful way to manage the options and arguments provided to a console
-based application. We only touched a few of the many possibilities offered.
 For further information, please refer to the API documentation of
 ezcConsoleInput_.
 
@@ -282,224 +211,145 @@ ezcConsoleInput_.
 Progress should happen
 ----------------------
 
-Next, let's take a look on indicating progress to the user, by providing a
-progressbar:
+This example defines a simple progressbar:
 
 .. include:: tutorial_example_06.php
    :literal:
 
-In the example we first create an output handler to print text on the console.
-This is necessary, because ezcConsoleProgressbar utilizes it to print the
-progressbar. The second parameter provided is the number to which the
-progressbar shall count to. This means, that we have to call 15 times the
-ezcConsoleProgressbar::advance() method (line 11) until the progressbar reaches 
-the 100% value. Note, that we are emulating some action here, by making the
-program sleep for a random time. In the real world you would have some time
-consuming action here.
+The created progressbar will count to a maximum value of 15, submitted to 
+ezcConsoleProgressbar::__construct() in line 7. ezcConsoleProgressbar utilizes
+ezcConsoleOutput to print the generated progressbar. The call to
+ezcConsoleProgressbar::advance() pushes the progressbar 1 step further on each
+call and redraws it (line 11). Calling ezcConsoleProgressbar::finish() will set
+the progressbar to 100% immediatelly.
 
-This is basically all you have to do, to create a basic progressbar, which will 
-look like this after we called advance() for a couple of times:
+The progressbar generated by the example will look like this:
 
 .. image:: img/consoletools_tutorial_example_06.png
 
-The bar will constantly move forward, every time you call advance() and
-reach it's end (and the 100% value) when you call advance() for the 15th time.
-The bar itself will always stay on the same line on the users console and 
-will redraw itself on every call to ezcConsoleProgressbar::advance() 
-automatically. You can even output some text before starting the bar and this 
-will stay in front of the bar all the time.
-
-But usually one wants to customize a progressbar to fit ones own special
-needs. This can be done easily with ezcConsoleProgressbar, too. Take a look at
-the following advanced example:
+The next example performs more customization on the progressbar appearance:
 
 .. include:: tutorial_example_07.php
    :literal:
 
-This time, we define a format to be applied to the bar itself and call it
-"bar" (lines 7+8). Then we create an array of options for the 
-ezcConsoleProgressbar::__construct() constructor. The first 2 values define, 
-how the bar itself will look like. The "emptyChar" defines, which character 
-is used to fill the "not yet covered space" of the bar. The "barChar" value 
-indicates the character that is used to fill the bar up. 
+The defined options array demonstrates only a small subset of options. For
+detailed information look at ezcConsoleProgressbar::$options. The "emptyChar"
+value defines the character to prefill the bar, the "barChar" option the
+character to fill the bar with while calling ezcConsoleProgressbar::advance().
+Using the "formatString" option, one defines the appearance of the whole bar.
+Here the substitution of several placeholders (like "%fraction%" and "%bar%")
+is permitted. "The formatString" must contain the "%bar%" placeholder, all
+other values are optional. Any other printable character is permitted, too.
+Beside that, formating options are allowed in the "formatString" option, but
+not in any other option. "redrawFrequency" defines the how often the
+progressbar will be redrawn. In the example this will be every 50th call to
+ezcConsoleProgressbar::advance().
 
-The "formatString" option is a little bit more complex. It contains the string
-into which the progressbar is rendered later. To make that a bit more clear,
-see here, how the progressbar will look like, when you render it: 
+The resulting progressbar will look like this:
 
 .. image:: img/consoletools_tutorial_example_07.png
 
-As you can see, we have the fraction value displayed at the beginning this
-time, followed by the progressbar itself (which looks quite different to the
-last one we generated), followed by 2 values which indicate the progress in
-kilobytes so far. If you compare the output with the definition of the
-"formatString" you can easily see how we did that. The "formatString" value 
-is a simple string, that may contain any character (but you should avoid
-newlines). Besides that, it also contains a number of place-holders where
-ezcConsoleProgressbar will fill in the specific values. "%fraction%" is the
-place-holder for the fraction value and "%bar%" indicates in which place the bar
-itself will be rendered.
-
-The example code also shows you another method of ezcConsoleOutput, which we
-did not see yet: ezcConsoleOutput::formatText(). This method can be used to
-apply a format to a string without printing it directly. As you can see in the
-example result, this makes the bar itself appear in blue (as defined for the
-"bar" format). 
-
-The last option, "redrawFrequency", indicates that ezcConsoleProgressbar
-should not redraw the progressbar on every call to
-ezcConsoleProgressbar::advance(), but only every 50th time. When your maximum
-value is very high and you indicate steps frequently this makes a lot of sense.
-If the bar would be redrawn very frequently it could jitter and
-the values displayed would definitely not be readable any more.
-
-Let's take a short look at the little brother of ezcConsoleProgressbar, the
-ezcConsoleStatusbar:
+Using ezcConsoleStatusbar one can indicate progress of a time consuming action
+in a simpler way. Here is an example:
 
 .. include:: tutorial_example_08.php
    :literal:
 
-As usual, we define some output formats, this time one called "success" and the
-other one called "failure". These formats are then used in the $options
-array we define for our ezcConsoleStatusbar. This simple class takes only 2
-possible options: "successChar" will be used to indicate a successful action
-and "failureChar" will be used to indicate a failed action.
+This variant of idicating progress only displays success or failure indicators
+for an action and allows you to run any number of actions, without specifiying,
+how many you will perform before. The "successChar" and "failureChar" options
+indicate, which string to print on a successful or failed action. Formating
+these strings is allowed here (lines 11 and 12).
 
-Then we instantiate the statusbar object (line 15) using our
-ezcConsoleOutput object and the options. Again we emulate some action by using
-a for-loop and some random sleeping time (line 21) and this time we also emulate 
-random success and failure values (line 19). Adding success and failure values to 
-the statusbar is easy: We just call the ezcConsoleStatusbar::add() method and
-submit either true (indicating success) or false to it (line 20).
+Indicating a status is done using ezcConsoleStatusbar::add(), which expects
+bool true for a succeeded action and false for a failed one (line 20). You can 
+access the number of successes and failures through
+ezcConsoleStatusbar::getSuccessCount() and
+ezcConsoleStatusbar::getFailureCount(). To make ezcConsoleStatusbar
+wrap a line after a certain amount of stati, one can use 
+ezcConsoleOutput::$autobreak.
 
-Finally we get the number of successes and failures from the statusbar by
-calling ezcConsoleStatusbar::getSuccessCount() and
-ezcConsoleStatusbar::getFailureCount() to display them to the user. Take a
-look at the result here:
+Here the result of the example:
 
 .. image:: img/consoletools_tutorial_example_08.png
 
-If you want to know more about indicating progress to the user from your shell
-application, take a look at the API documentation of ezcConsoleProgressbar_ and
-ezcConsoleStatusbar_.
+More information on these classes can be taken from the API documentation of 
+ezcConsoleProgressbar_ and ezcConsoleStatusbar_.
 
 .. _ezcConsoleProgressbar: http://ez.no/doc/components/view/(file)/1.0rc1/ConsoleTools/ezcConsoleProgressbar.html
 .. _ezcConsoleStatusbar: http://ez.no/doc/components/view/(file)/1.0rc1/ConsoleTools/ezcConsoleStatusbar.html
 
-Large data served on a table
+Large data served in a table
 ----------------------------
 
-Actually it should have been "in a table", but who cares about a metaphor?
-Whenever you want to display a large amount of structured data, a
-table layout is probably what you need. While this can easily be achieved in HTML, it's
-pretty hard to create a table on the console. Therefore, the ConsoleTools
-component also has a class to generate tables: ezcConsoleTable. Before we look
-at some example code, let me first show you, how the table will look like that
-we are going to create:
+This is the result of a table generated by ezcConsoleTable:
 
 .. image:: img/consoletools_tutorial_example_09.png
 
-As you can see, a table with a nice headline is created. Now, guess how much
-code you need for just generating such a table? No idea? So, here we go:
+The source code for it is printed here:
 
 .. include:: tutorial_example_09.php
    :literal:
 
-Also this example looks quite long, but you will see that it is not the generation
-of the table itself that makes it this long. From line 5 to 12 we define an
-array of data we want to display in the table. As you can see, the array
-already reflects the later table structure here, which might in the real world
-not be the case. After that, we define the formats we want to use in the table
-(lines 14-20).
+ezcConsoleTable uses (like ezcConsoleStatusbar and ezcConsoleProgressbar) the
+ezcConsoleOutput class to print to the console. To create a table one just
+needs to submit the maximal width of the table to it's constructor:
+ezcConsoleTable::__construct(). Options for the table formating are inherited
+from the table itself, to the table rows and from there to the table cells.
+On each inheritence level options might me overwriten individually. The
+"defaultBorderFormat" option sets the global format value for all borders (line
+24). This is overwritten in line 26 for the first row of the table.
 
-After that the real table creation starts. We instantiate a new ezcConsoleTable
-object in line 22, providing the maximal width that the table may have on the
-console. After that, we define the default format for table borders. These
-will later appear gray on the console. So far, the code should be nothing
-special.
+Table rows are accessed as if you use an array in PHP (this is achieved by
+implementing the ArrayAccess_ interface from SPL_). Beside that,
+ezcConsoleTable implements the Iterator interface (SPL_, too) to allow
+iteration over table rows using foreach. Each table row is represented by an
+object of type ezcConsoleTableRow, which also implements the ArrayAccess_ and
+Iterator interfaces to access cells contained in the rows in the same way. Each
+of the named classes allows the access of it's properties as usual, beside access 
+to it's contained objects throug the array interface.
 
-So, let's see what's next. The lines 26-28 might look confusing to you in the
-first place. The $table variable contains an object of type ezcConsoleTable,
-so why do we access it like an array here? The answer is simple and lies in a
-new interfaces, provided by the PHP extension SPL_, which is called
-ArrayAccess_. This allows you to provide array like access to your object, by
-implementing the necessary methods. So, when accessing $table[0] (for the
-first time), you automatically create an instance of ezcConsoleTableRow in your 
-table.
+ezcConsoleTableRow and ezcConsoleTableCell have a $format setting to define the
+format of the contained text. All cells (as described above) will inherit the
+setting of their parent ezcConsoleTableRow, as long as this has not been
+explicitly overwritten. The same applies to ezcConsoleTableRow::$align and
+ezcConsoleTableCell::$align. Possible align values are:
+
+- ezcConsoleTable::ALIGN_DEFAULT (inherit from parent)
+- ezcConsoleTable::ALIGN_LEFT
+- ezcConsoleTable::ALIGN_RIGHT
+- ezcConsoleTable::ALIGN_CENTER
+
+The content of a cell is stored in the ezcConsoleTableCell::$content property
+(line 34). The usage of formated text in a cell is possible, but not recommended. 
+If you want to define the format of cell cotent, use the 
+ezcConsoleTableCell::$format property.
 
 .. _SPL:         http://php.net/spl
 .. _ArrayAccess: http://www.php.net/~helly/php/ext/spl/interfaceArrayAccess.html
 
-Knowing this, we see that in line 26 the first table row is created and its
-"borderFormat" property is set to our "headBorder". On lines 27 and 28 we
-access this table row again, but now it already exists. With setting the
-"format" property of a row, we define which format will be applied to the
-content of the cells contained in that row (we'll see more in a bit).
-Actually, this is just the default format for those cells and might be
-overwritten in the cell object itself. The same applies to the alignment
-value, we set on line 28 for the first row in our table. Alignment values may
-indicate left, right and center alignments.
-
-We formated our head row accordingly and can start with adding data to our
-table. The 2 nested foreach loops iterate through our array (imagine this are
-database results in a result object). On line 34 we actually set the content
-of our cells. As you can see, the ezcConsoleTableCell objects contained in a
-row are also accessible using the ArrayAccess_ interface. So we are creating
-a cell for every element of our nested array. The data contained in a cell is
-stored in its "content" property.
-
-At the end on line 38 we print out some additional data and
-line 39 prints our table to the console. A finishing newline ends our example.
-
-Let's see, if we can also produce something funny with ezcConsoleTable:
+A more advanced (but in a way senseless) example to show the handling of tables
+a bit more:
 
 .. include:: tutorial_example_10.php
    :literal:
 
-As you already might have guessed, the code does not really make much sense in
-general, but it shows some more of the handling of console based tables and
-the result looks quite funny. So, let's dig into it.
+The "corner", "lineHorizontal" and "lineVertical" options define, which
+characters to use to define the borders of the table. These options must be
+exactly 1 character long and my not contain formating information. To style the
+borders, use the ezcConsoleTable::$defaultBorderFormat and
+ezcConsoleTableRow::$borderFormat properties. 
 
-We again define some formats, namely "blue", "red" and "green" to have a
-rainbow-like color mixture. Then we define 2 arrays, 1 containing all the
-names of the formats we recently defined, the other one containing all
-possible alignment values, offered by ezcConsoleTable. Then we create our
-table object again, with the same width as the previous one.
-
-So far nothing new. In the lines 19-22 we see some more options of
-ezcConsoleTable. The "corner", "lineVertical" and "lineHorizontal" values
-specify, which characters are used to render the table borders. As you have
-seen, the default for the "corner" character is '+', the "lineHorizontal" is
-represented by '|' and the vertical lines are rendered using '-'. In our
-example we replace each of these with a simple space. The last option we set
-is "widthType". This indicates, how ezcConsoleTable should deal with the width
-value we provided to its constructor. The default value here would be
-ezcConsoleTable::WIDTH_MAX, which allows ezcConsoleTable to render a table
-with a smaller width, if the content fits into it. In this example we disallow
-this and tell ezcConsoleTable to always make the table 78 character wide.
-
-Next we fill our table with content. This time we use 2 nested for loops
-which generate a 10x10 table. For the content we always use a '*'. The
-format and align values (this time we don't set those on the row, but on the
-cell, so it is individual for each cell) are set randomly, so we will get a
-very colorful picture from it. Let's take a look at this:
+The random format and alignment options selected above create the following
+table:
 
 .. image:: img/consoletools_tutorial_example_10.png
 
-Funny and useless, but I hope you got to know the concept behind
-ezcConsoleTable a bit better.
+For more information, see the ezcConsoleTable_ API documentation.
 
-Conclusion
-==========
+.. _ezcConsoleTable: http://ez.no/doc/components/view/(file)/1.0rc1/ConsoleTools/ezcConsoleTable.html
 
-The ConsoleTools component offers you a variety of powerful tools to create
-shell based applications more comfortable and efficiently. Having this tools 
-playing together you are able to create shell scripts and even complex 
-applications for the console very fast and comfortably. I hope you got a detailed 
-introduction into this component here. If you have any feedback you want to 
-provide, if you have ideas for new features or how to improve ConsoleTools or if 
-you want to throw critics at it, please don't hesitate to start a discussion 
-in our Forum_.
+Questions and feedback can be stated in the eZ components Forum_.
 
 .. _Forum: http://ez.no/community/forum/ez_components
 
