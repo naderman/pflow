@@ -85,7 +85,7 @@ class ezcConsoleProgressbarOptions
      */
     public function __get( $propertyName )
     {
-        if ( isset( $this->$propertyName ) )
+        if ( isset( $this->properties[$propertyName] ) )
         {
             return $this->properties[$propertyName];
         }

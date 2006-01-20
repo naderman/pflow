@@ -24,7 +24,7 @@ class ezcConsoleOutputOptions
      * 
      * @var int
      */
-    public $verbosityLevel = 1;
+    protected $verbosityLevel = 1;
 
     /**
      * Determins, whether text is automatically wrapped after a specific amount
@@ -33,14 +33,14 @@ class ezcConsoleOutputOptions
      * 
      * @var int
      */
-    public $autobreak = 0;
+    protected $autobreak = 0;
 
     /**
      * Wether to use formatings or not. 
      * 
      * @var bool
      */
-    public $useFormats = true;
+    protected $useFormats = true;
 
     /**
      * Create a new ezcConsoleOutputOptions struct. 
@@ -56,6 +56,70 @@ class ezcConsoleOutputOptions
         $this->verbosityLevel = $verbosityLevel;
         $this->autobreak = $autobreak;
         $this->useFormats = $useFormats;
+    }
+
+    /**
+     * Property read access.
+     * 
+     * @throws ezcBasePropertyNotFoundException if the the desired property is
+     *         not found.
+     *
+     * @param string $propertyName Name of the property.
+     * @return mixed Value of the property or null.
+     */
+    public function __get( $propertyName )
+    {
+        if ( isset( $this->$propertyName ) )
+        {
+            return $this->$propertyName;
+        }
+        throw new ezcBasePropertyNotFoundException( $propertyName );
+    }
+
+    /**
+     * Property write access.
+     * 
+     * @throws ezcBasePropertyNotFoundException
+     *         If a desired property could not be found.
+     * @throws ezcBaseSettingValueException
+     *         If a desired property value is out of range.
+     *
+     * @param string $propertyName Name of the property.
+     * @param mixed $val  The value for the property.
+     * @return void
+     */
+    public function __set( $propertyName, $val )
+    {
+        switch ( $propertyName )
+        {
+            case 'verbosityLevel':
+            case 'autobreak':
+                if ( !is_int( $val ) || $val < 0 )
+                {
+                    throw new ezcBaseSettingValueException( $propertyName, $val, 'int >= 0' );
+                }
+                break;
+            case 'useFormats':
+                if ( !is_bool( $val ) )
+                {
+                    throw new ezcBaseSettingValueException( $propertyName, $val, 'bool' );
+                }
+                break;
+            default:
+                throw new ezcBaseSettingNotFoundException( $propertyName );
+        }
+        $this->$propertyName = $val;
+    }
+ 
+    /**
+     * Property isset access.
+     * 
+     * @param string $propertyName Name of the property.
+     * @return bool True if the property is set, false otherwise.
+     */
+    public function __isset( $propertyName )
+    {
+        return isset( $this->$propertyName );
     }
 
 }

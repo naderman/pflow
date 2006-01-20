@@ -24,7 +24,7 @@ class ezcConsoleTableOptions
      * 
      * @var mixed
      */
-    public $colWidth = 'auto';
+    protected $colWidth = 'auto';
 
     /**
      * Wrap style of text contained in strings.
@@ -34,7 +34,7 @@ class ezcConsoleTableOptions
      * 
      * @var int
      */
-    public $colWrap = ezcConsoleTable::WRAP_AUTO;
+    protected $colWrap = ezcConsoleTable::WRAP_AUTO;
 
     /**
      * Standard column alignment, applied to cells that have to explicit
@@ -47,42 +47,42 @@ class ezcConsoleTableOptions
      * 
      * @var int
      */
-    public $defaultAlign = ezcConsoleTable::ALIGN_LEFT;
+    protected $defaultAlign = ezcConsoleTable::ALIGN_LEFT;
 
     /**
      * Padding characters for side padding between data and lines. 
      * 
      * @var string
      */
-    public $colPadding = ' ';
+    protected $colPadding = ' ';
 
     /**
      * Type of the given table width (fixed or maximal value).
      * 
      * @var int
      */
-    public $widthType = ezcConsoleTable::WIDTH_MAX;
+    protected $widthType = ezcConsoleTable::WIDTH_MAX;
         
     /**
      * Character to use for drawing vertical lines. 
      * 
      * @var string
      */
-    public $lineVertical = '-';
+    protected $lineVertical = '-';
 
     /**
      * Character to use for drawing hozizontal lines. 
      * 
      * @var string
      */
-    public $lineHorizontal = '|';
+    protected $lineHorizontal = '|';
 
     /**
      * Character to use for drawing line corners.
      * 
      * @var string
      */
-    public $corner = '+';
+    protected $corner = '+';
     
     /**
      * Standard column content format, applied to cells that have 'default' as
@@ -90,7 +90,7 @@ class ezcConsoleTableOptions
      * 
      * @var string
      */
-    public $defaultFormat = 'default';
+    protected $defaultFormat = 'default';
 
     /**
      * Standard border format, applied to rows that have 'default' as the
@@ -98,7 +98,7 @@ class ezcConsoleTableOptions
      * 
      * @var string
      */
-    public $defaultBorderFormat = 'default';
+    protected $defaultBorderFormat = 'default';
 
     /**
      * Create a new ezcConsoleProgressbarOptions struct. 
@@ -132,6 +132,96 @@ class ezcConsoleTableOptions
         $this->defaultFormat = $defaultFormat;
         $this->defaultBorderFormat = $defaultBorderFormat;
     }
+    
+    /**
+     * Property read access.
+     * 
+     * @throws ezcBasePropertyNotFoundException if the the desired property is
+     *         not found.
+     *
+     * @param string $propertyName Name of the property.
+     * @return mixed Value of the property or null.
+     */
+    public function __get( $propertyName )
+    {
+        if ( isset( $this->$propertyName ) )
+        {
+            return $this->$propertyName;
+        }
+        throw new ezcBasePropertyNotFoundException( $propertyName );
+    }
+
+    /**
+     * Property write access.
+     * 
+     * @throws ezcBasePropertyNotFoundException
+     *         If a desired property could not be found.
+     * @throws ezcBaseSettingValueException
+     *         If a desired property value is out of range.
+     *
+     * @param string $propertyName Name of the property.
+     * @param mixed $val  The value for the property.
+     * @return void
+     */
+    public function __set( $propertyName, $val )
+    {
+        switch ( $propertyName )
+        {
+            case 'colWidth':
+                if ( !is_array( $val ) && !is_string( $val ) && $val !== 'auto' )
+                {
+                    throw new ezcBaseSettingValueException( $propertyName, $val, 'array(int) or "auto"' );
+                }
+                break;
+            case 'colWrap':
+                if ( $val !== ezcConsoleTable::WRAP_AUTO && $val !== ezcConsoleTable::WRAP_NONE && $val !== ezcConsoleTable::WRAP_CUT )
+                {
+                    throw new ezcBaseSettingValueException( $propertyName, $val, 'ezcConsoleTable::WRAP_AUTO, ezcConsoleTable::WRAP_NONE, ezcConsoleTable::WRAP_CUT' );
+                }
+                break;
+            case 'defaultAlign':
+                if ( $val !== ezcConsoleTable::ALIGN_DEFAULT && $val !== ezcConsoleTable::ALIGN_LEFT && $val !== ezcConsoleTable::ALIGN_CENTER && $val !== ezcConsoleTable::ALIGN_RIGHT )
+                {
+                    throw new ezcBaseSettingValueException( $propertyName, $val, 'ezcConsoleTable::ALIGN_DEFAULT, ezcConsoleTable::ALIGN_LEFT, ezcConsoleTable::ALIGN_CENTER, ezcConsoleTable::ALIGN_RIGHT' );
+                }
+                break;
+            case 'colPadding':
+                if ( !is_string( $val ) )
+                {
+                    throw new ezcBaseSettingValueException( $propertyName, $val, 'string' );
+                }
+                break;
+            case 'widthType':
+                if ( $val !== ezcConsoleTable::WIDTH_MAX && $val !== ezcConsoleTable::WIDTH_FIXED )
+                {
+                    throw new ezcBaseSettingValueException( $propertyName, $val, 'ezcConsoleTable::WIDTH_MAX, ezcConsoleTable::WIDTH_FIXED' );
+                }
+                break;
+            case 'lineVertical':
+            case 'lineHorizontal':
+            case 'corner':
+                if ( !is_string( $val ) && strlen( $val ) !== 1 )
+                {
+                    throw new ezcBaseSettingValueException( $propertyName, $val, 'string, length = 1' );
+                }
+                break;
+            default:
+                throw new ezcBaseSettingNotFoundException( $propertyName );
+        }
+        $this->$propertyName = $val;
+    }
+ 
+    /**
+     * Property isset access.
+     * 
+     * @param string $propertyName Name of the property.
+     * @return bool True if the property is set, false otherwise.
+     */
+    public function __isset( $propertyName )
+    {
+        return isset( $this->$propertyName );
+    }
+
 
 }
 

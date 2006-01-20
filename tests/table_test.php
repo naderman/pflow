@@ -258,6 +258,10 @@ class ezcConsoleToolsTableTest extends ezcTestCase
         // Set options
         foreach ( $options as $key => $val )
         {
+            if ( $key == 'lineFormatHead' )
+            {
+                continue;
+            }
             $table->options->$key = $val;
         }
 

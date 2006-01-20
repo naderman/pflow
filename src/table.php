@@ -416,8 +416,6 @@ class ezcConsoleTable implements Countable, Iterator, ArrayAccess
      * @throws ezcBaseValueException
      *         If a the value for a property is out of range.
      * @return void
-     *
-     * @todo Remove deprectaed "cols" setting!
      */
     public function __set( $key, $val )
     {
