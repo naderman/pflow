@@ -19,10 +19,10 @@ Installation
 
 The installation and configuration of the eZ components environment is
 described in a separate article information. Please refer to
-the ComponentsIntroduction_ for instructions on installation and configuration
+the `Components Introduction`_ for instructions on installation and configuration
 of the eZ components, and the Base package.
 
-.. _ComponentsIntroduction Components Introduction: http://ez.no/community/articles/an_introduction_to_ez_components
+.. _Components Introduction: http://ez.no/community/articles/an_introduction_to_ez_components
 
 
 ..
