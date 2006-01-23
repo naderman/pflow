@@ -237,6 +237,7 @@ class ezcBaseTest extends ezcTestCase
         catch ( ezcBaseValueException $e )
         {
             $this->assertEquals( "The value <string> that you were trying to assign to setting <broken> is invalid. Allowed values are: strings.", $e->getMessage() );
+            $this->assertEquals( "The value <string> that you were trying to assign to setting <broken> is invalid. Allowed values are: strings.", $e->originalMessage );
         }
     }
 
