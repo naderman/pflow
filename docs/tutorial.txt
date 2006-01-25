@@ -345,9 +345,10 @@ table:
 
 .. image:: img/consoletools_tutorial_example_10.png
 
-For more information, see the ezcConsoleTable_ API documentation.
+More Information
+================
 
-.. _ezcConsoleTable: http://ez.no/doc/components/view/(file)/1.0rc1/ConsoleTools/ezcConsoleTable.html
+For more information, see the ezcConsoleTable API documentation.
 
 
 ..
