@@ -204,9 +204,7 @@ For this input the program will print: ::
   Arguments: foo, bar
    
 For further information, please refer to the API documentation of
-ezcConsoleInput_.
-
-.. _ezcConsoleInput: http://ez.no/doc/components/view/(file)/1.0rc1/ConsoleTools/ezcConsoleInput.html
+ezcConsoleInput.
 
 Progress should happen
 ----------------------
@@ -274,10 +272,7 @@ Here the result of the example:
 .. image:: img/consoletools_tutorial_example_08.png
 
 More information on these classes can be taken from the API documentation of 
-ezcConsoleProgressbar_ and ezcConsoleStatusbar_.
-
-.. _ezcConsoleProgressbar: http://ez.no/doc/components/view/(file)/1.0rc1/ConsoleTools/ezcConsoleProgressbar.html
-.. _ezcConsoleStatusbar: http://ez.no/doc/components/view/(file)/1.0rc1/ConsoleTools/ezcConsoleStatusbar.html
+ezcConsoleProgressbar and ezcConsoleStatusbar.
 
 Large data served in a table
 ----------------------------
