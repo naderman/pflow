@@ -64,14 +64,6 @@ ezcConsoleTable
   best width for the table columns (to make your content fit best), automatically
   wrapping too long content and aligning the content in the cells as you like.
 
-Installation
-============
-
-This tutorial assumes that you have set-up an eZ components environment. For
-information on how to do this, please refer to the ComponentsIntroduction_.
-
-.. _ComponentsIntroduction: http://ez.no/community/articles/an_introduction_to_ez_components
-
 
 Usage
 =====
