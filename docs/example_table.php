@@ -15,15 +15,7 @@
  */
 function __autoload( $class_name )
 {
-    require_once("Base/trunk/src/base.php");
-    if ( strpos( $class_name, "_" ) !== false )
-    {
-        $file = str_replace( "_", "/", $class_name ) . ".php";
-        $val = require_once( $file );
-        if ( $val == 0 )
-            return true;
-        return false;
-    }
+    require_once "Base/trunk/src/base.php";
     ezcBase::autoload( $class_name );
 }
 
@@ -48,7 +40,7 @@ for ( $i = 2; $i < 5; $i++ )
      $table[0][]->content = "Headline $i";
 }
 
-$data = array( 1, 2, 3, 4);
+$data = array( 1, 2, 3, 4 );
 
 // Create some more data in the table...
 foreach ( $data as $value )

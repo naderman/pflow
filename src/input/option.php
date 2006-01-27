@@ -134,7 +134,7 @@ class ezcConsoleOption {
      * simply apply these parameters as strings (without '-' or '--'). So
      *
      * <code>
-     * $param = new ezcConsoleOption('f', 'file');
+     * $param = new ezcConsoleOption( 'f', 'file' );
      * </code>
      *
      * will result in a parameter that can be accessed using
@@ -210,7 +210,7 @@ class ezcConsoleOption {
         }
         
         $exclusions = $exclusions !== null && is_array( $exclusions ) ? $exclusions : array();
-        foreach( $exclusions as $exc )
+        foreach ( $exclusions as $exc )
         {
             $this->addExclusion( $exc );
         }

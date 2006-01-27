@@ -15,15 +15,7 @@
  */
 function __autoload( $class_name )
 {
-    require_once("Base/trunk/src/base.php");
-    if ( strpos( $class_name, "_" ) !== false )
-    {
-        $file = str_replace( "_", "/", $class_name ) . ".php";
-        $val = require_once( $file );
-        if ( $val == 0 )
-            return true;
-        return false;
-    }
+    require_once "Base/trunk/src/base.php";
     ezcBase::autoload( $class_name );
 }
 
@@ -98,7 +90,7 @@ else
 // Process all parameters at once:
 foreach ( $paramHandler->getOptionValues() as $paramShort => $val )
 {
-     switch (true)
+     switch ( true )
      {
          case $val === false:
              echo "Parameter $paramShort was not submitted.\n";
@@ -106,7 +98,7 @@ foreach ( $paramHandler->getOptionValues() as $paramShort => $val )
          case $val === true:
              echo "Parameter $paramShort was submitted without a value.\n";
              break;
-         case is_array($val):
+         case is_array( $val ):
              echo "Parameter $paramShort was submitted multiple times with value: <".implode(', ', $val).">.\n";
              break;
          default:

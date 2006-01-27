@@ -264,7 +264,7 @@ class ezcConsoleInput
                 {
                     throw new ezcConsoleOptionStringNotWellformedException( "Missing long parameter name for short parameter <-{$short}>" );
                 }
-                $option = new ezcConsoleOption($short, $matches[4][$id]);
+                $option = new ezcConsoleOption( $short, $matches[4][$id] );
                 if ( !empty( $matches[2][$id] ) || !empty( $matches[5][$id] ) )
                 {
                     switch ( !empty( $matches[2][$id] ) ? $matches[2][$id] : $matches[5][$id] )
@@ -318,11 +318,11 @@ class ezcConsoleInput
             if ( $existParam === $option )
             {
                 $found = true;
-                unset($this->options[$id]);
+                unset( $this->options[$id] );
                 continue;
             }
-            $existParam->removeAllExclusions($option);
-            $existParam->removeAllDependencies($option);
+            $existParam->removeAllExclusions( $option );
+            $existParam->removeAllDependencies( $option );
         }
         if ( $found === false )
         {
@@ -332,14 +332,14 @@ class ezcConsoleInput
         {
             if ( $existParam === $option )
             {
-                unset($this->optionLong[$name]);
+                unset( $this->optionLong[$name] );
             }
         }
         foreach ( $this->optionShort as $name => $existParam )
         {
             if ( $existParam === $option )
             {
-                unset($this->optionShort[$name]);
+                unset( $this->optionShort[$name] );
             }
         }
     }
@@ -376,11 +376,11 @@ class ezcConsoleInput
         }
         if ( isset( $this->optionShort[$short] ) )
         {
-            unset($this->optionShort[$short]);
+            unset( $this->optionShort[$short] );
         }
         if ( isset( $this->optionLong[$short] ) )
         {
-            unset($this->optionLong[$long]);
+            unset( $this->optionLong[$long] );
         }
     }
 
@@ -578,7 +578,7 @@ class ezcConsoleInput
         $help = array();
         foreach ( $this->options as $id => $param )
         {
-            if ( count($params) === 0 || in_array( $param->short, $params ) || in_array( $param->long, $params ) )
+            if ( count( $params ) === 0 || in_array( $param->short, $params ) || in_array( $param->long, $params ) )
             {
                 $help[] = array( 
                     '-' . $param->short . ' / ' . '--' . $param->long,

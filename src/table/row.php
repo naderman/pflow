@@ -31,9 +31,9 @@
  * $row[0]->align = ezcConsoleTable::ALIGN_CENTER;
  * 
  * // Iterate through the row's cells.
- * foreach ($row as $cell)
+ * foreach ( $row as $cell )
  * {
- *     var_dump($cell);
+ *     var_dump( $cell );
  * }
  *
  * // Set the default align property for all cells in the row

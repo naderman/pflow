@@ -35,7 +35,7 @@
  *      $table[0][]->content = "Headline $i";
  * }
  * 
- * $data = array( 1, 2, 3, 4);
+ * $data = array( 1, 2, 3, 4 );
  * 
  * // Create some more data in the table...
  * foreach ( $data as $value )

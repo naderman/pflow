@@ -185,7 +185,7 @@ class ezcConsoleToolsInputTest extends ezcTestCase
     protected function createFakeParam( $paramData )
     {
         $param = new ezcConsoleOption( $paramData['short'], $paramData['long'] );
-        foreach( $paramData['options'] as $name => $val )
+        foreach ( $paramData['options'] as $name => $val )
         {
             if ( $name === 'depends' )
             {

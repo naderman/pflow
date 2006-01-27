@@ -208,7 +208,7 @@ class ezcConsoleOutput
      */
     public function __get( $propertyName )
     {
-        switch ($propertyName) 
+        switch ( $propertyName ) 
         {
             case 'options':
                 return $this->options;
@@ -236,7 +236,7 @@ class ezcConsoleOutput
      */
     public function __set( $propertyName, $val )
     {
-        switch ($propertyName) 
+        switch ( $propertyName ) 
         {
             case 'options':
                 if ( !( $val instanceof ezcConsoleOutputOptions ) )
