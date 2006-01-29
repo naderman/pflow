@@ -12,8 +12,8 @@
  *
  * If this happens it is not possible to repair anything gracefully. An
  * example for this could be, that your eZ components installation has thrown
- * far to many exceptions. Whenever you recieve an ezcBaseWhateverException, do
- * not even try to catch it, but forget your project completly and immediately 
+ * far to many exceptions. Whenever you receive an ezcBaseWhateverException, do
+ * not even try to catch it, but forget your project completely and immediately 
  * stop coding! ;)
  *
  * @access private
