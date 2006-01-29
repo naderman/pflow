@@ -183,7 +183,7 @@ class ezcConsoleToolsTableTest extends ezcTestCase
             __FUNCTION__,
             $this->tableData4,
             array( 'cols' => count( $this->tableData4[0] ), 'width' =>  120 ),
-            array( 'lineFormatHead' => 'blue', 'defaultAlign' => ezcConsoleTable::ALIGN_CENTER, 'colWrap' => ezcConsoleTable::WRAP_NONE ),
+            array( 'lineFormatHead' => 'blue', 'defaultAlign' => ezcConsoleTable::ALIGN_CENTER, 'colWrap' => ezcConsoleTable::WRAP_CUT ),
             array( 0 )
         );
     }
@@ -247,6 +247,201 @@ class ezcConsoleToolsTableTest extends ezcTestCase
         $table = new ezcConsoleTable( $this->output, 100 );
         $table[0];
     }
+
+    public function testSetOptions_Success1()
+    {
+        $out = new ezcConsoleOutput();
+        $table = new ezcConsoleTable( $out, 100 );
+        try
+        {
+            $table->options->colWidth = array( 1, 2, 3 );
+            $table->options->colWrap = ezcConsoleTable::WRAP_CUT;
+            $table->options->defaultAlign = ezcConsoleTable::ALIGN_CENTER;
+            $table->options->colPadding = ':';
+            $table->options->widthType = ezcConsoleTable::WIDTH_FIXED;
+            $table->options->lineVertical = ':';
+            $table->options->lineHorizontal = '-';
+            $table->options->corner = 'o';
+            $table->options->defaultFormat = 'test';
+            $table->options->defaultBorderFormat = 'test2';
+        }
+        catch ( Exception $e )
+        {
+            $this->fail( "Exception while setting valid option: {$e->getMessage()}." );
+        }
+    }
+    
+    public function testSetOptions_Success2()
+    {
+        try
+        {
+            $opt = new ezcConsoleTableOptions(
+                array( 1, 2, 3 ),
+                ezcConsoleTable::WRAP_CUT,
+                ezcConsoleTable::ALIGN_CENTER,
+                ':',
+                ezcConsoleTable::WIDTH_FIXED,
+                ':',
+                '-',
+                'o',
+                'test',
+                'test2'
+            );
+        }
+        catch ( Exception $e )
+        {
+            $this->fail( "Exception while setting valid option: {$e->getMessage()}." );
+        }
+    }
+    
+    public function testSetOptions_Failure()
+    {
+        $out = new ezcConsoleOutput();
+        $table = new ezcConsoleTable( $out, 100 );
+    
+        $exceptionThrown = false;
+        
+        try
+        {
+            $table->options->colWidth = 'test';
+        } 
+        catch ( ezcBaseSettingValueException $e)
+        {
+            $exceptionThrown = true;
+        }
+        if ( !$exceptionThrown )
+        {
+            $this->fail( 'No exception thrown on invalid setting for <colWidth>.');
+        }
+        $exceptionThrown = false;
+
+        try
+        {
+            $table->options->colWrap = 100;
+        } 
+        catch ( ezcBaseSettingValueException $e)
+        {
+            $exceptionThrown = true;
+        }
+        if ( !$exceptionThrown )
+        {
+            $this->fail( 'No exception thrown on invalid setting for <colWrap>.');
+        }
+        $exceptionThrown = false;
+        
+        try
+        {
+            $table->options->defaultAlign = 101;
+        } 
+        catch ( ezcBaseSettingValueException $e)
+        {
+            $exceptionThrown = true;
+        }
+        if ( !$exceptionThrown )
+        {
+            $this->fail( 'No exception thrown on invalid setting for <defaultAlign>.');
+        }
+        $exceptionThrown = false;
+        
+        try
+        {
+            $table->options->colPadding = 102;
+        } 
+        catch ( ezcBaseSettingValueException $e)
+        {
+            $exceptionThrown = true;
+        }
+        if ( !$exceptionThrown )
+        {
+            $this->fail( 'No exception thrown on invalid setting for <colPadding>.');
+        }
+        $exceptionThrown = false;
+        
+        try
+        {
+            $table->options->widthType = 103;
+        } 
+        catch ( ezcBaseSettingValueException $e)
+        {
+            $exceptionThrown = true;
+        }
+        if ( !$exceptionThrown )
+        {
+            $this->fail( 'No exception thrown on invalid setting for <widthType>.');
+        }
+        $exceptionThrown = false;
+        
+        try
+        {
+            $table->options->lineVertical = 104;
+        } 
+        catch ( ezcBaseSettingValueException $e)
+        {
+            $exceptionThrown = true;
+        }
+        if ( !$exceptionThrown )
+        {
+            $this->fail( 'No exception thrown on invalid setting for <lineVertical>.');
+        }
+        $exceptionThrown = false;
+        
+        try
+        {
+            $table->options->lineHorizontal = 105;
+        } 
+        catch ( ezcBaseSettingValueException $e)
+        {
+            $exceptionThrown = true;
+        }
+        if ( !$exceptionThrown )
+        {
+            $this->fail( 'No exception thrown on invalid setting for <lineHorizontal>.');
+        }
+        $exceptionThrown = false;
+        
+        try
+        {
+            $table->options->corner = 106;
+        } 
+        catch ( ezcBaseSettingValueException $e)
+        {
+            $exceptionThrown = true;
+        }
+        if ( !$exceptionThrown )
+        {
+            $this->fail( 'No exception thrown on invalid setting for <corner>.');
+        }
+        $exceptionThrown = false;
+        
+        try
+        {
+            $table->options->defaultFormat = array();
+        } 
+        catch ( ezcBaseSettingValueException $e)
+        {
+            $exceptionThrown = true;
+        }
+        if ( !$exceptionThrown )
+        {
+            $this->fail( 'No exception thrown on invalid setting for <defaultFormat>.');
+        }
+        $exceptionThrown = false;
+        
+        try
+        {
+            $table->options->defaultBorderFormat = true;
+        }
+        catch ( ezcBaseSettingValueException $e)
+        {
+            $exceptionThrown = true;
+        }
+        if ( !$exceptionThrown )
+        {
+            $this->fail( 'No exception thrown on invalid setting for <defaultBorderFormat>.');
+        }
+        $exceptionThrown = false;
+        
+    }
     
     private function commonTableTest( $refFile, $tableData, $settings, $options, $headrows = array() )
     {
@@ -283,12 +478,22 @@ class ezcConsoleToolsTableTest extends ezcTestCase
             $table[$row]->borderFormat = isset( $options['lineFormatHead'] ) ? $options['lineFormatHead'] : 'default';
         }
         
+        // For visual inspection, uncomment this block
+//        echo "\n\n";
+//        echo "Old $refFile:\n:";
+//        echo file_get_contents( dirname( __FILE__ ) . '/data/' . $refFile . '.dat' );
+//        echo "New $refFile:\n:";
+//        echo implode( "\n", $table->getTable() );
+//        echo "\n\n";
+        
+        // For test assertion, uncomment this block
         $this->assertEquals(
             file_get_contents( dirname( __FILE__ ) . '/data/' . $refFile . '.dat' ),
             implode( "\n", $table->getTable() ),
             'Table not correctly generated for ' . $refFile . '.'
         );
-        // To prepare test files use this:
+
+        // To prepare test files, uncomment this block
         // file_put_contents( dirname( __FILE__ ) . '/data/' . $refFile . '.dat', implode( "\n", $table->getTable() ) );
     }
 }

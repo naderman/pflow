@@ -121,16 +121,16 @@ class ezcConsoleTableOptions
         $defaultBorderFormat = 'default'
     )
     {
-        $this->colWidth = $colWidth;
-        $this->colWrap = $colWrap;
-        $this->defaultAlign = $defaultAlign;
-        $this->colPadding = $colPadding;
-        $this->widthType = $widthType;
-        $this->lineVertical = $lineVertical;
-        $this->lineHorizontal = $lineHorizontal;
-        $this->corner = $corner;
-        $this->defaultFormat = $defaultFormat;
-        $this->defaultBorderFormat = $defaultBorderFormat;
+        $this->__set( 'colWidth', $colWidth );
+        $this->__set( 'colWrap', $colWrap );
+        $this->__set( 'defaultAlign', $defaultAlign );
+        $this->__set( 'colPadding', $colPadding );
+        $this->__set( 'widthType', $widthType );
+        $this->__set( 'lineVertical', $lineVertical );
+        $this->__set( 'lineHorizontal', $lineHorizontal );
+        $this->__set( 'corner', $corner );
+        $this->__set( 'defaultFormat', $defaultFormat );
+        $this->__set( 'defaultBorderFormat', $defaultBorderFormat );
     }
     
     /**
@@ -168,7 +168,7 @@ class ezcConsoleTableOptions
         switch ( $propertyName )
         {
             case 'colWidth':
-                if ( !is_array( $val ) && !is_string( $val ) && $val !== 'auto' )
+                if ( !is_array( $val ) && is_string( $val ) && $val !== 'auto' )
                 {
                     throw new ezcBaseSettingValueException( $propertyName, $val, 'array(int) or "auto"' );
                 }
@@ -201,6 +201,18 @@ class ezcConsoleTableOptions
             case 'lineHorizontal':
             case 'corner':
                 if ( !is_string( $val ) && strlen( $val ) !== 1 )
+                {
+                    throw new ezcBaseSettingValueException( $propertyName, $val, 'string, length = 1' );
+                }
+                break;
+            case 'defaultFormat':
+                if ( !is_string( $val ) || strlen( $val ) < 1 )
+                {
+                    throw new ezcBaseSettingValueException( $propertyName, $val, 'string, length = 1' );
+                }
+                break;
+            case 'defaultBorderFormat':
+                if ( !is_string( $val ) || strlen( $val ) < 1 )
                 {
                     throw new ezcBaseSettingValueException( $propertyName, $val, 'string, length = 1' );
                 }
