@@ -204,7 +204,7 @@ class ezcBase
         require( ezcBase::$packageDir . $file );
     }
 
-    public static function checkDependency( $type, $value )
+    public static function checkDependency( $component, $type, $value )
     {
         switch ( $type )
         {
@@ -215,7 +215,7 @@ class ezcBase
                 }
                 else
                 {
-                    die( "\nThis component depends on the PHP extension <{$value}>, which is not loaded.\n" );
+                    die( "\nThe {$component} component depends on the PHP extension '{$value}', which is not loaded.\n" );
                 }
                 break;
 
@@ -227,7 +227,7 @@ class ezcBase
                 }
                 else
                 {
-                    die( "\nThis component depends on the PHP version <{$value}>, but the current version is <{$phpVersion}>.\n" );
+                    die( "\nThe {$component} component depends on the PHP version '{$value}', but the current version is '{$phpVersion}'.\n" );
                 }
                 break;
         }
