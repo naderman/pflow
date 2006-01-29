@@ -1,6 +1,18 @@
 1.0 - [RELEASEDATE]
 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
+- Fixed unreported bug: ezcConsoleTableOptions struct caried deprecated
+  options and missed 2 in its constructor.
+- Fixed unreported bug: Option values not properly checked for eczConsoleTable,
+  ezcConsoleOutput.
+- Fixed unreported bug in ezcConsoleProgressbarOptions that disallowed option
+  read access.
+- Fixed notice in ezcConsoleOptionExclusionViolationException.
+- Fixed unreported bug: ezcConsoleTable "colWrap" option not recognized
+  correctly.
+- Fix unreported bug: ezcConsoleTable "defaultFormat" and
+  "defaultBorderFormat" not recognized.
+
 
 1.0rc1 - Monday 16 January 2006
 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
