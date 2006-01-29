@@ -8,6 +8,8 @@
  * @license http://ez.no/licenses/new_bsd New BSD License
  */
 
+require_once "Base/trunk/src/base.php";
+
 /**
  * Autoload ezc classes 
  * 
@@ -15,7 +17,6 @@
  */
 function __autoload( $class_name )
 {
-    require_once "Base/trunk/src/base.php";
     ezcBase::autoload( $class_name );
 }
 
@@ -23,7 +24,7 @@ function __autoload( $class_name )
 $out = new ezcConsoleOutput();
 
 // Set the verbosity to level 10
-$out->options->verboseLevel = 10;
+$out->options->verbosityLevel = 10;
 // Enable auto wrapping of lines after 40 characters
 $out->options->autobreak    = 40;
 
@@ -55,6 +56,8 @@ $out->formats->default->color = 'blue';
 
 // This is visible, since we set verboseLevel to 10, and printed in default format (now blue)
 $out->outputText( "Some verbose output.\n", null, 10 );
+// This is not visible, since we set verboseLevel to 10
+$out->outputText( "Some more verbose output.\n", null, 20 );
 // This is visible, since we set verboseLevel to 10, and printed in format 'failure'
 $out->outputText( "And some not so verbose, failure output.\n", 'failure', 5 );
 ?>

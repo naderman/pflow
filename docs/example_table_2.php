@@ -8,6 +8,7 @@
  * @license http://ez.no/licenses/new_bsd New BSD License
  */
 
+require_once "Base/trunk/src/base.php";
 /**
  * Autoload ezc classes 
  * 
@@ -15,7 +16,6 @@
  */
 function __autoload( $class_name )
 {
-    require_once "Base/trunk/src/base.php";
     ezcBase::autoload( $class_name );
 }
 

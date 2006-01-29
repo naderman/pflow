@@ -13,7 +13,6 @@
  * Creating  and maintaining statusbars to be printed to the console. 
  *
  * <code>
- *
  * // Construction
  * $status = new ezcConsoleStatusbar( new ezcConsoleOutput() );
  *
@@ -31,7 +30,6 @@
  * // Retreive and display final statusbar results
  * $msg = $status->getSuccess() . ' succeeded, ' . $status->getFailure() . ' failed.';
  * $out->outputText( "Finished uploading files: $msg\n" );
- *
  * </code>
  *  
  * 

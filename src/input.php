@@ -15,10 +15,10 @@
  * to a console based application.
  *
  * <code>
- * $paramHandler = new ezcConsoleInput();
+ * $optionHandler = new ezcConsoleInput();
  * 
  * // Register simple parameter -h/--help
- * $paramHandler->registerOption( new ezcConsoleOption( 'h', 'help' ) );
+ * $optionHandler->registerOption( new ezcConsoleOption( 'h', 'help' ) );
  * 
  * // Register complex parameter -f/--file
  * $file = new ezcConsoleOption(
@@ -30,7 +30,7 @@
  *  'Process a file.',
  *  'Processes a single file.'
  * );
- * $paramHandler->registerOption( $file );
+ * $optionHandler->registerOption( $file );
  * 
  * // Manipulate parameter -f/--file after registration
  * $file->multiple = true;
@@ -44,27 +44,32 @@
  *  true,
  *  'Process a directory.',
  *  'Processes a complete directory.',
- *  array( new ezcConsoleOptionRule( $paramHandler->getOption( 'f' ) ) ),
- *  array( new ezcConsoleOptionRule( $paramHandler->getOption( 'h' ) ) )
+ *  array( new ezcConsoleOptionRule( $optionHandler->getOption( 'f' ) ) ),
+ *  array( new ezcConsoleOptionRule( $optionHandler->getOption( 'h' ) ) )
  * );
- * $paramHandler->registerOption( $dir );
+ * $optionHandler->registerOption( $dir );
  * 
  * // Register an alias for this parameter
- * $paramHandler->registerAlias( 'e', 'extended-dir', $dir );
+ * $optionHandler->registerAlias( 'e', 'extended-dir', $dir );
  * 
  * // Process registered parameters and handle errors
  * try
  * {
- *      $paramHandler->process( array( 'example_input.php', '-h' ) );
+ *      $optionHandler->process( array( 'example_input.php', '-h' ) );
  * }
- * catch ( ezcConsoleOptionDependencyViolationException $e )
+ * catch ( ezcConsoleInputException $e )
  * {
- *      $consoleOut->outputText( $e->getMessage() );
+ *      if ( $e->getCode() === ezcConsoleInputException::PARAMETER_DEPENDENCY_RULE_NOT_MET )
+ *      {
+ *          $consoleOut->outputText(
+ *              'Parameter ' . isset( $e->param ) ? $e->param->name : 'unknown' . " may not occur here.\n", 'error'
+ *          );
+ *      }
  *      exit( 1 );
  * }
  * 
  * // Process a single parameter
- * $file = $paramHandler->getOption( 'f' );
+ * $file = $optionHandler->getOption( 'f' );
  * if ( $file->value === false )
  * {
  *      echo "Parameter -{$file->short}/--{$file->long} was not submitted.\n";
@@ -79,9 +84,9 @@
  * }
  * 
  * // Process all parameters at once:
- * foreach ( $paramHandler->getOptionValues() as $paramShort => $val )
+ * foreach ( $optionHandler->getOptionValues() as $paramShort => $val )
  * {
- *      switch (true)
+ *      switch ( true )
  *      {
  *          case $val === false:
  *              echo "Parameter $paramShort was not submitted.\n";
@@ -89,7 +94,7 @@
  *          case $val === true:
  *              echo "Parameter $paramShort was submitted without a value.\n";
  *              break;
- *          case is_array($val):
+ *          case is_array( $val ):
  *              echo "Parameter $paramShort was submitted multiple times with value: <".implode(', ', $val).">.\n";
  *              break;
  *          default:

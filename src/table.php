@@ -13,7 +13,6 @@
  * Creating tables to be printed to the console. 
  *
  * <code>
- * 
  * // Initialize the console output handler
  * $out = new ezcConsoleOutput();
  * // Define a new format "headline"
@@ -51,7 +50,6 @@
  * $table[2]->format = 'sum';
  * 
  * $table->outputTable();
- *
  * </code>
  * 
  *

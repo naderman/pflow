@@ -27,35 +27,35 @@
  * 
  * // Set the color of the default output format to green
  * $out->formats->default->color   = 'green';
- *
+ * 
  * // Set the color of the output format named 'success' to white
  * $out->formats->success->color   = 'white';
  * // Set the style of the output format named 'success' to bold
  * $out->formats->success->style   = array( 'bold' );
- *
+ * 
  * // Set the color of the output format named 'failure' to red
  * $out->formats->failure->color   = 'red';
  * // Set the style of the output format named 'failure' to bold
  * $out->formats->failure->style   = array( 'bold' );
  * // Set the background color of the output format named 'failure' to blue
  * $out->formats->failure->bgcolor = 'blue';
- *
+ * 
  * // Output text with default format
  * $out->outputText( 'This is default text ' );
  * // Output text with format 'success'
  * $out->outputText( 'including success message', 'success' );
  * // Some more output with default output.
  * $out->outputText( "and a manual linebreak.\n" );
- *
+ * 
  * // Manipulate the later output
  * $out->formats->success->color = 'green';
  * $out->formats->default->color = 'blue';
- *
- * // This is visible, since we set verbosityLevel to 10, and printed in
- * // default format (now blue)
+ * 
+ * // This is visible, since we set verboseLevel to 10, and printed in default format (now blue)
  * $out->outputText( "Some verbose output.\n", null, 10 );
- * // This is visible, since we set verbosityLevel to 10, and printed in format
- * // 'failure'
+ * // This is not visible, since we set verboseLevel to 10
+ * $out->outputText( "Some more verbose output.\n", null, 20 );
+ * // This is visible, since we set verboseLevel to 10, and printed in format 'failure'
  * $out->outputText( "And some not so verbose, failure output.\n", 'failure', 5 );
  * </code>
  *

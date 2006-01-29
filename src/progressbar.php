@@ -13,11 +13,10 @@
  * Creating and maintaining progressbars to be printed to the console. 
  *
  * <code>
- *
  * $out = new ezcConsoleOutput();
  * 
  * // Create progress bar itself
- * $progress = new ezcConsoleProgressbar( $out, 100, 5 );
+ * $progress = new ezcConsoleProgressbar( $out, 100, array( 'step' => 5 ) );
  * 
  * $progress->options->emptyChar = '-';
  * $progress->options->progressChar = '#';
@@ -25,7 +24,7 @@
  * 
  * // Perform actions
  * $i = 0;
- * while ( $i++ < 20 ) 
+ * while( $i++ < 20 ) 
  * {
  *     // Do whatever you want to indicate progress for
  *     usleep( mt_rand( 20000, 2000000 ) );
@@ -37,7 +36,6 @@
  * $progress->finish();
  * 
  * $out->outputText( "Successfully uploaded </tmp/foobar.tar.bz2>.\n", 'success' );
- *
  * </code>
  *  
  * 

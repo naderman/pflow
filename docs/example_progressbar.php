@@ -8,6 +8,8 @@
  * @license http://ez.no/licenses/new_bsd New BSD License
  */
 
+require_once "Base/trunk/src/base.php";
+
 /**
  * Autoload ezc classes 
  * 
@@ -15,14 +17,13 @@
  */
 function __autoload( $class_name )
 {
-    require_once "Base/trunk/src/base.php";
     ezcBase::autoload( $class_name );
 }
 
 $out = new ezcConsoleOutput();
 
 // Create progress bar itself
-$progress = new ezcConsoleProgressbar( $out, 100, 5 );
+$progress = new ezcConsoleProgressbar( $out, 100, array( 'step' => 5 ) );
 
 $progress->options->emptyChar = '-';
 $progress->options->progressChar = '#';
