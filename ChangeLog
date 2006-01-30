@@ -1,4 +1,4 @@
-1.0 - [RELEASEDATE]
+1.0 - Monday 30 January 2006
 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
 - Added HTML escaping of exception messages so that they show up correctly in 
