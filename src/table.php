@@ -66,7 +66,7 @@ class ezcConsoleTable implements Countable, Iterator, ArrayAccess
     const WRAP_AUTO = 1;
     /**
      * Do not wrap text. Columns will be extended to fit the largest text.
-     * ATTENTION: This is riscy!
+     * ATTENTION: This is risky!
      * @see ezcConsoleTable::$options
      */
     const WRAP_NONE = 2;
@@ -316,7 +316,7 @@ class ezcConsoleTable implements Countable, Iterator, ArrayAccess
 
     /**
      * Returns the currently selected cell.
-     * This method is part of the Iterator interface to allow acces to the 
+     * This method is part of the Iterator interface to allow access to the 
      * cells of this row by iterating over it like an array (e.g. using
      * foreach).
      * 
@@ -329,7 +329,7 @@ class ezcConsoleTable implements Countable, Iterator, ArrayAccess
 
     /**
      * Returns the key of the currently selected cell.
-     * This method is part of the Iterator interface to allow acces to the 
+     * This method is part of the Iterator interface to allow access to the 
      * cells of this row by iterating over it like an array (e.g. using
      * foreach).
      * 
@@ -342,7 +342,7 @@ class ezcConsoleTable implements Countable, Iterator, ArrayAccess
 
     /**
      * Returns the next cell and selects it or false on the last cell.
-     * This method is part of the Iterator interface to allow acces to the 
+     * This method is part of the Iterator interface to allow access to the 
      * cells of this row by iterating over it like an array (e.g. using
      * foreach).
      *
@@ -355,7 +355,7 @@ class ezcConsoleTable implements Countable, Iterator, ArrayAccess
 
     /**
      * Selects the very first cell and returns it.
-     * This method is part of the Iterator interface to allow acces to the 
+     * This method is part of the Iterator interface to allow access to the 
      * cells of this row by iterating over it like an array (e.g. using
      * foreach).
      *
@@ -368,7 +368,7 @@ class ezcConsoleTable implements Countable, Iterator, ArrayAccess
 
     /**
      * Returns if the current cell is valid.
-     * This method is part of the Iterator interface to allow acces to the 
+     * This method is part of the Iterator interface to allow access to the 
      * cells of this row by iterating over it like an array (e.g. using
      * foreach).
      *
@@ -536,11 +536,11 @@ class ezcConsoleTable implements Countable, Iterator, ArrayAccess
     }
 
     /**
-     * Determine the alignement of a cell.
-     * Walks the inheritance path upwards to determine the alignement of a 
-     * cell. Checks first, if the cell has it's own alignement (apart from 
+     * Determine the alignment of a cell.
+     * Walks the inheritance path upwards to determine the alignment of a 
+     * cell. Checks first, if the cell has it's own alignment (apart from 
      * ezcConsoleTable::ALIGN_DEFAULT). If not, checks the row for an 
-     * alignement setting and uses the default alignement if not found.
+     * alignment setting and uses the default alignment if not found.
      * 
      * @param ezcConsoleTableRow $row   The row this cell belongs to.
      * @param ezcConsoleTableCell $cell Index of the desired cell.

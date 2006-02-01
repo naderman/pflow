@@ -110,7 +110,7 @@
 class ezcConsoleInput
 {
     /**
-     * Option does not cary a value.
+     * Option does not carry a value.
      */
     const TYPE_NONE     = 1;
 
@@ -170,7 +170,7 @@ class ezcConsoleInput
 
     /**
      * Register a new option.
-     * This method adds a new option to your option collection. If allready a
+     * This method adds a new option to your option collection. If already a
      * option with the assigned short or long value exists, an exception will
      * be thrown.
      *
@@ -237,9 +237,9 @@ class ezcConsoleInput
     }
 
     /**
-     * Registeres options according to a string specification.
-     * Accepts a string like used in eZ publis 3.x to define parameters and
-     * registeres all parameters as options accordingly. String definitions look like
+     * Registers options according to a string specification.
+     * Accepts a string like used in eZ publish 3.x to define parameters and
+     * registers all parameters as options accordingly. String definitions look like
      * this:
      *
      * <code>
@@ -304,7 +304,7 @@ class ezcConsoleInput
     /**
      * Remove a option to be no more supported.
      * Using this function you will remove a option. All dependencies to that 
-     * specific option are removed completly from every other registered 
+     * specific option are removed completely from every other registered 
      * option.
      *
      * @see ezcConsoleInput::registerOption()
@@ -425,7 +425,7 @@ class ezcConsoleInput
      * gram name itself!)
      *
      * All exceptions thrown by this method contain an additional attribute "option"
-     * which specifies the parameter on which the error occured.
+     * which specifies the parameter on which the error occurred.
      * 
      * @param array(int=>string) $args The arguments
      * @return void
@@ -521,7 +521,7 @@ class ezcConsoleInput
      * Returns the values of all submitted options.
      * Returns an array of all values submitted to the options. The array is 
      * indexed by the parameters short name (excluding the '-' prefix). The array
-     * does not contain any parameter, whiches value is 'false' (meaning: the
+     * does not contain any parameter, which value is 'false' (meaning: the
      * parameter was not submitted).
      * 
      * @return array(string=>mixed)

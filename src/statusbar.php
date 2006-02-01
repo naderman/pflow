@@ -10,7 +10,7 @@
  */
 
 /**
- * Creating  and maintaining statusbars to be printed to the console. 
+ * Creating  and maintaining status-bars to be printed to the console. 
  *
  * <code>
  * // Construction
@@ -109,7 +109,7 @@ class ezcConsoleStatusbar
 
     /**
      * Set options.
-     * Set the options of the statusbar.
+     * Set the options of the status-bar.
      * 
      * @see ezcConsoleStatusbar::$options
      * 
@@ -179,7 +179,7 @@ class ezcConsoleStatusbar
 
     /**
      * Add a status to the status bar.
-     * Adds a new status to the bar which is printed immediatelly. If the
+     * Adds a new status to the bar which is printed immediately. If the
      * cursor is currently not at the beginning of a line, it will move to
      * the next line.
      *
@@ -206,7 +206,7 @@ class ezcConsoleStatusbar
     }
 
     /**
-     * Reset the state of the statusbar object to its initial one. 
+     * Reset the state of the status-bar object to its initial one. 
      * 
      * @return void
      */

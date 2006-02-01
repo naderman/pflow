@@ -10,7 +10,7 @@
  */
 
 /**
- * Creating and maintaining progressbars to be printed to the console. 
+ * Creating and maintaining progress-bars to be printed to the console. 
  *
  * <code>
  * $out = new ezcConsoleOutput();
@@ -78,7 +78,8 @@ class ezcConsoleProgressbar
     );
 
     /**
-     * One tima calculated measures.
+     * Stores the bar utilization.
+     *
      * This array saves how much space a specific part of the bar utilizes to not
      * recalculate those on every step.
      * 
@@ -144,7 +145,7 @@ class ezcConsoleProgressbar
 
     /**
      * Set options.
-     * Set the options of the progressbar.
+     * Set the options of the progress-bar.
      *
      * @see ezcConsoleProgressbarOptions
      * 
@@ -241,7 +242,7 @@ class ezcConsoleProgressbar
 
     /**
      * Start the progress bar
-     * Starts the progess bar and sticks it to the current line.
+     * Starts the progress bar and sticks it to the current line.
      * No output will be done yet. Call {@link ezcConsoleProgressbar::output()}
      * to print the bar.
      * 
@@ -256,7 +257,7 @@ class ezcConsoleProgressbar
 
     /**
      * Draw the progress bar.
-     * Prints the progressbar to the screen. If start() has not been called 
+     * Prints the progress-bar to the screen. If start() has not been called 
      * yet, the current line is used for {@link ezcConsolProgressbar::start()}.
      *
      * @return void

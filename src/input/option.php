@@ -24,7 +24,7 @@ class ezcConsoleOption {
 
     /**
      * Properties, which provide only read access.
-     * Stores the short and long name of a parameter which are readonly after 
+     * Stores the short and long name of a parameter which are read-only after 
      * being set once during construction.
      * 
      * @var array(string)
@@ -48,7 +48,7 @@ class ezcConsoleOption {
      * Default value if the parameter is submitted without value.
      * If a parameter is eg. of type ezcConsoleInput::TYPE_STRING and 
      * therefore expects a value when being submitted, it may be submitted
-     * without a value and automatically get the default value sepcified here.
+     * without a value and automatically get the default value specified here.
      * 
      * @var mixed
      */
@@ -62,14 +62,14 @@ class ezcConsoleOption {
     public $multiple = false;
     
     /**
-     * Short help text. Ususally displayed when showing parameter help overview.
+     * Short help text. Usually displayed when showing parameter help overview.
      * 
      * @var string
      */
     public $shorthelp = 'No help available.';
     
     /**
-     * Long help text. Ususally displayed when showing parameter detailed help.
+     * Long help text. Usually displayed when showing parameter detailed help.
      * 
      * @var string
      */
@@ -258,7 +258,7 @@ class ezcConsoleOption {
     }
     
     /**
-     * Remove all dependency rule refering to a parameter.
+     * Remove all dependency rule referring to a parameter.
      * This removes all dependency rules from a parameter, that refer to as specific 
      * parameter. If no rule is registered with this parameter as reference, the 
      * method call will simply be ignored.
@@ -368,7 +368,7 @@ class ezcConsoleOption {
     }
     
     /**
-     * Remove all exclusion rule refering to a parameter.
+     * Remove all exclusion rule referring to a parameter.
      * This removes all exclusion rules from a parameter, that refer to as specific 
      * parameter. If no rule is registered with this parameter as reference, the 
      * method call will simply be ignored.
@@ -440,7 +440,7 @@ class ezcConsoleOption {
     
     /**
      * Property read access.
-     * Provies read access to the properties of the object.
+     * Provides read access to the properties of the object.
      * 
      * @param string $key The name of the property.
      * @return mixed The value if property exists and isset, otherwise null.
@@ -480,8 +480,8 @@ class ezcConsoleOption {
     }
 
     /**
-     * Returns if a given name if valid for use as a parameter name a paremeter. 
-     * Checks if a given parameter name is generaly valid for use. It checks a)
+     * Returns if a given name if valid for use as a parameter name a parameter. 
+     * Checks if a given parameter name is generally valid for use. It checks a)
      * that the name does not start with '-' or '--' and b) if it contains
      * whitespaces. Note, that this method does not check any conflicts with already
      * used parameter names.

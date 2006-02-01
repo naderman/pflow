@@ -280,7 +280,7 @@ class ezcConsoleOutput
     /**
      * Print text to the console.
      *
-     * Output a string to the console. If $format parameter is ommited, 
+     * Output a string to the console. If $format parameter is omitted, 
      * the default style is chosen. Style can either be a special style
      * {@link eczConsoleOutput::$options}, a style name 
      * {@link ezcConsoleOutput$formats} or 'none' to print without any styling.
@@ -330,7 +330,7 @@ class ezcConsoleOutput
     /**
      * Returns a formated version of the text.
      *
-     * If $format parameter is omited, the default style is chosen. The format
+     * If $format parameter is omitted, the default style is chosen. The format
      * must be a valid registered format definition.  For information on the
      * formats, see {@link ezcConsoleOutput::$formats}.
      *

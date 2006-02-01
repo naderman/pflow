@@ -71,7 +71,7 @@ class ezcConsoleTableOptions
     protected $lineVertical = '-';
 
     /**
-     * Character to use for drawing hozizontal lines. 
+     * Character to use for drawing horizontal lines. 
      * 
      * @var string
      */

@@ -27,7 +27,7 @@ class ezcConsoleOutputOptions
     protected $verbosityLevel = 1;
 
     /**
-     * Determins, whether text is automatically wrapped after a specific amount
+     * Determines, whether text is automatically wrapped after a specific amount
      * of characters in a line. If set to 0 (default), lines will not be wrapped
      * automatically.
      * 
@@ -36,7 +36,7 @@ class ezcConsoleOutputOptions
     protected $autobreak = 0;
 
     /**
-     * Wether to use formatings or not. 
+     * Wether to use formatting or not. 
      * 
      * @var bool
      */
