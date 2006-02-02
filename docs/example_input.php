@@ -61,7 +61,7 @@ try
 {
      $optionHandler->process( array( 'example_input.php', '-h' ) );
 }
-catch ( ezcConsoleInputException $e )
+catch ( ezcConsoleOptionException $e )
 {
      if ( $e->getCode() === ezcConsoleInputException::PARAMETER_DEPENDENCY_RULE_NOT_MET )
      {
