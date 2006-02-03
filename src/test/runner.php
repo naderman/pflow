@@ -42,39 +42,142 @@ class ezcTestRunner extends PHPUnit2_TextUI_TestRunner
     public static function main()
     {
         $tr = new ezcTestRunner();
-        $tr->runFromArguments(  $_SERVER["argv"] );
+        $tr->runFromArguments();
     }
 
-    public function showHelp()
+    /** 
+     * Registers the consoleInput options and arguments.
+     *
+     * The options and arguments are registered in the given $consoleInput object.
+     *
+     * @param ezcConsoleInput $consoleInput
+     * @return void
+     */
+    protected static function registerConsoleArguments( $consoleInput )
     {
-        print ( "./runtests DSN [ [Suite name] file_name ]\n\n" );
-        print ( "We use this crappy commandline parsing until the ConsoleTools package is made.\n\n" );
+        // Help option
+        $help = new ezcConsoleOption( '', 'help', ezcConsoleInput::TYPE_NONE );
+        $help->shorthelp = "Show this help";
+        $consoleInput->registerOption( $help  );
+
+        $help = new ezcConsoleOption( 'r', 'release', ezcConsoleInput::TYPE_STRING );
+        $help->shorthelp = "The release from the svn. e.g: trunk, 1.0, 1.0rc1, etc. Default release is trunk.";
+        $consoleInput->registerOption( $help  );
+
+        // DSN option
+        $dsn = new ezcConsoleOption( 'D', 'dsn', ezcConsoleInput::TYPE_STRING );
+        $dsn->shorthelp = "Use the database specified with a DSN: type://user:password@host/database.";
+        $dsn->longhelp   = "An example to connect with the local MySQL database is:\n";
+        $dsn->longhelp  .= "mysql://root@mypass@localhost/unittests";
+        $consoleInput->registerOption( $dsn  );
+
+        // host 
+        $host = new ezcConsoleOption( 'h', 'host', ezcConsoleInput::TYPE_STRING );
+        $host->shorthelp = "Hostname of the database";
+        $consoleInput->registerOption( $host  );
+
+        // type 
+        $type = new ezcConsoleOption( 't', 'type', ezcConsoleInput::TYPE_STRING );
+        $type->shorthelp = "Type of the database: (mysql, postsql, oracle, etc).";
+        $consoleInput->registerOption( $type );
+
+        // user 
+        $user = new ezcConsoleOption( 'u', 'user', ezcConsoleInput::TYPE_STRING );
+        $user->shorthelp = "User to connect with the database.";
+        $consoleInput->registerOption( $user );
+
+        // password 
+        $password = new ezcConsoleOption( 'p', 'password', ezcConsoleInput::TYPE_STRING );
+        $password->shorthelp = "Password that belongs to the user that connect with the database.";
+        $consoleInput->registerOption( $password );
+
+        // database 
+        $database = new ezcConsoleOption( 'd', 'database', ezcConsoleInput::TYPE_STRING );
+        $database->shorthelp = "Database name.";
+        $consoleInput->registerOption( $database );
+
+        // Add relations, one for all.
+        $type->addDependency( new ezcConsoleOptionRule( $host ) );
+        $user->addDependency( new ezcConsoleOptionRule( $host ) );
+        $database->addDependency( new ezcConsoleOptionRule( $host ) );
+
+        // Add relations, all for one.
+        $host->addDependency( new ezcConsoleOptionRule( $type ) );
+        $host->addDependency( new ezcConsoleOptionRule( $user ) );
+        $host->addDependency( new ezcConsoleOptionRule( $database ) );
+
+        // And the password belongs to the user.
+        $password->addDependency( new ezcConsoleOptionRule( $user ) );
+
+        // Exclude DSN from the host parameters.
+        $host->addExclusion( new ezcConsoleOptionRule( $dsn ) );
     }
 
-    public function runFromArguments( $args )
+    protected static function processConsoleArguments( $consoleInput )
     {
-        if ( count( $args )  < 2 )
+        try
         {
-            $this->showHelp();
-            return;
+             $consoleInput->process();
+        }
+        catch ( ezcConsoleOptionException $e )
+        {
+            die ( $e->getMessage() );
+        }
+    }
+
+    protected static function displayHelp( $consoleInput )
+    {
+        echo ("runtests [OPTION...] [PACKAGE | FILE]\n\n" );
+        $options = $consoleInput->getOptions();
+
+        foreach ( $options as $option )
+        {
+            echo "-{$option->short}, --{$option->long}\t    {$option->shorthelp}\n";
         }
 
-        try 
+        echo "\n";
+    }
+
+    public function runFromArguments()
+    {
+        $consoleInput = new ezcConsoleInput();
+        self::registerConsoleArguments( $consoleInput );
+        self::processConsoleArguments( $consoleInput );
+
+        if( $consoleInput->getOption( "help" )->value )
         {
-            $this->initializeDatabase( $args[1] );
+            self::displayHelp( $consoleInput );
+            exit();
         }
-        catch ( Exception $e )
+
+        $args = $consoleInput->getArguments();
+
+        if( $consoleInput->getOption("dsn")->value || $consoleInput->getOption("host")->value )
         {
-            print( "Database initialization error: {$e->getMessage()}\n" );
-            return;
+            $dsn = $consoleInput->getOption("dsn")->value;
+            $type = $consoleInput->getOption("type")->value;
+            $user = $consoleInput->getOption("user")->value;
+            $password = $consoleInput->getOption("password")->value;
+            $host = $consoleInput->getOption("host")->value;
+            $database = $consoleInput->getOption("database")->value;
+
+            try 
+            {
+                $this->initializeDatabase( $dsn, $type, $user, $password, $host, $database );
+            }
+            catch ( Exception $e )
+            {
+                print( "Database initialization error: {$e->getMessage()}\n" );
+                return;
+            }
         }
         $this->printCredits();
 
         print( "[Preparing tests]:");
 
         // If a package is given, use that package, otherwise parse all directories.
-        $packages = isset( $args[2] ) ? $args[2] : false;
-        $allSuites = $this->prepareTests( $packages );
+        $packages = isset( $args[0] ) ? $args[0] : false;
+        $allSuites = $this->prepareTests( $packages, $consoleInput->getOption("release")->value );
 
         $this->doRun( $allSuites );
     }
@@ -87,7 +190,7 @@ class ezcTestRunner extends PHPUnit2_TextUI_TestRunner
         print( "ezcUnitTest uses the " . substr( $version, 0, $pos ) . "framework from Sebastian Bergmann.\n\n" );
     }
 
-    protected function prepareTests( $onePackage = false )
+    protected function prepareTests( $onePackage, $release )
     {
         $directory = dirname( __FILE__ ) . "/../../../../";
  
@@ -107,7 +210,7 @@ class ezcTestRunner extends PHPUnit2_TextUI_TestRunner
                 }
                 else
                 {
-                    echo "\n  Cannot load: $onePackage. \n";
+                    echo "\n Cannot load: $onePackage. \n";
                 }
             }
         }
@@ -115,18 +218,16 @@ class ezcTestRunner extends PHPUnit2_TextUI_TestRunner
         {
             $packages = $onePackage ? array( $onePackage ) : $this->getPackages( $directory );
 
+            // Set the release. Default is trunk. 
+            $release = ( $release == false || $release == "trunk" ? "trunk" : "releases/$release" );
+
             foreach ( $packages as $package )
             {
-                $releases = $this->getReleases( $directory, $package );
+                $suite = $this->getTestSuite( $directory, $package, $release );
 
-                foreach ( $releases as $release )
+                if ( !is_null( $suite ) )
                 {
-                    $suite = $this->getTestSuite( $directory, $package, $release );
-
-                    if ( !is_null( $suite ) )
-                    {
-                        $allSuites->addTest( $suite );
-                    }
+                    $allSuites->addTest( $suite );
                 }
             }
         }
@@ -203,6 +304,7 @@ class ezcTestRunner extends PHPUnit2_TextUI_TestRunner
         return true;
     }
 
+    // Not used anymore.
     protected function isRelease( $dir, $entry )
     {
         // for now, they have the same rules.
@@ -211,6 +313,7 @@ class ezcTestRunner extends PHPUnit2_TextUI_TestRunner
 
     /**
      * @return array Releases from a package.
+     * TODO: not used anymore.
      */
     protected function getReleases( $dir, $package )
     {
@@ -267,14 +370,26 @@ class ezcTestRunner extends PHPUnit2_TextUI_TestRunner
         return null;
     }
 
-    protected function initializeDatabase( $dsn )
+    protected function initializeDatabase( $dsn, $type, $user, $password, $host, $database )
     {
-        $settings = ezcDbFactory::parseDSN( $dsn );
-
-        // Store the settings
         $ts = ezcTestSettings::getInstance();
-        $ts->db->dsn = $dsn;
 
+        if( $dsn )
+        {
+            $settings = ezcDbFactory::parseDSN( $dsn );
+
+            // Store the settings
+            $ts->db->dsn = $dsn;
+        }
+        else
+        {
+            $settings = array( "type" => $type, 
+                               "user" => $user, 
+                               "password" => $password, 
+                               "host" => $host, 
+                               "database" => $database );
+        }
+    
         try
         {
             $ts->setDatabaseSettings( $settings );
@@ -283,17 +398,7 @@ class ezcTestRunner extends PHPUnit2_TextUI_TestRunner
         }
         catch ( ezcDbException $e)
         {
-            switch ( $e->getCode() )
-            {
-                case ezcDbException::MISSING_DATABASE_NAME: $this->printError( "The database name is missing." ); break;
-                case ezcDbException::MISSING_USER_NAME: $this->printError( "The username is missing." ); break;
-                case ezcDbException::MISSING_PASSWORD: $this->printError( "The password is missing." ); break;
-                case ezcDbException::UNKNOWN_IMPL: $this->printError( "Unknown database implementation. Make sure you specified an existing driver (mysql, pgsql, oci) and that your PHP version has the modules (php -m): PDO and pdo_<driver> (e.g. pdo_mysql, pdo_pgsql, etc)." ); break;
-                case ezcDbException::INSTANCE_NOT_FOUND: $this->printError( "Cannot find the db instance." ); break;
-                case ezcDbException::NOT_IMPLEMENTED: $this->printError( "The functionality is not implemented." ); break;
-                default: $this->getTraceAsString(); break;
-            }
-            exit();
+            die ($e->getMessage());
         }
 
         // TODO Check if the database exists, and whether it is empty.
