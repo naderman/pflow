@@ -10,10 +10,13 @@
  */
 
 /**
- * Class for handling input submitted to console based programs (meaning options and arguments) .
+ * The ezcConsoleInput class handles the given options and arguments on the console.
+ * 
  * This class allows the complete handling of options and arguments submitted
  * to a console based application.
  *
+ * The next example demonstrate how to capture the console options: 
+ * 
  * <code>
  * $optionHandler = new ezcConsoleInput();
  * 
@@ -115,7 +118,7 @@ class ezcConsoleInput
     const TYPE_NONE     = 1;
 
     /**
-     * Option takes an int value.
+     * Option takes an integer value.
      */
     const TYPE_INT      = 2;
 
@@ -126,57 +129,61 @@ class ezcConsoleInput
 
     /**
      * Array of option definitions, indexed by number.
+     *
      * This array stores the ezcConsoleOption objects representing
      * the options.
      *
-     * For lookup of a option after it's short or long values the attributes
+     * For lookup of an option after its short or long values the attributes
      * @link ezcConsoleInput::$optionShort
      * @link ezcConsoleInput::$optionLong
      * are used.
      * 
-     * @var array(int => array)
+     * @var array(int=>array)
      */
     private $options = array();
 
     /**
-     * Short option names. Each references a key in 
-     * {@link ezcConsoleInput::$options}.
+     * Short option names. 
+     *
+     * Each references a key in {@link ezcConsoleInput::$options}.
      * 
-     * @var array(string => int)
+     * @var array(string=>int)
      */
     private $optionShort = array();
 
     /**
-     * Long option names. Each references a key in 
-     * {@link ezcConsoleInput::$options}.
+     * Long option names. 
      * 
-     * @var array(string => int)
+     * Each references a key in {@link ezcConsoleInput::$options}.
+     * 
+     * @var array(string=>int)
      */
     private $optionLong = array();
 
     /**
      * Arguments, if submitted, are stored here. 
      * 
-     * @var array
+     * @var array(string)
      */
     private $arguments = array();
 
     /**
-     * Create input handler
+     * Creates an input handler.
      */
     public function __construct()
     {
     }
 
     /**
-     * Register a new option.
-     * This method adds a new option to your option collection. If already a
-     * option with the assigned short or long value exists, an exception will
-     * be thrown.
+     * Registers the new option $option.
+     *
+     * This method adds the new option $option to your option collection. If
+     * already an option with the assigned short or long value exists, an
+     * exception will be thrown.
      *
      * @see ezcConsoleInput::unregisterOption()
      *
-     * @param ezcConsoleOption $option The option to register.
+     * @param ezcConsoleOption $option
      *
      * @return ezcConsoleOption The recently registered option.
      */
@@ -203,15 +210,20 @@ class ezcConsoleInput
     }
 
     /**
-     * Register an alias to a option.
-     * Registers a new alias for an existing option. Aliases may
-     * then be used as if they were real option.
+     * Registers an alias for an option.
+     *
+     * Registers a new alias for an existing option. Aliases can
+     * be used as if they were a normal option.
+     *
+     * The alias is registered with the short option name $short and the
+     * long option name $long. The alias references to the existing 
+     * option $option.
      *
      * @see ezcConsoleInput::unregisterAlias()
      *
-     * @param string $short                    Shortcut of the alias
-     * @param string $long                     Long version of the alias
-     * @param ezcConsoleOption $option Reference to an existing option
+     * @param string $short
+     * @param string $long
+     * @param ezcConsoleOption $option
      *
      *
      * @throws ezcConsoleOptionNotExistsException
@@ -238,24 +250,25 @@ class ezcConsoleInput
 
     /**
      * Registers options according to a string specification.
-     * Accepts a string like used in eZ publish 3.x to define parameters and
-     * registers all parameters as options accordingly. String definitions look like
-     * this:
+     *
+     * Accepts a string to define parameters and registers all parameters as
+     * options accordingly. String definition, specified in $optionDef, looks
+     * like this:
      *
      * <code>
      * [s:|size:][u:|user:][a:|all:]
      * </code>
      *
-     * This string will result in 3 parameters:
+     * This string registers 3 parameters:
      * -s / --size
      * -u / --user
      * -a / --all
      *
-     * @param string $optionDef Option definition string.
+     * @param string $optionDef
      * @return void
      * 
      * @throws ezcConsoleOptionStringNotWellformedException 
-     *         If string provided is not wellformed.
+     *         If provided string does not have the correct format.
      */
     public function registerOptionString( $optionDef ) 
     {
@@ -302,8 +315,9 @@ class ezcConsoleInput
     }
 
     /**
-     * Remove a option to be no more supported.
-     * Using this function you will remove a option. All dependencies to that 
+     * Removes an option.
+     *
+     * This function removes an option. All dependencies to that 
      * specific option are removed completely from every other registered 
      * option.
      *
@@ -350,16 +364,18 @@ class ezcConsoleInput
     }
     
     /**
-     * Remove a alias to be no more supported.
-     * Using this function you will remove an alias.
+     * Removes an alias to an option.
+     *
+     * This function removes an alias with the short name $short and long
+     * name $long.
      *
      * @see ezcConsoleInput::registerAlias()
      * 
      * @throws ezcConsoleOptionNoAliasException
      *      If the requested short/long name belongs to a real parameter instead.
      *
-     * @param string $short Short name of the alias
-     * @param string $long  Long name of the alias.
+     * @param string $short
+     * @param string $long
      * @return void
      *
      * @todo Check if $short and $long refer to the same option!
@@ -390,12 +406,13 @@ class ezcConsoleInput
     }
 
     /**
-     * Returns the definition object for a specific option.
-     * This method receives the long or short name of a option and
+     * Returns the definition object for the option with the name $name.
+     *
+     * This method receives the long or short name of an option and
      * returns the ezcConsoleOption object.
      * 
-     * @param string $name Short or long name of the option (without - or --).
-     * @return ezcConsoleOption The requested option.
+     * @param string $name  Short or long name of the option (without - or --).
+     * @return ezcConsoleOption
      *
      * @throws ezcConsoleOptionNotExistsException 
      *         If requesting a not registered parameter.
@@ -416,6 +433,7 @@ class ezcConsoleInput
 
     /**
      * Process the input parameters.
+     *
      * Actually process the input options and arguments according to the actual 
      * settings.
      * 
@@ -439,7 +457,7 @@ class ezcConsoleInput
      * @throws ezcConsoleOptionTypeViolationException 
      *         If the type of a submitted value violates the options type rule.
      * @throws ezcConsoleOptionArgumentsViolationException 
-     *         If arguments are passed although a parameter dissallowed them.
+     *         If arguments are passed although a parameter disallowed them.
      *
      * @see ezcConsoleOptionException
      */ 
@@ -479,7 +497,8 @@ class ezcConsoleInput
     }
 
     /**
-     * Returns if an option with the given name exists.
+     * Returns true if an option with the given name exists, otherwise false.
+     *
      * Checks if an option with the given name is registered.
      * 
      * @param string $name Short or long name of the option.
@@ -500,6 +519,7 @@ class ezcConsoleInput
 
     /**
      * Returns an array of all registered options.
+     *
      * Returns an array of all registered options in the following format:
      * <code>
      * array( 
@@ -519,6 +539,7 @@ class ezcConsoleInput
 
     /**
      * Returns the values of all submitted options.
+     *
      * Returns an array of all values submitted to the options. The array is 
      * indexed by the parameters short name (excluding the '-' prefix). The array
      * does not contain any parameter, which value is 'false' (meaning: the
@@ -541,6 +562,7 @@ class ezcConsoleInput
 
     /**
      * Returns arguments provided to the program.
+     *
      * This method returns all arguments provided to a program in an
      * int indexed array. Arguments are sorted in the way
      * they are submitted to the program. You can disable arguments
@@ -561,8 +583,9 @@ class ezcConsoleInput
 
     /**
      * Get help information for your options.
+     *
      * This method returns an array of help information for your options,
-     * indexed by int. Each helo info has 2 fields:
+     * indexed by int. Each help info has 2 fields:
      *
      * 0 => The options names ("<short> / <long>")
      * 1 => The help text (depending on the $long parameter)
@@ -595,16 +618,16 @@ class ezcConsoleInput
     }
 
     /**
-     * Returns a synopsis string for the program.
+     * Returns the synopsis string for the program.
+     *
      * This gives you a synopsis definition for the options and arguments 
      * defined with this instance of ezcConsoleInput. You can filter the 
      * options named in the synopsis by submitting their short names in an
-     * array as the parameter of this method. If the parameter $options
-     * is set, only the option names listed in this array are listed in the
-     * synopsis.
+     * array as the parameter of this method. If the parameter $optionNames
+     * is set, only those options are listed in the synopsis. 
      * 
-     * @param array(int=>string) $optionNames Names of options to include.
-     * @return string The generated synopsis
+     * @param array(int=>string) $optionNames
+     * @return string
      */
     public function getSynopsis( array $optionNames = null )
     {
@@ -623,7 +646,8 @@ class ezcConsoleInput
     }
 
     /**
-     * Returns the synopsis string for a single option and it's dependencies.
+     * Returns the synopsis string for a single option and its dependencies.
+     *
      * This method returns a part of the program synopsis, specifically for a
      * certain parameter. The method recursively adds depending parameters up
      * to the 2nd depth level to the synopsis. The second parameter is used
@@ -691,6 +715,7 @@ class ezcConsoleInput
 
     /**
      * Process an option.
+     *
      * This method does the processing of a single option. 
      * 
      * @param array(int=>string) $args The arguments array.
@@ -779,9 +804,9 @@ class ezcConsoleInput
     /**
      * Check the rules that may be associated with an option.
      *
-     * Options are allowed to have rules associated for
-     * dependencies to other options and exclusion of other options or
-     * arguments. This method processes the checks.
+     * Options are allowed to have rules associated for dependencies to other
+     * options and exclusion of other options or arguments. This method
+     * processes the checks.
      *
      * @throws ezcConsoleOptionDependencyViolationException
      *         If a dependency was violated. 
@@ -883,9 +908,11 @@ class ezcConsoleInput
     }
 
     /**
-     * Split parameter and value for long option names. This method checks 
-     * for long options, if the value is passed using =. If this is the case
-     * parameter and value get split and replaced in the arguments array.
+     * Split parameter and value for long option names. 
+     * 
+     * This method checks for long options, if the value is passed using =. If
+     * this is the case parameter and value get split and replaced in the
+     * arguments array.
      * 
      * @param array(int=>string) $args The arguments array
      * @param int $i                   Current arguments array position
