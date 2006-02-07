@@ -974,6 +974,32 @@ class ezcConsoleToolsInputTest extends ezcTestCase
         );
     }
 
+    public function testInvalidOptionName_short()
+    {
+        try
+        {
+            $option = new ezcConsoleOption( ' ', 'help' );
+        }
+        catch ( ezcConsoleInvalidOptionNameException $e )
+        {
+            return;
+        }
+        $this->fail( 'Exception not thrown on invalid option name.' );
+    }
+    
+    public function testInvalidOptionName_long()
+    {
+        try
+        {
+            $option = new ezcConsoleOption( 'h', '--help' );
+        }
+        catch ( ezcConsoleInvalidOptionNameException $e )
+        {
+            return;
+        }
+        $this->fail( 'Exception not thrown on invalid option name.' );
+    }
+
     private function commonProcessTestSuccess( $args, $res )
     {
         try 

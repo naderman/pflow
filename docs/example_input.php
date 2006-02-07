@@ -63,12 +63,7 @@ try
 }
 catch ( ezcConsoleOptionException $e )
 {
-     if ( $e->getCode() === ezcConsoleInputException::PARAMETER_DEPENDENCY_RULE_NOT_MET )
-     {
-         $consoleOut->outputText(
-             'Parameter ' . isset( $e->param ) ? $e->param->name : 'unknown' . " may not occur here.\n", 'error'
-         );
-     }
+     echo $e->getMessage();
      exit( 1 );
 }
 

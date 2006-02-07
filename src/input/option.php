@@ -165,6 +165,9 @@ class ezcConsoleOption {
      * @param array(int=>ezcConsoleOptionRule) $exclusions   Exclusion rules.
      * @param bool $arguments   Whether supplying arguments is allowed when this parameter is set.
      * @param bool $mandatory   Whether the parameter must be always submitted.
+     *
+     * @throws ezcConsoleInvalidOptionNameException If the option names start with a "-" 
+     *                                              sign or contain whitespaces.
      */
     public function __construct( 
         $short, 
@@ -181,19 +184,13 @@ class ezcConsoleOption {
     ) {
         if ( !self::validateOptionName( $short ) )
         {
-            throw new ezcConsoleInputException(  
-                "Invalid parameter name: <$short>.",
-                ezcConsoleInputException::PARAMETER_NAME_INVALID 
-            );
+            throw new ezcConsoleInvalidOptionNameException( $short );
         }
         $this->properties['short'] = $short;
         
         if ( !self::validateOptionName( $long ) )
         {
-            throw new ezcConsoleInputException(  
-                "Invalid parameter name: <$long>.",
-                ezcConsoleInputException::PARAMETER_NAME_INVALID 
-            );
+            throw new ezcConsoleInvalidOptionNameException( $long );
         }
         $this->properties['long'] = $long;
         
