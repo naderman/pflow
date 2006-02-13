@@ -127,7 +127,7 @@ class ezcTestRunner extends PHPUnit2_TextUI_TestRunner
 
     protected static function displayHelp( $consoleInput )
     {
-        echo ("runtests [OPTION...] [PACKAGE | FILE]\n\n" );
+        echo ("runtests [OPTION...]  [PACKAGE | FILE] [PACKAGE | FILE] ... \n\n" );
         $options = $consoleInput->getOptions();
 
         foreach ( $options as $option )
@@ -149,8 +149,6 @@ class ezcTestRunner extends PHPUnit2_TextUI_TestRunner
             self::displayHelp( $consoleInput );
             exit();
         }
-
-        $args = $consoleInput->getArguments();
 
         if( $consoleInput->getOption("dsn")->value || $consoleInput->getOption("host")->value )
         {
@@ -175,9 +173,11 @@ class ezcTestRunner extends PHPUnit2_TextUI_TestRunner
 
         print( "[Preparing tests]:");
 
-        // If a package is given, use that package, otherwise parse all directories.
-        $packages = isset( $args[0] ) ? $args[0] : false;
-        $allSuites = $this->prepareTests( $packages, $consoleInput->getOption("release")->value );
+        // Set the release. Default is trunk. 
+        $release = $consoleInput->getOption("release")->value;
+        $release = ( $release == false || $release == "trunk" ? "trunk" : "releases/$release" );
+
+        $allSuites = $this->prepareTests( $consoleInput->getArguments(),  $release );
 
         $this->doRun( $allSuites );
     }
@@ -190,38 +190,38 @@ class ezcTestRunner extends PHPUnit2_TextUI_TestRunner
         print( "ezcUnitTest uses the " . substr( $version, 0, $pos ) . "framework from Sebastian Bergmann.\n\n" );
     }
 
-    protected function prepareTests( $onePackage, $release )
+    protected function prepareTests( $packages, $release )
     {
         $directory = dirname( __FILE__ ) . "/../../../../";
  
         $allSuites = new ezcTestSuite();
         $allSuites->setName( "[Testing]" );
 
-        if ( strpos( $onePackage, "/" ) !== false )
+        if( sizeof( $packages ) == 0 )
         {
-            if ( file_exists( $onePackage ) )
-            {
-                require_once( $onePackage );
-                $class = $this->getClassName( $onePackage );
+            $packages = $this->getPackages( $directory );
+        }
 
-                if ( $class !== false )
+        foreach( $packages as $package )
+        {
+            if ( strpos( $package, "/" ) !== false )
+            {
+                if ( file_exists( $package ) )
                 {
-                    $allSuites->addTest( call_user_func( array( $class, 'suite' ) ) );
-                }
-                else
-                {
-                    echo "\n Cannot load: $onePackage. \n";
+                    require_once( $package );
+                    $class = $this->getClassName( $package );
+
+                    if ( $class !== false )
+                    {
+                        $allSuites->addTest( call_user_func( array( $class, 'suite' ) ) );
+                    }
+                    else
+                    {
+                        echo "\n Cannot load: $package. \n";
+                    }
                 }
             }
-        }
-        else
-        {
-            $packages = $onePackage ? array( $onePackage ) : $this->getPackages( $directory );
-
-            // Set the release. Default is trunk. 
-            $release = ( $release == false || $release == "trunk" ? "trunk" : "releases/$release" );
-
-            foreach ( $packages as $package )
+            else 
             {
                 $suite = $this->getTestSuite( $directory, $package, $release );
 
