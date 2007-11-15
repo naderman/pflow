@@ -20,13 +20,13 @@
 class ezcReflectionClass extends ReflectionClass
 {
     /**
-    * @var ezcReflectionDocParser
-    */
+     * @var ezcReflectionDocParser
+     */
     protected $docParser;
 
     /**
-    * @param string $name
-    */
+     * @param string $name
+     */
     public function __construct($name) {
         try {
             parent::__construct($name);
@@ -39,16 +39,16 @@ class ezcReflectionClass extends ReflectionClass
     }
 
     /**
-    * @param string $name
-    * @return ezcReflectionMethod
-    */
+     * @param string $name
+     * @return ezcReflectionMethod
+     */
     public function getMethod($name) {
         return new ezcReflectionMethod($this->getName(), $name);
     }
 
     /**
-    * @return ezcReflectionMethod
-    */
+     * @return ezcReflectionMethod
+     */
     public function getConstructor() {
         $con = parent::getConstructor();
         if ($con != null) {
@@ -61,20 +61,27 @@ class ezcReflectionClass extends ReflectionClass
     }
 
     /**
-    * @return ezcReflectionMethod[]
-    */
-    public function getMethods() {
-        $extMethodes = array();
-        $methodes = parent::getMethods();
-        foreach ($methodes as $method) {
-            $extMethodes[] = new ezcReflectionMethod($this->getName(), $method->getName());
+     * @param integer $filter a combination of ReflectionMethod::IS_STATIC,
+     * ReflectionMethod::IS_PUBLIC, ReflectionMethod::IS_PROTECTED, ReflectionMethod::IS_PRIVATE,
+     * ReflectionMethod::IS_ABSTRACT and ReflectionMethod::IS_FINAL
+     * @return ezcReflectionMethod[]
+     */
+    public function getMethods($filter = 0) {
+        $extMethods = array();
+        if ($filter > 0) {
+            $methods = parent::getMethods($filter);
+        } else {
+            $methods = parent::getMethods();
         }
-        return $extMethodes;
+        foreach ($methods as $method) {
+            $extMethods[] = new ezcReflectionMethod($this->getName(), $method->getName());
+        }
+        return $extMethods;
     }
 
     /**
-    * @return ezcReflectionClassType
-    */
+     * @return ezcReflectionClassType
+     */
     public function getParentClass() {
         $class = parent::getParentClass();
         if (is_object($class)) {
@@ -86,20 +93,27 @@ class ezcReflectionClass extends ReflectionClass
     }
 
     /**
-    * @param string $name
-    * @return ezcReflectionProperty
-    * @throws RelectionException if property doesn't exists
-    */
+     * @param string $name
+     * @return ezcReflectionProperty
+     * @throws RelectionException if property doesn't exists
+     */
     public function getProperty($name) {
         $pro = parent::getProperty($name);
         return new ezcReflectionProperty($this->getName(), $name);
     }
 
     /**
-    * @return ezcReflectionProperty[]
-    */
-    public function getProperties() {
-        $props = parent::getProperties();
+     * @param integer $filter a combination of ReflectionProperty::IS_STATIC,
+     * ReflectionProperty::IS_PUBLIC, ReflectionProperty::IS_PROTECTED,
+     * ReflectionProperty::IS_PRIVATE
+     * @return ezcReflectionProperty[]
+     */
+    public function getProperties($filter = 0) {
+        if ($filter > 0) {
+            $props = parent::getProperties($filter);
+        } else {
+            $props = parent::getProperties();
+        }
         $extProps = array();
         foreach ($props as $prop) {
             $extProps[] = new ezcReflectionProperty($this->getName(),
@@ -109,39 +123,39 @@ class ezcReflectionClass extends ReflectionClass
     }
 
     /**
-    * Check whether this class has been tagged with @webservice
-    * @return boolean
-    */
+     * Check whether this class has been tagged with @webservice
+     * @return boolean
+     */
     public function isWebService() {
         return $this->docParser->isTagged("webservice");
     }
 
     /**
-    * @return string
-    */
+     * @return string
+     */
     public function getShortDescription() {
         return $this->docParser->getShortDescription();
     }
 
     /**
-    * @return string
-    */
+     * @return string
+     */
     public function getLongDescription() {
         return $this->docParser->getLongDescription();
     }
 
     /**
-    * @param string $with
-    * @return boolean
-    */
+     * @param string $with
+     * @return boolean
+     */
     public function isTagged($with) {
         return $this->docParser->isTagged($with);
     }
 
     /**
-    * @param string $name
-    * @return ezcReflectionDocTag[]
-    */
+     * @param string $name
+     * @return ezcReflectionDocTag[]
+     */
     public function getTags($name = '') {
         if ($name == '') {
             return $this->docParser->getTags();
@@ -152,8 +166,8 @@ class ezcReflectionClass extends ReflectionClass
     }
 
     /**
-    * @return ezcReflectionExtension
-    */
+     * @return ezcReflectionExtension
+     */
     public function getExtension() {
         $name = $this->getExtensionName();
         if (!empty($name)) {
