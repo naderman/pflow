@@ -10,18 +10,32 @@
 
 class ezcReflectionClassTest extends ezcTestCase
 {
+    /**
+     * @var ezcReflectionClass
+     */
+    protected $class;
+
+    public function setUp() {
+        $this->class = new ezcReflectionClass('ezcReflectionClass');
+    }
+
+    public function tearDown() {
+        unset($this->class);
+    }
+
+    public function testGetName() {
+        self::assertEquals($this->class->getName(), 'ezcReflectionClass');
+    }
 
     public function testGetMethod() {
-        $class = new ezcReflectionClass('ezcReflectionClass');
-        $method = $class->getMethod('getMethod');
+        $method = $this->class->getMethod('getMethod');
         self::assertType('ezcReflectionMethod', $method);
         self::assertEquals($method->getName(), 'getMethod');
     }
 
 
     public function testGetConstructor() {
-        $class = new ezcReflectionClass('ezcReflectionClass');
-        $method = $class->getConstructor();
+        $method = $this->class->getConstructor();
         self::assertType('ezcReflectionMethod', $method);
         self::assertEquals($method->getName(), '__construct');
     }
@@ -46,8 +60,7 @@ class ezcReflectionClassTest extends ezcTestCase
     }
 
     public function testGetParentClass() {
-        $class = new ezcReflectionClass('ezcReflectionClass');
-        $parent = $class->getParentClass();
+        $parent = $this->class->getParentClass();
 
         self::assertType('ReflectionClass', $parent);
         self::assertEquals($parent->getName(), 'ReflectionClass');
@@ -57,14 +70,13 @@ class ezcReflectionClassTest extends ezcTestCase
     }
 
     public function testGetProperty() {
-        $class = new ezcReflectionClass('ezcReflectionClass');
-        $prop = $class->getProperty('docParser');
+        $prop = $this->class->getProperty('docParser');
 
         self::assertType('ezcReflectionProperty', $prop);
         self::assertEquals('docParser', $prop->getName());
 
         try {
-            $prop = $class->getProperty('none-existing-property');
+            $prop = $this->class->getProperty('none-existing-property');
         }
         catch (ReflectionException $expected) {
             return;
@@ -88,8 +100,7 @@ class ezcReflectionClassTest extends ezcTestCase
     }
 
     public function testIsWebService() {
-        $class = new ezcReflectionClass('ezcReflectionClass');
-        self::assertFalse($class->isWebService());
+        self::assertFalse($this->class->isWebService());
 
         $class = new ezcReflectionClass('TestWebservice');
         self::assertTrue($class->isWebService());
@@ -111,8 +122,7 @@ class ezcReflectionClassTest extends ezcTestCase
     }
 
     public function testIsTagged() {
-        $class = new ezcReflectionClass('ezcReflectionClass');
-        self::assertFalse($class->isTagged('foobar'));
+        self::assertFalse($this->class->isTagged('foobar'));
 
         $class = new ezcReflectionClass('TestWebservice');
         self::assertTrue($class->isTagged('foobar'));
@@ -121,8 +131,7 @@ class ezcReflectionClassTest extends ezcTestCase
 
 
     public function testGetTags() {
-        $class = new ezcReflectionClass('ezcReflectionClass');
-        $tags = $class->getTags();
+        $tags = $this->class->getTags();
 
         $expectedTags = array('package', 'version', 'author', 'author');
         ReflectionTestHelper::expectedTags($expectedTags, $tags, $this);
