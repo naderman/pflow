@@ -25,34 +25,103 @@ class ezcReflectionClass extends ReflectionClass
     protected $docParser;
 
     /**
-     * @param string $name
+     * @var string|object|ReflectionClass
+     *      name, instance or ReflectionClass object of the class to be
+     *      reflected
      */
-    public function __construct($name) {
-        try {
-            parent::__construct($name);
+    protected $class;
+
+    /**
+     * @param string|object|ReflectionClass $argument
+     *        name, instance or ReflectionClass object of the class to be
+     *        reflected
+     */
+    public function __construct( $argument )
+    {
+        if ( !$argument instanceof ReflectionClass )
+        {
+            parent::__construct($argument);
         }
-        catch (Exception $e) {
-            return;
-        }
+        $this->class = $argument;
         $this->docParser = ezcReflectionApi::getDocParserInstance();
         $this->docParser->parse($this->getDocComment());
     }
-
+    
     /**
-     * @param string $name
-     * @return ezcReflectionMethod
+     * Use overloading to call additional methods
+     * of the reflection instance given to the constructor
+     *
+     * @param string $method Method to be called
+     * @param array<integer, mixed> $arguments Arguments that were passed
+     * @return mixed
      */
-    public function getMethod($name) {
-        return new ezcReflectionMethod($this->getName(), $name);
+    public function __call( $method, $arguments )
+    {
+        if ( !$this->class instanceof ReflectionClass )
+        {
+            // query external reflection object
+            return call_user_method( $this->class, $method, $arguments );
+        } else {
+            throw new Exception( 'Call to undefined method ' . __CLASS__ . '::' . $method );
+        }
     }
 
     /**
+     * Returns the name of the class.
+     *
+     * @return string Classname
+     */
+    public function getName() {
+        if ( $this->class instanceof ReflectionClass )
+        {
+            // query external reflection object
+            $name = $this->class->getName();
+        } else {
+            $name = parent::getName();
+        }
+        return $name;
+    }
+
+    /**
+     * Returns the doc comment for the class.
+     *
+     * @return string Doc comment
+     */
+    public function getDocComment() {
+        if ( $this->class instanceof ReflectionClass )
+        {
+            // query external reflection object
+            $comment = $this->class->getDocComment();
+        } else {
+            $comment = parent::getDocComment();
+        }
+        return $comment;
+    }
+
+    /**
+     * Returns an ezcReflectionMethod object of the method specified by $name.
+     *
+     * @param string $name Name of the method
+     * @return ezcReflectionMethod
+     */
+    public function getMethod($name) {
+        return new ezcReflectionMethod($this->class, $name);
+    }
+
+    /**
+     * Returns an ezcReflectionMethod object of the constructor method.
+     *
      * @return ezcReflectionMethod
      */
     public function getConstructor() {
-        $con = parent::getConstructor();
-        if ($con != null) {
-            $extCon = new ezcReflectionMethod($this->getName(), $con->getName());
+        if ($this->class instanceof ReflectionClass) {
+            // query external reflection object
+            $constructorName = $this->class->getConstructor();
+        } else {
+            $constructorName = parent::getConstructor();
+        }
+        if ($constructor != null) {
+            $extCon = new ezcReflectionMethod($this->class, $constructor->getName());
             return $extCon;
         }
         else {
@@ -61,9 +130,16 @@ class ezcReflectionClass extends ReflectionClass
     }
 
     /**
-     * @param integer $filter a combination of ReflectionMethod::IS_STATIC,
-     * ReflectionMethod::IS_PUBLIC, ReflectionMethod::IS_PROTECTED, ReflectionMethod::IS_PRIVATE,
-     * ReflectionMethod::IS_ABSTRACT and ReflectionMethod::IS_FINAL
+     * Returns the methods as an array of ezcReflectionMethod objects.
+     *
+     * @param integer $filter
+     *        A combination of
+     *        ReflectionMethod::IS_STATIC,
+     *        ReflectionMethod::IS_PUBLIC,
+     *        ReflectionMethod::IS_PROTECTED,
+     *        ReflectionMethod::IS_PRIVATE,
+     *        ReflectionMethod::IS_ABSTRACT and
+     *        ReflectionMethod::IS_FINAL
      * @return ezcReflectionMethod[]
      */
     public function getMethods($filter = 0) {
@@ -82,8 +158,16 @@ class ezcReflectionClass extends ReflectionClass
     /**
      * @return ezcReflectionClassType
      */
-    public function getParentClass() {
-        $class = parent::getParentClass();
+    public function getParentClass()
+    {
+        if ( $this->class instanceof ReflectionClass )
+        {
+            // query external reflection object
+            $parentClass = $this->class->getParentClass();
+        } else {
+            $parentClass = parent::getParentClass();
+        }
+        //TODO: continue work with external reflection object
         if (is_object($class)) {
             return new ezcReflectionClassType($class->getName());
         }
@@ -98,6 +182,7 @@ class ezcReflectionClass extends ReflectionClass
      * @throws RelectionException if property doesn't exists
      */
     public function getProperty($name) {
+        //FIXME: unused variable $pro
         $pro = parent::getProperty($name);
         return new ezcReflectionProperty($this->getName(), $name);
     }
