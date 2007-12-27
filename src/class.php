@@ -57,10 +57,10 @@ class ezcReflectionClass extends ReflectionClass
      */
     public function __call( $method, $arguments )
     {
-        if ( !$this->class instanceof ReflectionClass )
+        if ( $this->class instanceof ReflectionClass )
         {
             // query external reflection object
-            return call_user_method( $this->class, $method, $arguments );
+            return call_user_func_array( array($this->class, $method), $arguments );
         } else {
             throw new Exception( 'Call to undefined method ' . __CLASS__ . '::' . $method );
         }
@@ -116,9 +116,9 @@ class ezcReflectionClass extends ReflectionClass
     public function getConstructor() {
         if ($this->class instanceof ReflectionClass) {
             // query external reflection object
-            $constructorName = $this->class->getConstructor();
+            $constructor = $this->class->getConstructor();
         } else {
-            $constructorName = parent::getConstructor();
+            $constructor = parent::getConstructor();
         }
         if ($constructor != null) {
             $extCon = new ezcReflectionMethod($this->class, $constructor->getName());
@@ -167,9 +167,9 @@ class ezcReflectionClass extends ReflectionClass
         } else {
             $parentClass = parent::getParentClass();
         }
-        //TODO: continue work with external reflection object
-        if (is_object($class)) {
-            return new ezcReflectionClassType($class->getName());
+        
+        if (is_object($parentClass)) {
+            return new ezcReflectionClassType($parentClass->getName());
         }
         else {
             return null;
@@ -182,9 +182,22 @@ class ezcReflectionClass extends ReflectionClass
      * @throws RelectionException if property doesn't exists
      */
     public function getProperty($name) {
-        //FIXME: unused variable $pro
-        $pro = parent::getProperty($name);
-        return new ezcReflectionProperty($this->getName(), $name);
+		if ( $this->class instanceof ReflectionClass )
+        {
+            // query external reflection object
+            $prop = $this->class->getProperty($name);
+        } else {
+            $prop = parent::getProperty($name);
+        }
+        
+		if (is_object($prop)) {
+			return new ezcReflectionProperty($prop, $name);
+        }
+        else {
+			// TODO: may be we should throw an exception here
+            return null;
+        }
+        
     }
 
     /**

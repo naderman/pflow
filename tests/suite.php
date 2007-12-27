@@ -29,6 +29,7 @@ require_once 'test_classes/webservice.php';
 require_once 'test_classes/methods.php';
 require_once 'test_classes/methods2.php';
 require_once 'test_classes/functions.php';
+require_once 'test_classes/MyReflectionClass.php';
 
 /** Helper Lib */
 require_once 'test_helper.php';

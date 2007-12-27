@@ -26,6 +26,11 @@ class ezcReflectionClassTest extends ezcTestCase
     public function testGetName() {
         self::assertEquals($this->class->getName(), 'ezcReflectionClass');
     }
+	
+	public function testCall() {
+		$myRefClass = new ezcReflectionClass(new MyReflectionClass('MyReflectionClass'));
+		self::assertTrue($myRefClass->doSomeMetaProgramming());
+	}
 
     public function testGetMethod() {
         $method = $this->class->getMethod('getMethod');
