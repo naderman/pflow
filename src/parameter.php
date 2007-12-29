@@ -85,6 +85,18 @@
             return parent::isPassedByReference();
         }
     }
+	
+	/**
+    * @return bool
+    */
+    public function isArray() {
+        if ($this->parameter != null) {
+            return $this->parameter->isArray();
+        }
+        else {
+            return parent::isArray();
+        }
+    }
 
     /**
     * @return bool
@@ -107,6 +119,18 @@
         }
         else {
             return parent::getName();
+        }
+    }
+	
+	/**
+    * @return int
+    */
+    public function getPosition() {
+        if ($this->parameter != null) {
+            return $this->parameter->getPosition();
+        }
+        else {
+            return parent::getPosition();
         }
     }
 

@@ -25,6 +25,8 @@ require_once 'test_classes/methods.php';
 require_once 'test_classes/methods2.php';
 require_once 'test_classes/MyReflectionClass.php';
 require_once 'test_classes/webservice.php';
+require_once 'test_classes/BaseClass.php';
+require_once 'test_classes/SomeClass.php';
 
 require_once 'test_helper.php';
 

@@ -6,12 +6,14 @@
  * @author
  * @param string $test
  * @param ezcReflectionApi $test2
- * @param NoneExistingType $test3
+ * @param ReflectionClass $test3
  * @return string Hello World
  */
-function m1($test, $test2, $test3) {
+function m1($test, $test2, &$test3) {
     return 'Hello World';
 }
+
+function mmm($t = 'foo') {}
 
 /**
  * @param void $DocuFlaw

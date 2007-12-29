@@ -17,7 +17,7 @@ class ezcReflectionClassExternalTest extends ezcReflectionClassTest
 
     public function setUp()
     {
-        $this->class = new ezcReflectionClass( new ReflectionClass( 'ezcReflectionClass' ) );
+        $this->class = new ezcReflectionClass( new MyReflectionClass( 'SomeClass' ) );
     }
 
     public function tearDown()

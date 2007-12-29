@@ -37,19 +37,20 @@ class ezcReflectionMethod extends ReflectionMethod
     * @param string $name
     */
     public function __construct($class, $name) {
-        parent::__construct($class, $name);
-        $this->docParser = ezcReflectionApi::getDocParserInstance();
-        $this->docParser->parse($this->getDocComment());
-        
-        if ($class instanceof ReflectionClass) {
+		if ($class instanceof ReflectionClass) {
+			parent::__construct($class->getName(), $name);
             $this->curClass = $class;
         }
         elseif (is_string($class)) {
+			parent::__construct($class, $name);
             $this->curClass = new ReflectionClass($class);
         }
         else {
             $this->curClass = null;
         }
+		
+		$this->docParser = ezcReflectionApi::getDocParserInstance();
+        $this->docParser->parse($this->getDocComment());
     }
 
     /**

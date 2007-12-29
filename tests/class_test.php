@@ -16,7 +16,7 @@ class ezcReflectionClassTest extends ezcTestCase
     protected $class;
 
     public function setUp() {
-        $this->class = new ezcReflectionClass('ezcReflectionClass');
+        $this->class = new ezcReflectionClass('SomeClass');
     }
 
     public function tearDown() {
@@ -24,7 +24,7 @@ class ezcReflectionClassTest extends ezcTestCase
     }
 
     public function testGetName() {
-        self::assertEquals($this->class->getName(), 'ezcReflectionClass');
+        self::assertEquals('SomeClass', $this->class->getName());
     }
 	
 	public function testCall() {
@@ -33,11 +33,10 @@ class ezcReflectionClassTest extends ezcTestCase
 	}
 
     public function testGetMethod() {
-        $method = $this->class->getMethod('getMethod');
+        $method = $this->class->getMethod('helloWorld');
         self::assertType('ezcReflectionMethod', $method);
-        self::assertEquals($method->getName(), 'getMethod');
+        self::assertEquals($method->getName(), 'helloWorld');
     }
-
 
     public function testGetConstructor() {
         $method = $this->class->getConstructor();
@@ -67,18 +66,18 @@ class ezcReflectionClassTest extends ezcTestCase
     public function testGetParentClass() {
         $parent = $this->class->getParentClass();
 
-        self::assertType('ReflectionClass', $parent);
-        self::assertEquals($parent->getName(), 'ReflectionClass');
+        self::assertType('ezcReflectionClass', $parent);
+        self::assertEquals('BaseClass', $parent->getName());
 
         $parentParent = $parent->getParentClass();
         self::assertNull($parentParent);
     }
 
     public function testGetProperty() {
-        $prop = $this->class->getProperty('docParser');
+        $prop = $this->class->getProperty('fields');
 
         self::assertType('ezcReflectionProperty', $prop);
-        self::assertEquals('docParser', $prop->getName());
+        self::assertEquals('fields', $prop->getName());
 
         try {
             $prop = $this->class->getProperty('none-existing-property');
@@ -138,7 +137,7 @@ class ezcReflectionClassTest extends ezcTestCase
     public function testGetTags() {
         $tags = $this->class->getTags();
 
-        $expectedTags = array('package', 'version', 'author', 'author');
+        $expectedTags = array('licence', 'donotdocument', 'testclass', 'ignore');
         ReflectionTestHelper::expectedTags($expectedTags, $tags, $this);
 
         $expectedTags = array('webservice', 'foobar');

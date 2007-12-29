@@ -190,14 +190,12 @@ class ezcReflectionClass extends ReflectionClass
             $prop = parent::getProperty($name);
         }
         
-		if (is_object($prop)) {
+		if (is_object($prop) && !($prop instanceof ezcReflectionProperty)) {
 			return new ezcReflectionProperty($prop, $name);
-        }
-        else {
+        } else {
 			// TODO: may be we should throw an exception here
-            return null;
+            return $prop;
         }
-        
     }
 
     /**

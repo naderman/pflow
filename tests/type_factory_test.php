@@ -40,15 +40,18 @@ class ezcReflectionTypeFactoryTest extends ezcTestCase
 
     /**
      * Test with class types
+	 * @expectedException ReflectionException
      */
     public function testGetTypeClass() {
-        $classes = array('ReflectionClass', 'NoneExistingClassFooBarr', 'ezcTestClass');
+        $classes = array('ReflectionClass', 'ezcTestClass');
         $factory = new ezcReflectionTypeFactoryImpl();
         foreach ($classes as $class) {
         	$type = $factory->getType($class);
         	self::assertType('ezcReflectionType', $type);
             self::assertType('ezcReflectionClassType', $type);
         }
+		
+		$type = $factory->getType('NoneExistingClass');
     }
 
 

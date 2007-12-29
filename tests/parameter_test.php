@@ -51,21 +51,95 @@ class ezcReflectionParameterTest extends ezcTestCase
     public function testGetDeclaringFunction() {
         $func = new ezcReflectionFunction('m1');
         $params = $func->getParameters();
-        //$decFunc = $params[0]->getDeclaringFunction();
-
-        //TODO: implement, why is this function is missing on win32 5.1.5??
-        self::markTestSkipped();
+        
+		$decFunc = $params[0]->getDeclaringFunction();
+		self::assertTrue($decFunc instanceof ezcReflectionFunction);
+        self::assertEquals('m1', $decFunc->getName());
     }
 
     public function testGetDeclaringClass() {
         $method = new ezcReflectionMethod('TestMethods', 'm3');
         $params = $method->getParameters();
 
-        //$params[0]->getDeclaringClass();
-        //TODO: implement, why is this function is missing on win32 5.1.5??
-        self::markTestSkipped();
+        $class = $params[0]->getDeclaringClass();
+		self::assertTrue($class instanceof ezcReflectionClass);
+        self::assertEquals('TestMethods', $class->getName());
     }
+    
+    public function testGetName() {
+		$func = new ezcReflectionFunction('m1');
+        $params = $func->getParameters();
+		self::assertEquals('test', $params[0]->getName());
+	}
 
+    public function testIsPassedByReference() {
+		$func = new ezcReflectionFunction('m1');
+        $params = $func->getParameters();
+		self::assertFalse($params[0]->isPassedByReference());
+		self::assertTrue($params[2]->isPassedByReference());
+	}
+	
+    public function testIsArray() {
+		$func = new ezcReflectionFunction('m1');
+        $params = $func->getParameters();
+		self::assertFalse($params[0]->isArray());
+	}
+	
+    public function testAllowsNull() {
+		$func = new ezcReflectionFunction('m1');
+        $params = $func->getParameters();
+		self::assertTrue($params[0]->allowsNull());
+	}
+	
+    public function isOptional() {
+		$func = new ezcReflectionFunction('mmm');
+		$param = $func->getParameter('t');
+		self::assertTrue($param->isOptional());
+		
+		$func = new ezcReflectionFunction('m1');
+		$param = $func->getParameter('test');
+		self::assertFalse($param->isOptional());
+	}
+	
+	public function testIsDefaultValueAvailable() {
+		$func = new ezcReflectionFunction('mmm');
+		$param = $func->getParameters();
+		$param = $param[0];
+		self::assertTrue($param->isDefaultValueAvailable());
+		
+		$func = new ezcReflectionFunction('m1');
+		$param = $func->getParameters();
+		$param = $param[0];
+		self::assertFalse($param->isDefaultValueAvailable());
+	}
+	
+	/**
+	* @expectedException ReflectionException
+	*/
+	public function testGetDefaultValue() {
+		$func = new ezcReflectionFunction('mmm');
+		$param = $func->getParameters();
+		$param = $param[0];
+		self::assertEquals('foo', $param->getDefaultValue());
+		
+		$func = new ezcReflectionFunction('m1');
+		$param = $func->getParameters();
+		$param = $param[0];
+		self::assertEquals(null, $param->getDefaultValue()); //should throw exception
+	}
+	
+	public function testGetPosition() {
+		$func = new ezcReflectionFunction('mmm');
+		$param = $func->getParameters();
+		$param = $param[0];
+		self::assertEquals(0, $param->getPosition());
+		
+		$func = new ezcReflectionFunction('m1');
+		$param = $func->getParameters();
+		$param = $param[1];
+		self::assertEquals(1, $param->getPosition());
+	}
+	
     public static function suite()
     {
          return new PHPUnit_Framework_TestSuite( "ezcReflectionParameterTest" );

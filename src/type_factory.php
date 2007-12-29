@@ -44,7 +44,7 @@ class ezcReflectionTypeFactoryImpl implements ezcReflectionTypeFactory {
             return new ezcReflectionArrayType($typeName);
         }
         //else it has to be a user class
-        else {
+		else {
             return new ezcReflectionClassType($typeName);
         }
     }
