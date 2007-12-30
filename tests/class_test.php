@@ -26,11 +26,6 @@ class ezcReflectionClassTest extends ezcTestCase
     public function testGetName() {
         self::assertEquals('SomeClass', $this->class->getName());
     }
-	
-	public function testCall() {
-		$myRefClass = new ezcReflectionClass(new MyReflectionClass('MyReflectionClass'));
-		self::assertTrue($myRefClass->doSomeMetaProgramming());
-	}
 
     public function testGetMethod() {
         $method = $this->class->getMethod('helloWorld');
@@ -43,7 +38,14 @@ class ezcReflectionClassTest extends ezcTestCase
         self::assertType('ezcReflectionMethod', $method);
         self::assertEquals($method->getName(), '__construct');
     }
+    
+	public function testGetInterfaces() {
+        $ifaces = $this->class->getInterfaces();
 
+        self::assertType('ezcReflectionClass', $ifaces[0]);
+        self::assertEquals('IInterface', $ifaces[0]->getName());
+        self::assertEquals(1, count($ifaces));
+    }
 
     public function testGetMethods() {
         $class = new ezcReflectionClass('TestWebservice');

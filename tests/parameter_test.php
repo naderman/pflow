@@ -91,13 +91,15 @@ class ezcReflectionParameterTest extends ezcTestCase
 		self::assertTrue($params[0]->allowsNull());
 	}
 	
-    public function isOptional() {
+    public function testIsOptional() {
 		$func = new ezcReflectionFunction('mmm');
-		$param = $func->getParameter('t');
+		$param = $func->getParameters();
+		$param = $param[0];
 		self::assertTrue($param->isOptional());
 		
 		$func = new ezcReflectionFunction('m1');
-		$param = $func->getParameter('test');
+		$param = $func->getParameters();
+		$param = $param[0];
 		self::assertFalse($param->isOptional());
 	}
 	

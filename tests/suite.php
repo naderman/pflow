@@ -9,7 +9,7 @@
 
 require_once 'class_test.php';
 require_once 'class_external_test.php';
-require_once 'extended_reflection_test.php';
+require_once 'reflection_test.php';
 require_once 'extension_test.php';
 require_once 'function_test.php';
 require_once 'method_test.php';
@@ -25,6 +25,7 @@ require_once 'test_classes/methods.php';
 require_once 'test_classes/methods2.php';
 require_once 'test_classes/MyReflectionClass.php';
 require_once 'test_classes/webservice.php';
+require_once 'test_classes/interface.php';
 require_once 'test_classes/BaseClass.php';
 require_once 'test_classes/SomeClass.php';
 

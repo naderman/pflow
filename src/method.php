@@ -31,12 +31,17 @@ class ezcReflectionMethod extends ReflectionMethod
      * @var ReflectionClass
      */
     protected $curClass;
+    
+    /**
+     * @var ReflectionMethod
+     */
+    protected $reflectionSource = null;
 
     /**
-    * @param mixed $class
-    * @param string $name
+    * @param mixed $classOrSource name of class, ReflectionClass, or ReflectionMethod
+    * @param string $name Optional if $classOrSource is instance of ReflectionMethod
     */
-    public function __construct($class, $name) {
+    public function __construct($classOrSource, $name = null) {
 		if ($class instanceof ReflectionClass) {
 			parent::__construct($class->getName(), $name);
             $this->curClass = $class;
@@ -206,6 +211,23 @@ class ezcReflectionMethod extends ReflectionMethod
 		else {
 		    return null;
 		}
+    }
+    
+    /**
+     * Use overloading to call additional methods
+     * of the reflection instance given to the constructor
+     *
+     * @param string $method Method to be called
+     * @param array(integer => mixed) $arguments Arguments that were passed
+     * @return mixed
+     */
+    public function __call( $method, $arguments )
+    {
+        if ( $this->reflectionSource ) {
+            return call_user_func_array( array($this->reflectionSource, $method), $arguments );
+        } else {
+            throw new Exception( 'Call to undefined method ' . __CLASS__ . '::' . $method );
+        }
     }
 }
 ?>

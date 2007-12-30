@@ -194,6 +194,23 @@ class ezcReflectionProperty extends ReflectionProperty {
             parent::setValue($object, $value);
         }
     }
+    
+	/**
+     * Use overloading to call additional methods
+     * of the reflection instance given to the constructor
+     *
+     * @param string $method Method to be called
+     * @param array(integer => mixed) $arguments Arguments that were passed
+     * @return mixed
+     */
+    public function __call( $method, $arguments )
+    {
+        if ( $this->reflectionSource ) {
+            return call_user_func_array( array($this->reflectionSource, $method), $arguments );
+        } else {
+            throw new Exception( 'Call to undefined method ' . __CLASS__ . '::' . $method );
+        }
+    }
 	
 }
 ?>

@@ -120,11 +120,10 @@ class ezcReflectionClass extends ReflectionClass
         } else {
             $constructor = parent::getConstructor();
         }
+        
         if ($constructor != null) {
-            $extCon = new ezcReflectionMethod($this->class, $constructor->getName());
-            return $extCon;
-        }
-        else {
+            return new ezcReflectionMethod($constructor);
+        } else {
             return null;
         }
     }
@@ -153,6 +152,24 @@ class ezcReflectionClass extends ReflectionClass
             $extMethods[] = new ezcReflectionMethod($this->getName(), $method->getName());
         }
         return $extMethods;
+    }
+    
+    /**
+     * Returns an array of all interfaces implemented by the class.
+     * @return ezcReflectionClass[]
+     */
+    public function getInterfaces() {
+    	if ( $this->class instanceof ReflectionClass ) {
+    		$ifaces = $this->class->getInterfaces();
+    	} else {
+    		$ifaces = parent::getInterfaces();
+    	}
+    	
+    	$result = array();
+    	foreach ($ifaces as $i) {
+    		$result[] = new ezcReflectionClassType($i);
+    	}
+    	return $result;
     }
 
     /**
@@ -204,16 +221,16 @@ class ezcReflectionClass extends ReflectionClass
      * ReflectionProperty::IS_PRIVATE
      * @return ezcReflectionProperty[]
      */
-    public function getProperties($filter = 0) {
-        if ($filter > 0) {
-            $props = parent::getProperties($filter);
+    public function getProperties($filter = null) {
+        if ( $this->reflectionSource ) {
+        	$props = $this->reflectionSource->getProperties($filter);
         } else {
-            $props = parent::getProperties();
+        	$props = parent::getProperties($filter);
         }
+        
         $extProps = array();
         foreach ($props as $prop) {
-            $extProps[] = new ezcReflectionProperty($this->getName(),
-                                                    $prop->getName());
+            $extProps[] = new ezcReflectionProperty( $prop );
         }
         return $extProps;
     }
@@ -265,11 +282,15 @@ class ezcReflectionClass extends ReflectionClass
      * @return ezcReflectionExtension
      */
     public function getExtension() {
-        $name = $this->getExtensionName();
-        if (!empty($name)) {
-            return new ezcReflectionExtension($name);
-        }
-        else {
+    	if ( $this->class instanceof ReflectionClass ) {
+    		$ext = $this->class->getExtension();
+    	} else {
+    		$ext = parent::getExtension();
+    	}
+    	
+        if ($ext) {
+            return new ezcReflectionExtension($ext);
+        } else {
             return null;
         }
     }

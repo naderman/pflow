@@ -5,7 +5,7 @@
 * @testclass
 * @ignore
 */
-class SomeClass extends BaseClass {
+class SomeClass extends BaseClass implements IInterface {
 
 	/**
 	* @var int[]
