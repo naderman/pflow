@@ -22,12 +22,23 @@ class ezcReflectionFunction extends ReflectionFunction
     * @var ezcReflectionDocParser
     */
     protected $docParser;
+    
+    /**
+     * ReflectionFunction object or name used to initialize this object
+     *
+     * @var string|ReflectionFunction
+     */
+    protected $reflectionSource;
 
     /**
     * @param string $name
     */
     public function __construct($name) {
-        parent::__construct($name);
+    	if ( !$name instanceof ReflectionFunction ) {
+        	parent::__construct($name);
+    	}
+    	$this->reflectionSource = $name;
+    	
         $this->docParser = ezcReflectionApi::getDocParserInstance();
         $this->docParser->parse($this->getDocComment());
     }
@@ -121,6 +132,14 @@ class ezcReflectionFunction extends ReflectionFunction
         else {
             return $this->docParser->getTagsByName($name);
         }
+    }
+    
+    public function isDisabled() {
+    	if ($this->reflectionSource instanceof ReflectionFunction ) {
+    		return $this->reflectionSource->isDisabled();
+    	} else {
+    		return parent::isDisabled();
+    	}
     }
 }
 ?>

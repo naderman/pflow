@@ -24,7 +24,7 @@ function m2() {
 }
 
 function m3() {
-
+	static $staticVar;
 }
 
 /**

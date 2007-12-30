@@ -176,7 +176,7 @@ class ezcReflectionProperty extends ReflectionProperty {
 	/**
      * @return mixed
      */
-    public function getValue($object) {
+    public function getValue($object = null) {
         if ( $this->reflectionSource instanceof ReflectionProperty ) {
             return $this->reflectionSource->getValue($object);
         } else {
@@ -187,7 +187,7 @@ class ezcReflectionProperty extends ReflectionProperty {
 	/**
 	 * @param mixed $value
      */
-    public function setValue($object, $value) {
+    public function setValue($object = null, $value) {
         if ( $this->reflectionSource instanceof ReflectionProperty ) {
             $this->reflectionSource->setValue($object, $value);
         } else {

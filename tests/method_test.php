@@ -8,20 +8,30 @@
  * @subpackage Tests
  */
 
-class ezcReflectionMethodTest extends ezcTestCase
+class ezcReflectionMethodTest extends ezcReflectionFunctionTest 
 {
+	public function setUp() {
+        $this->fctM1 = new ezcReflectionMethod('TestMethods', 'm1');
+        $this->fctM2 = new ezcReflectionMethod('TestMethods', 'm2');
+        $this->fctM3 = new ezcReflectionMethod('TestMethods', 'm3');
+    }
+
+    public function tearDown() {
+        unset($this->fctM1);
+        unset($this->fctM2);
+        unset($this->fctM3);
+    }
+	
     public function testGetDeclaringClass() {
-        $method = new ezcReflectionMethod('TestMethods', 'm1');
-        $class = $method->getDeclaringClass();
+        $class = $this->fctM1->getDeclaringClass();
         self::assertType('ezcReflectionClassType', $class);
         self::assertEquals('TestMethods', $class->getName());
     }
 
     public function testIsMagic() {
-        $method = new ezcReflectionMethod('TestMethods', 'm1');
-        self::assertFalse($method->isMagic());
+        self::assertFalse($this->fctM1->isMagic());
 
-        $class = $method->getDeclaringClass();
+        $class = $this->fctM1->getDeclaringClass();
         self::assertTrue($class->getConstructor()->isMagic());
     }
 
@@ -54,24 +64,21 @@ class ezcReflectionMethodTest extends ezcTestCase
     }
 
     public function testGetLongDescription() {
-        $method = new ezcReflectionMethod('TestMethods', 'm3');
-        $desc = $method->getLongDescription();
+        $desc = $this->fctM3->getLongDescription();
 
         $expected = "This is the long description with may be additional infos and much more lines\nof text.\n\nEmpty lines are valide to.\n\nfoo bar";
         self::assertEquals($expected, $desc);
     }
 
     public function testGetShortDescription() {
-        $method = new ezcReflectionMethod('TestMethods', 'm3');
-        $desc = $method->getShortDescription();
+        $desc = $this->fctM3->getShortDescription();
 
         $expected = "This is the short description";
         self::assertEquals($expected, $desc);
     }
 
     public function testIsWebmethod() {
-        $method = new ezcReflectionMethod('TestMethods', 'm3');
-        self::assertFalse($method->isWebmethod());
+        self::assertFalse($this->fctM3->isWebmethod());
         $method = new ezcReflectionMethod('TestMethods', 'm4');
         self::assertTrue($method->isWebmethod());
     }
@@ -145,7 +152,86 @@ class ezcReflectionMethodTest extends ezcTestCase
         $method = new ezcReflectionMethod('TestMethods2', 'm4');
         self::assertFalse($method->isIntroduced());
     }
-
+    
+	public function testIsDisabled() {
+    	// is not available for methods
+    }
+    
+	public function testGetFileName() {
+    	self::assertEquals('methods.php', basename($this->fctM1->getFileName()));
+    }
+    
+    public function testGetStartLine() {
+    	self::assertEquals(16, $this->fctM1->getStartLine());
+    }
+    
+    public function testGetEndLine() {
+    	self::assertEquals(18, $this->fctM1->getEndLine());
+    }
+    
+	public function testGetDocComment() {
+    	self::assertEquals("/**
+     * @foo
+     * @bar
+     * @foobar
+     */", $this->fctM2->getDocComment());
+    }
+    
+	public function testGetNumberOfParameters() {
+    	self::assertEquals(1, $this->fctM3->getNumberOfParameters());
+    	self::assertEquals(0, $this->fctM1->getNumberOfParameters());
+    }
+    
+    public function testGetNumberOfRequiredParameters() {
+    	self::assertEquals(0, $this->fctM1->getNumberOfRequiredParameters());
+    	self::assertEquals(1, $this->fctM3->getNumberOfRequiredParameters());
+    }
+    
+    public function testIsFinal() {
+    	self::assertFalse($this->fctM1->isFinal());
+    	self::assertFalse($this->fctM2->isFinal());
+    }
+    
+	public function testIsAbstract() {
+    	self::assertFalse($this->fctM1->isAbstract());
+    	self::assertFalse($this->fctM2->isAbstract());
+    }
+    
+	public function testIsPublic() {
+    	self::assertTrue($this->fctM1->isPublic());
+    	self::assertTrue($this->fctM2->isPublic());
+    }
+    
+	public function testIsPrivate() {
+    	self::assertFalse($this->fctM1->isPrivate());
+    	self::assertFalse($this->fctM2->isPrivate());
+    }
+    
+	public function testIsProtected() {
+    	self::assertFalse($this->fctM1->isProtected());
+    	self::assertFalse($this->fctM2->isProtected());
+    }
+    
+	public function testIsStatic() {
+    	self::assertFalse($this->fctM1->isStatic());
+    	self::assertFalse($this->fctM2->isStatic());
+    }
+    
+	public function testIsConstructor() {
+    	self::assertFalse($this->fctM1->isConstructor());
+    	self::assertFalse($this->fctM2->isConstructor());
+    }
+    
+	public function testIsDestructor() {
+    	self::assertFalse($this->fctM1->isDestructor());
+    	self::assertFalse($this->fctM2->isDestructor());
+    }
+    
+	public function testGetModifiers() {
+    	self::assertEquals(65792, $this->fctM1->getModifiers());
+    	self::assertEquals(65792, $this->fctM2->getModifiers());
+    }
+    
     public static function suite()
     {
          return new PHPUnit_Framework_TestSuite( "ezcReflectionMethodTest" );

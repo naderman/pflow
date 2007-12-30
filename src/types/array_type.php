@@ -52,7 +52,7 @@ class ezcReflectionArrayType extends ezcReflectionAbstractType {
      * Returns type of array items or null
      * @return ezcReflectionType
      */
-    public function getezcReflectionArrayType()
+    public function getArrayType()
     {
         return $this->arrayType;
     }
@@ -118,13 +118,13 @@ class ezcReflectionArrayType extends ezcReflectionAbstractType {
             if ($posm !== false) {
                 if ($posm < $pos) {
                     $typeName = substr($this->typeName, 0, $pos);
-                    $this->ezcReflectionArrayType
+                    $this->arrayType
                        = ezcReflectionApi::getTypeByName($typeName);
                 }
             }
             else {
                 $typeName = substr($this->typeName, 0, $pos);
-                $this->ezcReflectionArrayType
+                $this->arrayType
                    = ezcReflectionApi::getTypeByName($typeName);
             }
         }
@@ -139,10 +139,10 @@ class ezcReflectionArrayType extends ezcReflectionAbstractType {
             }
 
             if ($type1 == null and $type2 != null) {
-                $this->ezcReflectionArrayType = $type2;
+                $this->arrayType = $type2;
             }
             elseif ($type1 != null and $type2 == null) {
-                $this->ezcReflectionArrayType = $type1;
+                $this->arrayType = $type1;
             }
             elseif ($type1 != null and $type2 != null) {
                 $this->mapKeyType = $type1;
@@ -158,7 +158,7 @@ class ezcReflectionArrayType extends ezcReflectionAbstractType {
     public function toString()
     {
         if ($this->isArray()) {
-            return $this->ezcReflectionArrayType->toString().'[]';
+            return $this->arrayType->toString().'[]';
         }
         else if ($this->isMap()) {
             return 'array<'.$this->mapKeyType->toString()
@@ -191,7 +191,7 @@ class ezcReflectionArrayType extends ezcReflectionAbstractType {
             $prefix = '';
         }
         if ($this->isArray()) {
-            return $prefix . 'ArrayOf'.$this->ezcReflectionArrayType->getXmlName(false);
+            return $prefix . 'ArrayOf'.$this->arrayType->getXmlName(false);
         }
         elseif ($this->isMap()) {
             throw new Exception('XML Schema mapping is not supported for map-types');
@@ -240,8 +240,8 @@ class ezcReflectionArrayType extends ezcReflectionAbstractType {
         $elm->setAttribute('maxOccurs', 'unbounded');
         $elm->setAttribute('nillable', 'true');
 
-        $elm->setAttribute('name', $this->ezcReflectionArrayType->getXmlName(false));
-        $elm->setAttribute('type', $this->ezcReflectionArrayType->getXmlName(true));
+        $elm->setAttribute('name', $this->arrayType->getXmlName(false));
+        $elm->setAttribute('type', $this->arrayType->getXmlName(true));
 
         return $schema;
     }

@@ -27,7 +27,7 @@ class ezcReflectionPropertyTest extends ezcTestCase
     public function testGetType() {
         $type = $this->refProp->getType();
         self::assertType('ezcReflectionArrayType', $type);
-        self::assertEquals('int[]', $type->toString());
+        self::assertEquals('integer[]', $type->toString());
     }
 
     public function testGetDeclaringClass() {
