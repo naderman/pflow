@@ -6,6 +6,10 @@ class MyReflectionClass extends ReflectionClass {
 	{
 		return true;
 	}
+	
+	public function change() {
+		return true;
+	}
 }
 
 ?>

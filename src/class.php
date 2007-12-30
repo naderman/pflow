@@ -141,15 +141,15 @@ class ezcReflectionClass extends ReflectionClass
      *        ReflectionMethod::IS_FINAL
      * @return ezcReflectionMethod[]
      */
-    public function getMethods($filter = 0) {
+    public function getMethods($filter = null) {
         $extMethods = array();
-        if ($filter > 0) {
-            $methods = parent::getMethods($filter);
+        if ( $this->class instanceof ReflectionClass ) {
+            $methods = $this->class->getMethods($filter);
         } else {
-            $methods = parent::getMethods();
+            $methods = parent::getMethods($filter);
         }
         foreach ($methods as $method) {
-            $extMethods[] = new ezcReflectionMethod($this->getName(), $method->getName());
+            $extMethods[] = new ezcReflectionMethod($method);
         }
         return $extMethods;
     }

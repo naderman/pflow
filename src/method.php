@@ -42,13 +42,16 @@ class ezcReflectionMethod extends ReflectionMethod
     * @param string $name Optional if $classOrSource is instance of ReflectionMethod
     */
     public function __construct($classOrSource, $name = null) {
-		if ($class instanceof ReflectionClass) {
-			parent::__construct($class->getName(), $name);
-            $this->curClass = $class;
+    	if ($classOrSource instanceof ReflectionMethod ) {
+    		$this->reflectionSource = $classOrSource;
+    	}
+		elseif ($classOrSource instanceof ReflectionClass) {
+			parent::__construct($classOrSource->getName(), $name);
+            $this->curClass = $classOrSource;
         }
-        elseif (is_string($class)) {
-			parent::__construct($class, $name);
-            $this->curClass = new ReflectionClass($class);
+        elseif (is_string($classOrSource)) {
+			parent::__construct($classOrSource, $name);
+            $this->curClass = new ReflectionClass($classOrSource);
         }
         else {
             $this->curClass = null;
@@ -82,6 +85,20 @@ class ezcReflectionMethod extends ReflectionMethod
         return $extParams;
     }
 
+    /**
+     * Returns the doc comment for the method.
+     *
+     * @return string Doc comment
+     */
+    public function getDocComment() {
+        if ( $this->reflectionSource instanceof ReflectionMethod ) {
+            $comment = $this->reflectionSource->getDocComment();
+        } else {
+            $comment = parent::getDocComment();
+        }
+        return $comment;
+    }
+    
     /**
     * Returns the type defined in PHPDoc tags
     * @return ezcReflectionType
