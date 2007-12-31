@@ -231,6 +231,18 @@ class ezcReflectionMethod extends ReflectionMethod
     }
     
     /**
+     * Name of the method
+     * @return string
+     */
+    public function getName() {
+    	if ( $this->reflectionSource ) {
+    		return $this->reflectionSource->getName();
+    	} else {
+    		return parent::getName();
+    	}
+    }
+    
+    /**
      * Use overloading to call additional methods
      * of the reflection instance given to the constructor
      *

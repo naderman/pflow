@@ -105,7 +105,11 @@ class ezcReflectionClass extends ReflectionClass
      * @return ezcReflectionMethod
      */
     public function getMethod($name) {
-        return new ezcReflectionMethod($this->class, $name);
+    	if ( $this->class instanceof ReflectionClass ) {
+    		return new ezcReflectionMethod($this->class->getMethod($name));
+    	} else {
+    		return new ezcReflectionMethod(parent::getMethod($name));
+    	}
     }
 
     /**
@@ -186,7 +190,7 @@ class ezcReflectionClass extends ReflectionClass
         }
         
         if (is_object($parentClass)) {
-            return new ezcReflectionClassType($parentClass->getName());
+            return new ezcReflectionClassType($parentClass);
         }
         else {
             return null;
@@ -222,8 +226,8 @@ class ezcReflectionClass extends ReflectionClass
      * @return ezcReflectionProperty[]
      */
     public function getProperties($filter = null) {
-        if ( $this->reflectionSource ) {
-        	$props = $this->reflectionSource->getProperties($filter);
+        if ( $this->class instanceof ReflectionClass ) {
+        	$props = $this->class->getProperties($filter);
         } else {
         	$props = parent::getProperties($filter);
         }

@@ -18,22 +18,35 @@
  */
 class ezcReflectionExtension extends ReflectionExtension {
 
+	/**
+	 * @var ReflectionExtension
+	 */
+	protected $reflectionSource = null;
+	
     /**
-    * @param string $name
+    * @param string|ReflectionExtension $extension
     */
-    public function __construct($name) {
-        parent::__construct($name);
+    public function __construct($extension) {
+    	if ( $extension instanceof ReflectionExtension ) {
+    		$this->reflectionSource = $extension;
+    	} else {
+        	parent::__construct( $extension );
+    	}
     }
 
     /**
     * @return ezcReflectionFunction[]
     */
     public function getFunctions() {
-        $functs = parent::getFunctions();
+    	if ( $this->reflectionSource ) {
+    		$functs = $this->reflectionSource->getFunctions();
+    	} else {
+        	$functs = parent::getFunctions();
+    	}
+    	
         $result = array();
         foreach ($functs as $func) {
-        	$function = new ezcReflectionFunction($func->getName());
-        	$result[] = $function;
+        	$result[] = new ezcReflectionFunction($func);
         }
         return $result;
     }
@@ -42,11 +55,15 @@ class ezcReflectionExtension extends ReflectionExtension {
      * @return ezcReflectionClassType[]
      */
     public function getClasses() {
-        $classes = parent::getClasses();
+    	if ( $this->reflectionSource ) {
+    		$classes = $this->reflectionSource->getClasses();
+    	} else {
+        	$classes = parent::getClasses();
+    	}
+    	
         $result = array();
         foreach ($classes as $class) {
-        	$extClass = new ezcReflectionClassType($class->getName());
-        	$result[] = $extClass;
+        	$result[] = new ezcReflectionClassType($class);
         }
         return $result;
     }

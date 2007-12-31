@@ -30,13 +30,13 @@ class ezcReflectionClassTest extends ezcTestCase
     public function testGetMethod() {
         $method = $this->class->getMethod('helloWorld');
         self::assertType('ezcReflectionMethod', $method);
-        self::assertEquals($method->getName(), 'helloWorld');
+        self::assertEquals('helloWorld', $method->getName());
     }
 
     public function testGetConstructor() {
         $method = $this->class->getConstructor();
         self::assertType('ezcReflectionMethod', $method);
-        self::assertEquals($method->getName(), '__construct');
+        self::assertEquals('__construct', $method->getName());
     }
     
 	public function testGetInterfaces() {
@@ -52,10 +52,9 @@ class ezcReflectionClassTest extends ezcTestCase
         $methods = $class->getMethods();
         self::assertEquals(0, count($methods));
 
-        $class = new ezcReflectionClass('TestMethods');
-        $methods = $class->getMethods();
+        $methods = $this->class->getMethods();
 
-        $expectedMethods = array('__construct', 'm1', 'm2', 'm3', 'm4');
+        $expectedMethods = array('__construct', 'helloWorld');
         foreach ($methods as $method) {
             self::assertType('ezcReflectionMethod', $method);
             self::assertContains($method->getName(), $expectedMethods);
@@ -152,10 +151,9 @@ class ezcReflectionClassTest extends ezcTestCase
         $class = new ezcReflectionClass('ReflectionClass');
         $ext = $class->getExtension();
         self::assertType('ezcReflectionExtension', $ext);
-        self::assertEquals($ext->getName(), 'Reflection');
+        self::assertEquals('Reflection', $ext->getName());
 
-        $class = new ezcReflectionClass('TestWebservice');
-        $ext = $class->getExtension();
+        $ext = $this->class->getExtension();
         self::assertNull($ext);
     }
 
