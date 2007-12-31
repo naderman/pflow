@@ -67,5 +67,54 @@ class ezcReflectionExtension extends ReflectionExtension {
         }
         return $result;
     }
+    
+    public function getName() {
+    	if ( $this->reflectionSource ) {
+    		return $this->reflectionSource->getName();
+    	} else {
+    		parent::getName();
+    	}
+    }
+    
+    public function getVersion() {
+    	if ( $this->reflectionSource ) {
+    		return $this->reflectionSource->getVersion();
+    	} else {
+    		parent::getVersion();
+    	}
+    }
+    
+    public function getConstants() {
+    	if ( $this->reflectionSource ) {
+    		return $this->reflectionSource->getConstants();
+    	} else {
+    		parent::getConstants();
+    	}
+    }
+    
+    public function getINIEntries() {
+    	if ( $this->reflectionSource ) {
+    		return $this->reflectionSource->getINIEntries();
+    	} else {
+    		parent::getINIEntries();
+    	}
+    }
+    
+    public function getClassNames() {
+    	if ( $this->reflectionSource ) {
+    		return $this->reflectionSource->getClassNames();
+    	} else {
+    		parent::getClassNames();
+    	}
+    }
+    
+    public function info() {
+    	if ( $this->reflectionSource ) {
+    		return $this->reflectionSource->info();
+    	} else {
+    		parent::info();
+    	}
+    }
+    
 }
 ?>

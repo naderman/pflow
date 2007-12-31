@@ -26,6 +26,7 @@ require_once 'test_classes/methods2.php';
 require_once 'test_classes/MyReflectionClass.php';
 require_once 'test_classes/MyReflectionProperty.php';
 require_once 'test_classes/MyReflectionMethod.php';
+require_once 'test_classes/MyReflectionExtension.php';
 require_once 'test_classes/webservice.php';
 require_once 'test_classes/interface.php';
 require_once 'test_classes/BaseClass.php';
