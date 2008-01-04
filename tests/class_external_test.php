@@ -81,7 +81,9 @@ class ezcReflectionClassExternalTest extends ezcReflectionClassTest
 	public function testGetExtension() {
 		parent::testGetExtension();
 		
-		$ext = $this->class->getExtension();
+		self::assertNull($this->class->getExtension());
+		$c = new ezcReflectionClass( new MyReflectionClass( 'ReflectionClass' ) );
+		$ext = $c->getExtension();
 		self::assertTrue($ext->change());
 	}
     

@@ -19,7 +19,7 @@ class MyReflectionClass extends ReflectionClass {
     	return new MyReflectionMethod($this->getName(), $name);
     }
     
-    public function getMethods($filter = null) {
+    public function getMethods($filter = -1) {
     	$methods = parent::getMethods($filter);
     	
     	$result = array();
@@ -33,7 +33,7 @@ class MyReflectionClass extends ReflectionClass {
     	return new MyReflectionProperty($this->getName(), $name);
     }
     
-	public function getProperties($filter = null) {
+	public function getProperties($filter = -1) {
     	$props = parent::getProperties($filter);
     	
     	$result = array();
@@ -63,7 +63,12 @@ class MyReflectionClass extends ReflectionClass {
     }
     
     public function getExtension() {
-    	return new MyReflectionExtension(parent::getExtensionName());
+    	$extName =  parent::getExtensionName();
+    	if ($extName) {
+    		return new MyReflectionExtension($extName);
+    	} else {
+    		return NULL;
+    	}
     }
 }
 

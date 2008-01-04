@@ -43,8 +43,8 @@ class ezcReflectionExtensionTest extends ezcTestCase
     }
     
     public function testGetName() {
-    	self::assertEquals('Reflection', $this->extRef->getName());
     	self::assertEquals('SPL', $this->extSpl->getName());
+    	self::assertEquals('Reflection', $this->extRef->getName());
     }
     
     public function testGetVersion() {

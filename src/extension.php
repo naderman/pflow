@@ -72,7 +72,7 @@ class ezcReflectionExtension extends ReflectionExtension {
     	if ( $this->reflectionSource ) {
     		return $this->reflectionSource->getName();
     	} else {
-    		parent::getName();
+    		return parent::getName();
     	}
     }
     
@@ -80,7 +80,7 @@ class ezcReflectionExtension extends ReflectionExtension {
     	if ( $this->reflectionSource ) {
     		return $this->reflectionSource->getVersion();
     	} else {
-    		parent::getVersion();
+    		return parent::getVersion();
     	}
     }
     
@@ -88,7 +88,7 @@ class ezcReflectionExtension extends ReflectionExtension {
     	if ( $this->reflectionSource ) {
     		return $this->reflectionSource->getConstants();
     	} else {
-    		parent::getConstants();
+    		return parent::getConstants();
     	}
     }
     
@@ -96,7 +96,7 @@ class ezcReflectionExtension extends ReflectionExtension {
     	if ( $this->reflectionSource ) {
     		return $this->reflectionSource->getINIEntries();
     	} else {
-    		parent::getINIEntries();
+    		return parent::getINIEntries();
     	}
     }
     
@@ -104,7 +104,7 @@ class ezcReflectionExtension extends ReflectionExtension {
     	if ( $this->reflectionSource ) {
     		return $this->reflectionSource->getClassNames();
     	} else {
-    		parent::getClassNames();
+    		return parent::getClassNames();
     	}
     }
     
@@ -112,9 +112,25 @@ class ezcReflectionExtension extends ReflectionExtension {
     	if ( $this->reflectionSource ) {
     		return $this->reflectionSource->info();
     	} else {
-    		parent::info();
+    		return parent::info();
     	}
     }
     
+    /**
+     * Use overloading to call additional methods
+     * of the reflection instance given to the constructor
+     *
+     * @param string $method Method to be called
+     * @param array(integer => mixed) $arguments Arguments that were passed
+     * @return mixed
+     */
+    public function __call( $method, $arguments )
+    {
+        if ( $this->reflectionSource ) {
+            return call_user_func_array( array($this->reflectionSource, $method), $arguments );
+        } else {
+            throw new Exception( 'Call to undefined method ' . __CLASS__ . '::' . $method );
+        }
+    }
 }
 ?>

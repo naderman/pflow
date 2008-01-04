@@ -145,7 +145,7 @@ class ezcReflectionClass extends ReflectionClass
      *        ReflectionMethod::IS_FINAL
      * @return ezcReflectionMethod[]
      */
-    public function getMethods($filter = null) {
+    public function getMethods($filter = -1) {
         $extMethods = array();
         if ( $this->class instanceof ReflectionClass ) {
             $methods = $this->class->getMethods($filter);
@@ -225,7 +225,7 @@ class ezcReflectionClass extends ReflectionClass
      * ReflectionProperty::IS_PRIVATE
      * @return ezcReflectionProperty[]
      */
-    public function getProperties($filter = null) {
+    public function getProperties($filter = -1) {
         if ( $this->class instanceof ReflectionClass ) {
         	$props = $this->class->getProperties($filter);
         } else {

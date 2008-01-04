@@ -32,8 +32,8 @@ class ezcReflectionProperty extends ReflectionProperty {
     * @param mixed $class
     * @param string $name
     */
-    public function __construct($class, $name) {
-		if (!$class instanceof ReflectionProperty) {
+    public function __construct($class, $name = null) {
+		if ( !$class instanceof ReflectionProperty ) {
 			parent::__construct($class, $name);
 		}
 		$this->reflectionSource = $class;

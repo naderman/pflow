@@ -20,5 +20,9 @@ class MyReflectionExtension extends ReflectionExtension {
         }
         return $result;
     }
+    
+	public function change() {
+		return true;
+	}
 }
 ?>

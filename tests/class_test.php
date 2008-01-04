@@ -54,7 +54,8 @@ class ezcReflectionClassTest extends ezcTestCase
 
         $methods = $this->class->getMethods();
 
-        $expectedMethods = array('__construct', 'helloWorld');
+        $expectedMethods = array('__construct', 'helloWorld', 'doSomeMetaProgramming');
+        self::assertEquals(count($expectedMethods), count($methods));
         foreach ($methods as $method) {
             self::assertType('ezcReflectionMethod', $method);
             self::assertContains($method->getName(), $expectedMethods);
