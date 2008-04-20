@@ -22,7 +22,7 @@ class ezcReflectionFunction extends ReflectionFunction
     * @var ezcReflectionDocParser
     */
     protected $docParser;
-    
+
     /**
      * ReflectionFunction object or name used to initialize this object
      *
@@ -53,7 +53,10 @@ class ezcReflectionFunction extends ReflectionFunction
         foreach ($apiParams as $param) {
             $found = false;
             foreach ($params as $tag) {
-            	if ($tag->getParamName() == $param->getName()) {
+                if (
+                    $tag instanceof ezcReflectionDocTagparam
+            	    and $tag->getParamName() == $param->getName()
+                ) {
             	   $extParams[] = new ezcReflectionParameter($tag->getType(),
             	                                             $param);
             	   $found = true;
@@ -73,7 +76,7 @@ class ezcReflectionFunction extends ReflectionFunction
     */
     function getReturnType() {
         $re = $this->docParser->getReturnTags();
-        if (count($re) == 1 and isset($re[0])) {
+        if (count($re) == 1 and isset($re[0]) and $re[0] instanceof ezcReflectionDocTagReturn) {
             return ezcReflectionApi::getTypeByName($re[0]->getType());
         }
         return null;
