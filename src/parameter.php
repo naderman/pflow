@@ -17,21 +17,22 @@
  * @author Stefan Marr <mail@stefan-marr.de>
  */
  class ezcReflectionParameter extends ReflectionParameter {
+
     /**
-    * @var ezcReflectionType
-    */
+     * @var ezcReflectionType
+     */
     protected $type;
 
     /**
-    * @var ReflectionParameter
-    */
+     * @var ReflectionParameter
+     */
     protected $parameter = null;
 
     /**
-    * @param mixed $mixed Type info or $function for parent class
-    * @param mixed $parameter ReflectionParameter or $parameter for parent class
-    * @param string $type Type information from param tag
-    */
+     * @param mixed $mixed Type info or $function for parent class
+     * @param mixed $parameter ReflectionParameter or $parameter for parent class
+     * @param string $type Type information from param tag
+     */
     public function __construct($mixed, $parameter) {
         if ($parameter instanceof ReflectionParameter) {
             $this->parameter = $parameter;
@@ -44,15 +45,17 @@
     }
 
     /**
-    * @return ezcReflectionType
-    */
+     * Returns the type of this parameter in form of an ezcReflectionType
+     * @return ezcReflectionType
+     */
     public function getType() {
         return $this->type;
     }
 
     /**
-    * @return bool
-    */
+     * Returns whether NULL is allowed as this parameters's value
+     * @return boolean
+     */
     public function allowsNull() {
         if ($this->parameter != null) {
             return $this->parameter->allowsNull();
@@ -63,8 +66,9 @@
     }
 
     /**
-    * @return bool
-    */
+     * Returns whether this parameter is an optional parameter
+     * @return boolean
+     */
     public function isOptional() {
         if ($this->parameter != null) {
             return $this->parameter->isOptional();
@@ -75,8 +79,9 @@
     }
 
     /**
-    * @return bool
-    */
+     * Returns whether this parameters is passed to by reference
+     * @return boolean
+     */
     public function isPassedByReference() {
         if ($this->parameter != null) {
             return $this->parameter->isPassedByReference();
@@ -87,8 +92,9 @@
     }
 	
 	/**
-    * @return bool
-    */
+     * Returns whether parameter MUST be an array
+     * @return boolean
+     */
     public function isArray() {
         if ($this->parameter != null) {
             return $this->parameter->isArray();
@@ -99,8 +105,9 @@
     }
 
     /**
-    * @return bool
-    */
+     * Returns whether the default value of this parameter is available
+     * @return boolean
+     */
     public function isDefaultValueAvailable() {
         if ($this->parameter != null) {
             return $this->parameter->isDefaultValueAvailable();
@@ -111,8 +118,9 @@
     }
 
     /**
-    * @return string
-    */
+     * Returns this parameters's name
+     * @return string
+     */
     public function getName() {
         if ($this->parameter != null) {
             return $this->parameter->getName();
@@ -123,8 +131,9 @@
     }
 	
 	/**
-    * @return int
-    */
+     * Returns whether this parameter is an optional parameter
+     * @return integer
+     */
     public function getPosition() {
         if ($this->parameter != null) {
             return $this->parameter->getPosition();
@@ -135,8 +144,9 @@
     }
 
     /**
-    * @return mixed
-    */
+     * Returns the default value of this parameter or throws an exception
+     * @return mixed
+     */
     public function getDefaultValue() {
         if ($this->parameter != null) {
             return $this->parameter->getDefaultValue();
@@ -147,7 +157,7 @@
     }
 
     /**
-    * Returns reflection object identified by php type hinting
+    * Returns reflection object identified by type hinting or NULL if there is no hint
     * @return ezcReflectionClassType
     */
     public function getClass() {
@@ -158,8 +168,9 @@
     }
 
     /**
-    * @return ezcReflectionFunction
-    */
+     * Returns the ezcReflectionFunction for the function of this parameter
+     * @return ezcReflectionFunction
+     */
     public function getDeclaringFunction() {
         if ($this->parameter != null) {
             $func = $this->parameter->getDeclaringFunction();
@@ -176,8 +187,9 @@
 	}
 
     /**
-    * @return ezcReflectionClassType
-    */
+     * Returns in which class this parameter is defined (not the type hint of the parameter)
+     * @return ezcReflectionClassType
+     */
     function getDeclaringClass() {
         if ($this->parameter != null) {
             $class = $this->parameter->getDeclaringClass();
@@ -187,6 +199,7 @@
         }
 
 		if (!empty($class)) {
+            //TODO: this changes the semantic of the return value (PHP's Reflection API returns a ReflectionClass)
 		    return new ezcReflectionClassType($class->getName());
 		}
 		else {
