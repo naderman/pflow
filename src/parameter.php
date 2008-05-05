@@ -9,9 +9,11 @@
  */
 
 /**
+ * The ezcReflectionParameter class retrieves information about a function's
+ * or method's parameters and their types.
+ *
  * Extends the ReflectionParameter class using PHPDoc comments to provide
- * type information
- * 
+ * type information 
  * @package Reflection
  * @version //autogentag//
  * @author Stefan Marr <mail@stefan-marr.de>
@@ -19,29 +21,38 @@
  class ezcReflectionParameter extends ReflectionParameter {
 
     /**
+     * Type of the parameter
      * @var ezcReflectionType
      */
     protected $type;
 
     /**
+     * ReflectionParameter instance if one was provided to the constructor
      * @var ReflectionParameter
      */
     protected $parameter = null;
 
     /**
-     * @param mixed $mixed Type info or $function for parent class
-     * @param mixed $parameter ReflectionParameter or $parameter for parent class
+     * Constructor
+     *
+     * If called with a ReflectionParameter instance as second parameter the
+     * first parameter should be a string identifying the type of the parameter.
+     * Throws an Exception in case the given method does not exist
+     * @param string|array<integer,string|object> $function The function, method
+     *     or type of the parameter given as function name, type name,
+     *     array($classname, $method), or array($object, $method)
+     * @param integer|string|ReflectionParameter $parameter position, name, or
+     *     ReflectionParameter instance of the parameter to inspect
      * @param string $type Type information from param tag
      */
-    public function __construct($mixed, $parameter) {
+    public function __construct($function, $parameter) {
         if ($parameter instanceof ReflectionParameter) {
             $this->parameter = $parameter;
-            $this->type = ezcReflectionApi::getTypeByName($mixed);
+            $this->type = ezcReflectionApi::getTypeByName($function);
         }
         else {
-            parent::__construct($mixed, $parameter);
+            parent::__construct($function, $parameter);
         }
-
     }
 
     /**
