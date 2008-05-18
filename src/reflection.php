@@ -66,6 +66,81 @@ class ezcReflectionApi {
         }
         return self::$reflectionTypeFactory->getType($typeName);
     }
-}
 
+    /**
+     * Returns an array with the ezcReflectionClass objects for all declared
+     * classes
+     *
+     * @return ezcReflectionClass[] all declared classes
+     */
+    public static function getClasses() {
+        $classes = array();
+        foreach( get_declared_classes() as $className ) {
+            $classes[] = new ezcReflectionClass( $className );
+        }
+        return $classes;
+    }
+
+    /**
+     * Returns an array with the ezcReflectionClass objects for all declared
+     * interfaces
+     *
+     * @return ezcReflectionClass[] all declared interfaces
+     */
+    public static function getInterfaces() {
+        $interfaces = array();
+        foreach( get_declared_interfaces() as $interfaceName ) {
+            $interfaces[] = new ezcReflectionClass( $interfaceName );
+        }
+        return $interfaces;
+    }
+
+    /**
+     * Returns an array with the ezcReflectionFunction objects for all
+     * user-defined functions
+     *
+     * @return ezcReflectionFunction[] all user-defined functions
+     */
+    public static function getUserDefinedFunctions() {
+        $functions = array();
+        $functionNames = get_defined_functions();
+        foreach( $functionNames['user'] as $functionName ) {
+            $functions[] = new ezcReflectionFunction( $functionName );
+        }
+        return $functions;
+    }
+
+    /**
+     * Returns an array with the ezcReflectionFunction objects for all
+     * available internal functions
+     *
+     * @return ezcReflectionFunction[] all internal functions
+     */
+    public static function getInternalFunctions() {
+        $functions = array();
+        $functionNames = get_defined_functions();
+        foreach( $functionNames['internal'] as $functionName ) {
+            $functions[] = new ezcReflectionFunction( $functionName );
+        }
+        return $functions;
+    }
+
+    /**
+     * Returns an array with the ezcReflectionFunction objects for all
+     * internal and user-defined functions
+     *
+     * @return ezcReflectionFunction[] all internal and user-defined functions
+     */
+    public static function getFunctions() {
+        $functions = array();
+        $functionNames = get_defined_functions();
+        foreach( $functionNames['internal'] as $functionName ) {
+            $functions[] = new ezcReflectionFunction( $functionName );
+        }
+        foreach( $functionNames['user'] as $functionName ) {
+            $functions[] = new ezcReflectionFunction( $functionName );
+        }
+        return $functions;
+    }
+}
 ?>
