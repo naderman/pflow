@@ -28,8 +28,9 @@ class ezcReflectionTest extends ezcTestCase
     public function testGetClasses() {
         $classes = ezcReflectionApi::getClasses();
         self::assertContainsOnly( 'ezcReflectionClass', $classes );
-        foreach ( $classes as $class) {
+        foreach ( $classes as $className => $class) {
             self::assertFalse( $class->isInterface() );
+            self::assertEquals( $class->getName(), $className );
             $classNames[] = $class->getName();
         }
         self::assertEquals( get_declared_classes(), $classNames );
@@ -38,8 +39,9 @@ class ezcReflectionTest extends ezcTestCase
     public function testGetInterfaces() {
         $interfaces = ezcReflectionApi::getInterfaces();
         self::assertContainsOnly( 'ezcReflectionClass', $interfaces );
-        foreach ( $interfaces as $interface) {
+        foreach ( $interfaces as $interfaceName => $interface) {
             self::assertTrue( $interface->isInterface() );
+            self::assertEquals( $interface->getName(), $interfaceName );
             $interfaceNames[] = $interface->getName();
         }
         self::assertEquals( get_declared_interfaces(), $interfaceNames );
@@ -50,8 +52,9 @@ class ezcReflectionTest extends ezcTestCase
         $userDefinedFunctions = $definedFunctionArrays['user'];
         $functions = ezcReflectionApi::getUserDefinedFunctions();
         self::assertContainsOnly( 'ezcReflectionFunction', $functions );
-        foreach ( $functions as $function ) {
+        foreach ( $functions as $functionName => $function ) {
             self::assertTrue( $function->isUserDefined() );
+            self::assertEquals( strtolower( $function->getName() ), $functionName );
             self::assertContains( strtolower( $function->getName() ), $userDefinedFunctions );
             // strtolower used because of the following error:
             /*
@@ -77,8 +80,9 @@ class ezcReflectionTest extends ezcTestCase
         $internalFunctions = $definedFunctionArrays['internal'];
         $functions = ezcReflectionApi::getInternalFunctions();
         self::assertContainsOnly( 'ezcReflectionFunction', $functions );
-        foreach ( $functions as $function ) {
+        foreach ( $functions as $functionName => $function ) {
             self::assertTrue( $function->isInternal() );
+            self::assertEquals( $function->getName(), $functionName );
             self::assertContains( $function->getName(), $internalFunctions );
         }
     }
@@ -88,7 +92,8 @@ class ezcReflectionTest extends ezcTestCase
         $definedFunctions = array_merge( $definedFunctionArrays['internal'], $definedFunctionArrays['user'] );
         $functions = ezcReflectionApi::getFunctions();
         self::assertContainsOnly( 'ezcReflectionFunction', $functions );
-        foreach ( $functions as $function ) {
+        foreach ( $functions as $functionName => $function ) {
+            self::assertEquals( strtolower( $function->getName() ), $functionName );
             self::assertContains( strtolower( $function->getName() ), $definedFunctions );
             // strtolower used because of the following error:
             /*

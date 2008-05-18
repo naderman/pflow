@@ -76,7 +76,7 @@ class ezcReflectionApi {
     public static function getClasses() {
         $classes = array();
         foreach( get_declared_classes() as $className ) {
-            $classes[] = new ezcReflectionClass( $className );
+            $classes[$className] = new ezcReflectionClass( $className );
         }
         return $classes;
     }
@@ -90,7 +90,7 @@ class ezcReflectionApi {
     public static function getInterfaces() {
         $interfaces = array();
         foreach( get_declared_interfaces() as $interfaceName ) {
-            $interfaces[] = new ezcReflectionClass( $interfaceName );
+            $interfaces[$interfaceName] = new ezcReflectionClass( $interfaceName );
         }
         return $interfaces;
     }
@@ -105,7 +105,7 @@ class ezcReflectionApi {
         $functions = array();
         $functionNames = get_defined_functions();
         foreach( $functionNames['user'] as $functionName ) {
-            $functions[] = new ezcReflectionFunction( $functionName );
+            $functions[$functionName] = new ezcReflectionFunction( $functionName );
         }
         return $functions;
     }
@@ -120,7 +120,7 @@ class ezcReflectionApi {
         $functions = array();
         $functionNames = get_defined_functions();
         foreach( $functionNames['internal'] as $functionName ) {
-            $functions[] = new ezcReflectionFunction( $functionName );
+            $functions[$functionName] = new ezcReflectionFunction( $functionName );
         }
         return $functions;
     }
@@ -135,10 +135,10 @@ class ezcReflectionApi {
         $functions = array();
         $functionNames = get_defined_functions();
         foreach( $functionNames['internal'] as $functionName ) {
-            $functions[] = new ezcReflectionFunction( $functionName );
+            $functions[$functionName] = new ezcReflectionFunction( $functionName );
         }
         foreach( $functionNames['user'] as $functionName ) {
-            $functions[] = new ezcReflectionFunction( $functionName );
+            $functions[$functionName] = new ezcReflectionFunction( $functionName );
         }
         return $functions;
     }
