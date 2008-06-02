@@ -67,38 +67,6 @@ class ezcReflectionClass extends ReflectionClass
     }
 
     /**
-     * Returns the name of the class.
-     *
-     * @return string Classname
-     */
-    public function getName() {
-        if ( $this->class instanceof ReflectionClass )
-        {
-            // query external reflection object
-            $name = $this->class->getName();
-        } else {
-            $name = parent::getName();
-        }
-        return $name;
-    }
-
-    /**
-     * Returns the doc comment for the class.
-     *
-     * @return string Doc comment
-     */
-    public function getDocComment() {
-        if ( $this->class instanceof ReflectionClass )
-        {
-            // query external reflection object
-            $comment = $this->class->getDocComment();
-        } else {
-            $comment = parent::getDocComment();
-        }
-        return $comment;
-    }
-
-    /**
      * Returns an ezcReflectionMethod object of the method specified by $name.
      *
      * @param string $name Name of the method
@@ -160,6 +128,7 @@ class ezcReflectionClass extends ReflectionClass
     
     /**
      * Returns an array of all interfaces implemented by the class.
+     *
      * @return ezcReflectionClass[]
      */
     public function getInterfaces() {
@@ -171,13 +140,15 @@ class ezcReflectionClass extends ReflectionClass
     	
     	$result = array();
     	foreach ($ifaces as $i) {
-    		$result[] = new ezcReflectionClassType($i);
+    		$result[] = new ezcReflectionClassType($i); //TODO: Shouldn't this be eczReflectionClass
     	}
     	return $result;
     }
 
     /**
-     * @return ezcReflectionClassType
+     * Returns the class' parent class, or, if none exists, FALSE
+     *
+     * @return ezcReflectionClassType|boolean
      */
     public function getParentClass()
     {
@@ -198,6 +169,8 @@ class ezcReflectionClass extends ReflectionClass
     }
 
     /**
+     * Returns the class' property specified by its name
+     * 
      * @param string $name
      * @return ezcReflectionProperty
      * @throws RelectionException if property doesn't exists
@@ -220,10 +193,15 @@ class ezcReflectionClass extends ReflectionClass
     }
 
     /**
-     * @param integer $filter a combination of ReflectionProperty::IS_STATIC,
-     * ReflectionProperty::IS_PUBLIC, ReflectionProperty::IS_PROTECTED,
-     * ReflectionProperty::IS_PRIVATE
-     * @return ezcReflectionProperty[]
+     * Returns an array of this class' properties
+     * 
+     * @param integer $filter
+     *        A combination of
+     *        ReflectionProperty::IS_STATIC,
+     *        ReflectionProperty::IS_PUBLIC,
+     *        ReflectionProperty::IS_PROTECTED and
+     *        ReflectionProperty::IS_PRIVATE
+     * @return ezcReflectionProperty[] Properties of the class
      */
     public function getProperties($filter = -1) {
         if ( $this->class instanceof ReflectionClass ) {
@@ -241,6 +219,7 @@ class ezcReflectionClass extends ReflectionClass
 
     /**
      * Check whether this class has been tagged with @webservice
+     * 
      * @return boolean
      */
     public function isWebService() {
@@ -248,21 +227,29 @@ class ezcReflectionClass extends ReflectionClass
     }
 
     /**
-     * @return string
+     * Returns the short description of the class from the source code
+     * documentation
+     * 
+     * @return string short description of the class
      */
     public function getShortDescription() {
         return $this->docParser->getShortDescription();
     }
 
     /**
-     * @return string
+     * Returns the long description of the class from the source code
+     * documentation
+     * 
+     * @return string Long description of the class
      */
     public function getLongDescription() {
         return $this->docParser->getLongDescription();
     }
 
     /**
-     * @param string $with
+     * Checks whether a annotation is used
+     *
+     * @param string $with Name of the annotation
      * @return boolean
      */
     public function isTagged($with) {
@@ -270,8 +257,10 @@ class ezcReflectionClass extends ReflectionClass
     }
 
     /**
-     * @param string $name
-     * @return ezcReflectionDocTag[]
+     * Returns an array of annotations (optinally only annotations of a given name)
+     *
+     * @param string $name Name of the annotations
+     * @return ezcReflectionDocTag[] Annotations
      */
     public function getTags($name = '') {
         if ($name == '') {
@@ -283,6 +272,8 @@ class ezcReflectionClass extends ReflectionClass
     }
 
     /**
+     * Returns NULL or the extension the class belongs to
+     *
      * @return ezcReflectionExtension
      */
     public function getExtension() {
@@ -297,6 +288,78 @@ class ezcReflectionClass extends ReflectionClass
         } else {
             return null;
         }
+    }
+
+    /*
+     * Returns FALSE or the name of the extension the class belongs to
+     *
+     * This is purely a wrapper method which either calls the corresponding
+     * method of the parent class or forwards the call to the ReflectionClass
+     * instance passed to the constructor.
+     * @return string|boolean Extension name or FALSE
+     */
+    public function getExtensionName() {
+    	if ( $this->class instanceof ReflectionClass ) {
+            // query external reflection object
+    		$extensionName = $this->class->getExtensionName();
+    	} else {
+    		$extensionName = parent::getExtensionName();
+    	}
+        return $extensionName;
+    }
+
+    /**
+     * Returns the name of the class.
+     *
+     * This is purely a wrapper method which either calls the corresponding
+     * method of the parent class or forwards the call to the ReflectionClass
+     * instance passed to the constructor.
+     * @return string Class name
+     */
+    public function getName() {
+        if ( $this->class instanceof ReflectionClass )
+        {
+            // query external reflection object
+            $name = $this->class->getName();
+        } else {
+            $name = parent::getName();
+        }
+        return $name;
+    }
+
+    /**
+     * Returns the doc comment for the class.
+     *
+     * This is purely a wrapper method which either calls the corresponding
+     * method of the parent class or forwards the call to the ReflectionClass
+     * instance passed to the constructor.
+     * @return string Doc comment
+     */
+    public function getDocComment() {
+        if ( $this->class instanceof ReflectionClass )
+        {
+            // query external reflection object
+            $comment = $this->class->getDocComment();
+        } else {
+            $comment = parent::getDocComment();
+        }
+        return $comment;
+    }
+
+    /**
+     * Exports a reflection object.
+     *
+     * Returns the output if TRUE is specified for return, printing it otherwise.
+     * This is purely a wrapper method which calls the corresponding method of
+     * the parent class.
+     * @param ReflectionClass|string $class
+     *        ReflectionClass object or name of the class
+     * @param boolean $return
+     *        Wether to return (TRUE) or print (FALSE) the output
+     * @return mixed
+     */
+    public static function export($class, $return) {
+        return parent::export($class, $return);
     }
 }
 ?>
