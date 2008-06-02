@@ -27,18 +27,18 @@ class ezcReflectionPhpDocParser implements ezcReflectionDocParser {
 	const TAGS 		 = 2;
 	
     /**
-    * @var string
-    */
+     * @var string
+     */
     protected $docComment;
 
     /**
-    * @var int STATE
-    */
+     * @var int STATE
+     */
     protected $state = self::BEGINNING;
 
     /**
-    * @var array<int,int>
-    */
+     * @var array<int,int>
+     */
     protected $stateTable = array(
     							true => array ( // empty lines
     							  self::BEGINNING  => self::BEGINNING,
@@ -53,23 +53,23 @@ class ezcReflectionPhpDocParser implements ezcReflectionDocParser {
                                   self::TAGS       => self::TAGS)
                                   );
     /**
-    * @var ezcReflectionDocTag
-    */
+     * @var ezcReflectionDocTag
+     */
     protected $lastTag = null;
 
     /**
-    * @var string
-    */
+     * @var string
+     */
     protected $shortDesc;
 
     /**
-    * @var string
-    */
+     * @var string
+     */
     protected $longDesc;
 
     /**
-    * @var ezcReflectionDocTag[]
-    */
+     * @var ezcReflectionDocTag[]
+     */
     protected $tags;
 
     public function __construct() {
@@ -112,9 +112,9 @@ class ezcReflectionPhpDocParser implements ezcReflectionDocParser {
     }
 
     /**
-    * @param string $line
-    * @return string
-    */
+     * @param string $line
+     * @return string
+     */
     protected function stripDocPrefix($line) {
         while (strlen($line) > 0 and ($line{0} == '/' or $line{0} == '*')) {
             $line = substr($line, 1);
@@ -124,9 +124,9 @@ class ezcReflectionPhpDocParser implements ezcReflectionDocParser {
     }
 
     /**
-    * @param string $line
-    * @return void
-    */
+     * @param string $line
+     * @return void
+     */
     protected function parseTag($line) {
         if (strlen($line) > 0) {
             if ($line[0] == '@') {
@@ -146,9 +146,11 @@ class ezcReflectionPhpDocParser implements ezcReflectionDocParser {
     }
 
     /**
-    * @param string $name
-    * @return ezcReflectionDocTag[]
-    */
+     * Returns an array of annotations with a given name
+     *
+     * @param string $name
+     * @return ezcReflectionDocTag[]
+     */
     public function getTagsByName($name) {
         if (isset($this->tags[$name])) {
             return $this->tags[$name];
@@ -159,8 +161,8 @@ class ezcReflectionPhpDocParser implements ezcReflectionDocParser {
     }
 
     /**
-    * @return ezcReflectionDocTag[]
-    */
+     * @return ezcReflectionDocTag[]
+     */
     public function getTags() {
         $result = array();
         foreach ($this->tags as $tags) {
@@ -172,45 +174,52 @@ class ezcReflectionPhpDocParser implements ezcReflectionDocParser {
     }
 
     /**
-    * @return ezcReflectionDocTagParam[]
-    */
+     * @return ezcReflectionDocTagParam[]
+     */
     public function getParamTags() {
         return $this->getTagsByName('param');
     }
 
     /**
-    * @return ezcReflectionDocTagVar[]
-    */
+     * @return ezcReflectionDocTagVar[]
+     */
     public function getVarTags() {
         return $this->getTagsByName('var');
     }
 
     /**
-    * @return ezcReflectionDocTagReturn[]
-    */
+     * Return an array of return annotations 
+     *
+     * @return ezcReflectionDocTagReturn[]
+     */
     public function getReturnTags() {
         return $this->getTagsByName('return');
     }
 
     /**
-    * To check whether a tag was used
-    * @param string $with name of used tag
-    * @return boolean
-    */
+     * Checks whether a annotation is used
+     *
+     * @param string $with name of used annotation
+     * @return boolean
+     */
     public function isTagged($with) {
         return isset($this->tags[$with]);
     }
 
     /**
-    * @return string
-    */
+     * Returns the short description from the source code documentation
+     * 
+     * @return string Short description
+     */
     public function getShortDescription() {
         return $this->shortDesc;
     }
 
     /**
-    * @return string
-    */
+     * Returns the long description from the source code documentation
+     * 
+     * @return string Long description
+     */
     public function getLongDescription() {
         return $this->longDesc;
     }
