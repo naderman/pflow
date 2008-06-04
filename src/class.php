@@ -358,7 +358,7 @@ class ezcReflectionClass extends ReflectionClass
      *        Wether to return (TRUE) or print (FALSE) the output
      * @return mixed
      */
-    public static function export($class, $return) {
+    public static function export($class, $return = false) {
         return parent::export($class, $return);
     }
 }
