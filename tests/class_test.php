@@ -158,6 +158,10 @@ class ezcReflectionClassTest extends ezcTestCase
         self::assertNull($ext);
     }
 
+    public function testExport() {
+        self::assertEquals( ReflectionClass::export('TestWebservice', true), ezcReflectionClass::export('TestWebservice', true) );
+    }
+
     public static function suite()
     {
          return new PHPUnit_Framework_TestSuite( "ezcReflectionClassTest" );
