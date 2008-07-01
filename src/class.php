@@ -26,14 +26,14 @@ class ezcReflectionClass extends ReflectionClass
 
     /**
      * @var string|object|ReflectionClass
-     *      name, instance or ReflectionClass object of the class to be
+     *      Name, instance or ReflectionClass object of the class to be
      *      reflected
      */
     protected $class;
 
     /**
      * @param string|object|ReflectionClass $argument
-     *        name, instance or ReflectionClass object of the class to be
+     *        Name, instance or ReflectionClass object of the class to be
      *        reflected
      */
     public function __construct( $argument )

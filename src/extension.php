@@ -24,8 +24,13 @@ class ezcReflectionExtension extends ReflectionExtension {
 	protected $reflectionSource = null;
 	
     /**
-    * @param string|ReflectionExtension $extension
-    */
+     * Constructs a ezcReflectionExtension object from a given extension
+     *
+     * Throws an Exception in case the given extension does not exist
+     * @param string|ReflectionExtension $extension
+     *        Name or ReflectionExtension object of the extension to be
+     *        reflected
+     */
     public function __construct($extension) {
     	if ( $extension instanceof ReflectionExtension ) {
     		$this->reflectionSource = $extension;
@@ -35,8 +40,9 @@ class ezcReflectionExtension extends ReflectionExtension {
     }
 
     /**
-    * @return ezcReflectionFunction[]
-    */
+     * Returns an array of this extension's fuctions
+     * @return ezcReflectionFunction[]
+     */
     public function getFunctions() {
     	if ( $this->reflectionSource ) {
     		$functs = $this->reflectionSource->getFunctions();
@@ -52,6 +58,8 @@ class ezcReflectionExtension extends ReflectionExtension {
     }
 
     /**
+     * Returns an array containing ezcReflectionClassType objects for all
+     * classes of this extension
      * @return ezcReflectionClassType[]
      */
     public function getClasses() {
@@ -68,6 +76,22 @@ class ezcReflectionExtension extends ReflectionExtension {
         return $result;
     }
     
+    /**
+     * Returns a string representation
+     * @return string
+     */
+    public function __toString() {
+    	if ( $this->reflectionSource ) {
+    		return $this->reflectionSource->__toString();
+    	} else {
+    		return parent::__toString();
+    	}
+    }
+    
+    /**
+     * Returns this extension's name
+     * @return string
+     */
     public function getName() {
     	if ( $this->reflectionSource ) {
     		return $this->reflectionSource->getName();
@@ -76,6 +100,10 @@ class ezcReflectionExtension extends ReflectionExtension {
     	}
     }
     
+    /**
+     * Returns this extension's version
+     * @return string
+     */
     public function getVersion() {
     	if ( $this->reflectionSource ) {
     		return $this->reflectionSource->getVersion();
@@ -84,6 +112,11 @@ class ezcReflectionExtension extends ReflectionExtension {
     	}
     }
     
+    /**
+     * Returns an associative array containing this extension's constants and
+     * their values
+     * @return array<string,mixed>
+     */
     public function getConstants() {
     	if ( $this->reflectionSource ) {
     		return $this->reflectionSource->getConstants();
@@ -92,6 +125,11 @@ class ezcReflectionExtension extends ReflectionExtension {
     	}
     }
     
+    /**
+     * Returns an associative array containing this extension's INI entries and
+     * their values
+     * @return array<string,string>
+     */
     public function getINIEntries() {
     	if ( $this->reflectionSource ) {
     		return $this->reflectionSource->getINIEntries();
@@ -100,6 +138,10 @@ class ezcReflectionExtension extends ReflectionExtension {
     	}
     }
     
+    /**
+     * Returns an array containing all names of all classes of this extension
+     * @return string[]
+     */
     public function getClassNames() {
     	if ( $this->reflectionSource ) {
     		return $this->reflectionSource->getClassNames();
@@ -108,11 +150,28 @@ class ezcReflectionExtension extends ReflectionExtension {
     	}
     }
     
+    /**
+     * Returns an array containing all names of all extensions this extension
+     * depends on
+     * @return string[]
+     */
+    public function getDependencies() {
+    	if ( $this->reflectionSource ) {
+    		return $this->reflectionSource->getDependencies();
+    	} else {
+    		return parent::getDependencies();
+    	}
+    }
+    
+    /**
+     * Prints phpinfo block for the extension
+     * @return void
+     */
     public function info() {
     	if ( $this->reflectionSource ) {
-    		return $this->reflectionSource->info();
+    		$this->reflectionSource->info();
     	} else {
-    		return parent::info();
+    		parent::info();
     	}
     }
     
