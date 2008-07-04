@@ -9,7 +9,7 @@
  */
 
 /**
- * Provides structured data from PHP Documentation comments
+ * Provides structured data from PHP Documentor comments
  * 
  * Parser is implemented as state based parser using a state transisiton
  * table consisting of transition rules for empty and non-empty lines.

@@ -20,7 +20,7 @@
 class ezcReflectionClass extends ReflectionClass
 {
     /**
-     * @var ezcReflectionDocParser
+     * @var ezcReflectionDocParser Parser for source code annotations
      */
     protected $docParser;
 
