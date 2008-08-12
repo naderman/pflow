@@ -104,7 +104,7 @@ class ezcReflectionDocParserTest extends ezcTestCase
         self::assertEquals('string', $tags[0]->getType());
 
         self::assertEquals('test3', $tags[2]->getParamName());
-        self::assertEquals('NoneExistingType', $tags[2]->getType());
+        self::assertEquals('NonExistingType', $tags[2]->getType());
     }
 
     public function testGetVarTags() {

@@ -47,7 +47,7 @@ class TestMethods {
      * @author
      * @param string $test
      * @param ezcReflectionApi $test2
-     * @param NoneExistingType $test3
+     * @param NonExistingType $test3
      * @return string Hello World
      */
     public function m4() {

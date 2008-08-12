@@ -18,7 +18,7 @@ class ezcReflectionTypeMapperTest extends ezcTestCase
         }
 
         $noneezcReflectionPrimitiveTypes = array('ReflectionClass', 'array', 'int[]',
-                                    'string[]', 'NoneExistingClassFooBar');
+                                    'string[]', 'NonExistingClassFooBar');
         foreach ($noneezcReflectionPrimitiveTypes as $type) {
         	self::assertFalse(ezcReflectionTypeMapper::getInstance()->isPrimitive($type));
         }
@@ -26,7 +26,7 @@ class ezcReflectionTypeMapperTest extends ezcTestCase
 
     public function testIsArray() {
         $arrayDefs = array('array', 'string[]', 'bool[]', 'ReflectionClass[]',
-                           'NoneExistingTypeFooBar[]');
+                           'NonExistingTypeFooBar[]');
         foreach ($arrayDefs as $type) {
         	self::assertTrue(ezcReflectionTypeMapper::getInstance()->isArray($type));
         }
@@ -38,7 +38,7 @@ class ezcReflectionTypeMapperTest extends ezcTestCase
         }
 
         $noneezcReflectionArrayTypes = array('integer', 'int', 'INT', 'float', 'double',
-                                'string', 'bool', 'boolean', 'NoneExistingClassFooBar',
+                                'string', 'bool', 'boolean', 'NonExistingClassFooBar',
                                 'ReflectionClass');
         foreach ($noneezcReflectionArrayTypes as $type) {
         	self::assertFalse(ezcReflectionTypeMapper::getInstance()->isArray($type));

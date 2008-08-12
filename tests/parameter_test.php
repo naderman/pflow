@@ -32,15 +32,14 @@ class ezcReflectionParameterTest extends ezcTestCase
         self::assertEquals('test2', $params[1]->getName());
         self::assertEquals('ezcReflectionApi', $type->toString());
 
-        //none existing type??
         //@TODO: fix this error
         //fix or change documentation of handling of not existing classes
-        //with type system, at the moment type with name with empty string is
-        //return, this is wrong and have to be fixed.
+        //with the type system, at the moment, type with name with empty string is
+        //returned, this is wrong and has to be fixed.
         $type = $params[2]->getClass();
         self::assertType('ezcReflectionType', $type);
         self::assertEquals('test3', $params[2]->getName());
-        self::assertEquals('NoneExistingType', $type->toString());
+        self::assertEquals('NonExistingType', $type->toString());
 
         $method = new ezcReflectionMethod('TestMethods', 'm3');
         $params = $method->getParameters();
