@@ -32,6 +32,8 @@ class ezcReflectionClass extends ReflectionClass
     protected $class;
 
     /**
+     * Constructs a new ezcReflectionClass object
+     *
      * @param string|object|ReflectionClass $argument
      *        Name, instance or ReflectionClass object of the class to be
      *        reflected
@@ -40,16 +42,16 @@ class ezcReflectionClass extends ReflectionClass
     {
         if ( !$argument instanceof ReflectionClass )
         {
-            parent::__construct($argument);
+            parent::__construct( $argument );
         }
         $this->class = $argument;
         $this->docParser = ezcReflectionApi::getDocParserInstance();
-        $this->docParser->parse($this->getDocComment());
+        $this->docParser->parse( $this->getDocComment() );
     }
-    
+
     /**
      * Use overloading to call additional methods
-     * of the reflection instance given to the constructor
+     * of the ReflectionClass instance given to the constructor
      *
      * @param string $method Method to be called
      * @param array<integer, mixed> $arguments Arguments that were passed
@@ -290,7 +292,7 @@ class ezcReflectionClass extends ReflectionClass
         }
     }
 
-    /*
+    /**
      * Returns FALSE or the name of the extension the class belongs to
      *
      * This is purely a wrapper method which either calls the corresponding

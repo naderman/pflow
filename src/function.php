@@ -11,7 +11,7 @@
 /**
  * Extends the ReflectionFunction class using PHPDoc comments to provide
  * type information
- * 
+ *
  * @package Reflection
  * @version //autogentag//
  * @author Stefan Marr <mail@stefan-marr.de>
@@ -19,33 +19,49 @@
 class ezcReflectionFunction extends ReflectionFunction
 {
     /**
-    * @var ezcReflectionDocParser
-    */
+     * @var ezcReflectionDocParser Parser for source code annotations
+     */
     protected $docParser;
 
     /**
-     * ReflectionFunction object or name used to initialize this object
-     *
      * @var string|ReflectionFunction
+     *     ReflectionFunction object or function name used to initialize this
+     *     object
      */
     protected $reflectionSource;
 
     /**
-    * @param string $name
-    */
-    public function __construct($name) {
-    	if ( !$name instanceof ReflectionFunction ) {
-        	parent::__construct($name);
-    	}
-    	$this->reflectionSource = $name;
-    	
+     * Constructs a new ezcReflectionFunction object
+     *
+     * Throws an Exception in case the given function does not exist
+     * @param string|ReflectionFunction $name
+     *        Name or ReflectionFunction object of the function to be reflected
+     */
+    public function __construct( $name ) {
+        if ( !$name instanceof ReflectionFunction ) {
+            parent::__construct( $name );
+        }
+        $this->reflectionSource = $name;
+
         $this->docParser = ezcReflectionApi::getDocParserInstance();
-        $this->docParser->parse($this->getDocComment());
+        $this->docParser->parse( $this->getDocComment() );
     }
 
     /**
-    * @return ezcReflectionParameter[]
-    */
+     * Returns a string representation
+     * @return string
+     */
+    public function __toString() {
+        if ( $this->reflectionSource ) {
+            return $this->reflectionSource->__toString();
+        } else {
+            return parent::__toString();
+        }
+    }
+
+    /**
+     * @return ezcReflectionParameter[]
+     */
     function getParameters() {
         $params = $this->docParser->getParamTags();
         $extParams = array();
@@ -55,13 +71,15 @@ class ezcReflectionFunction extends ReflectionFunction
             foreach ($params as $tag) {
                 if (
                     $tag instanceof ezcReflectionDocTagparam
-            	    and $tag->getParamName() == $param->getName()
+                    and $tag->getParamName() == $param->getName()
                 ) {
-            	   $extParams[] = new ezcReflectionParameter($tag->getType(),
-            	                                             $param);
-            	   $found = true;
-            	   break;
-            	}
+                    $extParams[] = new ezcReflectionParameter(
+                        $tag->getType(),
+                        $param
+                    );
+                    $found = true;
+                    break;
+                }
             }
             if (!$found) {
                 $extParams[] = new ezcReflectionParameter(null, $param);
@@ -71,9 +89,9 @@ class ezcReflectionFunction extends ReflectionFunction
     }
 
     /**
-    * Returns the type defined in PHPDoc tags
-    * @return ezcReflectionType
-    */
+     * Returns the type defined in PHPDoc tags
+     * @return ezcReflectionType
+     */
     function getReturnType() {
         $re = $this->docParser->getReturnTags();
         if (count($re) == 1 and isset($re[0]) and $re[0] instanceof ezcReflectionDocTagReturn) {
@@ -83,9 +101,9 @@ class ezcReflectionFunction extends ReflectionFunction
     }
 
     /**
-    * Returns the description after a PHPDoc tag
-    * @return string
-    */
+     * Returns the description after a PHPDoc tag
+     * @return string
+     */
     function getReturnDescription() {
         $re = $this->docParser->getReturnTags();
         if (count($re) == 1 and isset($re[0])) {
@@ -95,39 +113,39 @@ class ezcReflectionFunction extends ReflectionFunction
     }
 
     /**
-    * Check whether this method has a @webmethod tag
-    * @return boolean
-    */
+     * Check whether this method has a @webmethod tag
+     * @return boolean
+     */
     function isWebmethod() {
         return $this->docParser->isTagged("webmethod");
     }
 
     /**
-    * @return string
-    */
+     * @return string
+     */
     public function getShortDescription() {
         return $this->docParser->getShortDescription();
     }
 
     /**
-    * @return string
-    */
+     * @return string
+     */
     public function getLongDescription() {
         return $this->docParser->getLongDescription();
     }
 
     /**
-    * @param string $with
-    * @return boolean
-    */
+     * @param string $with
+     * @return boolean
+     */
     public function isTagged($with) {
         return $this->docParser->isTagged($with);
     }
 
     /**
-    * @param string $name
-    * @return ezcReflectionDocTag[]
-    */
+     * @param string $name
+     * @return ezcReflectionDocTag[]
+     */
     public function getTags($name = '') {
         if ($name == '') {
             return $this->docParser->getTags();
@@ -136,13 +154,16 @@ class ezcReflectionFunction extends ReflectionFunction
             return $this->docParser->getTagsByName($name);
         }
     }
-    
+
+    /**
+     * @return boolean
+     */
     public function isDisabled() {
-    	if ($this->reflectionSource instanceof ReflectionFunction ) {
-    		return $this->reflectionSource->isDisabled();
-    	} else {
-    		return parent::isDisabled();
-    	}
+        if ($this->reflectionSource instanceof ReflectionFunction ) {
+            return $this->reflectionSource->isDisabled();
+        } else {
+            return parent::isDisabled();
+        }
     }
 }
 ?>
