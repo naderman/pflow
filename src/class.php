@@ -249,13 +249,13 @@ class ezcReflectionClass extends ReflectionClass
     }
 
     /**
-     * Checks whether a annotation is used
+     * Checks whether the class is annotated with the annotation $annotation
      *
-     * @param string $with Name of the annotation
+     * @param string $annotation Name of the annotation
      * @return boolean
      */
-    public function isTagged($with) {
-        return $this->docParser->isTagged($with);
+    public function isTagged($annotation) {
+        return $this->docParser->isTagged($annotation);
     }
 
     /**
