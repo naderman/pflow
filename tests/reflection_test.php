@@ -11,7 +11,7 @@
 class ezcReflectionTest extends ezcTestCase
 {
     public function testGetDocParser() {
-        self::assertTrue( ezcReflectionApi::getDocParserInstance() instanceof ezcReflectionDocParser );
+        self::assertType( 'ezcReflectionDocParser', ezcReflectionApi::getDocParserInstance() );
     }
 
     public function testSetDocParser() {
@@ -21,7 +21,7 @@ class ezcReflectionTest extends ezcTestCase
     }
 
     public function testGetReflectionTypeFactory() {
-        self::assertTrue( ezcReflectionApi::getReflectionTypeFactory() instanceof ezcReflectionTypeFactory );
+        self::assertType( 'ezcReflectionTypeFactory', ezcReflectionApi::getReflectionTypeFactory() );
     }
 
     public function testSetReflectionTypeFactory() {

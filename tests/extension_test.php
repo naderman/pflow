@@ -11,17 +11,27 @@
 class ezcReflectionExtensionTest extends ezcTestCase
 {
 	/**
+	 * @var ReflectionExtension
+	 */
+	protected $phpExtRef;
+	protected $phpExtSpl;
+	
+	/**
 	 * @var ezcReflectionExtension
 	 */
-	private $extRef;
-	private $extSpl;
-	
+	protected $extRef;
+	protected $extSpl;
+
     public function setUp() {
+        $this->phpExtRef = new ReflectionExtension('Reflection');
+        $this->phpExtSpl = new ReflectionExtension('Spl');
         $this->extRef = new ezcReflectionExtension('Reflection');
         $this->extSpl = new ezcReflectionExtension('Spl');
     }
 
     public function tearDown() {
+        unset($this->phpExtRef);
+        unset($this->phpExtSpl);
         unset($this->extRef);
         unset($this->extSpl);
     }
@@ -40,6 +50,11 @@ class ezcReflectionExtensionTest extends ezcTestCase
         foreach ($classes as $class) {
             self::assertType('ezcReflectionClassType', $class);
         }
+    }
+
+    public function testToString() {
+        self::assertEquals( (string) $this->phpExtRef, (string) $this->extRef);
+        self::assertEquals( (string) $this->phpExtSpl, (string) $this->extSpl);
     }
     
     public function testGetName() {
@@ -72,6 +87,11 @@ class ezcReflectionExtensionTest extends ezcTestCase
     public function testGetClassNames() {
     	$classNames = $this->extRef->getClassNames();
     	self::assertFalse(empty($classNames));
+    }
+    
+    public function testGetDependencies() {
+        self::assertEquals( $this->phpExtRef->getDependencies(), $this->extRef->getDependencies() );
+        self::assertEquals( $this->phpExtSpl->getDependencies(), $this->extSpl->getDependencies() );
     }
     
     public static function suite()
