@@ -15,6 +15,7 @@
  * @package Reflection
  * @version //autogentag//
  * @author Stefan Marr <mail@stefan-marr.de>
+ * @author Falko Menge <mail@falko-menge.de>
  */
 class ezcReflectionFunction extends ReflectionFunction
 {
@@ -34,38 +35,32 @@ class ezcReflectionFunction extends ReflectionFunction
      * Constructs a new ezcReflectionFunction object
      *
      * Throws an Exception in case the given function does not exist
-     * @param string|ReflectionFunction $name
+     * @param string|ReflectionFunction $function
      *        Name or ReflectionFunction object of the function to be reflected
      */
-    public function __construct( $name ) {
-        if ( !$name instanceof ReflectionFunction ) {
-            parent::__construct( $name );
+    public function __construct( $function ) {
+        if ( !$function instanceof ReflectionFunction ) {
+            parent::__construct( $function );
         }
-        $this->reflectionSource = $name;
+        $this->reflectionSource = $function;
 
         $this->docParser = ezcReflectionApi::getDocParserInstance();
         $this->docParser->parse( $this->getDocComment() );
     }
 
     /**
-     * Returns a string representation
-     * @return string
-     */
-    public function __toString() {
-        if ( $this->reflectionSource ) {
-            return $this->reflectionSource->__toString();
-        } else {
-            return parent::__toString();
-        }
-    }
-
-    /**
-     * @return ezcReflectionParameter[]
+     * Returns the parameters of the function as ezcReflectionParameter objects
+     *
+     * @return ezcReflectionParameter[] Function parameters
      */
     function getParameters() {
         $params = $this->docParser->getParamTags();
         $extParams = array();
-        $apiParams = parent::getParameters();
+        if ( $this->reflectionSource instanceof ReflectionFunction ) {
+            $apiParams = $this->reflectionSource->getParameters();
+        } else {
+            $apiParams = parent::getParameters();
+        }
         foreach ($apiParams as $param) {
             $found = false;
             foreach ($params as $tag) {
@@ -89,7 +84,8 @@ class ezcReflectionFunction extends ReflectionFunction
     }
 
     /**
-     * Returns the type defined in PHPDoc tags
+     * Returns the type of the return value
+     *
      * @return ezcReflectionType
      */
     function getReturnType() {
@@ -101,7 +97,8 @@ class ezcReflectionFunction extends ReflectionFunction
     }
 
     /**
-     * Returns the description after a PHPDoc tag
+     * Returns the description of the return value
+     *
      * @return string
      */
     function getReturnDescription() {
@@ -113,7 +110,8 @@ class ezcReflectionFunction extends ReflectionFunction
     }
 
     /**
-     * Check whether this method has a @webmethod tag
+     * Check whether this method has a @webmethod annotation
+     *
      * @return boolean
      */
     function isWebmethod() {
@@ -121,30 +119,38 @@ class ezcReflectionFunction extends ReflectionFunction
     }
 
     /**
-     * @return string
+     * Returns the short description from the function's documentation
+     *
+     * @return string Short description
      */
     public function getShortDescription() {
         return $this->docParser->getShortDescription();
     }
 
     /**
-     * @return string
+     * Returns the long description from the function's documentation
+     *
+     * @return string Long descrition
      */
     public function getLongDescription() {
         return $this->docParser->getLongDescription();
     }
 
     /**
-     * @param string $with
-     * @return boolean
+     * Checks whether the function is annotated with the annotation $annotation
+     *
+     * @param string $annotation Name of the annotation
+     * @return boolean True if the annotation exists for this function
      */
-    public function isTagged($with) {
-        return $this->docParser->isTagged($with);
+    public function isTagged($annotation) {
+        return $this->docParser->isTagged($annotation);
     }
 
     /**
-     * @param string $name
-     * @return ezcReflectionDocTag[]
+     * Returns an array of annotations (optinally only annotations of a given name)
+     *
+     * @param string $name Name of the annotations
+     * @return ezcReflectionDocTag[] Annotations
      */
     public function getTags($name = '') {
         if ($name == '') {
@@ -155,15 +161,260 @@ class ezcReflectionFunction extends ReflectionFunction
         }
     }
 
+
+    // the following methods do not contain additional features
+    // they just call the parent method or the reflection source
+
     /**
-     * @return boolean
+     * Returns a string representation
+     *
+     * @return string String representation
+     */
+    public function __toString() {
+        if ( $this->reflectionSource instanceof ReflectionFunction ) {
+            return $this->reflectionSource->__toString();
+        } else {
+            return parent::__toString();
+        }
+    }
+
+    /**
+     * Returns this function's name
+     *
+     * @return string This function's name
+     */
+    public function getName() {
+        if ( $this->reflectionSource instanceof ReflectionFunction ) {
+            return $this->reflectionSource->getName();
+        } else {
+            return parent::getName();
+        }
+    }
+
+    /**
+     * Returns whether this is an internal function
+     *
+     * @return boolean True if this is an internal function
+     */
+    public function isInternal() {
+        if ( $this->reflectionSource instanceof ReflectionFunction ) {
+            return $this->reflectionSource->isInternal();
+        } else {
+            return parent::isInternal();
+        }
+    }
+
+    /**
+     * Returns whether this is a user-defined function
+     *
+     * @return boolean True if this is a user-defined function
+     */
+    public function isUserDefined() {
+        if ( $this->reflectionSource instanceof ReflectionFunction ) {
+            return $this->reflectionSource->isUserDefined();
+        } else {
+            return parent::isUserDefined();
+        }
+    }
+
+    /**
+     * Returns whether this function has been disabled or not
+     *
+     * @return boolean True if this function has been disabled
      */
     public function isDisabled() {
-        if ($this->reflectionSource instanceof ReflectionFunction ) {
+        if ( $this->reflectionSource instanceof ReflectionFunction ) {
             return $this->reflectionSource->isDisabled();
         } else {
             return parent::isDisabled();
         }
+    }
+
+    /**
+     * Returns the filename of the file this function was declared in
+     *
+     * @return string Filename of the file this function was declared in
+     */
+    public function getFileName() {
+        if ( $this->reflectionSource instanceof ReflectionFunction ) {
+            return $this->reflectionSource->getFileName();
+        } else {
+            return parent::getFileName();
+        }
+    }
+
+    /**
+     * Returns the line this function's declaration starts at
+     *
+     * @return integer Line this function's declaration starts at
+     */
+    public function getStartLine() {
+        if ( $this->reflectionSource instanceof ReflectionFunction ) {
+            return $this->reflectionSource->getStartLine();
+        } else {
+            return parent::getStartLine();
+        }
+    }
+
+    /**
+     * Returns the line this function's declaration ends at
+     *
+     * @return integer Line this function's declaration ends at
+     */
+    public function getEndLine() {
+        if ( $this->reflectionSource instanceof ReflectionFunction ) {
+            return $this->reflectionSource->getEndLine();
+        } else {
+            return parent::getEndLine();
+        }
+    }
+
+    /**
+     * Returns the doc comment for this function
+     *
+     * @return string Doc comment for this function
+     */
+    public function getDocComment() {
+        if ( $this->reflectionSource instanceof ReflectionFunction ) {
+            return $this->reflectionSource->getDocComment();
+        } else {
+            return parent::getDocComment();
+        }
+    }
+
+    /**
+     * Returns an associative array containing this function's static variables
+     * and their values
+     *
+     * @return array<sting,mixed> This function's static variables
+     */
+    public function getStaticVariables() {
+        if ( $this->reflectionSource instanceof ReflectionFunction ) {
+            return $this->reflectionSource->getStaticVariables();
+        } else {
+            return parent::getStaticVariables();
+        }
+    }
+
+    /**
+     * Invokes the function
+     *
+     * @param mixed $argument,... Arguments
+     * @return mixed
+     */
+    public function invoke( $argument ) {
+        $arguments = func_get_args();
+        if ( $this->reflectionSource instanceof ReflectionFunction ) {
+            // doesn't work: return call_user_func_array( array( $this->reflectionSource, 'invoke' ), $arguments );
+            // but hopefully the methods of external ReflectionFunction implementation are semantically the same
+            return $this->reflectionSource->invokeArgs( $arguments );
+        } else {
+            // doesn't work: return call_user_func_array( array( parent, 'invoke' ), $arguments );
+            // but hopefully the methods of ReflectionFunction are semantically the same
+            return parent::invokeArgs( $arguments );
+        }
+    }
+
+    /**
+     * Invokes the function and allows to pass its arguments as an array
+     *
+     * @param array<integer,mixed> $arguments Arguments
+     * @return mixed
+     */
+    public function invokeArgs( Array $arguments ) {
+        if ( $this->reflectionSource instanceof ReflectionFunction ) {
+            return $this->reflectionSource->invokeArgs( $arguments );
+        } else {
+            return parent::invokeArgs( $arguments );
+        }
+    }
+
+    /**
+     * Returns whether this function returns a reference
+     *
+     * @return boolean True if this function returns a reference
+     */
+    public function returnsReference() {
+        if ( $this->reflectionSource instanceof ReflectionFunction ) {
+            return $this->reflectionSource->returnsReference();
+        } else {
+            return parent::returnsReference();
+        }
+    }
+
+    /**
+     * Returns the number of parameters
+     *
+     * @return integer The number of parameters
+     */
+    public function getNumberOfParameters() {
+        if ( $this->reflectionSource instanceof ReflectionFunction ) {
+            return $this->reflectionSource->getNumberOfParameters();
+        } else {
+            return parent::getNumberOfParameters();
+        }
+    }
+
+    /**
+     * Returns the number of required parameters
+     *
+     * @return integer The number of required parameters
+     */
+    public function getNumberOfRequiredParameters() {
+        if ( $this->reflectionSource instanceof ReflectionFunction ) {
+            return $this->reflectionSource->getNumberOfRequiredParameters();
+        } else {
+            return parent::getNumberOfRequiredParameters();
+        }
+    }
+
+    /**
+     * Returns NULL or the extension the function belongs to
+     *
+     * @return ezcReflectionExtension Extension the function belongs to
+     */
+    public function getExtension() {
+        if ( $this->getExtensionName() === false ) {
+            return null;
+        } else {
+            if ( $this->reflectionSource instanceof ReflectionFunction ) {
+                return new ezcReflectionExtension(
+                    $this->reflectionSource->getExtension()
+                );
+            } else {
+                // using the name, since otherwhise the object would be treated like an
+                // external reflection implementation and that would decrease performance
+                return new ezcReflectionExtension( parent::getExtensionName() );
+            }
+        }
+    }
+
+    /**
+     * Returns false or the name of the extension the function belongs to
+     *
+     * @return string|boolean False or the name of the extension
+     */
+    public function getExtensionName() {
+        if ( $this->reflectionSource instanceof ReflectionFunction ) {
+            return $this->reflectionSource->getExtensionName();
+        } else {
+            return parent::getExtensionName();
+        }
+    }
+
+    /**
+     * Exports a reflection object.
+     *
+     * Returns the output if TRUE is specified for $return, printing it otherwise.
+     * This is purely a wrapper method which calls the corresponding method of
+     * the parent class.
+     * @param string $function Name of the function
+     * @param boolean $return
+     *        Wether to return (TRUE) or print (FALSE) the output
+     * @return mixed
+     */
+    public static function export($function, $return = false) {
+        return parent::export($function, $return);
     }
 }
 ?>

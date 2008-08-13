@@ -11,17 +11,16 @@
 class ezcReflectionMethodTest extends ezcReflectionFunctionTest 
 {
 	public function setUp() {
+        $this->php_fctM1 = new ReflectionMethod('TestMethods', 'm1');
+        $this->php_fctM2 = new ReflectionMethod('TestMethods', 'm2');
+        $this->php_fctM3 = new ReflectionMethod('TestMethods', 'm3');
+        $this->php_fct_method_exists = new ReflectionMethod( 'ReflectionClass', 'hasMethod' );
         $this->fctM1 = new ezcReflectionMethod('TestMethods', 'm1');
         $this->fctM2 = new ezcReflectionMethod('TestMethods', 'm2');
         $this->fctM3 = new ezcReflectionMethod('TestMethods', 'm3');
+        $this->fct_method_exists = new ezcReflectionMethod( 'ReflectionClass', 'hasMethod' );
     }
 
-    public function tearDown() {
-        unset($this->fctM1);
-        unset($this->fctM2);
-        unset($this->fctM3);
-    }
-	
     public function testGetDeclaringClass() {
         $class = $this->fctM1->getDeclaringClass();
         self::assertType('ezcReflectionClassType', $class);
@@ -175,6 +174,20 @@ class ezcReflectionMethodTest extends ezcReflectionFunctionTest
      * @bar
      * @foobar
      */", $this->fctM2->getDocComment());
+    }
+    
+    public function testInvoke() {
+        self::assertEquals(
+            $this->php_fct_method_exists->invoke( new ReflectionClass('ReflectionClass'), 'hasMethod' ),
+            $this->fct_method_exists->invoke( new ReflectionClass('ReflectionClass'), 'hasMethod' )
+        );
+    }
+    
+    public function testInvokeArgs() {
+        self::assertEquals(
+            $this->php_fct_method_exists->invokeArgs( new ReflectionClass('ReflectionClass'), array( 'hasMethod' ) ),
+            $this->fct_method_exists->invokeArgs( new ReflectionClass('ReflectionClass'), array( 'hasMethod' ) )
+        );
     }
     
 	public function testGetNumberOfParameters() {

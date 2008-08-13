@@ -11,19 +11,36 @@
 class ezcReflectionFunctionTest extends ezcTestCase
 {
 	/**
+     * @var ReflectionFunction
+     */
+    protected $php_fctM1;
+    protected $php_fctM2;
+    protected $php_fctM3;
+    protected $php_fct_method_exists;
+
+	/**
      * @var ezcReflectionFunction
      */
     protected $fctM1;
     protected $fctM2;
     protected $fctM3;
+    protected $fct_method_exists;
 
     public function setUp() {
+        $this->php_fctM1 = new ReflectionFunction('m1');
+        $this->php_fctM2 = new ReflectionFunction('m2');
+        $this->php_fctM3 = new ReflectionFunction('m3');
+        $this->php_fct_method_exists = new ReflectionFunction('method_exists');
         $this->fctM1 = new ezcReflectionFunction('m1');
         $this->fctM2 = new ezcReflectionFunction('m2');
         $this->fctM3 = new ezcReflectionFunction('m3');
+        $this->fct_method_exists = new ezcReflectionFunction('method_exists');
     }
 
     public function tearDown() {
+        unset($this->php_fctM1);
+        unset($this->php_fctM2);
+        unset($this->php_fctM3);
         unset($this->fctM1);
         unset($this->fctM2);
         unset($this->fctM3);
@@ -142,9 +159,20 @@ class ezcReflectionFunctionTest extends ezcTestCase
         self::assertTrue(count($params) == 0);
     }
 
+
+    // the following methods do not contain additional features
+    // they just call the parent method or the reflection source
+
+    public function testToString() {
+        self::assertEquals(  $this->php_fctM1->__toString(), $this->fctM1->__toString() );
+        self::assertEquals( "{$this->php_fctM2}", "{$this->fctM2}" );
+        self::assertEquals( (string) $this->php_fctM3, (string) $this->fctM3);
+    }
+    
     public function testGetName() {
     	self::assertEquals('m1', $this->fctM1->getName());
     	self::assertEquals('m2', $this->fctM2->getName());
+    	self::assertEquals('m3', $this->fctM3->getName());
     }
        
     public function testIsInternal() {
@@ -184,8 +212,47 @@ class ezcReflectionFunctionTest extends ezcTestCase
     	self::assertTrue(array_key_exists('staticVar', $vars));
     }
     
-    //public mixed invoke([mixed args [, ...]])
-    //public mixed invokeArgs(array args)
+    public function testInvoke() {
+        self::assertEquals(
+            $this->php_fctM1->invoke(
+                'test',
+                'ezcReflectionApi',
+                new ReflectionClass( 'ReflectionClass' )
+            ),
+            $this->fctM1->invoke(
+                'test',
+                'ezcReflectionApi',
+                new ReflectionClass( 'ReflectionClass' )
+            )
+        );
+        self::assertEquals(
+            $this->php_fct_method_exists->invoke( 'ReflectionClass', 'hasMethod' ),
+            $this->fct_method_exists->invoke( 'ReflectionClass', 'hasMethod' )
+        );
+    }
+    
+    public function testInvokeArgs() {
+        self::assertEquals(
+            $this->php_fctM1->invokeArgs(
+                array(
+                    'test',
+                    'ezcReflectionApi',
+                    new ReflectionClass( 'ReflectionClass' )
+                )
+            ),
+            $this->fctM1->invokeArgs(
+                array(
+                    'test',
+                    'ezcReflectionApi',
+                    new ReflectionClass( 'ReflectionClass' )
+                )
+            )
+        );
+        self::assertEquals(
+            $this->php_fct_method_exists->invokeArgs( array( 'ReflectionClass', 'hasMethod' ) ),
+            $this->fct_method_exists->invokeArgs( array( 'ReflectionClass', 'hasMethod' ) )
+        );
+    }
     
     public function testReturnsReference() {
     	self::assertFalse($this->fctM3->returnsReference());
@@ -201,7 +268,27 @@ class ezcReflectionFunctionTest extends ezcTestCase
     	$func = new ReflectionFunction('mmm');
     	self::assertEquals(0, $func->getNumberOfRequiredParameters());
     }
+
+    public function testGetExtension() {
+        self::assertEquals( $this->php_fctM1->getExtension(), $this->fctM1->getExtension() );
+        self::assertEquals( $this->php_fctM2->getExtension(), $this->fctM2->getExtension() );
+        self::assertEquals( $this->php_fctM3->getExtension(), $this->fctM3->getExtension() );
+        self::assertEquals( $this->php_fct_method_exists->getExtension(), $this->fct_method_exists->getExtension() );
+    }
     
+    public function testGetExtensionName() {
+        self::assertEquals(  $this->php_fctM1->getExtensionName(), $this->fctM1->getExtensionName() );
+        self::assertEquals(  $this->php_fctM2->getExtensionName(), $this->fctM2->getExtensionName() );
+        self::assertEquals(  $this->php_fctM3->getExtensionName(), $this->fctM3->getExtensionName() );
+        self::assertEquals(  $this->php_fct_method_exists->getExtensionName(), $this->fct_method_exists->getExtensionName() );
+    }
+    
+    public function testExport() {
+        self::assertEquals( ReflectionFunction::export( 'm1', true ), ezcReflectionFunction::export( 'm1', true ) );
+        self::assertEquals( ReflectionFunction::export( 'm2', true ), ezcReflectionFunction::export( 'm2', true ) );
+        self::assertEquals( ReflectionFunction::export( 'm3', true ), ezcReflectionFunction::export( 'm3', true ) );
+    }
+
     public static function suite()
     {
          return new PHPUnit_Framework_TestSuite( "ezcReflectionFunctionTest" );
