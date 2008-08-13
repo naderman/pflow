@@ -17,8 +17,14 @@
  */
 class ezcReflectionTypeFactoryImpl implements ezcReflectionTypeFactory {
 
-    private $mapper;
+    /**
+     * @var ezcReflectionTypeMapper
+     */
+    protected $mapper;
 
+    /**
+     * Constructs a type factory implementation
+     */
     public function __construct() {
         $this->mapper = ezcReflectionTypeMapper::getInstance();
     }

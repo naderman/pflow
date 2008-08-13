@@ -34,6 +34,9 @@ class ezcReflectionTypeMapper
      */
     protected $xmlMappingTable;
 
+    /**
+     * Constructs a type mapper
+     */
     private function __construct()
     {
         $this->initMappingTable();
