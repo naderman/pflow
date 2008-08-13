@@ -82,7 +82,7 @@ class ezcReflectionDocParserTest extends ezcTestCase
         $parser = ezcReflectionApi::getDocParserInstance();
         $parser->parse(self::$docs[6]);
         $tags = $parser->getTags();
-        self::assertEquals(6, count($tags));
+        self::assertEquals(9, count($tags));
     }
 
     public function testGetParamTags() {

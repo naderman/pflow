@@ -60,7 +60,7 @@ class ezcReflectionSuite extends PHPUnit_Framework_TestSuite
         $this->addTest( ezcReflectionDocTagFactoryTest::suite() );
         $this->addTest( ezcReflectionTypeFactoryTest::suite() );
         $this->addTest( ezcReflectionTypeMapperTest::suite() );
-        //$this->addTest( ezcReflectionTest::suite() );
+        $this->addTest( ezcReflectionTest::suite() );
     }
 
     public static function suite()

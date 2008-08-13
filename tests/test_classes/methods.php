@@ -43,6 +43,9 @@ class TestMethods {
 
     /**
      * To check whether a tag was used
+     * @restmethod POST /\/(.*?)\/m4\//
+     * @restin XbelSerializer
+     * @restout XbelSerializer
      * @webmethod
      * @author
      * @param string $test

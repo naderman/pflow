@@ -43,7 +43,7 @@ class ezcReflectionMethodTest extends ezcReflectionFunctionTest
 
         $method = new ezcReflectionMethod('TestMethods', 'm4');
         $tags = $method->getTags();
-        $expectedTags = array('webmethod', 'author', 'param', 'param', 'param', 'return');
+        $expectedTags = array('webmethod', 'restmethod', 'restin', 'restout', 'author', 'param', 'param', 'param', 'return');
         ReflectionTestHelper::expectedTags($expectedTags, $tags, $this);
 
         $tags = $method->getTags('param');
