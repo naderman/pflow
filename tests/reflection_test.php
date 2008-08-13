@@ -10,6 +10,26 @@
 
 class ezcReflectionTest extends ezcTestCase
 {
+    public function testGetDocParser() {
+        self::assertTrue( ezcReflectionApi::getDocParserInstance() instanceof ezcReflectionDocParser );
+    }
+
+    public function testSetDocParser() {
+        $annotationParser = new ezcReflectionPhpDocParser();
+        ezcReflectionApi::setDocParser( $annotationParser );
+        self::assertEquals( $annotationParser, ezcReflectionApi::getDocParserInstance() );
+    }
+
+    public function testGetReflectionTypeFactory() {
+        self::assertTrue( ezcReflectionApi::getReflectionTypeFactory() instanceof ezcReflectionTypeFactory );
+    }
+
+    public function testSetReflectionTypeFactory() {
+        $factory = new ezcReflectionTypeFactoryImpl();
+        ezcReflectionApi::setReflectionTypeFactory( $factory );
+        self::assertEquals( $factory, ezcReflectionApi::getReflectionTypeFactory() );
+    }
+
     public function testGetTypeByName() {
         $string = ezcReflectionApi::getTypeByName('string');
         self::assertEquals('string', $string->toString());

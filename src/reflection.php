@@ -8,30 +8,40 @@
  * @license http://ez.no/licenses/new_bsd New BSD License
  */
 
+// TODO: rename ezcReflectionApi to ezcReflection
 /**
  * Holds type factory for generating type objects by given name
  * 
  * @package Reflection
  * @version //autogentag//
  * @author Stefan Marr <mail@stefan-marr.de>
+ * @author Falko Menge <mail@falko-menge.de>
  */
 class ezcReflectionApi {
 
 	/**
 	 * @var ezcReflectionTypeFactory
 	 */
-	private static $reflectionTypeFactory = null;
+	protected static $reflectionTypeFactory = null;
 	
 	/**
 	 * @var ezcReflectionDocParser
+     *      Current documentation parser used by all ezcReflection classes
 	 */
-	private static $docParser = null;
+	protected static $docParser = null;
 
 	/**
 	 * Don't allow objects, it is just a static factory
 	 */
     private function __construct() {}
 
+    // TODO: rename getDocParserInstance() to getDocParser()
+    /**
+     * Returns a copy of the current documentation parser used by all
+     * ezcReflection classes
+     *
+     * @return ezcReflectionDocParser
+     */
     public static function getDocParserInstance()
     {
     	if (self::$docParser == null) {
@@ -40,17 +50,38 @@ class ezcReflectionApi {
     	return clone self::$docParser;
     }
     
-    public static function setDocParser($docParser)
+    /**
+     * Sets the documentation parser used by all ezcReflection classes
+     *
+     * @param setDocParser $docParser Parser for documentation blocks
+     * @return void
+     */
+    public static function setDocParser(ezcReflectionDocParser $docParser)
     {
     	self::$docParser = $docParser;
     }
     
     /**
-     * Factory to create type objects
-     * @param ezcReflectionTypeFactory $factory
+     * Returns a copy of the current factory used to create type objects
+     *
+     * @return ezcReflectionTypeFactory
+     */
+    public static function getReflectionTypeFactory()
+    {
+        if (self::$reflectionTypeFactory == null) {
+            self::$reflectionTypeFactory = new ezcReflectionTypeFactoryImpl();
+        }
+    	return clone self::$reflectionTypeFactory;
+    }
+    
+    /**
+     * Sets the factory used to create type objects
+     *
+     * @param ezcReflectionTypeFactory $factory Factory for type objects
      * @return void
      */
-    public static function setReflectionTypeFactory($factory) {
+    public static function setReflectionTypeFactory(ezcReflectionTypeFactory $factory)
+    {
         self::$reflectionTypeFactory = $factory;
     }
 
@@ -60,11 +91,9 @@ class ezcReflectionApi {
      * @param string $typeName
      * @return ezcReflectionType
      */
-    public static function getTypeByName($typeName) {
-        if (self::$reflectionTypeFactory == null) {
-            self::$reflectionTypeFactory = new ezcReflectionTypeFactoryImpl();
-        }
-        return self::$reflectionTypeFactory->getType($typeName);
+    public static function getTypeByName($typeName)
+    {
+        return self::getReflectionTypeFactory()->getType($typeName);
     }
 
     /**
