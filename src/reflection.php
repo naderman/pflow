@@ -33,7 +33,9 @@ class ezcReflectionApi {
 	/**
 	 * Don't allow objects, it is just a static factory
 	 */
+    // @codeCoverageIgnoreStart
     private function __construct() {}
+    // @codeCoverageIgnoreEnd
 
     // TODO: rename getDocParserInstance() to getDocParser()
     /**
