@@ -3,8 +3,8 @@
  * File containing the ezcReflectionParameter class.
  *
  * @package Reflection
- * @version //autogentag//
- * @copyright Copyright (C) 2007 eZ systems as. All rights reserved.
+ * @version //autogen//
+ * @copyright Copyright (C) 2005-2008 eZ systems as. All rights reserved.
  * @license http://ez.no/licenses/new_bsd New BSD License
  */
 
@@ -13,9 +13,9 @@
  * or method's parameters and their types.
  *
  * Extends the ReflectionParameter class using PHPDoc comments to provide
- * type information 
+ * type information
  * @package Reflection
- * @version //autogentag//
+ * @version //autogen//
  * @author Stefan Marr <mail@stefan-marr.de>
  */
  class ezcReflectionParameter extends ReflectionParameter {
@@ -101,7 +101,7 @@
             return parent::isPassedByReference();
         }
     }
-	
+
 	/**
      * Returns whether parameter MUST be an array
      * @return boolean
@@ -140,7 +140,7 @@
             return parent::getName();
         }
     }
-	
+
 	/**
      * Returns whether this parameter is an optional parameter
      * @return integer

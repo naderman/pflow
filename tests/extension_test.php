@@ -1,8 +1,8 @@
 <?php
 /**
- * @copyright Copyright (C) 2005, 2006 eZ systems as. All rights reserved.
+ * @copyright Copyright (C) 2005-2008 eZ systems as. All rights reserved.
  * @license http://ez.no/licenses/new_bsd New BSD License
- * @version //autogentag//
+ * @version //autogen//
  * @filesource
  * @package Reflection
  * @subpackage Tests
@@ -15,7 +15,7 @@ class ezcReflectionExtensionTest extends ezcTestCase
 	 */
 	protected $phpExtRef;
 	protected $phpExtSpl;
-	
+
 	/**
 	 * @var ezcReflectionExtension
 	 */
@@ -35,7 +35,7 @@ class ezcReflectionExtensionTest extends ezcTestCase
         unset($this->extRef);
         unset($this->extSpl);
     }
-	
+
     public function testGetFunctions() {
         $functs = $this->extRef->getFunctions();
         foreach ($functs as $func) {
@@ -56,44 +56,44 @@ class ezcReflectionExtensionTest extends ezcTestCase
         self::assertEquals( (string) $this->phpExtRef, (string) $this->extRef);
         self::assertEquals( (string) $this->phpExtSpl, (string) $this->extSpl);
     }
-    
+
     public function testGetName() {
     	self::assertEquals('SPL', $this->extSpl->getName());
     	self::assertEquals('Reflection', $this->extRef->getName());
     }
-    
+
     public function testGetVersion() {
     	$version = $this->extRef->getVersion();
     	self::assertFalse(empty($version));
     }
-    
+
     public function testInfo() {
     	ob_start();
     	$this->extRef->info();
-    	$info = ob_get_clean(); 
+    	$info = ob_get_clean();
     	self::assertFalse(empty($info));
     }
-    
+
     public function testGetConstants() {
     	$constants = $this->extRef->getConstants();
     	self::assertTrue(empty($constants));
     }
-    
+
     public function testGetINIEntries() {
     	$iniEntries = $this->extRef->getINIEntries();
     	self::assertTrue(empty($iniEntries));
     }
-    
+
     public function testGetClassNames() {
     	$classNames = $this->extRef->getClassNames();
     	self::assertFalse(empty($classNames));
     }
-    
+
     public function testGetDependencies() {
         self::assertEquals( $this->phpExtRef->getDependencies(), $this->extRef->getDependencies() );
         self::assertEquals( $this->phpExtSpl->getDependencies(), $this->extSpl->getDependencies() );
     }
-    
+
     public static function suite()
     {
          return new PHPUnit_Framework_TestSuite( "ezcReflectionExtensionTest" );

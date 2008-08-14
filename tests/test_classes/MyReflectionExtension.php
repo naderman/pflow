@@ -1,9 +1,9 @@
 <?php
 class MyReflectionExtension extends ReflectionExtension {
-	
+
 	public function getFunctions() {
     	$functs = parent::getFunctions();
-    	
+
     	$result = array();
         foreach ($functs as $func) {
         	$result[] = new MyReflectionFunction($func->getName());
@@ -20,7 +20,7 @@ class MyReflectionExtension extends ReflectionExtension {
         }
         return $result;
     }
-    
+
 	public function change() {
 		return true;
 	}

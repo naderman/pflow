@@ -3,29 +3,29 @@
  * File containing the ezcReflectionPhpDocParser class.
  *
  * @package Reflection
- * @version //autogentag//
- * @copyright Copyright (C) 2007 eZ systems as. All rights reserved.
+ * @version //autogen//
+ * @copyright Copyright (C) 2005-2008 eZ systems as. All rights reserved.
  * @license http://ez.no/licenses/new_bsd New BSD License
  */
 
 /**
  * Provides structured data from PHP Documentor comments
- * 
+ *
  * Parser is implemented as state based parser using a state transisiton
  * table consisting of transition rules for empty and non-empty lines.
- * 
+ *
  * @package Reflection
- * @version //autogentag//
+ * @version //autogen//
  * @author Stefan Marr <mail@stefan-marr.de>
  * @author Falko Menge <mail@falko-menge.de>
  */
 class ezcReflectionPhpDocParser implements ezcReflectionDocParser {
-	
+
 	const BEGINNING  = 10;
 	const SHORT_DESC = 0;
 	const LONG_DESC  = 1;
 	const TAGS 		 = 2;
-	
+
     /**
      * @var string
      */
@@ -45,7 +45,7 @@ class ezcReflectionPhpDocParser implements ezcReflectionDocParser {
                                   self::SHORT_DESC => self::LONG_DESC,
                                   self::LONG_DESC  => self::LONG_DESC,
                                   self::TAGS       => self::TAGS),
-                                  
+
                                 false => array ( // non empty lines
     							  self::BEGINNING  => self::SHORT_DESC,
                                   self::SHORT_DESC => self::SHORT_DESC,
@@ -78,7 +78,7 @@ class ezcReflectionPhpDocParser implements ezcReflectionDocParser {
 
     public function parse($docComment) {
     	$this->docComment = $docComment;
-    	
+
         $lines = explode("\n", $this->docComment);
 
         foreach ($lines as $line) {
@@ -103,7 +103,7 @@ class ezcReflectionPhpDocParser implements ezcReflectionDocParser {
             else if ($this->state == self::LONG_DESC) {
                 $this->longDesc .= "\n";
             }
-            
+
             //next state
             $this->state = $this->stateTable[empty($line)][$this->state];
         }
@@ -188,7 +188,7 @@ class ezcReflectionPhpDocParser implements ezcReflectionDocParser {
     }
 
     /**
-     * Return an array of return annotations 
+     * Return an array of return annotations
      *
      * @return ezcReflectionDocTagReturn[]
      */
@@ -208,7 +208,7 @@ class ezcReflectionPhpDocParser implements ezcReflectionDocParser {
 
     /**
      * Returns the short description from the source code documentation
-     * 
+     *
      * @return string Short description
      */
     public function getShortDescription() {
@@ -217,7 +217,7 @@ class ezcReflectionPhpDocParser implements ezcReflectionDocParser {
 
     /**
      * Returns the long description from the source code documentation
-     * 
+     *
      * @return string Long description
      */
     public function getLongDescription() {

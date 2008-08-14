@@ -3,17 +3,17 @@
  * File containing the ezcReflectionMethod class.
  *
  * @package Reflection
- * @version //autogentag//
- * @copyright Copyright (C) 2007 eZ systems as. All rights reserved.
+ * @version //autogen//
+ * @copyright Copyright (C) 2005-2008 eZ systems as. All rights reserved.
  * @license http://ez.no/licenses/new_bsd New BSD License
  */
 
 /**
  * Extends the ReflectionMethod class using PHPDoc comments to provide
  * type information
- * 
+ *
  * @package Reflection
- * @version //autogentag//
+ * @version //autogen//
  * @author Stefan Marr <mail@stefan-marr.de>
  */
 class ezcReflectionMethod extends ReflectionMethod
@@ -31,7 +31,7 @@ class ezcReflectionMethod extends ReflectionMethod
      * @var ReflectionClass
      */
     protected $curClass;
-    
+
     /**
      * @var ReflectionMethod
      */
@@ -56,7 +56,7 @@ class ezcReflectionMethod extends ReflectionMethod
         else {
             $this->curClass = null;
         }
-		
+
 		$this->docParser = ezcReflectionApi::getDocParserInstance();
         $this->docParser->parse($this->getDocComment());
     }
@@ -101,7 +101,7 @@ class ezcReflectionMethod extends ReflectionMethod
         }
         return $comment;
     }
-    
+
     /**
     * Returns the type defined in PHPDoc tags
     * @return ezcReflectionType
@@ -232,7 +232,7 @@ class ezcReflectionMethod extends ReflectionMethod
 		    return null;
 		}
     }
-    
+
     /**
      * Name of the method
      * @return string
@@ -244,7 +244,7 @@ class ezcReflectionMethod extends ReflectionMethod
     		return parent::getName();
     	}
     }
-    
+
     /**
      * Use overloading to call additional methods
      * of the reflection instance given to the constructor

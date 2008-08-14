@@ -3,16 +3,16 @@
  * File containing the ezcReflectionTypeFactory interface.
  *
  * @package Reflection
- * @version //autogentag//
- * @copyright Copyright (C) 2007 eZ systems as. All rights reserved.
+ * @version //autogen//
+ * @copyright Copyright (C) 2005-2008 eZ systems as. All rights reserved.
  * @license http://ez.no/licenses/new_bsd New BSD License
  */
 
 /**
  * Interface definition for the type factory used by the reflection
- * 
+ *
  * @package Reflection
- * @version //autogentag//
+ * @version //autogen//
  * @author Stefan Marr <mail@stefan-marr.de>
  */
 interface ezcReflectionTypeFactory {

@@ -1,8 +1,8 @@
 <?php
 /**
- * @copyright Copyright (C) 2005, 2006 eZ systems as. All rights reserved.
+ * @copyright Copyright (C) 2005-2008 eZ systems as. All rights reserved.
  * @license http://ez.no/licenses/new_bsd New BSD License
- * @version //autogentag//
+ * @version //autogen//
  * @filesource
  * @package Reflection
  * @subpackage Tests
@@ -35,35 +35,35 @@ class ezcReflectionPropertyTest extends ezcTestCase
         self::assertType('ezcReflectionClassType', $class);
         self::assertEquals('SomeClass', $class->toString());
     }
-	
+
 	public function testGetName() {
 		self::assertEquals('fields', $this->refProp->getName());
 	}
-	
+
     public function testIsPublic() {
 		self::assertFalse($this->refProp->isPublic());
 	}
-	
+
 	public function testIsPrivate() {
 		self::assertTrue($this->refProp->isPrivate());
 	}
-    
+
 	public function testIsProtected() {
 		self::assertFalse($this->refProp->isProtected());
 	}
-	
+
 	public function testIsStatic() {
 		self::assertFalse($this->refProp->isStatic());
 	}
-    
+
 	public function testIsDefault() {
 		self::assertTrue($this->refProp->isDefault());
 	}
-    
+
 	public function testGetModifiers() {
 		self::assertEquals(1024, $this->refProp->getModifiers());
 	}
-	
+
 	/**
 	* @expectedException ReflectionException
 	*/
@@ -71,7 +71,7 @@ class ezcReflectionPropertyTest extends ezcTestCase
 		$o = new SomeClass();
 		self::assertEquals(null, $this->refProp->getValue($o));
 	}
-	
+
 	/**
 	* @expectedException ReflectionException
 	*/
@@ -81,14 +81,14 @@ class ezcReflectionPropertyTest extends ezcTestCase
 		$this->refProp->setValue($o, 3);
 		//self::assertEquals(3, $this->refProp->getValue($o));
 	}
-	
+
 	public function testGetDocComment() {
 		$o = new SomeClass();
 		self::assertEquals("/**
      * @var int[]
      */", $this->refProp->getDocComment($o));
 	}
-	
+
 
     public static function suite()
     {

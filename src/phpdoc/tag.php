@@ -3,23 +3,23 @@
  * File containing the ezcReflectionDocTag class.
  *
  * @package Reflection
- * @version //autogentag//
- * @copyright Copyright (C) 2007 eZ systems as. All rights reserved.
+ * @version //autogen//
+ * @copyright Copyright (C) 2005-2008 eZ systems as. All rights reserved.
  * @license http://ez.no/licenses/new_bsd New BSD License
  */
 
 /**
  * Represents a doc tag in the php source code comment.
- * 
+ *
  * This class is used as standard implementation for representing
  * annotations. It is only used if no specialized tag class could be
  * found deriving from this class.
- * 
+ *
  * The comment line is tokenized by at spaces and if no further structure is recognized,
- * tokens are available at getParams. 
- * 
+ * tokens are available at getParams.
+ *
  * @package Reflection
- * @version //autogentag//
+ * @version //autogen//
  * @author Stefan Marr <mail@stefan-marr.de>
  */
 class ezcReflectionDocTag {

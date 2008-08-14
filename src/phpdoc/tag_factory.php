@@ -3,16 +3,16 @@
  * File containing the ezcReflectionDocTagFactory class.
  *
  * @package Reflection
- * @version //autogentag//
- * @copyright Copyright (C) 2007 eZ systems as. All rights reserved.
+ * @version //autogen//
+ * @copyright Copyright (C) 2005-2008 eZ systems as. All rights reserved.
  * @license http://ez.no/licenses/new_bsd New BSD License
  */
 
 /**
  * Creates a ezcReflectionDocTag object be the given doctag
- * 
+ *
  * @package Reflection
- * @version //autogentag//
+ * @version //autogen//
  * @author Stefan Marr <mail@stefan-marr.de>
  */
 class ezcReflectionDocTagFactory {

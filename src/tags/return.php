@@ -3,20 +3,20 @@
  * File containing the ezcReflectionDocTagReturn class.
  *
  * @package Reflection
- * @version //autogentag//
- * @copyright Copyright (C) 2007 eZ systems as. All rights reserved.
+ * @version //autogen//
+ * @copyright Copyright (C) 2005-2008 eZ systems as. All rights reserved.
  * @license http://ez.no/licenses/new_bsd New BSD License
  */
 
 /**
- * Represents a return doc tag in the php source code comment. 
- * 
+ * Represents a return doc tag in the php source code comment.
+ *
  * @package Reflection
- * @version //autogentag//
+ * @version //autogen//
  * @author Stefan Marr <mail@stefan-marr.de>
  */
 class ezcReflectionDocTagReturn extends ezcReflectionDocTag {
-    
+
 	/**
     * @param string[] $line array of words
     */

@@ -1,8 +1,8 @@
 <?php
 /**
- * @copyright Copyright (C) 2005, 2006 eZ systems as. All rights reserved.
+ * @copyright Copyright (C) 2005-2008 eZ systems as. All rights reserved.
  * @license http://ez.no/licenses/new_bsd New BSD License
- * @version //autogentag//
+ * @version //autogen//
  * @filesource
  * @package Reflection
  * @subpackage Tests
@@ -50,7 +50,7 @@ class ezcReflectionTypeFactoryTest extends ezcTestCase
         	self::assertType('ezcReflectionType', $type);
             self::assertType('ezcReflectionClassType', $type);
         }
-		
+
 		$type = $factory->getType('NoneExistingClass');
     }
 

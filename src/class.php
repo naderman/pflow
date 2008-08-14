@@ -3,17 +3,17 @@
  * File containing the ezcReflectionClass class.
  *
  * @package Reflection
- * @version //autogentag//
- * @copyright Copyright (C) 2007 eZ systems as. All rights reserved.
+ * @version //autogen//
+ * @copyright Copyright (C) 2005-2008 eZ systems as. All rights reserved.
  * @license http://ez.no/licenses/new_bsd New BSD License
  */
 
 /**
  * Extends the ReflectionClass using PHPDoc comments to provide
  * type information
- * 
+ *
  * @package Reflection
- * @version //autogentag//
+ * @version //autogen//
  * @author Stefan Marr <mail@stefan-marr.de>
  * @author Falko Menge <mail@falko-menge.de>
  */
@@ -94,7 +94,7 @@ class ezcReflectionClass extends ReflectionClass
         } else {
             $constructor = parent::getConstructor();
         }
-        
+
         if ($constructor != null) {
             return new ezcReflectionMethod($constructor);
         } else {
@@ -127,7 +127,7 @@ class ezcReflectionClass extends ReflectionClass
         }
         return $extMethods;
     }
-    
+
     /**
      * Returns an array of all interfaces implemented by the class.
      *
@@ -139,7 +139,7 @@ class ezcReflectionClass extends ReflectionClass
     	} else {
     		$ifaces = parent::getInterfaces();
     	}
-    	
+
     	$result = array();
     	foreach ($ifaces as $i) {
     		$result[] = new ezcReflectionClassType($i); //TODO: Shouldn't this be eczReflectionClass
@@ -161,7 +161,7 @@ class ezcReflectionClass extends ReflectionClass
         } else {
             $parentClass = parent::getParentClass();
         }
-        
+
         if (is_object($parentClass)) {
             return new ezcReflectionClassType($parentClass);
         }
@@ -172,7 +172,7 @@ class ezcReflectionClass extends ReflectionClass
 
     /**
      * Returns the class' property specified by its name
-     * 
+     *
      * @param string $name
      * @return ezcReflectionProperty
      * @throws RelectionException if property doesn't exists
@@ -185,7 +185,7 @@ class ezcReflectionClass extends ReflectionClass
         } else {
             $prop = parent::getProperty($name);
         }
-        
+
 		if (is_object($prop) && !($prop instanceof ezcReflectionProperty)) {
 			return new ezcReflectionProperty($prop, $name);
         } else {
@@ -196,7 +196,7 @@ class ezcReflectionClass extends ReflectionClass
 
     /**
      * Returns an array of this class' properties
-     * 
+     *
      * @param integer $filter
      *        A combination of
      *        ReflectionProperty::IS_STATIC,
@@ -211,7 +211,7 @@ class ezcReflectionClass extends ReflectionClass
         } else {
         	$props = parent::getProperties($filter);
         }
-        
+
         $extProps = array();
         foreach ($props as $prop) {
             $extProps[] = new ezcReflectionProperty( $prop );
@@ -221,7 +221,7 @@ class ezcReflectionClass extends ReflectionClass
 
     /**
      * Check whether this class has been tagged with @webservice
-     * 
+     *
      * @return boolean
      */
     public function isWebService() {
@@ -231,7 +231,7 @@ class ezcReflectionClass extends ReflectionClass
     /**
      * Returns the short description of the class from the source code
      * documentation
-     * 
+     *
      * @return string short description of the class
      */
     public function getShortDescription() {
@@ -241,7 +241,7 @@ class ezcReflectionClass extends ReflectionClass
     /**
      * Returns the long description of the class from the source code
      * documentation
-     * 
+     *
      * @return string Long description of the class
      */
     public function getLongDescription() {
@@ -284,7 +284,7 @@ class ezcReflectionClass extends ReflectionClass
     	} else {
     		$ext = parent::getExtension();
     	}
-    	
+
         if ($ext) {
             return new ezcReflectionExtension($ext);
         } else {

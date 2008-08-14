@@ -3,17 +3,17 @@
  * File containing the ezcReflectionApi class.
  *
  * @package Reflection
- * @version //autogentag//
- * @copyright Copyright (C) 2007 eZ systems as. All rights reserved.
+ * @version //autogen//
+ * @copyright Copyright (C) 2005-2008 eZ systems as. All rights reserved.
  * @license http://ez.no/licenses/new_bsd New BSD License
  */
 
 // TODO: rename ezcReflectionApi to ezcReflection
 /**
  * Holds type factory for generating type objects by given name
- * 
+ *
  * @package Reflection
- * @version //autogentag//
+ * @version //autogen//
  * @author Stefan Marr <mail@stefan-marr.de>
  * @author Falko Menge <mail@falko-menge.de>
  */
@@ -23,7 +23,7 @@ class ezcReflectionApi {
 	 * @var ezcReflectionTypeFactory
 	 */
 	protected static $reflectionTypeFactory = null;
-	
+
 	/**
 	 * @var ezcReflectionDocParser
      *      Current documentation parser used by all ezcReflection classes
@@ -51,7 +51,7 @@ class ezcReflectionApi {
     	}
     	return clone self::$docParser;
     }
-    
+
     /**
      * Sets the documentation parser used by all ezcReflection classes
      *
@@ -62,7 +62,7 @@ class ezcReflectionApi {
     {
     	self::$docParser = $docParser;
     }
-    
+
     /**
      * Returns a copy of the current factory used to create type objects
      *
@@ -75,7 +75,7 @@ class ezcReflectionApi {
         }
     	return clone self::$reflectionTypeFactory;
     }
-    
+
     /**
      * Sets the factory used to create type objects
      *

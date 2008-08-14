@@ -1,8 +1,8 @@
 <?php
 /**
- * @copyright Copyright (C) 2005, 2006 eZ systems as. All rights reserved.
+ * @copyright Copyright (C) 2005-2008 eZ systems as. All rights reserved.
  * @license http://ez.no/licenses/new_bsd New BSD License
- * @version //autogentag//
+ * @version //autogen//
  * @filesource
  * @package Reflection
  * @subpackage Tests
@@ -45,7 +45,7 @@ class ezcReflectionFunctionTest extends ezcTestCase
         unset($this->fctM2);
         unset($this->fctM3);
     }
-	
+
     public function testGetTags() {
         $func = $this->fctM1;
         $tags = $func->getTags();
@@ -168,50 +168,50 @@ class ezcReflectionFunctionTest extends ezcTestCase
         self::assertEquals( "{$this->php_fctM2}", "{$this->fctM2}" );
         self::assertEquals( (string) $this->php_fctM3, (string) $this->fctM3);
     }
-    
+
     public function testGetName() {
     	self::assertEquals('m1', $this->fctM1->getName());
     	self::assertEquals('m2', $this->fctM2->getName());
     	self::assertEquals('m3', $this->fctM3->getName());
     }
-       
+
     public function testIsInternal() {
     	self::assertFalse($this->fctM1->isInternal());
     }
-    
+
     public function testIsDisabled() {
     	self::assertFalse($this->fctM1->isDisabled());
     }
-    
+
     public function testIsUserDefined() {
     	self::assertTrue($this->fctM1->isUserDefined());
     }
-    
+
     public function testGetFileName() {
     	self::assertEquals('functions.php', basename($this->fctM1->getFileName()));
     }
-    
+
     public function testGetStartLine() {
     	self::assertEquals(12, $this->fctM1->getStartLine());
     }
-    
+
     public function testGetEndLine() {
     	self::assertEquals(14, $this->fctM1->getEndLine());
     }
-    
+
     public function testGetDocComment() {
     	self::assertEquals("/**
  * @param void \$DocuFlaw
  * @author flaw joe
  */", $this->fctM2->getDocComment());
     }
-    
+
     public function testGetStaticVariables() {
     	$vars = $this->fctM3->getStaticVariables();
     	self::assertEquals(1, count($vars));
     	self::assertTrue(array_key_exists('staticVar', $vars));
     }
-    
+
     public function testInvoke() {
         self::assertEquals(
             $this->php_fctM1->invoke(
@@ -230,7 +230,7 @@ class ezcReflectionFunctionTest extends ezcTestCase
             $this->fct_method_exists->invoke( 'ReflectionClass', 'hasMethod' )
         );
     }
-    
+
     public function testInvokeArgs() {
         self::assertEquals(
             $this->php_fctM1->invokeArgs(
@@ -253,11 +253,11 @@ class ezcReflectionFunctionTest extends ezcTestCase
             $this->fct_method_exists->invokeArgs( array( 'ReflectionClass', 'hasMethod' ) )
         );
     }
-    
+
     public function testReturnsReference() {
     	self::assertFalse($this->fctM3->returnsReference());
     }
-    
+
     public function testGetNumberOfParameters() {
     	self::assertEquals(3, $this->fctM1->getNumberOfParameters());
     	$func = new ReflectionFunction('mmm');
@@ -275,14 +275,14 @@ class ezcReflectionFunctionTest extends ezcTestCase
         self::assertEquals( $this->php_fctM3->getExtension(), $this->fctM3->getExtension() );
         self::assertEquals( $this->php_fct_method_exists->getExtension(), $this->fct_method_exists->getExtension() );
     }
-    
+
     public function testGetExtensionName() {
         self::assertEquals(  $this->php_fctM1->getExtensionName(), $this->fctM1->getExtensionName() );
         self::assertEquals(  $this->php_fctM2->getExtensionName(), $this->fctM2->getExtensionName() );
         self::assertEquals(  $this->php_fctM3->getExtensionName(), $this->fctM3->getExtensionName() );
         self::assertEquals(  $this->php_fct_method_exists->getExtensionName(), $this->fct_method_exists->getExtensionName() );
     }
-    
+
     public function testExport() {
         self::assertEquals( ReflectionFunction::export( 'm1', true ), ezcReflectionFunction::export( 'm1', true ) );
         self::assertEquals( ReflectionFunction::export( 'm2', true ), ezcReflectionFunction::export( 'm2', true ) );

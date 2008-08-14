@@ -15,7 +15,7 @@ class SomeClass extends BaseClass implements IInterface {
         // echo "New SomeClass instance created.\n";
     }
 
-    public function helloWorld() 
+    public function helloWorld()
     {
         return true;
     }

@@ -2,7 +2,7 @@
 
 class BaseClass {
 
-    public function doSomeMetaProgramming() 
+    public function doSomeMetaProgramming()
 	{
 		return true;
 	}

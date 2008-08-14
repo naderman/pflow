@@ -1,8 +1,8 @@
 <?php
 /**
- * @copyright Copyright (C) 2005, 2006 eZ systems as. All rights reserved.
+ * @copyright Copyright (C) 2005-2008 eZ systems as. All rights reserved.
  * @license http://ez.no/licenses/new_bsd New BSD License
- * @version //autogentag//
+ * @version //autogen//
  * @filesource
  * @package Reflection
  * @subpackage Tests
@@ -38,7 +38,7 @@ class ezcReflectionClassTest extends ezcTestCase
         self::assertType('ezcReflectionMethod', $method);
         self::assertEquals('__construct', $method->getName());
     }
-    
+
 	public function testGetInterfaces() {
         $ifaces = $this->class->getInterfaces();
 
