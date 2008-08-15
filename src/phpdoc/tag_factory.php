@@ -15,17 +15,25 @@
  * @version //autogen//
  * @author Stefan Marr <mail@stefan-marr.de>
  */
-class ezcReflectionDocTagFactory {
+class ezcReflectionDocTagFactory
+{
+
+	/**
+	 * Don't allow objects, it is just a static factory
+	 */
+    // @codeCoverageIgnoreStart
+    private function __construct() {}
+    // @codeCoverageIgnoreEnd
 
     /**
-    * @param string $type
-    * @param string[] $line array of words
-    * @return ezcReflectionDocTag
-    */
+     * @param string $type
+     * @param string[] $line array of words
+     * @return ezcReflectionDocTag
+     */
     static public function createTag($type, $line) {
         $tagClassName = 'ezcReflectionDocTag'.$type;
         $tag = null;
-        if (class_exists($tagClassName)) {
+        if (!empty($type) and class_exists($tagClassName)) {
             $tag = new $tagClassName($line);
         }
         else {
