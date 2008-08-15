@@ -127,8 +127,6 @@ class ezcReflectionClassTest extends ezcTestCase
         self::assertTrue($class->isTagged('foobar'));
     }
 
-
-
     public function testGetTags() {
         $tags = $this->class->getTags();
 

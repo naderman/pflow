@@ -97,6 +97,31 @@ class ezcReflectionProperty extends ReflectionProperty
 		}
     }
 
+    /**
+     * Checks whether the property is annotated with the annotation $annotation
+     *
+     * @param string $annotation Name of the annotation
+     * @return boolean
+     */
+    public function isTagged($annotation) {
+        return $this->docParser->isTagged($annotation);
+    }
+
+    /**
+     * Returns an array of annotations (optinally only annotations of a given name)
+     *
+     * @param string $name Name of the annotations
+     * @return ezcReflectionDocTag[] Annotations
+     */
+    public function getTags($name = '') {
+        if ($name == '') {
+            return $this->docParser->getTags();
+        }
+        else {
+            return $this->docParser->getTagsByName($name);
+        }
+    }
+
 	/**
      * Returns the PHPDoc comment of the property.
      *
