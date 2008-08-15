@@ -220,15 +220,6 @@ class ezcReflectionClass extends ReflectionClass
     }
 
     /**
-     * Check whether this class has been tagged with @webservice
-     *
-     * @return boolean
-     */
-    public function isWebService() {
-        return $this->docParser->isTagged("webservice");
-    }
-
-    /**
      * Returns the short description of the class from the source code
      * documentation
      *

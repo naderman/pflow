@@ -127,14 +127,6 @@ class ezcReflectionMethod extends ReflectionMethod
     }
 
     /**
-    * Check whether this method has a @webmethod tag
-    * @return boolean
-    */
-    function isWebmethod() {
-        return $this->docParser->isTagged("webmethod");
-    }
-
-    /**
     * @return string
     */
     public function getShortDescription() {

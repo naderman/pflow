@@ -105,13 +105,6 @@ class ezcReflectionClassTest extends ezcTestCase
         self::assertEquals(0, count($expected));
     }
 
-    public function testIsWebService() {
-        self::assertFalse($this->class->isWebService());
-
-        $class = new ezcReflectionClass('TestWebservice');
-        self::assertTrue($class->isWebService());
-    }
-
     public function testGetShortDescription() {
         $class = new ezcReflectionClass('TestWebservice');
         $desc = $class->getShortDescription();

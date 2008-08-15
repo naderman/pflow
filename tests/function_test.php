@@ -119,14 +119,6 @@ class ezcReflectionFunctionTest extends ezcTestCase
         self::assertEquals($expected, $desc);
     }
 
-    public function testIsWebmethod() {
-        $func = $this->fctM1;
-        self::assertTrue($func->isWebmethod());
-
-        $func = $this->fctM2;
-        self::assertFalse($func->isWebmethod());
-    }
-
     public function testGetReturnDescription() {
         $func = $this->fctM1;
         $desc = $func->getReturnDescription();

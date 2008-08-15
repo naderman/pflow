@@ -76,12 +76,6 @@ class ezcReflectionMethodTest extends ezcReflectionFunctionTest
         self::assertEquals($expected, $desc);
     }
 
-    public function testIsWebmethod() {
-        self::assertFalse($this->fctM3->isWebmethod());
-        $method = new ezcReflectionMethod('TestMethods', 'm4');
-        self::assertTrue($method->isWebmethod());
-    }
-
     public function testGetReturnDescription() {
         $method = new ezcReflectionMethod('TestMethods', 'm4');
         $desc = $method->getReturnDescription();
