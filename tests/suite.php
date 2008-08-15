@@ -22,6 +22,7 @@ require_once 'tag_factory_test.php';
 require_once 'type_factory_test.php';
 require_once 'type_mapper_test.php';
 require_once 'abstract_type_test.php';
+require_once 'array_type_test.php';
 require_once 'class_type_test.php';
 require_once 'primitive_type_test.php';
 
@@ -64,6 +65,7 @@ class ezcReflectionSuite extends PHPUnit_Framework_TestSuite
         $this->addTest( ezcReflectionTypeFactoryTest::suite() );
         $this->addTest( ezcReflectionTypeMapperTest::suite() );
         $this->addTest( ezcReflectionAbstractTypeTest::suite() );
+        $this->addTest( ezcReflectionArrayTypeTest::suite() );
         $this->addTest( ezcReflectionClassTypeTest::suite() );
         $this->addTest( ezcReflectionPrimitiveTypeTest::suite() );
         $this->addTest( ezcReflectionTest::suite() );

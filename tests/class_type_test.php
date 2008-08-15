@@ -79,7 +79,7 @@ class ezcReflectionClassTypeTest extends ezcTestCase
     {
         $expected = new DOMDocument;
         $expected->preserveWhiteSpace = false;
-        $expected->load( dirname( __FILE__ ) . DIRECTORY_SEPARATOR . 'test_classes' . DIRECTORY_SEPARATOR . 'SomeClass.xsd' );
+        $expected->load( dirname( __FILE__ ) . DIRECTORY_SEPARATOR . 'schemas' . DIRECTORY_SEPARATOR . 'SomeClass.xsd' );
 
         $actual = new DOMDocument;
         $actual->appendChild( $this->class->getXmlSchema( $actual ) );
@@ -93,7 +93,7 @@ class ezcReflectionClassTypeTest extends ezcTestCase
 
         $expected = new DOMDocument;
         $expected->preserveWhiteSpace = false;
-        $expected->load( dirname( __FILE__ ) . DIRECTORY_SEPARATOR . 'test_classes' . DIRECTORY_SEPARATOR . 'stdClass.xsd' );
+        $expected->load( dirname( __FILE__ ) . DIRECTORY_SEPARATOR . 'schemas' . DIRECTORY_SEPARATOR . 'stdClass.xsd' );
 
         $actual = new DOMDocument;
         $actual->appendChild( $this->class->getXmlSchema( $actual ) );
