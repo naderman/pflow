@@ -31,7 +31,7 @@ class ezcReflectionDocTagFactory
      * @return ezcReflectionDocTag
      */
     static public function createTag($type, $line) {
-        $tagClassName = 'ezcReflectionDocTag'.$type;
+        $tagClassName = 'ezcReflectionDocTag' . ucfirst($type);
         $tag = null;
         if (!empty($type) and class_exists($tagClassName)) {
             $tag = new $tagClassName($line);
