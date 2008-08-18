@@ -15,12 +15,13 @@
  * @package Reflection
  * @version //autogen//
  * @author Stefan Marr <mail@stefan-marr.de>
+ * @author Falko Menge <mail@falko-menge.de>
  */
 class ezcReflectionMethod extends ReflectionMethod
 {
     /**
-    * @var ezcReflectionDocParser
-    */
+     * @var ezcReflectionDocParser
+     */
     protected $docParser;
 
     /**
@@ -62,6 +63,23 @@ class ezcReflectionMethod extends ReflectionMethod
     }
 
     /**
+     * Use overloading to call additional methods
+     * of the reflection instance given to the constructor
+     *
+     * @param string $method Method to be called
+     * @param array(integer => mixed) $arguments Arguments that were passed
+     * @return mixed
+     */
+    public function __call( $method, $arguments )
+    {
+        if ( $this->reflectionSource ) {
+            return call_user_func_array( array($this->reflectionSource, $method), $arguments );
+        } else {
+            throw new Exception( 'Call to undefined method ' . __CLASS__ . '::' . $method );
+        }
+    }
+
+    /**
     * @return ezcReflectionParameter[]
     */
     function getParameters() {
@@ -86,20 +104,6 @@ class ezcReflectionMethod extends ReflectionMethod
             }
         }
         return $extParams;
-    }
-
-    /**
-     * Returns the doc comment for the method.
-     *
-     * @return string Doc comment
-     */
-    public function getDocComment() {
-        if ( $this->reflectionSource instanceof ReflectionMethod ) {
-            $comment = $this->reflectionSource->getDocComment();
-        } else {
-            $comment = parent::getDocComment();
-        }
-        return $comment;
     }
 
     /**
@@ -225,33 +229,34 @@ class ezcReflectionMethod extends ReflectionMethod
 		}
     }
 
+
+    // the following methods do not contain additional features
+    // they just call the parent method or the reflection source
+
+    /**
+     * Returns the doc comment for the method.
+     *
+     * @return string Doc comment
+     */
+    public function getDocComment() {
+        if ( $this->reflectionSource instanceof ReflectionMethod ) {
+            $comment = $this->reflectionSource->getDocComment();
+        } else {
+            $comment = parent::getDocComment();
+        }
+        return $comment;
+    }
+
     /**
      * Name of the method
      * @return string
      */
     public function getName() {
-    	if ( $this->reflectionSource ) {
+        if ( $this->reflectionSource instanceof ReflectionMethod ) {
     		return $this->reflectionSource->getName();
     	} else {
     		return parent::getName();
     	}
-    }
-
-    /**
-     * Use overloading to call additional methods
-     * of the reflection instance given to the constructor
-     *
-     * @param string $method Method to be called
-     * @param array(integer => mixed) $arguments Arguments that were passed
-     * @return mixed
-     */
-    public function __call( $method, $arguments )
-    {
-        if ( $this->reflectionSource ) {
-            return call_user_func_array( array($this->reflectionSource, $method), $arguments );
-        } else {
-            throw new Exception( 'Call to undefined method ' . __CLASS__ . '::' . $method );
-        }
     }
 }
 ?>
