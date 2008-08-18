@@ -25,11 +25,10 @@ class ezcReflectionMethod extends ReflectionMethod
     protected $docParser;
 
     /**
-     * This is the class for which this method object has been instantiated.
-     * It is necessary to decide if a method is definied, inherited, overridden
-     * in a class.
-     *
      * @var ReflectionClass
+     *      This is the class which this method object has been instantiated
+     *      for. It is necessary to decide if a method is definied, inherited,
+     *      overridden in a class.
      */
     protected $curClass;
 
@@ -39,11 +38,15 @@ class ezcReflectionMethod extends ReflectionMethod
     protected $reflectionSource = null;
 
     /**
-    * @param mixed $classOrSource name of class, ReflectionClass, or ReflectionMethod
-    * @param string $name Optional if $classOrSource is instance of ReflectionMethod
-    */
+     * Constructs an new ezcReflectionMethod
+     *
+     * @param mixed $classOrSource
+     *        Name of class, ReflectionClass, or ReflectionMethod
+     * @param string $name
+     *        Optional if $classOrSource is an instance of ReflectionMethod
+     */
     public function __construct($classOrSource, $name = null) {
-    	if ($classOrSource instanceof ReflectionMethod ) {
+    	if ( $classOrSource instanceof ReflectionMethod ) {
     		$this->reflectionSource = $classOrSource;
     	}
 		elseif ($classOrSource instanceof ReflectionClass) {
@@ -80,8 +83,10 @@ class ezcReflectionMethod extends ReflectionMethod
     }
 
     /**
-    * @return ezcReflectionParameter[]
-    */
+     * Returns the parameters of the method
+     *
+     * @return ezcReflectionParameter[] Parameters of the method
+     */
     function getParameters() {
         $params = $this->docParser->getParamTags();
         $extParams = array();
@@ -107,9 +112,10 @@ class ezcReflectionMethod extends ReflectionMethod
     }
 
     /**
-    * Returns the type defined in PHPDoc tags
-    * @return ezcReflectionType
-    */
+     * Returns the type defined in PHPDoc tags
+     *
+     * @return ezcReflectionType
+     */
     function getReturnType() {
         $re = $this->docParser->getReturnTags();
         if (count($re) == 1 and isset($re[0]) and $re[0] instanceof ezcReflectionDocTagReturn) {
@@ -119,9 +125,10 @@ class ezcReflectionMethod extends ReflectionMethod
     }
 
     /**
-    * Returns the description after a PHPDoc tag
-    * @return string
-    */
+     * Returns the description after a PHPDoc tag
+     *
+     * @return string
+     */
     function getReturnDescription() {
         $re = $this->docParser->getReturnTags();
         if (count($re) == 1 and isset($re[0])) {
@@ -131,31 +138,39 @@ class ezcReflectionMethod extends ReflectionMethod
     }
 
     /**
-    * @return string
-    */
+     * Returns the short description from the method's documentation
+     *
+     * @return string Short description
+     */
     public function getShortDescription() {
         return $this->docParser->getShortDescription();
     }
 
     /**
-    * @return string
-    */
+     * Returns the long description from the method's documentation
+     *
+     * @return string Long description
+     */
     public function getLongDescription() {
         return $this->docParser->getLongDescription();
     }
 
     /**
-    * @param string $with
-    * @return boolean
-    */
-    public function isTagged($with) {
-        return $this->docParser->isTagged($with);
+     * Checks whether the method is annotated with the annotation $annotation
+     *
+     * @param string $annotation Name of the annotation
+     * @return boolean True if the annotation exists for this method
+     */
+    public function isTagged($annotation) {
+        return $this->docParser->isTagged($annotation);
     }
 
     /**
-    * @param string $name
-    * @return ezcReflectionDocTag[]
-    */
+     * Returns an array of annotations (optinally only annotations of a given name)
+     *
+     * @param string $name Name of the annotations
+     * @return ezcReflectionDocTag[] Annotations
+     */
     public function getTags($name = '') {
         if ($name == '') {
             return $this->docParser->getTags();
@@ -167,6 +182,7 @@ class ezcReflectionMethod extends ReflectionMethod
 
     /**
      * Checks if this method is a 'Magic Method' or not
+     *
      * @return boolean
      */
     function isMagic() {
@@ -178,6 +194,7 @@ class ezcReflectionMethod extends ReflectionMethod
 
     /**
      * Checks if this is already available in the parent class
+     *
      * @return boolean
      */
     function isInherited() {
@@ -191,6 +208,7 @@ class ezcReflectionMethod extends ReflectionMethod
 
     /**
      * Checks if this method is redefined in this class
+     *
      * @return boolean
      */
     function isOverridden() {
@@ -210,6 +228,7 @@ class ezcReflectionMethod extends ReflectionMethod
 
     /**
      * Checks if this method is appeared first in the current class
+     *
      * @return boolean
      */
     function isIntroduced() {
@@ -217,16 +236,50 @@ class ezcReflectionMethod extends ReflectionMethod
     }
 
     /**
-     * @return ezcReflectionClassType
+     * Returns the class the method was declared in
+     *
+     * @return ezcReflectionClassType Class declaring the method
      */
     function getDeclaringClass() {
-        $class = parent::getDeclaringClass();
+        if ( $this->reflectionSource ) {
+            $class = $this->reflectionSource->getDeclaringClass();
+        } else {
+            $class = parent::getDeclaringClass();
+        }
 		if (!empty($class)) {
 		    return new ezcReflectionClassType($class->getName());
 		}
 		else {
 		    return null;
 		}
+    }
+
+    /**
+     * Returns the source code of the method
+     *
+     * @return string Source code
+     */
+    public function getCode()
+    {
+        if ( $this->isInternal() ) {
+            $code = '/* '
+                  . $this->getDeclaringClass()->getName() . '::'
+                  . $this->getName()
+                  . ' is an internal function.'
+                  . ' Therefore the source code is not available. */';
+        } else {
+            $filename = $this->getFileName();
+
+            $start = $this->getStartLine();
+            $end = $this->getEndLine();
+
+            $offset = $start - 1;
+            $length = $end - $start + 1;
+
+            $lines = array_slice( file( $filename ), $offset, $length );
+            $code = implode( '', $lines );
+        }
+        return $code;
     }
 
 
@@ -245,6 +298,19 @@ class ezcReflectionMethod extends ReflectionMethod
             $comment = parent::getDocComment();
         }
         return $comment;
+    }
+
+    /**
+     * Returns the filename of the file this function was declared in
+     *
+     * @return string Filename of the file this function was declared in
+     */
+    public function getFileName() {
+        if ( $this->reflectionSource instanceof ReflectionMethod ) {
+    		return $this->reflectionSource->getFileName();
+    	} else {
+    		return parent::getFileName();
+    	}
     }
 
     /**

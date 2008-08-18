@@ -150,6 +150,17 @@ class ezcReflectionMethodTest extends ezcReflectionFunctionTest
     	// is not available for methods
     }
 
+    public function testGetCode() {
+        self::assertEquals( "    public function m1() {\n\n    }\n", $this->fctM1->getCode() );
+        self::assertEquals( "    public function m2() {\n\n    }\n", $this->fctM2->getCode() );
+        self::assertEquals( "    public function m3(\$undocumented) {\n        static \$staticVar;\n    }\n", $this->fctM3->getCode() );
+        self::assertEquals( "/* ReflectionClass::hasMethod is an internal function. Therefore the source code is not available. */", $this->fct_method_exists->getCode() );
+    }
+
+
+    // the following methods do not contain additional features
+    // they just call the parent method or the reflection source
+
 	public function testGetFileName() {
     	self::assertEquals('methods.php', basename($this->fctM1->getFileName()));
     }

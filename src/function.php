@@ -152,6 +152,31 @@ class ezcReflectionFunction extends ReflectionFunction
         }
     }
 
+    /**
+     * Returns the source code of the function
+     *
+     * @return string Source code
+     */
+    public function getCode()
+    {
+        if ( $this->isInternal() ) {
+            $code = '/* ' . $this->getName() . ' is an internal function.'
+                  . ' Therefore the source code is not available. */';
+        } else {
+            $filename = $this->getFileName();
+
+            $start = $this->getStartLine();
+            $end = $this->getEndLine();
+
+            $offset = $start - 1;
+            $length = $end - $start + 1;
+            
+            $lines = array_slice( file( $filename ), $offset, $length );
+            $code = implode( '', $lines );
+        }
+        return $code;
+    }
+    
 
     // the following methods do not contain additional features
     // they just call the parent method or the reflection source

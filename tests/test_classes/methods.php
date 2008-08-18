@@ -37,7 +37,7 @@ class TestMethods {
      * foo bar
      */
     public function m3($undocumented) {
-		static $staticVar;
+        static $staticVar;
     }
 
 
