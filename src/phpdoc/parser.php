@@ -212,7 +212,12 @@ class ezcReflectionPhpDocParser implements ezcReflectionDocParser {
      * @return string Short description
      */
     public function getShortDescription() {
-        return $this->shortDesc;
+        if (substr($this->shortDesc, -2) == '*/') {
+            $shortDescription = substr($this->shortDesc, 0, -2);
+        } else {
+            $shortDescription = $this->shortDesc;
+        }
+        return trim($shortDescription);
     }
 
     /**

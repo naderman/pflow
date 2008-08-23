@@ -105,7 +105,7 @@ class ezcReflectionFunctionTest extends ezcTestCase
 
         $func = $this->fctM2;
         $desc = $func->getShortDescription();
-        $expected = '';
+        $expected = 'weird coding standards should also be supported:';
         self::assertEquals($expected, $desc);
 
         $func = $this->fctM3;
@@ -156,6 +156,7 @@ class ezcReflectionFunctionTest extends ezcTestCase
         self::assertEquals( "function m2() {\n\n}\n", $this->fctM2->getCode() );
         self::assertEquals( "function m3() {\n    static \$staticVar;\n}\n", $this->fctM3->getCode() );
         self::assertEquals( "/* method_exists is an internal function. Therefore the source code is not available. */", $this->fct_method_exists->getCode() );
+        //$tokens = token_get_all($this->fctM2->getCode());
     }
 
 
@@ -202,7 +203,7 @@ class ezcReflectionFunctionTest extends ezcTestCase
     	self::assertEquals("/**
  * @param void \$DocuFlaw
  * @author flaw joe
- */", $this->fctM2->getDocComment());
+weird coding standards should also be supported: */", $this->fctM2->getDocComment());
     }
 
     public function testGetStaticVariables() {
