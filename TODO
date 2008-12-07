@@ -18,6 +18,7 @@ Roadmap
 - Missing Features (?)
     - Add support for mixed type
     - Add support pipe notation in type definitions, i.e. @param datatype1|datatype2 $paramname description
+    - Use type hints for type introspection if they are available
     - See todo annotations in the source code, e.g., using 'grep -inor todo.* --exclude-dir=.svn .'
     - Implement getCode methods (Sebastian)
     - support for annotation grouping especially for properties (has to be supported by PHP, maybe a feature for StaticReflection)
