@@ -24,6 +24,8 @@ Roadmap
     - support for annotation grouping especially for properties (has to be supported by PHP, maybe a feature for StaticReflection)
     - trow ezcReflectionUnknownTypeException during XML Schema generation
 - Tutorial (?)
+- Documentation about available annotations (?)
+    (see https://instantsvc.svn.sourceforge.net/svnroot/instantsvc/branches/transition/doc/style-guide.html)
 - Integration of Toby's annotation parser? (Toby?)
 
 
