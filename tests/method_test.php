@@ -139,6 +139,9 @@ class ezcReflectionMethodTest extends ezcReflectionFunctionTest
 
         $method = new ezcReflectionMethod('ezcReflectionMethod', 'isInternal');
         self::assertTrue($method->isOverridden());
+
+        $method = new ezcReflectionMethod('ReflectionMethod', 'isInternal');
+        self::assertFalse($method->isOverridden());
     }
 
     public function testIsIntroduced() {

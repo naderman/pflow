@@ -215,10 +215,7 @@ class ezcReflectionMethod extends ReflectionMethod
         $decClass = $this->getDeclaringClass();
         if (!empty($this->curClass) and !empty($decClass)) {
             $parent = $this->curClass->getParentClass();
-            if (!is_object($parent)) {
-                return false;
-            }
-            else {
+            if (is_object($parent)) {
                 return ($parent->hasMethod($this->getName()) and
                         $this->curClass->getName() == $decClass->getName());
             }

@@ -149,6 +149,12 @@ class ezcReflectionClassTest extends ezcTestCase
         self::assertNull($ext);
     }
 
+    public function testGetExtensionName() {
+        $class = new ezcReflectionClass( 'ReflectionClass' );
+        self::assertEquals( 'Reflection', $class->getExtensionName() );
+        self::assertEquals( '', $this->class->getExtensionName() );
+    }
+
     public function testExport() {
         self::assertEquals( ReflectionClass::export('TestWebservice', true), ezcReflectionClass::export('TestWebservice', true) );
     }
