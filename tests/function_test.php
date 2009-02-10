@@ -156,7 +156,11 @@ class ezcReflectionFunctionTest extends ezcTestCase
         self::assertEquals( "function m2() {\n\n}\n", $this->fctM2->getCode() );
         self::assertEquals( "function m3() {\n    static \$staticVar;\n}\n", $this->fctM3->getCode() );
         self::assertEquals( "/* method_exists is an internal function. Therefore the source code is not available. */", $this->fct_method_exists->getCode() );
-        //$tokens = token_get_all($this->fctM2->getCode());
+        $tokens[] = token_get_all("<?php\n" . $this->fctM1->getCode());
+        $tokens[] = token_get_all("<?php\n" . $this->fctM2->getCode());
+        $tokens[] = token_get_all("<?php\n" . $this->fctM3->getCode());
+        $tokens[] = token_get_all("<?php\n" . $this->fct_method_exists->getCode());
+        //var_export($tokens);
     }
 
 
@@ -176,7 +180,11 @@ class ezcReflectionFunctionTest extends ezcTestCase
     }
 
     public function testIsInternal() {
-    	self::assertFalse($this->fctM1->isInternal());
+        self::assertFalse($this->fctM1->isInternal());
+        self::assertEquals(
+            $this->php_fct_method_exists->isInternal(),
+            $this->fct_method_exists->isInternal()
+        );
     }
 
     public function testIsDisabled() {

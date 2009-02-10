@@ -205,12 +205,12 @@ class ezcReflectionTypeMapper
                 return true;
             }
 
-            //test for array map types
+            //test for array map types array<int,int>
             //@TODO Remove support for array<int, int> definitions
             elseif (preg_match('/(.*)(<(.*?)(,(.*?))?>)/', $type)) {
                 return true;
             }
-        	//test for array map types
+        	//test for array map types array(int=>int)
             elseif (preg_match('/(.*)(\((.*?)(=>(.*?))?\))/', $type)) {
                 return true;
             }

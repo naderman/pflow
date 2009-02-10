@@ -19,6 +19,10 @@ class ezcReflectionMethodTest extends ezcReflectionFunctionTest
         $this->fctM2 = new ezcReflectionMethod('TestMethods', 'm2');
         $this->fctM3 = new ezcReflectionMethod('TestMethods', 'm3');
         $this->fct_method_exists = new ezcReflectionMethod( 'ReflectionClass', 'hasMethod' );
+        $this->phpReflectionClassOfReflectionClass = new ReflectionClass( 'ReflectionClass' );
+        $this->ezcReflectionClassOfReflectionClass = new ezcReflectionClass( 'ReflectionClass' );
+        $this->phpReflectionMethodsOfReflectionClass = $this->phpReflectionClassOfReflectionClass->getMethods();
+        $this->ezcReflectionMethodsOfReflectionClass = $this->ezcReflectionClassOfReflectionClass->getMethods();
     }
 
     public function testGetDeclaringClass() {
@@ -248,6 +252,20 @@ class ezcReflectionMethodTest extends ezcReflectionFunctionTest
 	public function testGetModifiers() {
     	self::assertEquals(65792, $this->fctM1->getModifiers());
     	self::assertEquals(65792, $this->fctM2->getModifiers());
+    }
+
+    public function testIsInternal() {
+    	self::assertFalse($this->fctM1->isInternal());
+        self::assertEquals(
+            $this->php_fct_method_exists->isInternal(),
+            $this->fct_method_exists->isInternal()
+        );
+        foreach ( $this->phpReflectionMethodsOfReflectionClass as $key => $method ) {
+            self::assertEquals(
+                $method->isInternal(),
+                $this->phpReflectionMethodsOfReflectionClass[$key]->isInternal()
+            );
+        }
     }
 
     public static function suite()
