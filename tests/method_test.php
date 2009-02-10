@@ -11,18 +11,20 @@
 class ezcReflectionMethodTest extends ezcReflectionFunctionTest
 {
 	public function setUp() {
-        $this->php_fctM1 = new ReflectionMethod('TestMethods', 'm1');
-        $this->php_fctM2 = new ReflectionMethod('TestMethods', 'm2');
-        $this->php_fctM3 = new ReflectionMethod('TestMethods', 'm3');
+        // comparison objects for expected values
+        $this->php_fctM1 = new ReflectionMethod( 'TestMethods', 'm1' );
+        $this->php_fctM2 = new ReflectionMethod( 'TestMethods', 'm2' );
+        $this->php_fctM3 = new ReflectionMethod( 'TestMethods', 'm3' );
         $this->php_fct_method_exists = new ReflectionMethod( 'ReflectionClass', 'hasMethod' );
+
+        $this->setUpFixtures();
+    }
+
+    protected function setUpFixtures() {
         $this->fctM1 = new ezcReflectionMethod('TestMethods', 'm1');
         $this->fctM2 = new ezcReflectionMethod('TestMethods', 'm2');
         $this->fctM3 = new ezcReflectionMethod('TestMethods', 'm3');
         $this->fct_method_exists = new ezcReflectionMethod( 'ReflectionClass', 'hasMethod' );
-        $this->phpReflectionClassOfReflectionClass = new ReflectionClass( 'ReflectionClass' );
-        $this->ezcReflectionClassOfReflectionClass = new ezcReflectionClass( 'ReflectionClass' );
-        $this->phpReflectionMethodsOfReflectionClass = $this->phpReflectionClassOfReflectionClass->getMethods();
-        $this->ezcReflectionMethodsOfReflectionClass = $this->ezcReflectionClassOfReflectionClass->getMethods();
     }
 
     public function testGetDeclaringClass() {
@@ -136,7 +138,7 @@ class ezcReflectionMethodTest extends ezcReflectionFunctionTest
         self::assertFalse($method->isOverridden());
 
         $method = new ezcReflectionMethod('ezcReflectionMethod', 'isInternal');
-        self::assertFalse($method->isOverridden());
+        self::assertTrue($method->isOverridden());
     }
 
     public function testIsIntroduced() {
@@ -254,18 +256,31 @@ class ezcReflectionMethodTest extends ezcReflectionFunctionTest
     	self::assertEquals(65792, $this->fctM2->getModifiers());
     }
 
-    public function testIsInternal() {
-    	self::assertFalse($this->fctM1->isInternal());
+    public function testExport() {
         self::assertEquals(
-            $this->php_fct_method_exists->isInternal(),
-            $this->fct_method_exists->isInternal()
+            ReflectionMethod::export( 'TestMethods', 'm1', true ),
+            ezcReflectionMethod::export( 'TestMethods', 'm1', true )
         );
-        foreach ( $this->phpReflectionMethodsOfReflectionClass as $key => $method ) {
-            self::assertEquals(
-                $method->isInternal(),
-                $this->phpReflectionMethodsOfReflectionClass[$key]->isInternal()
-            );
-        }
+        self::assertEquals(
+            ReflectionMethod::export( 'TestMethods', 'm2', true ),
+            ezcReflectionMethod::export( 'TestMethods', 'm2', true )
+        );
+        self::assertEquals(
+            ReflectionMethod::export( 'TestMethods', 'm3', true ),
+            ezcReflectionMethod::export( 'TestMethods', 'm3', true )
+        );
+        self::assertEquals(
+            ReflectionMethod::export( new TestMethods(), 'm1', true ),
+            ezcReflectionMethod::export( new TestMethods(), 'm1', true )
+        );
+        self::assertEquals(
+            ReflectionMethod::export( new TestMethods(), 'm2', true ),
+            ezcReflectionMethod::export( new TestMethods(), 'm2', true )
+        );
+        self::assertEquals(
+            ReflectionMethod::export( new TestMethods(), 'm3', true ),
+            ezcReflectionMethod::export( new TestMethods(), 'm3', true )
+        );
     }
 
     public static function suite()

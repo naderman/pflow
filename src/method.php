@@ -26,9 +26,9 @@ class ezcReflectionMethod extends ReflectionMethod
 
     /**
      * @var ReflectionClass
-     *      This is the class which this method object has been instantiated
-     *      for. It is necessary to decide if a method is definied, inherited,
-     *      overridden in a class.
+     *      This is the class for which this method object has been
+     *      instantiated. It is necessary to decide if a method is definied,
+     *      inherited, overridden in a class.
      */
     protected $curClass;
 
@@ -323,6 +323,334 @@ class ezcReflectionMethod extends ReflectionMethod
     	} else {
     		return parent::getName();
     	}
+    }
+
+    /**
+     * Returns whether this is an internal method
+     *
+     * @return boolean True if this is an internal method
+     */
+    public function isInternal() {
+        if ( $this->reflectionSource instanceof ReflectionMethod ) {
+    		return $this->reflectionSource->isInternal();
+    	} else {
+    		return parent::isInternal();
+    	}
+    }
+
+    /**
+     * Returns the line this method's declaration starts at
+     *
+     * @return integer Line this methods's declaration starts at
+     */
+    public function getStartLine() {
+        if ( $this->reflectionSource instanceof ReflectionMethod ) {
+            return $this->reflectionSource->getStartLine();
+        } else {
+            return parent::getStartLine();
+        }
+    }
+
+    /**
+     * Returns the line this method's declaration ends at
+     *
+     * @return integer Line this methods's declaration ends at
+     */
+    public function getEndLine() {
+        if ( $this->reflectionSource instanceof ReflectionMethod ) {
+            return $this->reflectionSource->getEndLine();
+        } else {
+            return parent::getEndLine();
+        }
+    }
+
+    /**
+     * Invokes the method on a given object
+     *
+     * @param object $object      Instance of the class defining this method
+     * @param mixed $argument,... Arguments for the method
+     * @return mixed              Return value of the method invocation
+     */
+    public function invoke( $object, $arguments ) {
+        $arguments = func_get_args();
+        $object = array_shift( $arguments );
+        if ( $this->reflectionSource instanceof ReflectionMethod ) {
+            // doesn't work: return call_user_func_array( array( $this->reflectionSource, 'invoke' ), array_unshift( $arguments, $object ) );
+            // but hopefully the methods invoke and invokeArgs of
+            // the external ReflectionMethod implementation are semantically the same
+            return $this->reflectionSource->invokeArgs( $object, $arguments );
+        } else {
+            // doesn't work: return call_user_func_array( array( parent, 'invoke' ), array_unshift( $arguments, $object ) );
+            // but hopefully the methods invoke and invokeArgs of
+            // PHP's ReflectionMethod are semantically the same
+            return parent::invokeArgs( $object, $arguments );
+        }
+    }
+
+    /**
+     * Invokes the Method and allows to pass its arguments as an array
+     *
+     * @param object $object
+     *        Instance of the class defining this method
+     * @param array<integer,mixed> $arguments
+     *        Arguments
+     * @return mixed
+     *         Return value of the method invocation
+     */
+    public function invokeArgs( $object, Array $arguments ) {
+        if ( $this->reflectionSource instanceof ReflectionMethod ) {
+            return $this->reflectionSource->invokeArgs( $object, $arguments );
+        } else {
+            return parent::invokeArgs( $object, $arguments );
+        }
+    }
+
+    /**
+     * Returns the number of parameters
+     *
+     * @return integer The number of parameters
+     */
+    public function getNumberOfParameters() {
+        if ( $this->reflectionSource instanceof ReflectionMethod ) {
+            return $this->reflectionSource->getNumberOfParameters();
+        } else {
+            return parent::getNumberOfParameters();
+        }
+    }
+
+    /**
+     * Returns the number of required parameters
+     *
+     * @return integer The number of required parameters
+     */
+    public function getNumberOfRequiredParameters() {
+        if ( $this->reflectionSource instanceof ReflectionMethod ) {
+            return $this->reflectionSource->getNumberOfRequiredParameters();
+        } else {
+            return parent::getNumberOfRequiredParameters();
+        }
+    }
+
+    /**
+     * Returns whether this method is final
+     *
+     * @return boolean TRUE if this method is final
+     */
+    public function isFinal() {
+        if ( $this->reflectionSource instanceof ReflectionMethod ) {
+            return $this->reflectionSource->isFinal();
+        } else {
+            return parent::isFinal();
+        }
+    }
+
+    /**
+     * Returns whether this method is abstract
+     *
+     * @return boolean TRUE if this method is abstract
+     */
+    public function isAbstract() {
+        if ( $this->reflectionSource instanceof ReflectionMethod ) {
+            return $this->reflectionSource->isAbstract();
+        } else {
+            return parent::isAbstract();
+        }
+    }
+
+    /**
+     * Returns whether this method is public
+     *
+     * @return boolean TRUE if this method is public
+     */
+    public function isPublic() {
+        if ( $this->reflectionSource instanceof ReflectionMethod ) {
+            return $this->reflectionSource->isPublic();
+        } else {
+            return parent::isPublic();
+        }
+    }
+
+    /**
+     * Returns whether this method is private
+     *
+     * @return boolean TRUE if this method is private
+     */
+    public function isPrivate() {
+        if ( $this->reflectionSource instanceof ReflectionMethod ) {
+            return $this->reflectionSource->isPrivate();
+        } else {
+            return parent::isPrivate();
+        }
+    }
+
+    /**
+     * Returns whether this method is protected
+     *
+     * @return boolean TRUE if this method is protected
+     */
+    public function isProtected() {
+        if ( $this->reflectionSource instanceof ReflectionMethod ) {
+            return $this->reflectionSource->isProtected();
+        } else {
+            return parent::isProtected();
+        }
+    }
+
+    /**
+     * Returns whether this method is static
+     *
+     * @return boolean TRUE if this method is static
+     */
+    public function isStatic() {
+        if ( $this->reflectionSource instanceof ReflectionMethod ) {
+            return $this->reflectionSource->isStatic();
+        } else {
+            return parent::isStatic();
+        }
+    }
+
+    /**
+     * Returns whether this method is a constructor
+     *
+     * @return boolean TRUE if this method is a constructor
+     */
+    public function isConstructor() {
+        if ( $this->reflectionSource instanceof ReflectionMethod ) {
+            return $this->reflectionSource->isConstructor();
+        } else {
+            return parent::isConstructor();
+        }
+    }
+
+    /**
+     * Returns whether this method is a destructor
+     *
+     * @return boolean TRUE if this method is a destructor
+     */
+    public function isDestructor() {
+        if ( $this->reflectionSource instanceof ReflectionMethod ) {
+            return $this->reflectionSource->isDestructor();
+        } else {
+            return parent::isDestructor();
+        }
+    }
+
+    /**
+     * Returns a bitfield of the access modifiers for this method
+     *
+     * @return integer  Bitfield of the access modifiers for this method
+     */
+    public function getModifiers() {
+        if ( $this->reflectionSource instanceof ReflectionMethod ) {
+            return $this->reflectionSource->getModifiers();
+        } else {
+            return parent::getModifiers();
+        }
+    }
+
+    /**
+     * Returns a string representation
+     *
+     * @return string String representation
+     */
+    public function __toString() {
+        if ( $this->reflectionSource instanceof ReflectionMethod ) {
+            return $this->reflectionSource->__toString();
+        } else {
+            return parent::__toString();
+        }
+    }
+
+    /**
+     * Returns whether this is a user-defined method
+     *
+     * @return boolean True if this is a user-defined method
+     */
+    public function isUserDefined() {
+        if ( $this->reflectionSource instanceof ReflectionMethod ) {
+            return $this->reflectionSource->isUserDefined();
+        } else {
+            return parent::isUserDefined();
+        }
+    }
+
+    /**
+     * Returns an associative array containing this method's static variables
+     * and their values
+     *
+     * @return array<sting,mixed> This method's static variables
+     */
+    public function getStaticVariables() {
+        if ( $this->reflectionSource instanceof ReflectionMethod ) {
+            return $this->reflectionSource->getStaticVariables();
+        } else {
+            return parent::getStaticVariables();
+        }
+    }
+
+    /**
+     * Returns whether this method returns a reference
+     *
+     * @return boolean True if this method returns a reference
+     */
+    public function returnsReference() {
+        if ( $this->reflectionSource instanceof ReflectionMethod ) {
+            return $this->reflectionSource->returnsReference();
+        } else {
+            return parent::returnsReference();
+        }
+    }
+
+    /**
+     * Returns NULL or the extension the method belongs to
+     *
+     * @return ezcReflectionExtension Extension the method belongs to
+     */
+    public function getExtension() {
+        if ( $this->getExtensionName() === false ) {
+            return null;
+        } else {
+            if ( $this->reflectionSource instanceof ReflectionMethod ) {
+                return new ezcReflectionExtension(
+                    $this->reflectionSource->getExtension()
+                );
+            } else {
+                // using the name, since otherwhise the object would be treated like an
+                // external reflection implementation and that would decrease performance
+                return new ezcReflectionExtension( parent::getExtensionName() );
+            }
+        }
+    }
+
+    /**
+     * Returns false or the name of the extension the method belongs to
+     *
+     * @return string|boolean False or the name of the extension
+     */
+    public function getExtensionName() {
+        if ( $this->reflectionSource instanceof ReflectionMethod ) {
+            return $this->reflectionSource->getExtensionName();
+        } else {
+            return parent::getExtensionName();
+        }
+    }
+
+    /**
+     * Exports a reflection method object.
+     *
+     * Returns the output if TRUE is specified for $return, printing it otherwise.
+     * This is purely a wrapper method which calls the corresponding method of
+     * the parent class (ReflectionMethod::export()).
+     * @param string|object $class
+     *        Name or instance of the class declaring the method
+     * @param string $name
+     *        Name of the method
+     * @param boolean $return
+     *        Wether to return (TRUE) or print (FALSE) the output
+     * @return mixed
+     */
+    public static function export($class, $name, $return = false) {
+        return parent::export($class, $name, $return);
     }
 }
 ?>

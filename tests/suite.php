@@ -15,6 +15,8 @@ require_once 'extension_external_test.php';
 require_once 'function_test.php';
 require_once 'function_external_test.php';
 require_once 'method_test.php';
+require_once 'method_from_class_test.php';
+require_once 'methods_from_class_test.php';
 require_once 'parameter_test.php';
 require_once 'parser_test.php';
 require_once 'property_test.php';
@@ -58,6 +60,8 @@ class ezcReflectionSuite extends PHPUnit_Framework_TestSuite
         $this->addTest( ezcReflectionFunctionTest::suite() );
         $this->addTest( ezcReflectionFunctionExternalTest::suite() );
         $this->addTest( ezcReflectionMethodTest::suite() );
+        $this->addTest( ezcReflectionMethodFromClassTest::suite() );
+        $this->addTest( ezcReflectionMethodsFromClassTest::suite() );
         $this->addTest( ezcReflectionParameterTest::suite() );
         $this->addTest( ezcReflectionPropertyTest::suite() );
         $this->addTest( ezcReflectionDocParserTest::suite() );
