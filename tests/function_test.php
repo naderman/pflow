@@ -281,7 +281,7 @@ weird coding standards should also be supported: */", $this->fctM2->getDocCommen
         self::assertEquals( $this->php_fctM1->getExtension(), $this->fctM1->getExtension() );
         self::assertEquals( $this->php_fctM2->getExtension(), $this->fctM2->getExtension() );
         self::assertEquals( $this->php_fctM3->getExtension(), $this->fctM3->getExtension() );
-        self::assertEquals( $this->php_fct_method_exists->getExtension(), $this->fct_method_exists->getExtension() );
+        self::assertEquals( (string) $this->php_fct_method_exists->getExtension(), (string) $this->fct_method_exists->getExtension() );
     }
 
     public function testGetExtensionName() {

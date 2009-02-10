@@ -315,18 +315,20 @@ class ezcReflectionFunction extends ReflectionFunction
     /**
      * Invokes the function
      *
-     * @param mixed $argument,... Arguments
-     * @return mixed
+     * @param mixed $argument,...  Arguments
+     * @return mixed               Return value of the function invocation
      */
     public function invoke( $argument ) {
         $arguments = func_get_args();
         if ( $this->reflectionSource instanceof ReflectionFunction ) {
             // doesn't work: return call_user_func_array( array( $this->reflectionSource, 'invoke' ), $arguments );
-            // but hopefully the methods of external ReflectionFunction implementation are semantically the same
+            // but hopefully the methods invoke and invokeArgs of
+            // the external ReflectionFunction implementation are semantically the same
             return $this->reflectionSource->invokeArgs( $arguments );
         } else {
             // doesn't work: return call_user_func_array( array( parent, 'invoke' ), $arguments );
-            // but hopefully the methods of ReflectionFunction are semantically the same
+            // but hopefully the methods invoke and invokeArgs of
+            // PHP's ReflectionFunction are semantically the same
             return parent::invokeArgs( $arguments );
         }
     }
@@ -334,8 +336,10 @@ class ezcReflectionFunction extends ReflectionFunction
     /**
      * Invokes the function and allows to pass its arguments as an array
      *
-     * @param array<integer,mixed> $arguments Arguments
+     * @param array<integer,mixed> $arguments
+     *     Arguments
      * @return mixed
+     *     Return value of the function invocation
      */
     public function invokeArgs( Array $arguments ) {
         if ( $this->reflectionSource instanceof ReflectionFunction ) {
@@ -419,11 +423,11 @@ class ezcReflectionFunction extends ReflectionFunction
     }
 
     /**
-     * Exports a reflection object.
+     * Exports a reflection function object.
      *
      * Returns the output if TRUE is specified for $return, printing it otherwise.
      * This is purely a wrapper method which calls the corresponding method of
-     * the parent class.
+     * the parent class (ReflectionFunction::export()).
      * @param string $function Name of the function
      * @param boolean $return
      *        Wether to return (TRUE) or print (FALSE) the output
