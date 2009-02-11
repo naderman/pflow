@@ -15,16 +15,27 @@ class ezcReflectionMethodTest extends ezcReflectionFunctionTest
         $this->php_fctM1 = new ReflectionMethod( 'TestMethods', 'm1' );
         $this->php_fctM2 = new ReflectionMethod( 'TestMethods', 'm2' );
         $this->php_fctM3 = new ReflectionMethod( 'TestMethods', 'm3' );
+        $this->php_fctM4 = new ReflectionMethod( 'TestMethods', 'm4' );
         $this->php_fct_method_exists = new ReflectionMethod( 'ReflectionClass', 'hasMethod' );
 
         $this->setUpFixtures();
     }
 
     protected function setUpFixtures() {
-        $this->fctM1 = new ezcReflectionMethod('TestMethods', 'm1');
-        $this->fctM2 = new ezcReflectionMethod('TestMethods', 'm2');
-        $this->fctM3 = new ezcReflectionMethod('TestMethods', 'm3');
+        $this->fctM1 = new ezcReflectionMethod( 'TestMethods', 'm1' );
+        $this->fctM2 = new ezcReflectionMethod( 'TestMethods', 'm2' );
+        $this->fctM3 = new ezcReflectionMethod( 'TestMethods', 'm3' );
+        $this->fctM4 = new ezcReflectionMethod( 'TestMethods', 'm4' );
         $this->fct_method_exists = new ezcReflectionMethod( 'ReflectionClass', 'hasMethod' );
+        $this->ezc_TestMethods2_m1 = new ezcReflectionMethod( 'TestMethods2', 'm1' );
+        $this->ezc_TestMethods2_m2 = new ezcReflectionMethod( 'TestMethods2', 'm2' );
+        $this->ezc_TestMethods2_m3 = new ezcReflectionMethod( 'TestMethods2', 'm3' );
+        $this->ezc_TestMethods2_m4 = new ezcReflectionMethod( 'TestMethods2', 'm4' );
+        $this->ezc_TestMethods2_newMethod = new ezcReflectionMethod( 'TestMethods2', 'newMethod' );
+        $this->ezc_ReflectionMethod_isInternal = new ezcReflectionMethod('ReflectionMethod', 'isInternal');
+        $this->ezc_ezcReflectionMethod_isInternal = new ezcReflectionMethod('ezcReflectionMethod', 'isInternal');
+        $this->ezc_ezcReflectionMethod_isInherited = new ezcReflectionMethod('ezcReflectionMethod', 'isInherited');
+        $this->ezc_ezcReflectionMethod_getTags = new ezcReflectionMethod('ezcReflectionMethod', 'getTags');
     }
 
     public function testGetDeclaringClass() {
@@ -46,26 +57,23 @@ class ezcReflectionMethodTest extends ezcReflectionFunctionTest
         $tags = $method->getTags();
         self::assertEquals(2, count($tags));
 
-
-        $method = new ezcReflectionMethod('TestMethods', 'm4');
-        $tags = $method->getTags();
+        $tags = $this->fctM4->getTags();
         $expectedTags = array('webmethod', 'restmethod', 'restin', 'restout', 'author', 'param', 'param', 'param', 'return');
         ReflectionTestHelper::expectedTags($expectedTags, $tags, $this);
 
-        $tags = $method->getTags('param');
+        $tags = $this->fctM4->getTags('param');
         $expectedTags = array('param', 'param', 'param');
         ReflectionTestHelper::expectedTags($expectedTags, $tags, $this);
 
-        $method = new ezcReflectionMethod('TestMethods', 'm1');
+        $method = $this->fctM1;
         $tags = $method->getTags();
         $expectedTags = array('param', 'author');
         ReflectionTestHelper::expectedTags($expectedTags, $tags, $this);
     }
 
     public function testIsTagged() {
-        $method = new ezcReflectionMethod('TestMethods', 'm4');
-        self::assertTrue($method->isTagged('webmethod'));
-        self::assertFalse($method->isTagged('fooobaaar'));
+        self::assertTrue($this->fctM4->isTagged('webmethod'));
+        self::assertFalse($this->fctM4->isTagged('fooobaaar'));
     }
 
     public function testGetLongDescription() {
@@ -83,21 +91,18 @@ class ezcReflectionMethodTest extends ezcReflectionFunctionTest
     }
 
     public function testGetReturnDescription() {
-        $method = new ezcReflectionMethod('TestMethods', 'm4');
-        $desc = $method->getReturnDescription();
+        $desc = $this->fctM4->getReturnDescription();
         self::assertEquals('Hello World', $desc);
     }
 
     public function testGetReturnType() {
-        $method = new ezcReflectionMethod('TestMethods', 'm4');
-        $type = $method->getReturnType();
+        $type = $this->fctM4->getReturnType();
         self::assertType('ezcReflectionType', $type);
         self::assertEquals('string', $type->toString());
     }
 
     public function testGetParameters() {
-        $method = new ezcReflectionMethod('ezcReflectionMethod', 'getTags');
-        $params = $method->getParameters();
+        $params = $this->ezc_ezcReflectionMethod_getTags->getParameters();
 
         $expectedParams = array('name');
         foreach ($params as $param) {
@@ -110,49 +115,28 @@ class ezcReflectionMethodTest extends ezcReflectionFunctionTest
     }
 
     public function testIsInherited() {
-        $method = new ezcReflectionMethod('TestMethods2', 'm2');
-        self::assertFalse($method->isInherited());
-
-        //is internal has been inherited an not redefined from ReflectionFunction
-        $method = new ezcReflectionMethod('ReflectionMethod', 'isInternal');
-        self::assertTrue($method->isInherited());
-
-        $method = new ezcReflectionMethod('TestMethods2', 'm3');
-        self::assertTrue($method->isInherited());
-
-        $method = new ezcReflectionMethod('TestMethods2', 'newMethod');
-        self::assertFalse($method->isInherited());
-
-        $method = new ezcReflectionMethod('ezcReflectionMethod', 'isInherited');
-        self::assertFalse($method->isInherited());
+        self::assertFalse($this->ezc_TestMethods2_m2->isInherited());
+        // isInternal has been inherited an not redefined from ReflectionFunction
+        self::assertTrue($this->ezc_ReflectionMethod_isInternal->isInherited());
+        self::assertTrue($this->ezc_TestMethods2_m3->isInherited());
+        self::assertFalse($this->ezc_TestMethods2_newMethod->isInherited());
+        self::assertFalse($this->ezc_ezcReflectionMethod_isInherited->isInherited());
     }
 
     public function testIsOverriden() {
-        $method = new ezcReflectionMethod('TestMethods2', 'm2');
-        self::assertTrue($method->isOverridden());
-
-        $method = new ezcReflectionMethod('TestMethods2', 'newMethod');
-        self::assertFalse($method->isOverridden());
-
-        $method = new ezcReflectionMethod('TestMethods2', 'm4');
-        self::assertFalse($method->isOverridden());
-
-        $method = new ezcReflectionMethod('ezcReflectionMethod', 'isInternal');
-        self::assertTrue($method->isOverridden());
-
-        $method = new ezcReflectionMethod('ReflectionMethod', 'isInternal');
-        self::assertFalse($method->isOverridden());
+        self::assertTrue($this->ezc_TestMethods2_m2->isOverridden());
+        self::assertFalse($this->ezc_TestMethods2_newMethod->isOverridden());
+        self::assertFalse($this->ezc_TestMethods2_m4->isOverridden());
+        self::assertTrue($this->ezc_ezcReflectionMethod_isInternal->isOverridden());
+        self::assertFalse($this->ezc_ReflectionMethod_isInternal->isOverridden());
     }
 
     public function testIsIntroduced() {
-        $method = new ezcReflectionMethod('TestMethods2', 'm2');
-        self::assertFalse($method->isIntroduced());
+        self::assertFalse($this->ezc_TestMethods2_m2->isIntroduced());
 
-        $method = new ezcReflectionMethod('TestMethods2', 'newMethod');
-        self::assertTrue($method->isIntroduced());
+        self::assertTrue($this->ezc_TestMethods2_newMethod->isIntroduced());
 
-        $method = new ezcReflectionMethod('TestMethods2', 'm4');
-        self::assertFalse($method->isIntroduced());
+        self::assertFalse($this->ezc_TestMethods2_m4->isIntroduced());
     }
 
 	public function testIsDisabled() {
@@ -273,6 +257,10 @@ class ezcReflectionMethodTest extends ezcReflectionFunctionTest
             ezcReflectionMethod::export( 'TestMethods', 'm3', true )
         );
         self::assertEquals(
+            ReflectionMethod::export( 'TestMethods', 'm4', true ),
+            ezcReflectionMethod::export( 'TestMethods', 'm4', true )
+        );
+        self::assertEquals(
             ReflectionMethod::export( new TestMethods(), 'm1', true ),
             ezcReflectionMethod::export( new TestMethods(), 'm1', true )
         );
@@ -283,6 +271,10 @@ class ezcReflectionMethodTest extends ezcReflectionFunctionTest
         self::assertEquals(
             ReflectionMethod::export( new TestMethods(), 'm3', true ),
             ezcReflectionMethod::export( new TestMethods(), 'm3', true )
+        );
+        self::assertEquals(
+            ReflectionMethod::export( new TestMethods(), 'm4', true ),
+            ezcReflectionMethod::export( new TestMethods(), 'm4', true )
         );
     }
 

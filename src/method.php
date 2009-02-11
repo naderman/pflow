@@ -90,7 +90,11 @@ class ezcReflectionMethod extends ReflectionMethod
     function getParameters() {
         $params = $this->docParser->getParamTags();
         $extParams = array();
-        $apiParams = parent::getParameters();
+        if ( $this->reflectionSource ) {
+            $apiParams = $this->reflectionSource->getParameters();
+        } else {
+            $apiParams = parent::getParameters();
+        }
         foreach ($apiParams as $param) {
             $found = false;
             foreach ($params as $tag) {
