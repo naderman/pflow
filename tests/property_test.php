@@ -18,6 +18,14 @@ class ezcReflectionPropertyTest extends ezcTestCase
     public function setUp() {
         $class = new ezcReflectionClass('SomeClass');
 		$this->refProp = $class->getProperty('fields');
+        /*
+        foreach ( $class->getProperties() as $property ) {
+            if ( $property->getName() == 'fields' ) {
+		        $this->refProp = $property;
+                break;
+            }
+        }
+        */
     }
 
     public function tearDown() {

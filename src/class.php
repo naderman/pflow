@@ -209,6 +209,7 @@ class ezcReflectionClass extends ReflectionClass
         if ( $this->class instanceof ReflectionClass ) {
         	$props = $this->class->getProperties($filter);
         } else {
+            //TODO: return ezcReflectionProperty[]
         	$props = parent::getProperties($filter);
         }
 
