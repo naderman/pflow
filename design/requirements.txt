@@ -1,5 +1,5 @@
 eZ component: Reflection, Requirements
-~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
 Introduction
 ============
