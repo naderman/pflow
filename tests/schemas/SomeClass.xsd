@@ -4,6 +4,7 @@
     <xsd:extension base="tns:BaseClass">
       <xsd:sequence>
         <xsd:element minOccurs="0" maxOccurs="1" nillable="true" name="fields" type="tns:ArrayOfint"/>
+        <xsd:element minOccurs="0" maxOccurs="1" nillable="true" name="publicProperty" type="tns:SomeClass"/>
       </xsd:sequence>
     </xsd:extension>
   </xsd:complexContent>

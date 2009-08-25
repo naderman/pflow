@@ -17,7 +17,11 @@ class ezcReflectionPropertyTest extends ezcTestCase
 
     public function setUp() {
         $class = new ezcReflectionClass('SomeClass');
-		$this->refProp = $class->getProperty('fields');
+		$this->refPropName = 'fields';
+		$this->refProp = $class->getProperty($this->refPropName);
+        $this->publicPropertyName = 'publicProperty';
+        $this->publicProperty = $class->getProperty($this->publicPropertyName);
+        $this->instanceOfSomeClass = new SomeClass();
         /*
         foreach ( $class->getProperties() as $property ) {
             if ( $property->getName() == 'fields' ) {
@@ -87,31 +91,43 @@ class ezcReflectionPropertyTest extends ezcTestCase
 		self::assertEquals(1024, $this->refProp->getModifiers());
 	}
 
-	/**
-	* @expectedException ReflectionException
-	*/
 	public function testGetValue() {
-		$o = new SomeClass();
-		self::assertEquals(null, $this->refProp->getValue($o));
+		$o = $this->instanceOfSomeClass;
+        $value = new SomeClass();
+		self::assertEquals(null, $this->publicProperty->getValue($o));
+        $propertyName = $this->publicPropertyName;
+	    $o->$propertyName = $value;
+		self::assertSame($value, $this->publicProperty->getValue($o));
+    }
+
+	/**
+     * @expectedException ReflectionException
+     */
+	public function testGetValueOfPrivatePropertyThrowsException() {
+		$this->refProp->getValue($this->instanceOfSomeClass);
+	}
+
+	public function testSetValue() {
+		$o = $this->instanceOfSomeClass;
+        $value = $this->instanceOfSomeClass;
+        $propertyName = $this->publicPropertyName;
+		self::assertEquals(null, $o->$propertyName);
+		$this->publicProperty->setValue($o, $value);
+		self::assertSame($value, $o->$propertyName);
 	}
 
 	/**
-	* @expectedException ReflectionException
-	*/
-	public function testSetValue() {
-		$o = new SomeClass();
-		//self::assertEquals(null, $this->refProp->getValue($o));
-		$this->refProp->setValue($o, 3);
-		//self::assertEquals(3, $this->refProp->getValue($o));
+     * @expectedException ReflectionException
+     */
+	public function testSetValueOfPrivatePropertyThrowsException() {
+		$this->refProp->setValue($this->instanceOfSomeClass, 3);
 	}
 
 	public function testGetDocComment() {
-		$o = new SomeClass();
 		self::assertEquals("/**
      * @var int[]
-     */", $this->refProp->getDocComment($o));
+     */", $this->refProp->getDocComment($this->instanceOfSomeClass));
 	}
-
 
     public static function suite()
     {

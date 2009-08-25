@@ -11,6 +11,11 @@ class SomeClass extends BaseClass implements IInterface {
      */
     private $fields;
 
+    /**
+     * @var SomeClass
+     */
+    public $publicProperty;
+
     public function __construct() {
         // echo "New SomeClass instance created.\n";
     }
