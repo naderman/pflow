@@ -318,7 +318,7 @@ class ezcReflectionFunction extends ReflectionFunction
      * @param mixed $argument,...  Arguments
      * @return mixed               Return value of the function invocation
      */
-    public function invoke( $argument ) {
+    public function invoke( $arguments = array() ) {
         $arguments = func_get_args();
         if ( $this->reflectionSource instanceof ReflectionFunction ) {
             // doesn't work: return call_user_func_array( array( $this->reflectionSource, 'invoke' ), $arguments );
