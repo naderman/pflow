@@ -266,7 +266,7 @@ class ezcReflectionProperty extends ReflectionProperty
 	/**
      * Returns the property's value.
      *
-     * @param object An object from which the property value is obtained
+     * @param object $object An object from which the property value is obtained
      * @return mixed The property's value
      */
     public function getValue( $object = null )
@@ -284,7 +284,7 @@ class ezcReflectionProperty extends ReflectionProperty
 	/**
      * Changes the property's value.
      *
-     * @param object An object on which the property value will be changed
+     * @param object $object An object on which the property value will be changed
 	 * @param mixed $value Value of the property
      * @return void
      */

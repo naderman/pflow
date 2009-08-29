@@ -219,7 +219,7 @@ class ezcReflectionArrayType extends ezcReflectionAbstractType {
      * @param DOMDocument $dom
      * @return DOMElement
      */
-    function getXmlSchema($dom, $namespaceXMLSchema = 'http://www.w3.org/2001/XMLSchema') {
+    function getXmlSchema(DOMDocument $dom, $namespaceXMLSchema = 'http://www.w3.org/2001/XMLSchema') {
         if ($this->isMap()) {
             throw new Exception('XML Schema mapping is not supported for map-types');
         }

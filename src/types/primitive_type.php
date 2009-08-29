@@ -74,10 +74,10 @@ class ezcReflectionPrimitiveType extends ezcReflectionAbstractType {
     }
 
     /**
-     * @param DOMDocument
+     * @param  DOMDocument $dom
      * @return DOMElement
      */
-    function getXmlSchema($dom) {
+    function getXmlSchema(DOMDocument $dom) {
         return null;
     }
 }

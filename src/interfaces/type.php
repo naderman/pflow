@@ -16,47 +16,46 @@
  * @author Stefan Marr <mail@stefan-marr.de>
  */
 interface ezcReflectionType {
-
     /**
      * Return type of elements in an array type or null if is not an array
      *
      * @return ezcReflectionType
      */
-    function getArrayType();
+    public function getArrayType();
 
     /**
      * Returns type of key used in a map
      *
      * @return ezcReflectionType
      */
-    function getMapIndexType();
+    public function getMapIndexType();
 
     /**
      * Returns type of values used in a map
      *
      * @return ezcReflectionType
      */
-    function getMapValueType();
+    public function getMapValueType();
 
     /**
      * @return boolean
      */
-    function isArray();
+    public function isArray();
 
     /**
      * @return boolean
      */
-    function isClass();
+    public function isClass();
 
     /**
      * @return boolean
      */
-    function isPrimitive();
+    public function isPrimitive();
 
     /**
      * @return boolean
      */
-    function isMap();
+    public function isMap();
 
     /**
      * Return the name of this type as string
@@ -64,24 +63,23 @@ interface ezcReflectionType {
      * @return string
      * @todo approve name, may be getName is better
      */
-    function toString();
+    public function toString();
 
-    //** Advanced infos for xml mapping ************************************
     /**
      * @return boolean
      */
-    function isStandardType();
+    public function isStandardType();
 
     /**
      * Returns the name to be used in a xml schema for this type
      * @return string
      */
-    function getXmlName();
+    public function getXmlName();
 
     /**
-     * @param DOMDocument $dom
+     * @param  DOMDocument $dom
      * @return DOMElement
      */
-    function getXmlSchema($dom);
+    public function getXmlSchema(DOMDocument $dom);
 }
 ?>

@@ -105,7 +105,7 @@ class ezcReflectionClassType extends ezcReflectionClass implements ezcReflection
      * @param DOMDocument $dom
      * @return DOMElement
      */
-    function getXmlSchema($dom, $namespaceXMLSchema = 'http://www.w3.org/2001/XMLSchema') {
+    function getXmlSchema(DOMDocument $dom, $namespaceXMLSchema = 'http://www.w3.org/2001/XMLSchema') {
 
         $schema = $dom->createElementNS($namespaceXMLSchema, 'xsd:complexType');
         $schema->setAttribute('name', $this->getXmlName(false));

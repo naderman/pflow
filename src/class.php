@@ -54,7 +54,7 @@ class ezcReflectionClass extends ReflectionClass
      * of the ReflectionClass instance given to the constructor
      *
      * @param string $method Method to be called
-     * @param array<integer, mixed> $arguments Arguments that were passed
+     * @param array  $arguments Arguments that were passed
      * @return mixed
      */
     public function __call( $method, $arguments )

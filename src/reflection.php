@@ -55,7 +55,7 @@ class ezcReflectionApi {
     /**
      * Sets the documentation parser used by all ezcReflection classes
      *
-     * @param setDocParser $docParser Parser for documentation blocks
+     * @param ezcReflectionDocParser $docParser Parser for documentation blocks
      * @return void
      */
     public static function setDocParser(ezcReflectionDocParser $docParser)
