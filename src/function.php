@@ -423,10 +423,26 @@ class ezcReflectionFunction extends ReflectionFunction
     }
 
     /**
+     * Returns whether this function is deprecated
+     *
+     * This is purely a wrapper method, which calls the corresponding method of
+     * the parent class.
+     * @return boolean
+     */
+    public function isDeprecated() {
+        // TODO: also check @deprecated annotation
+        if ( $this->reflectionSource instanceof ReflectionFunction ) {
+            return $this->reflectionSource->isDeprecated();
+        } else {
+            return parent::isDeprecated();
+        }
+    }
+
+    /**
      * Exports a reflection function object.
      *
      * Returns the output if TRUE is specified for $return, printing it otherwise.
-     * This is purely a wrapper method which calls the corresponding method of
+     * This is purely a wrapper method, which calls the corresponding method of
      * the parent class (ReflectionFunction::export()).
      * @param string $function Name of the function
      * @param boolean $return
@@ -436,5 +452,6 @@ class ezcReflectionFunction extends ReflectionFunction
     public static function export($function, $return = false) {
         return parent::export($function, $return);
     }
+
 }
 ?>

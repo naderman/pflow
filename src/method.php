@@ -83,6 +83,31 @@ class ezcReflectionMethod extends ReflectionMethod
     }
 
     /**
+     * Forwards a method invocation to either the reflection source passed to
+     * the constructor of this class when creating an instance or to the parent
+     * class.
+     *
+     * This method is part of the dependency injection mechanism and serves as
+     * a helper for implementing wrapper methods without code duplication.
+     * @param string $method Name of the method to be invoked
+     * @param mixed[] $arguments Arguments to be passed to the method
+     * @return mixed Return value of the invoked method
+     */
+    protected function forwardCallToReflectionSource( $method, $arguments = array() ) {
+        if ( $this->reflectionSource instanceof parent ) {
+            return call_user_func_array( array( $this->reflectionSource, $method ), $arguments );
+        } else {
+            //return call_user_func_array( array( parent, $method ), $arguments );
+            $argumentStrings = array();
+            foreach ( array_keys( $arguments ) as $key ) {
+                $argumentStrings[] = var_export( $key, true );
+            }
+            $cmd = 'return parent::$method( ' . implode( ', ', $argumentStrings ) . ' );';
+            return eval( $cmd );
+        }
+    }
+
+    /**
      * Returns the parameters of the method
      *
      * @return ezcReflectionParameter[] Parameters of the method
@@ -293,12 +318,7 @@ class ezcReflectionMethod extends ReflectionMethod
      * @return string Doc comment
      */
     public function getDocComment() {
-        if ( $this->reflectionSource instanceof ReflectionMethod ) {
-            $comment = $this->reflectionSource->getDocComment();
-        } else {
-            $comment = parent::getDocComment();
-        }
-        return $comment;
+        return $this->forwardCallToReflectionSource( __FUNCTION__ );
     }
 
     /**
@@ -539,7 +559,7 @@ class ezcReflectionMethod extends ReflectionMethod
     /**
      * Returns a bitfield of the access modifiers for this method
      *
-     * @return integer  Bitfield of the access modifiers for this method
+     * @return integer Bitfield of the access modifiers for this method
      */
     public function getModifiers() {
         if ( $this->reflectionSource instanceof ReflectionMethod ) {
@@ -637,10 +657,47 @@ class ezcReflectionMethod extends ReflectionMethod
     }
 
     /**
+     * Returns whether this method is deprecated.
+     *
+     * This is purely a wrapper method, which calls the corresponding method of
+     * the parent class.
+     * @return boolean
+     */
+    public function isDeprecated() {
+        // TODO: also check @deprecated annotation
+        if ( $this->reflectionSource instanceof ReflectionFunction ) {
+            return $this->reflectionSource->isDeprecated();
+        } else {
+            return parent::isDeprecated();
+        }
+    }
+
+    /**
+     * Returns the prototype.
+     *
+     * This is mostly a wrapper method, which calls the corresponding method of
+     * the parent class. The only difference is that it returns an instance
+     * ezcReflectionClassType instead of a ReflectionClass instance
+     * @return ezcReflectionClassType Prototype
+     */
+    public function getPrototype() {
+        if ( $this->reflectionSource instanceof ReflectionFunction ) {
+            $prototype = $this->reflectionSource->getPrototype();
+        } else {
+            $prototype = parent::getPrototype();
+        }
+		if (!empty($prototype)) {
+		    return new ezcReflectionClassType($prototype->getName());
+		} else {
+		    return null;
+		}
+    }
+
+    /**
      * Exports a reflection method object.
      *
      * Returns the output if TRUE is specified for $return, printing it otherwise.
-     * This is purely a wrapper method which calls the corresponding method of
+     * This is purely a wrapper method, which calls the corresponding method of
      * the parent class (ReflectionMethod::export()).
      * @param string|object $class
      *        Name or instance of the class declaring the method
@@ -653,5 +710,6 @@ class ezcReflectionMethod extends ReflectionMethod
     public static function export($class, $name, $return = false) {
         return parent::export($class, $name, $return);
     }
+
 }
 ?>

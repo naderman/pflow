@@ -69,6 +69,31 @@ class ezcReflectionClass extends ReflectionClass
     }
 
     /**
+     * Forwards a method invocation to either the reflection source passed to
+     * the constructor of this class when creating an instance or to the parent
+     * class.
+     *
+     * This method is part of the dependency injection mechanism and serves as
+     * a helper for implementing wrapper methods without code duplication.
+     * @param string $method Name of the method to be invoked
+     * @param mixed[] $arguments Arguments to be passed to the method
+     * @return mixed Return value of the invoked method
+     */
+    protected function forwardCallToReflectionSource( $method, $arguments = array() ) {
+        if ( $this->class instanceof parent ) {
+            return call_user_func_array( array( $this->class, $method ), $arguments );
+        } else {
+            //return call_user_func_array( array( parent, $method ), $arguments );
+            $argumentStrings = array();
+            foreach ( array_keys( $arguments ) as $key ) {
+                $argumentStrings[] = var_export( $key, true );
+            }
+            $cmd = 'return parent::$method( ' . implode( ', ', $argumentStrings ) . ' );';
+            return eval( $cmd );
+        }
+    }
+
+    /**
      * Returns an ezcReflectionMethod object of the method specified by $name.
      *
      * @param string $name Name of the method
@@ -173,7 +198,7 @@ class ezcReflectionClass extends ReflectionClass
     /**
      * Returns the class' property specified by its name
      *
-     * @param string $name
+     * @param string $name Name of the property
      * @return ezcReflectionProperty
      * @throws RelectionException if property doesn't exists
      */
@@ -287,64 +312,383 @@ class ezcReflectionClass extends ReflectionClass
     /**
      * Returns FALSE or the name of the extension the class belongs to
      *
-     * This is purely a wrapper method which either calls the corresponding
+     * This is purely a wrapper method, which either calls the corresponding
      * method of the parent class or forwards the call to the ReflectionClass
      * instance passed to the constructor.
      * @return string|boolean Extension name or FALSE
      */
     public function getExtensionName() {
-    	if ( $this->class instanceof ReflectionClass ) {
-            // query external reflection object
-    		$extensionName = $this->class->getExtensionName();
-    	} else {
-    		$extensionName = parent::getExtensionName();
-    	}
-        return $extensionName;
+        return $this->forwardCallToReflectionSource( __FUNCTION__ );
     }
 
     /**
      * Returns the name of the class.
      *
-     * This is purely a wrapper method which either calls the corresponding
+     * This is purely a wrapper method, which either calls the corresponding
      * method of the parent class or forwards the call to the ReflectionClass
      * instance passed to the constructor.
      * @return string Class name
      */
     public function getName() {
-        if ( $this->class instanceof ReflectionClass )
-        {
-            // query external reflection object
-            $name = $this->class->getName();
-        } else {
-            $name = parent::getName();
-        }
-        return $name;
+        return $this->forwardCallToReflectionSource( __FUNCTION__ );
     }
 
     /**
      * Returns the doc comment for the class.
      *
-     * This is purely a wrapper method which either calls the corresponding
+     * This is purely a wrapper method, which either calls the corresponding
      * method of the parent class or forwards the call to the ReflectionClass
      * instance passed to the constructor.
      * @return string Doc comment
      */
     public function getDocComment() {
-        if ( $this->class instanceof ReflectionClass )
-        {
-            // query external reflection object
-            $comment = $this->class->getDocComment();
-        } else {
-            $comment = parent::getDocComment();
-        }
-        return $comment;
+        return $this->forwardCallToReflectionSource( __FUNCTION__ );
+    }
+
+    /**
+     * Returns the class' constant specified by its name
+     *
+     * This is purely a wrapper method, which either calls the corresponding
+     * method of the parent class or forwards the call to the ReflectionClass
+     * instance passed to the constructor.
+     * @param string $name Name of the constant
+     * @return mixed
+     */
+    public function getConstant( $name ) {
+        return $this->forwardCallToReflectionSource( __FUNCTION__, array( $name ) );
+    }
+
+    /**
+     * Returns an associative array containing this class' constants and their
+     * values.
+     *
+     * This is purely a wrapper method, which either calls the corresponding
+     * method of the parent class or forwards the call to the ReflectionClass
+     * instance passed to the constructor.
+     * @return array<string, mixed> Constants and their values
+     */
+    public function getConstants() {
+        return $this->forwardCallToReflectionSource( __FUNCTION__ );
+    }
+
+    /**
+     * Returns an associative array containing copies of all default property
+     * values of the class.
+     *
+     * This is purely a wrapper method, which either calls the corresponding
+     * method of the parent class or forwards the call to the ReflectionClass
+     * instance passed to the constructor.
+     * @return array<string, mixed> Copies of all default property values
+     */
+    public function getDefaultProperties() {
+        return $this->forwardCallToReflectionSource( __FUNCTION__ );
+    }
+
+    /**
+     * Returns the line this class' declaration ends at
+     *
+     * This is purely a wrapper method, which either calls the corresponding
+     * method of the parent class or forwards the call to the ReflectionClass
+     * instance passed to the constructor.
+     * @return integer Line this class' declaration ends at
+     */
+    public function getEndLine() {
+        return $this->forwardCallToReflectionSource( __FUNCTION__ );
+    }
+
+    /**
+     * Returns the filename of the file this class was declared in
+     *
+     * This is purely a wrapper method, which either calls the corresponding
+     * method of the parent class or forwards the call to the ReflectionClass
+     * instance passed to the constructor.
+     * @return string The filename of the file this class was declared in
+     */
+    public function getFileName() {
+        return $this->forwardCallToReflectionSource( __FUNCTION__ );
+    }
+
+    /**
+     * Returns an array of names of interfaces this class implements
+     *
+     * This is purely a wrapper method, which either calls the corresponding
+     * method of the parent class or forwards the call to the ReflectionClass
+     * instance passed to the constructor.
+     * @return string[] Array of names of interfaces this class implements
+     */
+    public function getInterfaceNames() {
+        return $this->forwardCallToReflectionSource( __FUNCTION__ );
+    }
+
+    /**
+     * Returns a bitfield of the access modifiers for this class
+     *
+     * This is purely a wrapper method, which either calls the corresponding
+     * method of the parent class or forwards the call to the ReflectionClass
+     * instance passed to the constructor.
+     * @return integer Bitfield of the access modifiers for this method
+     */
+    public function getModifiers() {
+        return $this->forwardCallToReflectionSource( __FUNCTION__ );
+    }
+
+    /**
+     * Returns the line this class' declaration starts at
+     *
+     * This is purely a wrapper method, which either calls the corresponding
+     * method of the parent class or forwards the call to the ReflectionClass
+     * instance passed to the constructor.
+     * @return integer The line this class' declaration starts at
+     */
+    public function getStartLine() {
+        return $this->forwardCallToReflectionSource( __FUNCTION__ );
+    }
+
+    /**
+     * Returns an associative array containing all static property values of
+     * the class
+     *
+     * This is purely a wrapper method, which either calls the corresponding
+     * method of the parent class or forwards the call to the ReflectionClass
+     * instance passed to the constructor.
+     * @return array<string,mixed>
+     *         An associative array containing all static property values of
+     *         the class
+     */
+    public function getStaticProperties() {
+        return $this->forwardCallToReflectionSource( __FUNCTION__ );
+    }
+
+    /**
+     * Returns the value of a static property
+     *
+     * This is purely a wrapper method, which either calls the corresponding
+     * method of the parent class or forwards the call to the ReflectionClass
+     * instance passed to the constructor.
+     * @param string $name Name of the static property
+     * @param mixed $default Default value
+     * @return mixed Value of a static property
+     */
+    public function getStaticPropertyValue( $name, $default = null ) {
+        return $this->forwardCallToReflectionSource( __FUNCTION__, array( $name, $default ) );
+    }
+
+    /**
+     * Returns whether a constant exists or not
+     *
+     * This is purely a wrapper method, which either calls the corresponding
+     * method of the parent class or forwards the call to the ReflectionClass
+     * instance passed to the constructor.
+     * @param string $name Name of the constant
+     * @return boolean Whether a constant exists or not
+     */
+    public function hasConstant( $name ) {
+        return $this->forwardCallToReflectionSource( __FUNCTION__, array( $name ) );
+    }
+
+    /**
+     * Returns whether a method exists or not
+     *
+     * This is purely a wrapper method, which either calls the corresponding
+     * method of the parent class or forwards the call to the ReflectionClass
+     * instance passed to the constructor.
+     * @param string $name Name of the method
+     * @return boolean Whether a method exists or not
+     */
+    public function hasMethod( $name ) {
+        return $this->forwardCallToReflectionSource( __FUNCTION__, array( $name ) );
+    }
+
+    /**
+     * Returns whether a property exists or not
+     *
+     * This is purely a wrapper method, which either calls the corresponding
+     * method of the parent class or forwards the call to the ReflectionClass
+     * instance passed to the constructor.
+     * @param string $name Name of the property
+     * @return boolean Whether a property exists or not
+     */
+    public function hasProperty( $name ) {
+        return $this->forwardCallToReflectionSource( __FUNCTION__, array( $name ) );
+    }
+
+    /**
+     * Returns whether this class is a subclass of another class
+     *
+     * This is purely a wrapper method, which either calls the corresponding
+     * method of the parent class or forwards the call to the ReflectionClass
+     * instance passed to the constructor.
+     * @param string|ReflectionClass $class
+     *        Name or ReflectionClass object of the super class
+     * @return boolean Whether this class is a subclass of the given super lass
+     */
+    public function isSubclassOf( $class ) {
+        return $this->forwardCallToReflectionSource( __FUNCTION__, array( $class ) );
+    }
+
+    /**
+     * Returns whether this class implements a given interface
+     *
+     * This is purely a wrapper method, which either calls the corresponding
+     * method of the parent class or forwards the call to the ReflectionClass
+     * instance passed to the constructor.
+     * @param string|ReflectionClass $interface
+     *        Name or ReflectionClass object of the interface
+     * @return boolean Whether the given interface is implemented or not
+     */
+    public function implementsInterface( $interface ) {
+        return $this->forwardCallToReflectionSource( __FUNCTION__, array( $interface ) );
+    }
+
+    /**
+     * Returns whether this class is abstract
+     *
+     * This is purely a wrapper method, which either calls the corresponding
+     * method of the parent class or forwards the call to the ReflectionClass
+     * instance passed to the constructor.
+     * @return boolean Whether this class is abstract
+     */
+    public function isAbstract() {
+        return $this->forwardCallToReflectionSource( __FUNCTION__ );
+    }
+
+    /**
+     * Returns whether this class is final
+     *
+     * This is purely a wrapper method, which either calls the corresponding
+     * method of the parent class or forwards the call to the ReflectionClass
+     * instance passed to the constructor.
+     * @return boolean Whether this class is final
+     */
+    public function isFinal() {
+        return $this->forwardCallToReflectionSource( __FUNCTION__ );
+    }
+
+    /**
+     * Returns whether this class is instantiable
+     *
+     * This is purely a wrapper method, which either calls the corresponding
+     * method of the parent class or forwards the call to the ReflectionClass
+     * instance passed to the constructor.
+     * @return boolean Whether this class is instantiable
+     */
+    public function isInstantiable() {
+        return $this->forwardCallToReflectionSource( __FUNCTION__ );
+    }
+
+    /**
+     * Returns whether this class is an interface
+     *
+     * This is purely a wrapper method, which either calls the corresponding
+     * method of the parent class or forwards the call to the ReflectionClass
+     * instance passed to the constructor.
+     * @return boolean Whether this class is an interface
+     */
+    public function isInterface() {
+        return $this->forwardCallToReflectionSource( __FUNCTION__ );
+    }
+
+    /**
+     * Returns whether this class is an internal class
+     *
+     * This is purely a wrapper method, which either calls the corresponding
+     * method of the parent class or forwards the call to the ReflectionClass
+     * instance passed to the constructor.
+     * @return boolean Whether this class is an internal class
+     */
+    public function isInternal() {
+        return $this->forwardCallToReflectionSource( __FUNCTION__ );
+    }
+
+    /**
+     * Returns whether this class is iterateable (can be used inside foreach)
+     *
+     * This is purely a wrapper method, which either calls the corresponding
+     * method of the parent class or forwards the call to the ReflectionClass
+     * instance passed to the constructor.
+     * @return boolean
+     *         Whether this class is iterateable (can be used inside foreach)
+     */
+    public function isIterateable() {
+        return $this->forwardCallToReflectionSource( __FUNCTION__ );
+    }
+
+    /**
+     * Returns whether this class is user-defined
+     *
+     * This is purely a wrapper method, which either calls the corresponding
+     * method of the parent class or forwards the call to the ReflectionClass
+     * instance passed to the constructor.
+     * @return boolean Whether this class is user-defined
+     */
+    public function isUserDefined() {
+        return $this->forwardCallToReflectionSource( __FUNCTION__ );
+    }
+
+    /**
+     * Returns whether the given object is an instance of this class
+     *
+     * This is purely a wrapper method, which either calls the corresponding
+     * method of the parent class or forwards the call to the ReflectionClass
+     * instance passed to the constructor.
+     * @param object $object An object to be checked
+     * @return boolean Whether the given object is an instance of this class
+     */
+    public function isInstance( $object ) {
+        return $this->forwardCallToReflectionSource( __FUNCTION__, array( $object ) );
+    }
+
+    /**
+     * Returns an instance of this class
+     *
+     * This is purely a wrapper method, which either calls the corresponding
+     * method of the parent class or forwards the call to the ReflectionClass
+     * instance passed to the constructor.
+     * @param mixed $argument,...  Arguments
+     * @return object An instance of this class
+     */
+    public function newInstance( $arguments ) {
+        /**
+         * Note from PHP Manual: func_get_args() returns a copy of the passed
+         * arguments only, and does not account for default (non-passed)
+         * arguments.
+         */
+        $arguments = func_get_args();
+        return $this->forwardCallToReflectionSource( __FUNCTION__, $arguments );
+    }
+
+    /**
+     * Returns an instance of this class
+     *
+     * This is purely a wrapper method, which either calls the corresponding
+     * method of the parent class or forwards the call to the ReflectionClass
+     * instance passed to the constructor.
+     * @param array<integer,mixed> $arguments Arguments
+     * @return object An instance of this class
+     */
+    public function newInstanceArgs( array $arguments = null ) {
+        return $this->forwardCallToReflectionSource( __FUNCTION__, $arguments );
+    }
+
+    /**
+     * Sets the value of a static property
+     *
+     * This is purely a wrapper method, which either calls the corresponding
+     * method of the parent class or forwards the call to the ReflectionClass
+     * instance passed to the constructor.
+     * @param string $name Name of the static property
+     * @param mixed $default Value
+     * @return 
+     */
+    public function setStaticPropertyValue( $name, $value ) {
+        return $this->forwardCallToReflectionSource( __FUNCTION__, array( $name, $value ) );
     }
 
     /**
      * Exports a reflection object.
      *
      * Returns the output if TRUE is specified for return, printing it otherwise.
-     * This is purely a wrapper method which calls the corresponding method of
+     * This is purely a wrapper method, which calls the corresponding method of
      * the parent class.
      * @param ReflectionClass|string $class
      *        ReflectionClass object or name of the class
@@ -355,5 +699,6 @@ class ezcReflectionClass extends ReflectionClass
     public static function export($class, $return = false) {
         return parent::export($class, $return);
     }
+
 }
 ?>

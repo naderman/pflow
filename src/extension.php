@@ -192,5 +192,22 @@ class ezcReflectionExtension extends ReflectionExtension {
             throw new Exception( 'Call to undefined method ' . __CLASS__ . '::' . $method );
         }
     }
+
+    /**
+     * Exports a reflection object.
+     *
+     * Returns the output if TRUE is specified for return, printing it otherwise.
+     * This is purely a wrapper method, which calls the corresponding method of
+     * the parent class.
+     * @param ReflectionExtension|string $extension
+     *        ReflectionExtension object or name of the class
+     * @param boolean $return
+     *        Wether to return (TRUE) or print (FALSE) the output
+     * @return mixed
+     */
+    public static function export($extension, $return = false) {
+        return parent::export($extension, $return);
+    }
+
 }
 ?>

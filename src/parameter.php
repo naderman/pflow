@@ -217,5 +217,34 @@
 		    return null;
 		}
     }
+
+    /**
+     * Returns a string representation
+     * @return string
+     */
+    public function __toString() {
+        if ( $this->parameter ) {
+            return $this->parameter->__toString();
+        } else {
+            return parent::__toString();
+        }
+    }
+
+    /**
+     * Exports a reflection object.
+     *
+     * Returns the output if TRUE is specified for $return, printing it otherwise.
+     * This is purely a wrapper method, which calls the corresponding method of
+     * the parent class.
+     * @param mixed $function Function or Method
+     * @param mixed $parameter Parameter
+     * @param boolean $return
+     *        Wether to return (TRUE) or print (FALSE) the output
+     * @return mixed
+     */
+    public static function export($function, $parameter, $return = false) {
+        return parent::export($function, $return);
+    }
+
 }
 ?>

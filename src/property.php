@@ -253,14 +253,7 @@ class ezcReflectionProperty extends ReflectionProperty
      */
     public function getModifiers()
     {
-        if ( $this->reflectionSource instanceof ReflectionProperty )
-        {
-            return $this->reflectionSource->getModifiers();
-        }
-        else
-        {
-            return parent::getModifiers();
-        }
+        return $this->forwardCallToReflectionSource( __FUNCTION__ );
     }
 
 	/**
@@ -271,14 +264,7 @@ class ezcReflectionProperty extends ReflectionProperty
      */
     public function getValue( $object = null )
     {
-        if ( $this->reflectionSource instanceof ReflectionProperty )
-        {
-            return $this->reflectionSource->getValue( $object );
-        }
-        else
-        {
-            return parent::getValue( $object );
-        }
+        return $this->forwardCallToReflectionSource( __FUNCTION__, array( $object ) );
     }
 
 	/**
@@ -290,14 +276,7 @@ class ezcReflectionProperty extends ReflectionProperty
      */
     public function setValue( $object = null, $value )
     {
-        if ( $this->reflectionSource instanceof ReflectionProperty )
-        {
-            $this->reflectionSource->setValue( $object, $value );
-        }
-        else
-        {
-            parent::setValue( $object, $value );
-        }
+        return $this->forwardCallToReflectionSource( __FUNCTION__, array( $object, $value ) );
     }
 
 	/**
@@ -318,6 +297,52 @@ class ezcReflectionProperty extends ReflectionProperty
         {
             throw new Exception( 'Call to undefined method ' . __CLASS__ . '::' . $method );
         }
+    }
+
+    /**
+     * Forwards a method invocation to either the reflection source passed to
+     * constructor this class when creating an instance or to the parent class.
+     *
+     * This method is part of the dependency injection mechanism and serves as
+     * a helper for implementing wrapper methods without code duplication.
+     * @param string $method Name of the method to be invoked
+     * @param mixed[] $arguments Arguments to be passed to the method
+     * @return mixed Return value of the invoked method
+     */
+    protected function forwardCallToReflectionSource( $method, $arguments = array() ) {
+        if ( $this->reflectionSource instanceof parent ) {
+            return call_user_func_array( array( $this->reflectionSource, $method ), $arguments );
+        } else {
+            return call_user_func_array( array( parent, $method ), $arguments );
+        }
+    }
+
+    /**
+     * Returns a string representation
+     * @return string
+     */
+    public function __toString() {
+        if ( $this->reflectionSource ) {
+            return $this->reflectionSource->__toString();
+        } else {
+            return parent::__toString();
+        }
+    }
+
+    /**
+     * Exports a reflection object.
+     *
+     * Returns the output if TRUE is specified for return, printing it otherwise.
+     * This is purely a wrapper method, which calls the corresponding method of
+     * the parent class.
+     * @param ReflectionProperty|string $property
+     *        ReflectionProperty object or name of the class
+     * @param boolean $return
+     *        Wether to return (TRUE) or print (FALSE) the output
+     * @return mixed
+     */
+    public static function export($property, $return = false) {
+        return parent::export($property, $return);
     }
 
 }
