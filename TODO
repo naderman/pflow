@@ -2,15 +2,14 @@ Roadmap
 =======
 
 - Dependency Injection (Falko)
-    - Add wrapper methods for features introduces with PHP 5.3 if any
-    - Write tests for wrapper methods
+    - Add wrapper methods for features introduced with PHP 5.3
     - Add missing class ezcReflectionObject
-    - Wrappers for recently introduced features in PHP's Reflection extension
+    - Document version dependencies with @since
+    - Write tests for wrapper methods
     - Write documentation of the methods introduced for the dependency injection mechanism
     - Add a comment about their purpose to the wrapper methods:
         This method makes it easier to extend this class and improves the documentation of the ezcReflection component.
         enables Dependency Injection (only in case of static methods)
-    - Document version dependencies with @since
 - Test Coverage (Sebastian)
     - Test ezcReflectionParameter::__construct, since PHP Manual states:
       "To introspect function parameters, you will first have to create an
@@ -27,7 +26,8 @@ Roadmap
     - See todo annotations in the source code, e.g., using 'grep -inor todo.* --exclude-dir=.svn .'
     - Implement getCode methods (Sebastian)
     - support for annotation grouping especially for properties (has to be supported by PHP, maybe a feature for StaticReflection)
-    - trow ezcReflectionUnknownTypeException during XML Schema generation
+    - throw ezcReflectionUnknownTypeException during XML Schema generation
+    - obtain type information for internal functions from PHP's source code
 - Tutorial (?)
 - Documentation about available annotations (?)
     (see https://instantsvc.svn.sourceforge.net/svnroot/instantsvc/branches/transition/doc/style-guide.html)
