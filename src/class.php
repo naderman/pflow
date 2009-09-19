@@ -685,6 +685,44 @@ class ezcReflectionClass extends ReflectionClass
     }
 
     /**
+     * Returns the name of namespace where this class is defined
+     *
+     * This is purely a wrapper method, which either calls the corresponding
+     * method of the parent class or forwards the call to the ReflectionClass
+     * instance passed to the constructor.
+     * @return string The name of namespace where this class is defined
+     * @since PHP 5.3.0
+     */
+    public function getNamespaceName() {
+        return $this->forwardCallToReflectionSource( __FUNCTION__ );
+    }
+
+    /**
+     * Returns whether this class is defined in a namespace
+     *
+     * This is purely a wrapper method, which either calls the corresponding
+     * method of the parent class or forwards the call to the ReflectionClass
+     * instance passed to the constructor.
+     * @return boolean Whether this class is defined in a namespace
+     * @since PHP 5.3.0
+     */
+    public function inNamespace() {
+        return $this->forwardCallToReflectionSource( __FUNCTION__ );
+    }
+
+    /**
+     * Returns a string representation
+     *
+     * This is purely a wrapper method, which either calls the corresponding
+     * method of the parent class or forwards the call to the ReflectionClass
+     * instance passed to the constructor.
+     * @return string A string representation
+     */
+    public function __toString() {
+        return $this->forwardCallToReflectionSource( __FUNCTION__ );
+    }
+
+    /**
      * Exports a reflection object.
      *
      * Returns the output if TRUE is specified for return, printing it otherwise.

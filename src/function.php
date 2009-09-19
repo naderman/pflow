@@ -49,6 +49,50 @@ class ezcReflectionFunction extends ReflectionFunction
     }
 
     /**
+     * Use overloading to call additional methods
+     * of the ReflectionFunction instance given to the constructor
+     *
+     * @param string $method Method to be called
+     * @param array  $arguments Arguments that were passed
+     * @return mixed
+     */
+    public function __call( $method, $arguments )
+    {
+        if ( $this->reflectionSource instanceof parent )
+        {
+            // query external reflection object
+            return call_user_func_array( array($this->reflectionSource, $method), $arguments );
+        } else {
+            throw new Exception( 'Call to undefined method ' . __CLASS__ . '::' . $method );
+        }
+    }
+
+    /**
+     * Forwards a method invocation to either the reflection source passed to
+     * the constructor of this class when creating an instance or to the parent
+     * class.
+     *
+     * This method is part of the dependency injection mechanism and serves as
+     * a helper for implementing wrapper methods without code duplication.
+     * @param string $method Name of the method to be invoked
+     * @param mixed[] $arguments Arguments to be passed to the method
+     * @return mixed Return value of the invoked method
+     */
+    protected function forwardCallToReflectionSource( $method, $arguments = array() ) {
+        if ( $this->reflectionSource instanceof parent ) {
+            return call_user_func_array( array( $this->reflectionSource, $method ), $arguments );
+        } else {
+            //return call_user_func_array( array( parent, $method ), $arguments );
+            $argumentStrings = array();
+            foreach ( array_keys( $arguments ) as $key ) {
+                $argumentStrings[] = var_export( $key, true );
+            }
+            $cmd = 'return parent::$method( ' . implode( ', ', $argumentStrings ) . ' );';
+            return eval( $cmd );
+        }
+    }
+
+    /**
      * Returns the parameters of the function as ezcReflectionParameter objects
      *
      * @return ezcReflectionParameter[] Function parameters
@@ -436,6 +480,45 @@ class ezcReflectionFunction extends ReflectionFunction
         } else {
             return parent::isDeprecated();
         }
+    }
+
+    /**
+     * Returns the name of namespace where this function is defined
+     *
+     * This is purely a wrapper method, which either calls the corresponding
+     * method of the parent class or forwards the call to the ReflectionClass
+     * instance passed to the constructor.
+     * @return string The name of namespace where this function is defined
+     * @since PHP 5.3.0
+     */
+    public function getNamespaceName() {
+        return $this->forwardCallToReflectionSource( __FUNCTION__ );
+    }
+
+    /**
+     * Returns whether this function is defined in a namespace
+     *
+     * This is purely a wrapper method, which either calls the corresponding
+     * method of the parent class or forwards the call to the ReflectionClass
+     * instance passed to the constructor.
+     * @return boolean Whether this function is defined in a namespace
+     * @since PHP 5.3.0
+     */
+    public function inNamespace() {
+        return $this->forwardCallToReflectionSource( __FUNCTION__ );
+    }
+
+    /**
+     * Returns whether this is a closure
+     *
+     * This is purely a wrapper method, which either calls the corresponding
+     * method of the parent class or forwards the call to the ReflectionClass
+     * instance passed to the constructor.
+     * @return boolean Whether this is a closure 
+     * @since PHP 5.3.0
+     */
+    public function isClosure() {
+        return $this->forwardCallToReflectionSource( __FUNCTION__ );
     }
 
     /**

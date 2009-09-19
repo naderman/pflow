@@ -694,6 +694,45 @@ class ezcReflectionMethod extends ReflectionMethod
     }
 
     /**
+     * Returns the name of namespace where this method is defined
+     *
+     * This is purely a wrapper method, which either calls the corresponding
+     * method of the parent class or forwards the call to the ReflectionClass
+     * instance passed to the constructor.
+     * @return string The name of namespace where this method is defined
+     * @since PHP 5.3.0
+     */
+    public function getNamespaceName() {
+        return $this->forwardCallToReflectionSource( __FUNCTION__ );
+    }
+
+    /**
+     * Returns whether this method is defined in a namespace
+     *
+     * This is purely a wrapper method, which either calls the corresponding
+     * method of the parent class or forwards the call to the ReflectionClass
+     * instance passed to the constructor.
+     * @return boolean Whether this method is defined in a namespace
+     * @since PHP 5.3.0
+     */
+    public function inNamespace() {
+        return $this->forwardCallToReflectionSource( __FUNCTION__ );
+    }
+
+    /**
+     * Returns whether this is a closure
+     *
+     * This is purely a wrapper method, which either calls the corresponding
+     * method of the parent class or forwards the call to the ReflectionClass
+     * instance passed to the constructor.
+     * @return boolean Whether this is a closure 
+     * @since PHP 5.3.0
+     */
+    public function isClosure() {
+        return $this->forwardCallToReflectionSource( __FUNCTION__ );
+    }
+
+    /**
      * Exports a reflection method object.
      *
      * Returns the output if TRUE is specified for $return, printing it otherwise.
