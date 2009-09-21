@@ -720,6 +720,20 @@ class ezcReflectionMethod extends ReflectionMethod
     }
 
     /**
+     * Returns the short name of the method (without namespace part)
+     *
+     * This is purely a wrapper method, which either calls the corresponding
+     * method of the parent class or forwards the call to the ReflectionClass
+     * instance passed to the constructor.
+     * @return string
+     *         Returns the short name of the method (without namespace part)
+     * @since PHP 5.3.0
+     */
+    public function getShortName() {
+        return $this->forwardCallToReflectionSource( __FUNCTION__ );
+    }
+
+    /**
      * Returns whether this is a closure
      *
      * This is purely a wrapper method, which either calls the corresponding
