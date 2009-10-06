@@ -9,8 +9,8 @@
  */
 
 /**
- * Extends the ReflectionClass using PHPDoc comments to provide
- * type information
+ * Extends the ReflectionClass class to provide type information
+ * using PHPDoc annotations.
  *
  * @package Reflection
  * @version //autogen//
@@ -29,7 +29,7 @@ class ezcReflectionClass extends ReflectionClass
      *      Name, instance or ReflectionClass object of the class to be
      *      reflected
      */
-    protected $class;
+    protected $reflectionSource;
 
     /**
      * Constructs a new ezcReflectionClass object
@@ -40,11 +40,12 @@ class ezcReflectionClass extends ReflectionClass
      */
     public function __construct( $argument )
     {
-        if ( !$argument instanceof ReflectionClass )
+        if ( !$argument instanceof parent )
         {
             parent::__construct( $argument );
         }
-        $this->class = $argument;
+        $this->reflectionSource = $argument;
+        // TODO: Parse comment on demand to save CPU time and memory
         $this->docParser = ezcReflectionApi::getDocParserInstance();
         $this->docParser->parse( $this->getDocComment() );
     }
@@ -59,10 +60,10 @@ class ezcReflectionClass extends ReflectionClass
      */
     public function __call( $method, $arguments )
     {
-        if ( $this->class instanceof ReflectionClass )
+        if ( $this->reflectionSource instanceof parent )
         {
             // query external reflection object
-            return call_user_func_array( array($this->class, $method), $arguments );
+            return call_user_func_array( array($this->reflectionSource, $method), $arguments );
         } else {
             throw new Exception( 'Call to undefined method ' . __CLASS__ . '::' . $method );
         }
@@ -80,13 +81,13 @@ class ezcReflectionClass extends ReflectionClass
      * @return mixed Return value of the invoked method
      */
     protected function forwardCallToReflectionSource( $method, $arguments = array() ) {
-        if ( $this->class instanceof parent ) {
-            return call_user_func_array( array( $this->class, $method ), $arguments );
+        if ( $this->reflectionSource instanceof parent ) {
+            return call_user_func_array( array( $this->reflectionSource, $method ), $arguments );
         } else {
             //return call_user_func_array( array( parent, $method ), $arguments );
             $argumentStrings = array();
             foreach ( array_keys( $arguments ) as $key ) {
-                $argumentStrings[] = var_export( $key, true );
+                $argumentStrings[] = '$arguments[' . var_export( $key, true ) . ']';
             }
             $cmd = 'return parent::$method( ' . implode( ', ', $argumentStrings ) . ' );';
             return eval( $cmd );
@@ -98,13 +99,11 @@ class ezcReflectionClass extends ReflectionClass
      *
      * @param string $name Name of the method
      * @return ezcReflectionMethod
+     * @throws ReflectionException if method doesn't exist
      */
-    public function getMethod($name) {
-    	if ( $this->class instanceof ReflectionClass ) {
-    		return new ezcReflectionMethod($this->class->getMethod($name));
-    	} else {
-    		return new ezcReflectionMethod(parent::getMethod($name));
-    	}
+    public function getMethod( $name ) {
+        $method = $this->forwardCallToReflectionSource( __FUNCTION__, array( $name ) );
+        return new ezcReflectionMethod( $method );
     }
 
     /**
@@ -113,13 +112,7 @@ class ezcReflectionClass extends ReflectionClass
      * @return ezcReflectionMethod
      */
     public function getConstructor() {
-        if ($this->class instanceof ReflectionClass) {
-            // query external reflection object
-            $constructor = $this->class->getConstructor();
-        } else {
-            $constructor = parent::getConstructor();
-        }
-
+        $constructor = $this->forwardCallToReflectionSource( __FUNCTION__ );
         if ($constructor != null) {
             return new ezcReflectionMethod($constructor);
         } else {
@@ -140,15 +133,11 @@ class ezcReflectionClass extends ReflectionClass
      *        ReflectionMethod::IS_FINAL
      * @return ezcReflectionMethod[]
      */
-    public function getMethods($filter = -1) {
+    public function getMethods( $filter = -1 ) {
+        $methods = $this->forwardCallToReflectionSource( __FUNCTION__, array( $filter ) );
         $extMethods = array();
-        if ( $this->class instanceof ReflectionClass ) {
-            $methods = $this->class->getMethods($filter);
-        } else {
-            $methods = parent::getMethods($filter);
-        }
-        foreach ($methods as $method) {
-            $extMethods[] = new ezcReflectionMethod($method);
+        foreach ( $methods as $method ) {
+            $extMethods[] = new ezcReflectionMethod( $method );
         }
         return $extMethods;
     }
@@ -159,12 +148,7 @@ class ezcReflectionClass extends ReflectionClass
      * @return ezcReflectionClass[]
      */
     public function getInterfaces() {
-    	if ( $this->class instanceof ReflectionClass ) {
-    		$ifaces = $this->class->getInterfaces();
-    	} else {
-    		$ifaces = parent::getInterfaces();
-    	}
-
+        $ifaces = $this->forwardCallToReflectionSource( __FUNCTION__ );
     	$result = array();
     	foreach ($ifaces as $i) {
     		$result[] = new ezcReflectionClassType($i); //TODO: Shouldn't this be eczReflectionClass
@@ -179,16 +163,9 @@ class ezcReflectionClass extends ReflectionClass
      */
     public function getParentClass()
     {
-        if ( $this->class instanceof ReflectionClass )
-        {
-            // query external reflection object
-            $parentClass = $this->class->getParentClass();
-        } else {
-            $parentClass = parent::getParentClass();
-        }
-
-        if (is_object($parentClass)) {
-            return new ezcReflectionClassType($parentClass);
+        $parentClass = $this->forwardCallToReflectionSource( __FUNCTION__ );
+        if ( is_object( $parentClass ) ) {
+            return new ezcReflectionClassType( $parentClass );
         }
         else {
             return null;
@@ -203,14 +180,7 @@ class ezcReflectionClass extends ReflectionClass
      * @throws RelectionException if property doesn't exists
      */
     public function getProperty($name) {
-		if ( $this->class instanceof ReflectionClass )
-        {
-            // query external reflection object
-            $prop = $this->class->getProperty($name);
-        } else {
-            $prop = parent::getProperty($name);
-        }
-
+        $prop = $this->forwardCallToReflectionSource( __FUNCTION__, array( $name ) );
 		if (is_object($prop) && !($prop instanceof ezcReflectionProperty)) {
 			return new ezcReflectionProperty($prop, $name);
         } else {
@@ -231,13 +201,7 @@ class ezcReflectionClass extends ReflectionClass
      * @return ezcReflectionProperty[] Properties of the class
      */
     public function getProperties($filter = -1) {
-        if ( $this->class instanceof ReflectionClass ) {
-        	$props = $this->class->getProperties($filter);
-        } else {
-            //TODO: return ezcReflectionProperty[]
-        	$props = parent::getProperties($filter);
-        }
-
+        $props = $this->forwardCallToReflectionSource( __FUNCTION__, array( $filter ) );
         $extProps = array();
         foreach ($props as $prop) {
             $extProps[] = new ezcReflectionProperty( $prop );
@@ -281,8 +245,8 @@ class ezcReflectionClass extends ReflectionClass
      * @param string $name Name of the annotations
      * @return ezcReflectionDocTag[] Annotations
      */
-    public function getTags($name = '') {
-        if ($name == '') {
+    public function getTags( $name = '' ) {
+        if ( $name == '' ) {
             return $this->docParser->getTags();
         }
         else {
@@ -296,18 +260,16 @@ class ezcReflectionClass extends ReflectionClass
      * @return ezcReflectionExtension
      */
     public function getExtension() {
-    	if ( $this->class instanceof ReflectionClass ) {
-    		$ext = $this->class->getExtension();
-    	} else {
-    		$ext = parent::getExtension();
-    	}
-
+        $ext = $this->forwardCallToReflectionSource( __FUNCTION__ );
         if ($ext) {
             return new ezcReflectionExtension($ext);
         } else {
             return null;
         }
     }
+
+
+    // only pure wrapper methods follow bellow this line
 
     /**
      * Returns FALSE or the name of the extension the class belongs to
