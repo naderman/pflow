@@ -9,8 +9,8 @@
  */
 
 /**
- * Extends the ReflectionProperty class using PHPDoc comments to provide
- * type information.
+ * Extends the ReflectionProperty class to provide type information
+ * using PHPDoc annotations.
  *
  * @package Reflection
  * @version //autogen//
@@ -88,13 +88,13 @@ class ezcReflectionProperty extends ReflectionProperty
     {
 		if ( $this->reflectionSource instanceof ReflectionProperty )
         {
-			return new ezcReflectionClassType( $this->reflectionSource->getDeclaringClass() );
-		}
+            return new ezcReflectionClassType( $this->reflectionSource->getDeclaringClass() );
+        }
         else
         {
-			$class = parent::getDeclaringClass();
-			return new ezcReflectionClassType( $class->getName() );
-		}
+            $class = parent::getDeclaringClass();
+            return new ezcReflectionClassType( $class->getName() );
+        }
     }
 
     /**
@@ -271,7 +271,7 @@ class ezcReflectionProperty extends ReflectionProperty
      * Changes the property's value.
      *
      * @param object $object An object on which the property value will be changed
-	 * @param mixed $value Value of the property
+     * @param mixed $value Value of the property
      * @return void
      */
     public function setValue( $object = null, $value )
@@ -279,7 +279,18 @@ class ezcReflectionProperty extends ReflectionProperty
         return $this->forwardCallToReflectionSource( __FUNCTION__, array( $object, $value ) );
     }
 
-	/**
+    /**
+     * Sets whether non-public properties can be requested
+     *
+     * @param mixed $value Whether non-public properties can be requested
+     * @return integer
+     */
+    public function setAccessible( $value )
+    {
+        return $this->forwardCallToReflectionSource( __FUNCTION__, array( $object, $value ) );
+    }
+
+    /**
      * Use overloading to call additional methods
      * of the ReflectionProperty instance given to the constructor.
      *
