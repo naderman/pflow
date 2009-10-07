@@ -284,6 +284,7 @@ class ezcReflectionProperty extends ReflectionProperty
      *
      * @param mixed $value Whether non-public properties can be requested
      * @return integer
+     * @since PHP 5.3.0
      */
     public function setAccessible( $value )
     {
