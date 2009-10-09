@@ -12,8 +12,8 @@
  * The ezcReflectionParameter class retrieves information about a function's
  * or method's parameters and their types.
  *
- * Extends the ReflectionParameter class using PHPDoc comments to provide
- * type information
+ * Extends the ReflectionParameter class to provide type information
+ * using PHPDoc annotations.
  * @package Reflection
  * @version //autogen//
  * @author Stefan Marr <mail@stefan-marr.de>

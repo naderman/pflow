@@ -9,8 +9,8 @@
  */
 
 /**
- * Extends the ReflectionMethod class using PHPDoc comments to provide
- * type information
+ * Extends the ReflectionMethod class to provide type information
+ * using PHPDoc annotations.
  *
  * @package Reflection
  * @version //autogen//

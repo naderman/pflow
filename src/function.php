@@ -9,8 +9,8 @@
  */
 
 /**
- * Extends the ReflectionFunction class using PHPDoc comments to provide
- * type information
+ * Extends the ReflectionFunction class to provide type information
+ * using PHPDoc annotations.
  *
  * @package Reflection
  * @version //autogen//
@@ -536,7 +536,7 @@ class ezcReflectionFunction extends ReflectionFunction
     }
 
     /**
-     * Exports a reflection function object.
+     * Exports a ReflectionFunction object.
      *
      * Returns the output if TRUE is specified for $return, printing it otherwise.
      * This is purely a wrapper method, which calls the corresponding method of

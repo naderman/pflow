@@ -9,8 +9,8 @@
  */
 
 /**
- * Extends the ReflectionExtension class using PHPDoc comments to provide
- * type information
+ * Extends the ReflectionExtension class to provide type information
+ * using PHPDoc annotations.
  *
  * @package Reflection
  * @version //autogen//
@@ -200,7 +200,7 @@ class ezcReflectionExtension extends ReflectionExtension {
      * This is purely a wrapper method, which calls the corresponding method of
      * the parent class.
      * @param ReflectionExtension|string $extension
-     *        ReflectionExtension object or name of the class
+     *        ReflectionExtension object or name of the extension
      * @param boolean $return
      *        Wether to return (TRUE) or print (FALSE) the output
      * @return mixed
