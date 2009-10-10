@@ -59,6 +59,7 @@ class ezcReflectionProperty extends ReflectionProperty
      * Determines the type of the property based on source code annotations.
      *
      * @return ezcReflectionType Type of the property
+     * @since PHP 5.1.0
      */
     public function getType()
     {
@@ -102,6 +103,7 @@ class ezcReflectionProperty extends ReflectionProperty
      *
      * @param string $annotation Name of the annotation
      * @return boolean
+     * @since PHP 5.1.0
      */
     public function isTagged($annotation) {
         return $this->docParser->isTagged($annotation);
@@ -112,6 +114,7 @@ class ezcReflectionProperty extends ReflectionProperty
      *
      * @param string $name Name of the annotations
      * @return ezcReflectionDocTag[] Annotations
+     * @since PHP 5.1.0
      */
     public function getTags($name = '') {
         if ($name == '') {
@@ -126,6 +129,7 @@ class ezcReflectionProperty extends ReflectionProperty
      * Returns the PHPDoc comment of the property.
      *
      * @return string PHPDoc comment
+     * @since PHP 5.1.0
      */
     public function getDocComment()
     {
@@ -282,13 +286,13 @@ class ezcReflectionProperty extends ReflectionProperty
     /**
      * Sets whether non-public properties can be requested
      *
-     * @param mixed $value Whether non-public properties can be requested
-     * @return integer
+     * @param boolean $value Whether non-public properties can be requested
+     * @return void
      * @since PHP 5.3.0
      */
     public function setAccessible( $value )
     {
-        return $this->forwardCallToReflectionSource( __FUNCTION__, array( $object, $value ) );
+        $this->forwardCallToReflectionSource( __FUNCTION__, array( $object, $value ) );
     }
 
     /**

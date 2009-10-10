@@ -79,6 +79,7 @@
     /**
      * Returns whether this parameter is an optional parameter
      * @return boolean
+     * @since PHP 5.0.3
      */
     public function isOptional() {
         if ($this->parameter != null) {
@@ -105,6 +106,7 @@
 	/**
      * Returns whether parameter MUST be an array
      * @return boolean
+     * @since PHP 5.1.0
      */
     public function isArray() {
         if ($this->parameter != null) {
@@ -118,6 +120,7 @@
     /**
      * Returns whether the default value of this parameter is available
      * @return boolean
+     * @since PHP 5.0.3
      */
     public function isDefaultValueAvailable() {
         if ($this->parameter != null) {
@@ -144,6 +147,7 @@
 	/**
      * Returns whether this parameter is an optional parameter
      * @return integer
+     * @since PHP 5.2.3
      */
     public function getPosition() {
         if ($this->parameter != null) {
@@ -157,6 +161,7 @@
     /**
      * Returns the default value of this parameter or throws an exception
      * @return mixed
+     * @since PHP 5.0.3
      */
     public function getDefaultValue() {
         if ($this->parameter != null) {
@@ -181,6 +186,7 @@
     /**
      * Returns the ezcReflectionFunction for the function of this parameter
      * @return ezcReflectionFunction
+     * @since PHP 5.2.3
      */
     public function getDeclaringFunction() {
         if ($this->parameter != null) {

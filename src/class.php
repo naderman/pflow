@@ -214,6 +214,7 @@ class ezcReflectionClass extends ReflectionClass
      * documentation
      *
      * @return string short description of the class
+     * @since PHP 5.1.0
      */
     public function getShortDescription() {
         return $this->docParser->getShortDescription();
@@ -224,6 +225,7 @@ class ezcReflectionClass extends ReflectionClass
      * documentation
      *
      * @return string Long description of the class
+     * @since PHP 5.1.0
      */
     public function getLongDescription() {
         return $this->docParser->getLongDescription();
@@ -234,6 +236,7 @@ class ezcReflectionClass extends ReflectionClass
      *
      * @param string $annotation Name of the annotation
      * @return boolean
+     * @since PHP 5.1.0
      */
     public function isTagged($annotation) {
         return $this->docParser->isTagged($annotation);
@@ -244,6 +247,7 @@ class ezcReflectionClass extends ReflectionClass
      *
      * @param string $name Name of the annotations
      * @return ezcReflectionDocTag[] Annotations
+     * @since PHP 5.1.0
      */
     public function getTags( $name = '' ) {
         if ( $name == '' ) {
@@ -302,6 +306,7 @@ class ezcReflectionClass extends ReflectionClass
      * method of the parent class or forwards the call to the ReflectionClass
      * instance passed to the constructor.
      * @return string Doc comment
+     * @since PHP 5.1.0
      */
     public function getDocComment() {
         return $this->forwardCallToReflectionSource( __FUNCTION__ );
@@ -430,6 +435,7 @@ class ezcReflectionClass extends ReflectionClass
      * @param string $name Name of the static property
      * @param mixed $default Default value
      * @return mixed Value of a static property
+     * @since PHP 5.1.0
      */
     public function getStaticPropertyValue( $name, $default = null ) {
         return $this->forwardCallToReflectionSource( __FUNCTION__, array( $name, $default ) );
@@ -443,6 +449,7 @@ class ezcReflectionClass extends ReflectionClass
      * instance passed to the constructor.
      * @param string $name Name of the constant
      * @return boolean Whether a constant exists or not
+     * @since PHP 5.1.0
      */
     public function hasConstant( $name ) {
         return $this->forwardCallToReflectionSource( __FUNCTION__, array( $name ) );
@@ -456,6 +463,7 @@ class ezcReflectionClass extends ReflectionClass
      * instance passed to the constructor.
      * @param string $name Name of the method
      * @return boolean Whether a method exists or not
+     * @since PHP 5.1.0
      */
     public function hasMethod( $name ) {
         return $this->forwardCallToReflectionSource( __FUNCTION__, array( $name ) );
@@ -469,6 +477,7 @@ class ezcReflectionClass extends ReflectionClass
      * instance passed to the constructor.
      * @param string $name Name of the property
      * @return boolean Whether a property exists or not
+     * @since PHP 5.1.0
      */
     public function hasProperty( $name ) {
         return $this->forwardCallToReflectionSource( __FUNCTION__, array( $name ) );
@@ -627,6 +636,7 @@ class ezcReflectionClass extends ReflectionClass
      * instance passed to the constructor.
      * @param array<integer,mixed> $arguments Arguments
      * @return object An instance of this class
+     * @since PHP 5.1.3
      */
     public function newInstanceArgs( array $arguments = null ) {
         return $this->forwardCallToReflectionSource( __FUNCTION__, $arguments );
@@ -640,10 +650,11 @@ class ezcReflectionClass extends ReflectionClass
      * instance passed to the constructor.
      * @param string $name Name of the static property
      * @param mixed $default Value
-     * @return 
+     * @return void
+     * @since PHP 5.1.0
      */
     public function setStaticPropertyValue( $name, $value ) {
-        return $this->forwardCallToReflectionSource( __FUNCTION__, array( $name, $value ) );
+        $this->forwardCallToReflectionSource( __FUNCTION__, array( $name, $value ) );
     }
 
     /**

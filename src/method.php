@@ -111,6 +111,7 @@ class ezcReflectionMethod extends ReflectionMethod
      * Returns the parameters of the method
      *
      * @return ezcReflectionParameter[] Parameters of the method
+     * @since PHP 5.1.0
      */
     function getParameters() {
         $params = $this->docParser->getParamTags();
@@ -144,6 +145,7 @@ class ezcReflectionMethod extends ReflectionMethod
      * Returns the type defined in PHPDoc tags
      *
      * @return ezcReflectionType
+     * @since PHP 5.1.0
      */
     function getReturnType() {
         $re = $this->docParser->getReturnTags();
@@ -157,6 +159,7 @@ class ezcReflectionMethod extends ReflectionMethod
      * Returns the description after a PHPDoc tag
      *
      * @return string
+     * @since PHP 5.1.0
      */
     function getReturnDescription() {
         $re = $this->docParser->getReturnTags();
@@ -170,6 +173,7 @@ class ezcReflectionMethod extends ReflectionMethod
      * Returns the short description from the method's documentation
      *
      * @return string Short description
+     * @since PHP 5.1.0
      */
     public function getShortDescription() {
         return $this->docParser->getShortDescription();
@@ -179,6 +183,7 @@ class ezcReflectionMethod extends ReflectionMethod
      * Returns the long description from the method's documentation
      *
      * @return string Long description
+     * @since PHP 5.1.0
      */
     public function getLongDescription() {
         return $this->docParser->getLongDescription();
@@ -189,6 +194,7 @@ class ezcReflectionMethod extends ReflectionMethod
      *
      * @param string $annotation Name of the annotation
      * @return boolean True if the annotation exists for this method
+     * @since PHP 5.1.0
      */
     public function isTagged($annotation) {
         return $this->docParser->isTagged($annotation);
@@ -199,6 +205,7 @@ class ezcReflectionMethod extends ReflectionMethod
      *
      * @param string $name Name of the annotations
      * @return ezcReflectionDocTag[] Annotations
+     * @since PHP 5.1.0
      */
     public function getTags($name = '') {
         if ($name == '') {
@@ -316,6 +323,7 @@ class ezcReflectionMethod extends ReflectionMethod
      * Returns the doc comment for the method.
      *
      * @return string Doc comment
+     * @since PHP 5.1.0
      */
     public function getDocComment() {
         return $this->forwardCallToReflectionSource( __FUNCTION__ );
@@ -417,6 +425,7 @@ class ezcReflectionMethod extends ReflectionMethod
      *        Arguments
      * @return mixed
      *         Return value of the method invocation
+     * @since PHP 5.1.0
      */
     public function invokeArgs( $object, Array $arguments ) {
         if ( $this->reflectionSource instanceof ReflectionMethod ) {
@@ -430,6 +439,7 @@ class ezcReflectionMethod extends ReflectionMethod
      * Returns the number of parameters
      *
      * @return integer The number of parameters
+     * @since PHP 5.0.3
      */
     public function getNumberOfParameters() {
         if ( $this->reflectionSource instanceof ReflectionMethod ) {
@@ -443,6 +453,7 @@ class ezcReflectionMethod extends ReflectionMethod
      * Returns the number of required parameters
      *
      * @return integer The number of required parameters
+     * @since PHP 5.0.3
      */
     public function getNumberOfRequiredParameters() {
         if ( $this->reflectionSource instanceof ReflectionMethod ) {
