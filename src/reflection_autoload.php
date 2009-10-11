@@ -32,5 +32,6 @@ return array(
     'ezcReflectionProperty'        => 'Reflection/property.php',
     'ezcReflectionTypeFactoryImpl' => 'Reflection/type_factory.php',
     'ezcReflectionTypeMapper'      => 'Reflection/type_mapper.php',
+    'ezcReflectionObject'          => 'Reflection/object.php',
 );
 ?>
