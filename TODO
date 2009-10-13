@@ -2,23 +2,23 @@ Roadmap
 =======
 
 - Dependency Injection (Falko)
-    - Add wrapper methods for features introduced with PHP 5.3
-    - Add missing class ezcReflectionObject
-    - Document version dependencies with @since
     - Write tests for wrapper methods
     - Write documentation of the methods introduced for the dependency injection mechanism
     - Add a comment about their purpose to the wrapper methods:
         This method makes it easier to extend this class and improves the documentation of the ezcReflection component.
         enables Dependency Injection (only in case of static methods)
+- Fix Tests
 - Test Coverage (Sebastian)
     - Test ezcReflectionParameter::__construct, since PHP Manual states:
       "To introspect function parameters, you will first have to create an
       instance of the ReflectionFunction or ReflectionMethod classes and then
       use their getParameters() method to retrieve an array of parameters."
+    - Maybe reuse phpt test cases of the Reflection extension
 - Refactoring (Falko)
-    - Rename DocTag/Tag into Annotation in all class, interface, method, property, and parameter names
+    - Rename DocTag/Tag into Annotation in all class, interface, method, property, and parameter names, e.g., getAnnotations & isAnnotatedWith
     - Rename src/interfaces/parser.php into annotation_parser.php
     - Complete the adoption of the eZ Components coding standard
+    - Parse comments on demand to save CPU time and memory, when creating large amounts of reflection objects
 - Missing Features (?)
     - Add support for mixed type
     - Add support pipe notation in type definitions, i.e. @param datatype1|datatype2 $paramname description

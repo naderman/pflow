@@ -128,6 +128,7 @@ class ezcReflectionArrayType extends ezcReflectionAbstractType {
                    = ezcReflectionApi::getTypeByName($typeName);
             }
         }
+        //TODO: add support for array(integer => mixed)
         if (preg_match('/(.*)(<(.*?)(,(.*?))?>)/', $this->typeName, $matches)) {
             $type1 = null;
             $type2 = null;
