@@ -103,7 +103,7 @@ class ezcReflectionMethodTest extends ezcReflectionFunctionTest
         $class = new ezcReflectionClass('ezcReflectionClass');
         $method = $class->getMethod('getMethod');
         $tags = $method->getTags();
-        self::assertEquals(2, count($tags));
+        self::assertEquals(3, count($tags));
 
         $tags = $this->fctM4->getTags();
         $expectedTags = array('webmethod', 'restmethod', 'restin', 'restout', 'author', 'param', 'param', 'param', 'return');

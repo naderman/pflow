@@ -40,7 +40,7 @@ class ezcReflectionMethod extends ReflectionMethod
     /**
      * Constructs an new ezcReflectionMethod
      *
-     * @param mixed $classOrSource
+     * @param ReflectionMethod|ReflectionClass|string $classOrSource
      *        Name of class, ReflectionClass, or ReflectionMethod
      * @param string $name
      *        Optional if $classOrSource is an instance of ReflectionMethod
@@ -48,17 +48,15 @@ class ezcReflectionMethod extends ReflectionMethod
     public function __construct($classOrSource, $name = null) {
     	if ( $classOrSource instanceof ReflectionMethod ) {
     		$this->reflectionSource = $classOrSource;
+            $this->curClass = new ReflectionClass( $this->reflectionSource->class );
     	}
 		elseif ($classOrSource instanceof ReflectionClass) {
 			parent::__construct($classOrSource->getName(), $name);
             $this->curClass = $classOrSource;
         }
-        elseif (is_string($classOrSource)) {
-			parent::__construct($classOrSource, $name);
-            $this->curClass = new ReflectionClass($classOrSource);
-        }
         else {
-            $this->curClass = null;
+			parent::__construct( $classOrSource, $name );
+            $this->curClass = new ReflectionClass( (string) $classOrSource );
         }
 
 		$this->docParser = ezcReflectionApi::getDocParserInstance();
