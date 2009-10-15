@@ -37,6 +37,7 @@ class ezcReflectionClass extends ReflectionClass
      * @param string|object|ReflectionClass $argument
      *        Name, instance or ReflectionClass object of the class to be
      *        reflected
+     * @throws ReflectionException if the specified class doesn't exist
      */
     public function __construct( $argument )
     {
@@ -168,7 +169,7 @@ class ezcReflectionClass extends ReflectionClass
             return new ezcReflectionClassType( $parentClass );
         }
         else {
-            return null;
+            return false;
         }
     }
 

@@ -72,7 +72,7 @@ class ezcReflectionClassTest extends ezcTestCase
         self::assertEquals('BaseClass', $parent->getName());
 
         $parentParent = $parent->getParentClass();
-        self::assertNull($parentParent);
+        self::assertFalse($parentParent);
     }
 
     public function testGetProperty() {
