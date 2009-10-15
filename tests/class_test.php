@@ -14,9 +14,12 @@ class ezcReflectionClassTest extends ezcTestCase
      * @var ezcReflectionClass
      */
     protected $class;
+    protected $classTestWebservice;
 
     public function setUp() {
-        $this->class = new ezcReflectionClass('SomeClass');
+        $this->class                   = new ezcReflectionClass( 'SomeClass' );
+        $this->classTestWebservice     = new ezcReflectionClass( 'TestWebservice' );
+        $this->classReflectionFunction = new ezcReflectionClass( 'ReflectionFunction' );
     }
 
     public function tearDown() {
@@ -48,8 +51,7 @@ class ezcReflectionClassTest extends ezcTestCase
     }
 
     public function testGetMethods() {
-        $class = new ezcReflectionClass('TestWebservice');
-        $methods = $class->getMethods();
+        $methods = $this->classTestWebservice->getMethods();
         self::assertEquals(0, count($methods));
 
         $methods = $this->class->getMethods();
@@ -70,9 +72,10 @@ class ezcReflectionClassTest extends ezcTestCase
 
         self::assertType('ezcReflectionClass', $parent);
         self::assertEquals('BaseClass', $parent->getName());
+    }
 
-        $parentParent = $parent->getParentClass();
-        self::assertFalse($parentParent);
+    public function testGetParentClassFalse() {
+        self::assertFalse( $this->classTestWebservice->getParentClass() );
     }
 
     public function testGetProperty() {
@@ -91,8 +94,7 @@ class ezcReflectionClassTest extends ezcTestCase
     }
 
     public function testGetProperties() {
-        $class = new ezcReflectionClass('TestWebservice');
-        $properties = $class->getProperties();
+        $properties = $this->classTestWebservice->getProperties();
 
         $expected = array('prop1', 'prop2', 'prop3');
 
@@ -106,15 +108,13 @@ class ezcReflectionClassTest extends ezcTestCase
     }
 
     public function testGetShortDescription() {
-        $class = new ezcReflectionClass('TestWebservice');
-        $desc = $class->getShortDescription();
+        $desc = $this->classTestWebservice->getShortDescription();
 
         self::assertEquals('This is the short description', $desc);
     }
 
     public function testGetLongDescription() {
-        $class = new ezcReflectionClass('TestWebservice');
-        $desc = $class->getLongDescription();
+        $desc = $this->classTestWebservice->getLongDescription();
 
         $expected = "This is the long description with may be additional infos and much more lines\nof text.\n\nEmpty lines are valide to.\n\nfoo bar";
         self::assertEquals($expected, $desc);
@@ -123,8 +123,7 @@ class ezcReflectionClassTest extends ezcTestCase
     public function testIsTagged() {
         self::assertFalse($this->class->isTagged('foobar'));
 
-        $class = new ezcReflectionClass('TestWebservice');
-        self::assertTrue($class->isTagged('foobar'));
+        self::assertTrue($this->classTestWebservice->isTagged('foobar'));
     }
 
     public function testGetTags() {
@@ -134,14 +133,12 @@ class ezcReflectionClassTest extends ezcTestCase
         ReflectionTestHelper::expectedTags($expectedTags, $tags, $this);
 
         $expectedTags = array('webservice', 'foobar');
-        $class = new ezcReflectionClass('TestWebservice');
-        $tags = $class->getTags();
+        $tags = $this->classTestWebservice->getTags();
         ReflectionTestHelper::expectedTags($expectedTags, $tags, $this);
     }
 
     public function testGetExtension() {
-        $class = new ezcReflectionClass('ReflectionClass');
-        $ext = $class->getExtension();
+        $ext = $this->classReflectionFunction->getExtension();
         self::assertType('ezcReflectionExtension', $ext);
         self::assertEquals('Reflection', $ext->getName());
 
@@ -150,8 +147,7 @@ class ezcReflectionClassTest extends ezcTestCase
     }
 
     public function testGetExtensionName() {
-        $class = new ezcReflectionClass( 'ReflectionClass' );
-        self::assertEquals( 'Reflection', $class->getExtensionName() );
+        self::assertEquals( 'Reflection', $this->classReflectionFunction->getExtensionName() );
         self::assertEquals( '', $this->class->getExtensionName() );
     }
 

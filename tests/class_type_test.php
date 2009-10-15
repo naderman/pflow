@@ -8,16 +8,13 @@
  * @subpackage Tests
  */
 
-class ezcReflectionClassTypeTest extends ezcTestCase
+class ezcReflectionClassTypeTest extends ezcReflectionClassTest
 {
-    /**
-     * @var ezcReflectionClassType
-     */
-    protected $class;
-
     public function setUp()
     {
-        $this->class = new ezcReflectionClassType( 'SomeClass' );
+        $this->class                   = new ezcReflectionClassType( 'SomeClass' );
+        $this->classTestWebservice     = new ezcReflectionClassType( 'TestWebservice' );
+        $this->classReflectionFunction = new ezcReflectionClassType( 'ReflectionFunction' );
     }
 
     public function testGetArrayType()

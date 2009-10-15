@@ -10,19 +10,11 @@
 
 class ezcReflectionClassExternalTest extends ezcReflectionClassTest
 {
-    /**
-     * @var ezcReflectionClass
-     */
-    protected $class;
-
     public function setUp()
     {
-        $this->class = new ezcReflectionClass( new MyReflectionClass( 'SomeClass' ) );
-    }
-
-    public function tearDown()
-    {
-        unset($this->class);
+        $this->class                   = new ezcReflectionClass( new MyReflectionClass( 'SomeClass' ) );
+        $this->classTestWebservice     = new ezcReflectionClass( new MyReflectionClass( 'TestWebservice' ) );
+        $this->classReflectionFunction = new ezcReflectionClass( new MyReflectionClass( 'ReflectionFunction' ) );
     }
 
 	public function testCall() {

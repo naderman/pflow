@@ -9,6 +9,8 @@
 
 require_once 'class_test.php';
 require_once 'class_external_test.php';
+require_once 'class_instance_test.php';
+require_once 'object_test.php';
 require_once 'reflection_test.php';
 require_once 'extension_test.php';
 require_once 'extension_external_test.php';
@@ -55,6 +57,8 @@ class ezcReflectionSuite extends PHPUnit_Framework_TestSuite
 
         $this->addTest( ezcReflectionClassTest::suite() );
         $this->addTest( ezcReflectionClassExternalTest::suite() );
+        $this->addTest( ezcReflectionClassInstanceTest::suite() );
+        $this->addTest( ezcReflectionObjectTest::suite() );
         $this->addTest( ezcReflectionExtensionTest::suite() );
         $this->addTest( ezcReflectionExtensionExternalTest::suite() );
         $this->addTest( ezcReflectionFunctionTest::suite() );

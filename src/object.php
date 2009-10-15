@@ -166,7 +166,7 @@ class ezcReflectionObject extends ReflectionObject
             return new ezcReflectionClassType( $parentClass );
         }
         else {
-            return null;
+            return false;
         }
     }
 
