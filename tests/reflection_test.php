@@ -10,26 +10,6 @@
 
 class ezcReflectionTest extends ezcTestCase
 {
-    public function testGetDocParser() {
-        self::assertType( 'ezcReflectionDocParser', ezcReflectionApi::getDocParserInstance() );
-    }
-
-    public function testSetDocParser() {
-        $annotationParser = new ezcReflectionPhpDocParser();
-        ezcReflectionApi::setDocParser( $annotationParser );
-        self::assertEquals( $annotationParser, ezcReflectionApi::getDocParserInstance() );
-    }
-
-    public function testGetReflectionTypeFactory() {
-        self::assertType( 'ezcReflectionTypeFactory', ezcReflectionApi::getReflectionTypeFactory() );
-    }
-
-    public function testSetReflectionTypeFactory() {
-        $factory = new ezcReflectionTypeFactoryImpl();
-        ezcReflectionApi::setReflectionTypeFactory( $factory );
-        self::assertEquals( $factory, ezcReflectionApi::getReflectionTypeFactory() );
-    }
-
     public function testGetTypeByName() {
         $string = ezcReflectionApi::getTypeByName('string');
         self::assertEquals('string', $string->toString());
@@ -132,6 +112,26 @@ class ezcReflectionTest extends ezcTestCase
                  contains <string:PHPUnit_Util_ErrorHandler>.
             */
         }
+    }
+
+    public function testGetDocParser() {
+        self::assertType( 'ezcReflectionDocParser', ezcReflectionApi::getDocParserInstance() );
+    }
+
+    public function testSetDocParser() {
+        $annotationParser = new ezcReflectionPhpDocParser();
+        ezcReflectionApi::setDocParser( $annotationParser );
+        self::assertEquals( $annotationParser, ezcReflectionApi::getDocParserInstance() );
+    }
+
+    public function testGetReflectionTypeFactory() {
+        self::assertType( 'ezcReflectionTypeFactory', ezcReflectionApi::getReflectionTypeFactory() );
+    }
+
+    public function testSetReflectionTypeFactory() {
+        $factory = new ezcReflectionTypeFactoryImpl();
+        ezcReflectionApi::setReflectionTypeFactory( $factory );
+        self::assertEquals( $factory, ezcReflectionApi::getReflectionTypeFactory() );
     }
 
     public static function suite()
