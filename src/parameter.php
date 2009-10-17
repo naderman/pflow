@@ -29,29 +29,85 @@
     /**
      * ReflectionParameter instance if one was provided to the constructor
      * @var ReflectionParameter
+     * @deprecated
      */
     protected $parameter = null;
+    
+    /**
+     * @var integer|string|ReflectionParameter
+     *      Position, name, or ReflectionParameter instance of the parameter to
+     *      inspect
+     */
+    protected $reflectionSource;
 
     /**
      * Constructor
      *
-     * If called with a ReflectionParameter instance as second parameter the
-     * first parameter should be a string identifying the type of the parameter.
-     * Throws an Exception in case the given method does not exist
-     * @param string|array<integer,string|object> $function The function, method
-     *     or type of the parameter given as function name, type name,
-     *     array($classname, $method), or array($object, $method)
-     * @param integer|string|ReflectionParameter $parameter position, name, or
-     *     ReflectionParameter instance of the parameter to inspect
-     * @param string $type Type information from param tag
+     * If called with a ReflectionParameter instance as second argument the,
+     * first argument should be a string identifying the type of the parameter.
+     * @param string|array<integer,string|object> $functionMethodOrType
+     *        The function, method or type of the parameter given as function
+     *        name, type name, array($classname, $method), or
+     *        array($object, $method)
+     * @param integer|string|ReflectionParameter $parameter
+     *        Position, name, or ReflectionParameter instance of the parameter
+     *        to inspect
+     * @throws ReflectionException
+     *         in case the given method or function does not exist
      */
-    public function __construct($function, $parameter) {
-        if ($parameter instanceof ReflectionParameter) {
-            $this->parameter = $parameter;
-            $this->type = ezcReflectionApi::getTypeByName($function);
+    public function __construct($functionMethodOrType, $parameterPositionNameOrSource) {
+        // TODO a third optional parameter for the type might be easier to understand?
+        if ($parameterPositionNameOrSource instanceof parent) {
+            $this->parameter = $parameterPositionNameOrSource; // source
+            $this->reflectionSource = $parameterPositionNameOrSource;
+            $this->type = ezcReflectionApi::getTypeByName($functionMethodOrType); // type
         }
         else {
-            parent::__construct($function, $parameter);
+            parent::__construct($functionMethodOrType, $parameterPositionNameOrSource);
+        }
+    }
+
+    /**
+     * Use overloading to call additional methods
+     * of the ReflectionParameter instance given to the constructor
+     *
+     * @param string $method Method to be called
+     * @param array  $arguments Arguments that were passed
+     * @return mixed
+     */
+    public function __call( $method, $arguments )
+    {
+        if ( $this->reflectionSource instanceof parent )
+        {
+            // query external reflection object
+            return call_user_func_array( array($this->reflectionSource, $method), $arguments );
+        } else {
+            throw new Exception( 'Call to undefined method ' . __CLASS__ . '::' . $method );
+        }
+    }
+
+    /**
+     * Forwards a method invocation to either the reflection source passed to
+     * the constructor of this class when creating an instance or to the parent
+     * class.
+     *
+     * This method is part of the dependency injection mechanism and serves as
+     * a helper for implementing wrapper methods without code duplication.
+     * @param string $method Name of the method to be invoked
+     * @param mixed[] $arguments Arguments to be passed to the method
+     * @return mixed Return value of the invoked method
+     */
+    protected function forwardCallToReflectionSource( $method, $arguments = array() ) {
+        if ( $this->reflectionSource instanceof parent ) {
+            return call_user_func_array( array( $this->reflectionSource, $method ), $arguments );
+        } else {
+            //return call_user_func_array( array( parent, $method ), $arguments );
+            $argumentStrings = array();
+            foreach ( array_keys( $arguments ) as $key ) {
+                $argumentStrings[] = '$arguments[' . var_export( $key, true ) . ']';
+            }
+            $cmd = 'return parent::$method( ' . implode( ', ', $argumentStrings ) . ' );';
+            return eval( $cmd );
         }
     }
 
@@ -173,14 +229,28 @@
     }
 
     /**
-    * Returns reflection object identified by type hinting or NULL if there is no hint
-    * @return ezcReflectionClassType
-    */
+     * Returns reflection object identified by type hinting or NULL if there is
+     * no hint
+     *
+     * This method does not rely on type annotations. That gives users the
+     * freedom to decide on whether they want to trust the type annotations,
+     * i.e., by calling {@link getType()}, or only PHP's type hinting, which is
+     * the sole data source for this method.
+     * @return ezcReflectionClass
+     *         Class identified by type hinting or NULL if there is no hint
+     * @throws ReflectionException
+     *         if a parameter uses 'self' or 'parent' as type hint, but function
+     *         is not a class member, if a parameter uses 'parent' as type hint,
+     *         although class does not have a parent, or if the class does not
+     *         exist
+     */
     public function getClass() {
-        if ($this->type && $this->type->isClass()) {
-            return $this->type;
+        $class = $this->forwardCallToReflectionSource( __FUNCTION__ );
+        if ( $class instanceOf ReflectionClass ) {
+            return new ezcReflectionClass( $class );
+        } else {
+            return $class;
         }
-        return null;
     }
 
     /**

@@ -10,41 +10,63 @@
 
 class ezcReflectionParameterTest extends ezcTestCase
 {
+    public function setUp() {
+        // function with three parameters that have type annotations but no type hints
+        //$this->expectedFunctionM1 = new ReflectionFunction( 'm1' );
+        //$this->expectedParamsOfM1 = $this->expectedFunctionM1->getParameters();
+        $this->actualFunctionM1   = new ezcReflectionFunction( 'm1' );
+        $this->actualParamsOfM1   = $this->actualFunctionM1->getParameters();
+
+        // method with one undocumented parameter
+        //$this->expectedMethod_TestMethods_m3 = new ReflectionMethod( 'TestMethods', 'm3' );
+        //$this->expectedParamsOfMethod_TestMethods_m3 = $this->expectedMethod_TestMethods_m3->getParameters();
+        $this->actualMethod_TestMethods_m3   = new ezcReflectionMethod( 'TestMethods', 'm3' );
+        $this->actualParamsOf_TestMethods_m3 = $this->actualMethod_TestMethods_m3->getParameters();
+
+        // method with parameter that has type hint
+        $this->actualMethod_ezcReflectionApi_setReflectionTypeFactory
+            = new ezcReflectionMethod( 'ezcReflectionApi', 'setReflectionTypeFactory' );
+        $this->actualParamsOf_ezcReflectionApi_setReflectionTypeFactory
+            = $this->actualMethod_ezcReflectionApi_setReflectionTypeFactory->getParameters();
+
+        // function with parameter that has type hint only
+        $this->actualFunction_functionWithTypeHint = new ezcReflectionFunction( 'functionWithTypeHint' );
+        $this->actualParamsOf_functionWithTypeHint = $this->actualFunction_functionWithTypeHint->getParameters();
+    }
+
     public function testGetType() {
-        $func = new ezcReflectionFunction('m1');
-        $params = $func->getParameters();
-        $type = $params[0]->getType();
+        $type = $this->actualParamsOfM1[0]->getType();
         self::assertType('ezcReflectionType', $type);
-        self::assertEquals('test', $params[0]->getName());
         self::assertEquals('string', $type->toString());
 
-        $method = new ezcReflectionMethod('TestMethods', 'm3');
-        $params = $method->getParameters();
-        self::assertNull($params[0]->getType());
+        $type = $this->actualParamsOfM1[1]->getType();
+        self::assertType('ezcReflectionType', $type);
+        self::assertEquals('ezcReflectionApi', $type->toString());
+
+        $type = $this->actualParamsOfM1[2]->getType();
+        self::assertType('ezcReflectionType', $type);
+        self::assertEquals('ReflectionClass', $type->toString());
+
+        // this method has both a type hint and a type annotation
+        $type = $this->actualParamsOf_ezcReflectionApi_setReflectionTypeFactory[0]->getType();
+        self::assertType('ezcReflectionType', $type);
+        self::assertEquals('ezcReflectionTypeFactory', $type->toString());
+
+        // testing a param that only has a type hint
+        $type = $this->actualParamsOf_functionWithTypeHint[0]->getType();
+        self::assertType('ezcReflectionType', $type);
+        self::assertEquals('ReflectionClass', $type->toString());
+
+        self::assertNull($this->actualParamsOf_TestMethods_m3[0]->getType());
     }
 
     public function testGetClass() {
-        $func = new ezcReflectionFunction('m1');
-        $params = $func->getParameters();
-
-        $type = $params[1]->getClass();
-        self::assertType('ezcReflectionType', $type);
-        self::assertEquals('test2', $params[1]->getName());
-        self::assertEquals('ezcReflectionApi', $type->toString());
-
-        //@TODO: fix this error
-        //fix or change documentation of handling of not existing classes
-        //with the type system, at the moment, type with name with empty string is
-        //returned, this is wrong and has to be fixed.
-        $type = $params[2]->getClass();
-        self::assertType('ezcReflectionType', $type);
-        self::assertEquals('test3', $params[2]->getName());
-        self::assertEquals('NonExistingType', $type->toString());
-
-        $method = new ezcReflectionMethod('TestMethods', 'm3');
-        $params = $method->getParameters();
-
-        self::assertNull($params[0]->getClass());
+        self::assertNull( $this->actualParamsOfM1[0]->getClass() );
+        self::assertNull( $this->actualParamsOfM1[1]->getClass() );
+        self::assertNull( $this->actualParamsOfM1[2]->getClass() );
+        self::assertNull( $this->actualParamsOf_TestMethods_m3[0]->getClass() );
+        self::assertEquals( 'ezcReflectionTypeFactory',
+            $this->actualParamsOf_ezcReflectionApi_setReflectionTypeFactory[0]->getClass()->getName() );
     }
 
     public function testGetDeclaringFunction() {
@@ -66,9 +88,9 @@ class ezcReflectionParameterTest extends ezcTestCase
     }
 
     public function testGetName() {
-		$func = new ezcReflectionFunction('m1');
-        $params = $func->getParameters();
-		self::assertEquals('test', $params[0]->getName());
+        self::assertEquals('test', $this->actualParamsOfM1[0]->getName());
+        self::assertEquals('test2', $this->actualParamsOfM1[1]->getName());
+        self::assertEquals('test3', $this->actualParamsOfM1[2]->getName());
 	}
 
     public function testIsPassedByReference() {

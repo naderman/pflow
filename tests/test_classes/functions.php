@@ -40,4 +40,7 @@ function m4() {
 
 }
 
+function functionWithTypeHint( ReflectionClass $paramWithTypeHintOnly ) {
+}
+
 ?>
