@@ -113,10 +113,22 @@
 
     /**
      * Returns the type of this parameter in form of an ezcReflectionType
+     *
+     * A valid type hint for the parameter will be preferred over a type
+     * annotation.
      * @return ezcReflectionType
      */
     public function getType() {
-        return $this->type;
+        try {
+            $typeHint = $this->getClass();
+        } catch ( ReflectionException $e ) {
+            $typeHint = null;
+        }
+        if ( $typeHint instanceOf ReflectionClass ) {
+            return new ezcReflectionClassType( $typeHint );
+        } else {
+            return $this->type;
+        }
     }
 
     /**
