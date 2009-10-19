@@ -30,7 +30,7 @@ class ezcReflectionMethod extends ReflectionMethod
      *      instantiated. It is necessary to decide if a method is definied,
      *      inherited, overridden in a class.
      */
-    protected $curClass;
+    protected $currentClass;
 
     /**
      * @var ReflectionMethod
@@ -40,7 +40,7 @@ class ezcReflectionMethod extends ReflectionMethod
     /**
      * Constructs an new ezcReflectionMethod
      *
-     * @param ReflectionMethod|ReflectionClass|string $classOrSource
+     * @param string|ReflectionClass|ReflectionMethod $classOrSource
      *        Name of class, ReflectionClass, or ReflectionMethod
      * @param string $name
      *        Optional if $classOrSource is an instance of ReflectionMethod
@@ -48,15 +48,15 @@ class ezcReflectionMethod extends ReflectionMethod
     public function __construct($classOrSource, $name = null) {
     	if ( $classOrSource instanceof ReflectionMethod ) {
     		$this->reflectionSource = $classOrSource;
-            $this->curClass = new ReflectionClass( $this->reflectionSource->class );
+            $this->currentClass = new ReflectionClass( $this->reflectionSource->class );
     	}
 		elseif ($classOrSource instanceof ReflectionClass) {
 			parent::__construct($classOrSource->getName(), $name);
-            $this->curClass = $classOrSource;
+            $this->currentClass = $classOrSource;
         }
         else {
 			parent::__construct( $classOrSource, $name );
-            $this->curClass = new ReflectionClass( (string) $classOrSource );
+            $this->currentClass = new ReflectionClass( (string) $classOrSource );
         }
 
 		$this->docParser = ezcReflectionApi::getDocParserInstance();
@@ -232,12 +232,12 @@ class ezcReflectionMethod extends ReflectionMethod
      * @return boolean
      */
     function isInherited() {
-        $decClass = $this->getDeclaringClass();
-        if (!empty($this->curClass) and !empty($decClass)) {
-            return ($decClass->getName() != $this->curClass->getName());
+        $declaringClass = $this->getDeclaringClass();
+        if ( $declaringClass->getName() != $this->currentClass->getName() ) {
+            return true;
+        } else {
+            return false;
         }
-
-        return false;
     }
 
     /**
@@ -246,15 +246,17 @@ class ezcReflectionMethod extends ReflectionMethod
      * @return boolean
      */
     function isOverridden() {
-        $decClass = $this->getDeclaringClass();
-        if (!empty($this->curClass) and !empty($decClass)) {
-            $parent = $this->curClass->getParentClass();
-            if (is_object($parent)) {
-                return ($parent->hasMethod($this->getName()) and
-                        $this->curClass->getName() == $decClass->getName());
-            }
+        $declaringClass = $this->getDeclaringClass();
+        $parent = $this->currentClass->getParentClass();
+        if (
+                $parent != false
+                and $parent->hasMethod( $this->getName() )
+                and $this->currentClass->getName() == $declaringClass->getName()
+        ) {
+            return true;
+        } else {
+            return false;
         }
-        return false;
     }
 
     /**
