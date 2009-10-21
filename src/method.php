@@ -676,7 +676,7 @@ class ezcReflectionMethod extends ReflectionMethod
      */
     public function isDeprecated() {
         // TODO: also check @deprecated annotation
-        if ( $this->reflectionSource instanceof ReflectionFunction ) {
+        if ( $this->reflectionSource instanceof parent ) {
             return $this->reflectionSource->isDeprecated();
         } else {
             return parent::isDeprecated();
@@ -690,18 +690,15 @@ class ezcReflectionMethod extends ReflectionMethod
      * the parent class. The only difference is that it returns an instance
      * ezcReflectionClassType instead of a ReflectionClass instance
      * @return ezcReflectionClassType Prototype
+     * @throws ReflectionException if the method has not prototype
      */
     public function getPrototype() {
-        if ( $this->reflectionSource instanceof ReflectionFunction ) {
+        if ( $this->reflectionSource instanceof parent ) {
             $prototype = $this->reflectionSource->getPrototype();
         } else {
             $prototype = parent::getPrototype();
         }
-		if (!empty($prototype)) {
-		    return new ezcReflectionClassType($prototype->getName());
-		} else {
-		    return null;
-		}
+	    return new ezcReflectionClassType( $prototype->getName() );
     }
 
     /**
