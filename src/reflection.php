@@ -107,7 +107,7 @@ class ezcReflectionApi {
     public static function getClasses() {
         $classes = array();
         foreach( get_declared_classes() as $className ) {
-            $classes[$className] = new ezcReflectionClass( $className );
+            $classes[$className] = new ezcReflectionClassType( $className );
         }
         return $classes;
     }
@@ -121,7 +121,7 @@ class ezcReflectionApi {
     public static function getInterfaces() {
         $interfaces = array();
         foreach( get_declared_interfaces() as $interfaceName ) {
-            $interfaces[$interfaceName] = new ezcReflectionClass( $interfaceName );
+            $interfaces[$interfaceName] = new ezcReflectionClassType( $interfaceName );
         }
         return $interfaces;
     }

@@ -259,7 +259,7 @@
     public function getClass() {
         $class = $this->forwardCallToReflectionSource( __FUNCTION__ );
         if ( $class instanceOf ReflectionClass ) {
-            return new ezcReflectionClass( $class );
+            return new ezcReflectionClassType( $class );
         } else {
             return $class;
         }

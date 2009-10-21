@@ -19,6 +19,7 @@ Roadmap
     - Rename src/interfaces/parser.php into annotation_parser.php
     - Complete the adoption of the eZ Components coding standard
     - Parse comments on demand to save CPU time and memory, when creating large amounts of reflection objects
+    - Maybe create instances of ezcReflectionClassType through type factory
 - Missing Features (?)
     - Add support for mixed type
     - Add support pipe notation in type definitions, i.e. @param datatype1|datatype2 $paramname description
