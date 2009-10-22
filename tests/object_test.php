@@ -11,11 +11,22 @@
 
 class ezcReflectionObjectTest extends ezcReflectionClassTest
 {
-    public function setUp()
+    public function setUpFixtures()
     {
-        $this->class                   = new ezcReflectionObject( new SomeClass() );
-        $this->classTestWebservice     = new ezcReflectionObject( new TestWebservice() );
-        $this->classReflectionFunction = new ezcReflectionObject( new ReflectionFunction( 'var_export' ) );
+        $this->expected = array(
+            'SomeClass'
+                => new ReflectionObject( new SomeClass() ),
+            'TestWebservice'
+                => new ReflectionObject( new TestWebservice() ),
+            'ReflectionFunction'
+                => new ReflectionObject( new ReflectionFunction( 'var_export' ) ),
+        );
+        $this->class
+            = new ezcReflectionObject( new SomeClass() );
+        $this->classTestWebservice
+            = new ezcReflectionObject( new TestWebservice() );
+        $this->classReflectionFunction
+            = new ezcReflectionObject( new ReflectionFunction( 'var_export' ) );
     }
 
     public function testExport() {

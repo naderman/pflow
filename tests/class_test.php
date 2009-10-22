@@ -10,13 +10,37 @@
 
 class ezcReflectionClassTest extends ezcTestCase
 {
-    /**
+    /**#@+
      * @var ezcReflectionClass
+     * @deprecated
      */
     protected $class;
     protected $classTestWebservice;
+    protected $classReflectionFunction;
+    /**#@-*/
 
-    public function setUp() {
+	public function setUp() {
+        // comparison objects for expected values
+        $this->expected = array(
+            'SomeClass'
+                => new ReflectionClass( 'SomeClass' ),
+            'TestWebservice'
+                => new ReflectionClass( 'TestWebservice' ),
+            'ReflectionFunction'
+                => new ReflectionClass( 'ReflectionFunction' ),
+        );
+        $this->setUpFixtures();
+        $this->actual = array(
+            'SomeClass'
+                => $this->class,
+            'TestWebservice'
+                => $this->classTestWebservice,
+            'ReflectionFunction'
+                => $this->classReflectionFunction,
+        );
+    }
+
+    public function setUpFixtures() {
         $this->class                   = new ezcReflectionClass( 'SomeClass' );
         $this->classTestWebservice     = new ezcReflectionClass( 'TestWebservice' );
         $this->classReflectionFunction = new ezcReflectionClass( 'ReflectionFunction' );
@@ -153,6 +177,71 @@ class ezcReflectionClassTest extends ezcTestCase
 
     public function testExport() {
         self::assertEquals( ReflectionClass::export('TestWebservice', true), ezcReflectionClass::export('TestWebservice', true) );
+    }
+
+    public function getWrapperMethods() {
+        $wrapperMethods = array(
+            array( '__toString', array() ),
+            array( 'getName', array() ),
+            array( 'isInternal', array() ),
+            array( 'isUserDefined', array() ),
+            array( 'getFileName', array() ),
+            array( 'getStartLine', array() ),
+            array( 'getEndLine', array() ),
+            array( 'getDocComment', array() ),
+            array( 'getExtension', array() ),
+            array( 'getExtensionName', array() ),
+            array( 'getConstants', array() ),
+            array( 'getDefaultProperties', array() ),
+            array( 'getInterfaceNames', array() ),
+            array( 'getModifiers', array() ),
+            array( 'getStaticProperties', array() ),
+            array( 'isAbstract', array() ),
+            array( 'isFinal', array() ),
+            array( 'isInstantiable', array() ),
+            array( 'isIterateable', array() ),
+            array( 'isInterface', array() ),
+            // FIXME: array( 'isDeprecated', array() ),
+        );
+        if ( version_compare( PHP_VERSION, '5.3.0' ) === 1 ) {
+            $wrapperMethods530 = array(
+                array( 'getNamespaceName', array() ),
+                array( 'inNamespace', array() ),
+                array( 'getShortName', array() ),
+            );
+        } else {
+            $wrapperMethods530 = array();
+        }
+        return array_merge( $wrapperMethods, $wrapperMethods530 );
+    }
+
+    /**
+     * @dataProvider getWrapperMethods
+     */
+    public function testWrapperMethods( $method, $arguments ) {
+        foreach ( array_keys( $this->expected ) as $fixtureName ) {
+            try {
+                $actual = call_user_func_array(
+                    array( $this->actual[ $fixtureName ], $method ), $arguments
+                );
+                $expected = call_user_func_array(
+                    array( $this->expected[ $fixtureName ], $method ), $arguments
+                );
+                if ( $expected instanceOf Reflector ) {
+                    self::assertEquals( (string) $expected, (string) $actual );
+                } else {
+                    self::assertEquals( $expected, $actual );
+                }
+            } catch ( ReflectionException $e ) {
+                if ( !(
+                    $this->$php_fixtureName instanceOf ReflectionMethod
+                    and
+                    $e->getMessage() == 'Method ' . $this->$php_fixtureName->getDeclaringClass()->getName() . '::' . $this->$php_fixtureName->getName() . ' does not have a prototype'
+                ) ) {
+                    self::fail( 'Unexpected ReflectionException: ' . $e->getMessage() );
+                }
+            }
+        }
     }
 
     public static function suite()

@@ -11,7 +11,7 @@
 
 class ezcReflectionClassInstanceTest extends ezcReflectionClassTest
 {
-    public function setUp()
+    public function setUpFixtures()
     {
         $this->class                   = new ezcReflectionClass( new SomeClass() );
         $this->classTestWebservice     = new ezcReflectionClass( new TestWebservice() );

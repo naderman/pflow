@@ -10,7 +10,7 @@
 
 class ezcReflectionClassTypeTest extends ezcReflectionClassTest
 {
-    public function setUp()
+    public function setUpFixtures()
     {
         $this->class                   = new ezcReflectionClassType( 'SomeClass' );
         $this->classTestWebservice     = new ezcReflectionClassType( 'TestWebservice' );
