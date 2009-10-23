@@ -50,7 +50,7 @@ class ezcReflectionObject extends ReflectionObject
 
     /**
      * Use overloading to call additional methods
-     * of the ReflectionObject instance given to the constructor
+     * of the ReflectionObject instance given to the constructor.
      *
      * @param string $method Method to be called
      * @param array  $arguments Arguments that were passed
@@ -61,8 +61,10 @@ class ezcReflectionObject extends ReflectionObject
         if ( $this->reflectionSource instanceof parent )
         {
             // query external reflection object
-            return call_user_func_array( array($this->reflectionSource, $method), $arguments );
-        } else {
+            return call_user_func_array( array( $this->reflectionSource, $method ), $arguments );
+        }
+        else
+        {
             throw new Exception( 'Call to undefined method ' . __CLASS__ . '::' . $method );
         }
     }

@@ -32,7 +32,7 @@ class ezcReflectionClass extends ReflectionClass
     protected $reflectionSource;
 
     /**
-     * Constructs a new ezcReflectionClass object
+     * Constructs a new ezcReflectionClass object.
      *
      * @param string|object|ReflectionClass $argument
      *        Name, instance or ReflectionClass object of the class to be
@@ -53,7 +53,7 @@ class ezcReflectionClass extends ReflectionClass
 
     /**
      * Use overloading to call additional methods
-     * of the ReflectionClass instance given to the constructor
+     * of the ReflectionClass instance given to the constructor.
      *
      * @param string $method Method to be called
      * @param array  $arguments Arguments that were passed
@@ -64,8 +64,10 @@ class ezcReflectionClass extends ReflectionClass
         if ( $this->reflectionSource instanceof parent )
         {
             // query external reflection object
-            return call_user_func_array( array($this->reflectionSource, $method), $arguments );
-        } else {
+            return call_user_func_array( array( $this->reflectionSource, $method ), $arguments );
+        }
+        else
+        {
             throw new Exception( 'Call to undefined method ' . __CLASS__ . '::' . $method );
         }
     }
@@ -711,11 +713,11 @@ class ezcReflectionClass extends ReflectionClass
     }
 
     /**
-     * Exports a reflection object.
+     * Exports a ReflectionClass instance.
      *
-     * Returns the output if TRUE is specified for return, printing it otherwise.
+     * Returns the output if TRUE is specified for $return, printing it otherwise.
      * This is purely a wrapper method, which calls the corresponding method of
-     * the parent class.
+     * the parent class (ReflectionClass::export()).
      * @param ReflectionClass|string $class
      *        ReflectionClass object or name of the class
      * @param boolean $return

@@ -50,7 +50,7 @@ class ezcReflectionFunction extends ReflectionFunction
 
     /**
      * Use overloading to call additional methods
-     * of the ReflectionFunction instance given to the constructor
+     * of the ReflectionFunction instance given to the constructor.
      *
      * @param string $method Method to be called
      * @param array  $arguments Arguments that were passed
@@ -61,8 +61,10 @@ class ezcReflectionFunction extends ReflectionFunction
         if ( $this->reflectionSource instanceof parent )
         {
             // query external reflection object
-            return call_user_func_array( array($this->reflectionSource, $method), $arguments );
-        } else {
+            return call_user_func_array( array( $this->reflectionSource, $method ), $arguments );
+        }
+        else
+        {
             throw new Exception( 'Call to undefined method ' . __CLASS__ . '::' . $method );
         }
     }
@@ -85,7 +87,7 @@ class ezcReflectionFunction extends ReflectionFunction
             //return call_user_func_array( array( parent, $method ), $arguments );
             $argumentStrings = array();
             foreach ( array_keys( $arguments ) as $key ) {
-                $argumentStrings[] = var_export( $key, true );
+                $argumentStrings[] = '$arguments[' . var_export( $key, true ) . ']';
             }
             $cmd = 'return parent::$method( ' . implode( ', ', $argumentStrings ) . ' );';
             return eval( $cmd );
@@ -395,11 +397,15 @@ class ezcReflectionFunction extends ReflectionFunction
      * @since PHP 5.1.0
      */
     public function invokeArgs( Array $arguments ) {
+        /*
+        return $this->forwardCallToReflectionSource( __FUNCTION__, array( $arguments ) );
+        /*/
         if ( $this->reflectionSource instanceof ReflectionFunction ) {
             return $this->reflectionSource->invokeArgs( $arguments );
         } else {
             return parent::invokeArgs( $arguments );
         }
+        //*/
     }
 
     /**
@@ -470,11 +476,7 @@ class ezcReflectionFunction extends ReflectionFunction
      * @return string|boolean False or the name of the extension
      */
     public function getExtensionName() {
-        if ( $this->reflectionSource instanceof ReflectionFunction ) {
-            return $this->reflectionSource->getExtensionName();
-        } else {
-            return parent::getExtensionName();
-        }
+        return $this->forwardCallToReflectionSource( __FUNCTION__ );
     }
 
     /**

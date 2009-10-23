@@ -65,7 +65,7 @@ class ezcReflectionMethod extends ReflectionMethod
 
     /**
      * Use overloading to call additional methods
-     * of the reflection instance given to the constructor
+     * of the ReflectionMethod instance given to the constructor.
      *
      * @param string $method Method to be called
      * @param array  $arguments Arguments that were passed
@@ -73,9 +73,13 @@ class ezcReflectionMethod extends ReflectionMethod
      */
     public function __call( $method, $arguments )
     {
-        if ( $this->reflectionSource ) {
-            return call_user_func_array( array($this->reflectionSource, $method), $arguments );
-        } else {
+        if ( $this->reflectionSource instanceof parent )
+        {
+            // query external reflection object
+            return call_user_func_array( array( $this->reflectionSource, $method ), $arguments );
+        }
+        else
+        {
             throw new Exception( 'Call to undefined method ' . __CLASS__ . '::' . $method );
         }
     }
@@ -98,7 +102,7 @@ class ezcReflectionMethod extends ReflectionMethod
             //return call_user_func_array( array( parent, $method ), $arguments );
             $argumentStrings = array();
             foreach ( array_keys( $arguments ) as $key ) {
-                $argumentStrings[] = var_export( $key, true );
+                $argumentStrings[] = '$arguments[' . var_export( $key, true ) . ']';
             }
             $cmd = 'return parent::$method( ' . implode( ', ', $argumentStrings ) . ' );';
             return eval( $cmd );

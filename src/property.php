@@ -22,17 +22,17 @@ class ezcReflectionProperty extends ReflectionProperty
 	/**
      * @var ezcReflectionDocParser Parser for source code annotations
      */
-    protected $docParser = null;
+    protected $docParser;
 
     /**
      * @var ReflectionProperty
      *      Name, instance of the property's class
      *      or ReflectionProperty object of the property
      */
-	protected $reflectionSource = null;
+	protected $reflectionSource;
 
     /**
-     * Constructor.
+     * Constructs a new ezcReflectionParameter object
      *
      * Throws an Exception in case the given property does not exist
      * @param string|object|ReflectionProperty $class
@@ -45,14 +45,60 @@ class ezcReflectionProperty extends ReflectionProperty
      */
     public function __construct( $class, $name = null )
     {
-		if ( !$class instanceof ReflectionProperty )
-{
-			parent::__construct( $class, $name );
-		}
-		$this->reflectionSource = $class;
+        if ( !$class instanceof ReflectionProperty )
+        {
+            parent::__construct( $class, $name );
+        }
+        $this->reflectionSource = $class;
 
         $this->docParser = ezcReflectionApi::getDocParserInstance();
-		$this->docParser->parse( $this->getDocComment() );
+        $this->docParser->parse( $this->getDocComment() );
+    }
+
+    /**
+     * Use overloading to call additional methods
+     * of the ReflectionProperty instance given to the constructor.
+     *
+     * @param string $method Method to be called
+     * @param array  $arguments Arguments that were passed
+     * @return mixed
+     */
+    public function __call( $method, $arguments )
+    {
+        if ( $this->reflectionSource instanceof parent )
+        {
+            // query external reflection object
+            return call_user_func_array( array( $this->reflectionSource, $method ), $arguments );
+        }
+        else
+        {
+            throw new Exception( 'Call to undefined method ' . __CLASS__ . '::' . $method );
+        }
+    }
+
+    /**
+     * Forwards a method invocation to either the reflection source passed to
+     * the constructor of this class when creating an instance or to the parent
+     * class.
+     *
+     * This method is part of the dependency injection mechanism and serves as
+     * a helper for implementing wrapper methods without code duplication.
+     * @param string $method Name of the method to be invoked
+     * @param mixed[] $arguments Arguments to be passed to the method
+     * @return mixed Return value of the invoked method
+     */
+    protected function forwardCallToReflectionSource( $method, $arguments = array() ) {
+        if ( $this->reflectionSource instanceof parent ) {
+            return call_user_func_array( array( $this->reflectionSource, $method ), $arguments );
+        } else {
+            //return call_user_func_array( array( parent, $method ), $arguments );
+            $argumentStrings = array();
+            foreach ( array_keys( $arguments ) as $key ) {
+                $argumentStrings[] = '$arguments[' . var_export( $key, true ) . ']';
+            }
+            $cmd = 'return parent::$method( ' . implode( ', ', $argumentStrings ) . ' );';
+            return eval( $cmd );
+        }
     }
 
     /**
@@ -296,44 +342,6 @@ class ezcReflectionProperty extends ReflectionProperty
     }
 
     /**
-     * Use overloading to call additional methods
-     * of the ReflectionProperty instance given to the constructor.
-     *
-     * @param string $method Method to be called
-     * @param array<integer,mixed> $arguments Arguments that were passed
-     * @return mixed
-     */
-    public function __call( $method, $arguments )
-    {
-        if ( $this->reflectionSource )
-        {
-            return call_user_func_array( array( $this->reflectionSource, $method ), $arguments );
-        }
-        else
-        {
-            throw new Exception( 'Call to undefined method ' . __CLASS__ . '::' . $method );
-        }
-    }
-
-    /**
-     * Forwards a method invocation to either the reflection source passed to
-     * constructor this class when creating an instance or to the parent class.
-     *
-     * This method is part of the dependency injection mechanism and serves as
-     * a helper for implementing wrapper methods without code duplication.
-     * @param string $method Name of the method to be invoked
-     * @param mixed[] $arguments Arguments to be passed to the method
-     * @return mixed Return value of the invoked method
-     */
-    protected function forwardCallToReflectionSource( $method, $arguments = array() ) {
-        if ( $this->reflectionSource instanceof parent ) {
-            return call_user_func_array( array( $this->reflectionSource, $method ), $arguments );
-        } else {
-            return call_user_func_array( array( parent, $method ), $arguments );
-        }
-    }
-
-    /**
      * Returns a string representation
      * @return string
      */
@@ -346,7 +354,7 @@ class ezcReflectionProperty extends ReflectionProperty
     }
 
     /**
-     * Exports a reflection object.
+     * Exports a ReflectionProperty instance.
      *
      * Returns the output if TRUE is specified for return, printing it otherwise.
      * This is purely a wrapper method, which calls the corresponding method of
