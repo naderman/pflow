@@ -297,6 +297,74 @@ weird coding standards should also be supported: */", $this->fctM2->getDocCommen
         self::assertEquals( ReflectionFunction::export( 'm3', true ), ezcReflectionFunction::export( 'm3', true ) );
     }
 
+    public function getWrapperMethods() {
+        $wrapperMethods = array(
+            array( '__toString', array() ),
+            array( 'getName', array() ),
+            array( 'isInternal', array() ),
+            array( 'isUserDefined', array() ),
+            // not in ReflectionMethod: array( 'isDisabled', array() ),
+            array( 'getFileName', array() ),
+            array( 'getStartLine', array() ),
+            array( 'getEndLine', array() ),
+            array( 'getDocComment', array() ),
+            array( 'getStaticVariables', array() ),
+            array( 'returnsReference', array() ),
+            array( 'getNumberOfParameters', array() ),
+            array( 'getNumberOfRequiredParameters', array() ),
+            array( 'getExtension', array() ),
+            array( 'getExtensionName', array() ),
+            // FIXME: array( 'isDeprecated', array() ),
+        );
+        if ( version_compare( PHP_VERSION, '5.3.0' ) === 1 ) {
+            $wrapperMethods530 = array(
+                array( 'getNamespaceName', array() ),
+                array( 'inNamespace', array() ),
+                array( 'getShortName', array() ),
+                array( 'isClosure', array() ),
+            );
+        } else {
+            $wrapperMethods530 = array();
+        }
+        return array_merge( $wrapperMethods, $wrapperMethods530 );
+    }
+
+    /**
+     * @dataProvider getWrapperMethods
+     */
+    public function testWrapperMethods( $method, $arguments ) {
+        $fixtureNames = array(
+            'fctM1',
+            'fctM2',
+            'fctM3',
+            'fct_method_exists',
+        );
+        foreach ( $fixtureNames as $fixtureName ) {
+            $php_fixtureName = "php_$fixtureName";
+            try {
+                $actual = call_user_func_array(
+                    array( $this->$fixtureName, $method ), $arguments
+                );
+                $expected = call_user_func_array(
+                    array( $this->$php_fixtureName, $method ), $arguments
+                );
+                if ( $expected instanceOf Reflector ) {
+                    self::assertEquals( (string) $expected, (string) $actual );
+                } else {
+                    self::assertEquals( $expected, $actual );
+                }
+            } catch ( ReflectionException $e ) {
+                if ( !(
+                    $this->$php_fixtureName instanceOf ReflectionMethod
+                    and
+                    $e->getMessage() == 'Method ' . $this->$php_fixtureName->getDeclaringClass()->getName() . '::' . $this->$php_fixtureName->getName() . ' does not have a prototype'
+                ) ) {
+                    self::fail( 'Unexpected ReflectionException: ' . $e->getMessage() );
+                }
+            }
+        }
+    }
+
     public static function suite()
     {
          return new PHPUnit_Framework_TestSuite( "ezcReflectionFunctionTest" );
