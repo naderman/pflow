@@ -268,22 +268,23 @@
     }
 
     /**
-     * Returns the ezcReflectionFunction for the function of this parameter
-     * @return ezcReflectionFunction
+     * Returns the function or method declaring this parameter
+     * @return ezcReflectionFunction|ezcReflectionMethod
      * @since PHP 5.2.3
      */
-    public function getDeclaringFunction() {
-        if ($this->parameter != null) {
+    public function getDeclaringFunction()
+    {
+        if ( $this->parameter instanceOf parent ) {
             $func = $this->parameter->getDeclaringFunction();
         }
         else {
             $func = parent::getDeclaringFunction();
         }
-        if (!empty($func)) {
-            return new ezcReflectionFunction($func->getName());
+        if ( $func instanceOf ReflectionMethod ) {
+            return new ezcReflectionMethod( $func->getDeclaringClass(), $func->getName() );
         }
-        else {
-            return null;
+        elseif ( $func instanceOf ReflectionFunction ) {
+            return new ezcReflectionFunction( $func->getName() );
         }
 	}
 

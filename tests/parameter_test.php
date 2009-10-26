@@ -71,7 +71,7 @@ class ezcReflectionParameterTest extends ezcTestCase
 
         // function with parameter that has type hint only
         //$this->actualFunction_functionWithTypeHint = new ezcReflectionFunction( 'functionWithTypeHint' );
-        $this->actualParamsOf_functionWithTypeHint = new ezcReflectionParameter( 'functionWithTypeHint', 0 );
+        $this->actualParamsOf_functionWithTypeHint[] = new ezcReflectionParameter( 'functionWithTypeHint', 0 );
     }
 
     public function testGetType() {
@@ -115,6 +115,20 @@ class ezcReflectionParameterTest extends ezcTestCase
 		$decFunc = $params[0]->getDeclaringFunction();
 		self::assertTrue($decFunc instanceof ezcReflectionFunction);
         self::assertEquals('m1', $decFunc->getName());
+
+        $decFunc = $this->actual['TestMethods::m3'][0]->getDeclaringFunction();
+        self::assertType('ezcReflectionMethod', $decFunc);
+        self::assertEquals('TestMethods', $decFunc->getDeclaringClass()->getName());
+        self::assertEquals('m3', $decFunc->getName());
+        
+        $decFunc = $this->actual['ezcReflectionApi::setReflectionTypeFactory'][0]->getDeclaringFunction();
+        self::assertType('ezcReflectionMethod', $decFunc);
+        self::assertEquals('ezcReflectionApi', $decFunc->getDeclaringClass()->getName());
+        self::assertEquals('setReflectionTypeFactory', $decFunc->getName());
+
+        $decFunc = $this->actual['functionWithTypeHint'][0]->getDeclaringFunction();
+        self::assertType('ezcReflectionFunction', $decFunc);
+        self::assertEquals('functionWithTypeHint', $decFunc->getName());
     }
 
     public function testGetDeclaringClass() {
@@ -123,6 +137,8 @@ class ezcReflectionParameterTest extends ezcTestCase
         $class = $params[0]->getDeclaringClass();
 		self::assertTrue($class instanceof ezcReflectionClass);
         self::assertEquals('TestMethods', $class->getName());
+
+        self::assertNull( $this->actual['mmm'][0]->getDeclaringClass() );
     }
 
     public function testGetName() {
@@ -165,13 +181,15 @@ class ezcReflectionParameterTest extends ezcTestCase
 		self::assertFalse($param->isDefaultValueAvailable());
 	}
 
-	/**
-	* @expectedException ReflectionException
-	*/
 	public function testGetDefaultValue() {
 		$param = $this->actual['mmm'][0];
 		self::assertEquals('foo', $param->getDefaultValue());
+	}
 
+	/**
+     * @expectedException ReflectionException
+     */
+	public function testGetDefaultValueThrowsReflectionException() {
         $params = $this->actualParamsOfM1;
 		$param = $params[0];
 		self::assertEquals(null, $param->getDefaultValue()); //should throw exception
