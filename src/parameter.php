@@ -283,7 +283,7 @@
         if ( $func instanceOf ReflectionMethod ) {
             return new ezcReflectionMethod( $func->getDeclaringClass(), $func->getName() );
         }
-        elseif ( $func instanceOf ReflectionFunction ) {
+        else {
             return new ezcReflectionFunction( $func->getName() );
         }
 	}
