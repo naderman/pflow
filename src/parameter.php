@@ -50,13 +50,13 @@
      *        name, type name, array($classname, $method), or
      *        array($object, $method)
      * @param integer|string|ReflectionParameter $parameter
-     *        Position, name, or ReflectionParameter instance of the parameter
-     *        to inspect
+     *        Position (starting at 0), name, or ReflectionParameter instance
+     *        of the parameter to introspect
      * @throws ReflectionException
      *         in case the given method or function does not exist
      */
     public function __construct($functionMethodOrType, $parameterPositionNameOrSource) {
-        // TODO a third optional parameter for the type might be easier to understand?
+        // TODO a third optional parameter for the type might be easier to understand and is required for Instantiation without ReflectionParameter instance
         if ($parameterPositionNameOrSource instanceof parent) {
             $this->parameter = $parameterPositionNameOrSource; // source
             $this->reflectionSource = $parameterPositionNameOrSource;

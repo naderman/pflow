@@ -10,28 +10,68 @@
 
 class ezcReflectionParameterTest extends ezcTestCase
 {
+
+    /**
+     * Expected parameters of certain methods or functions
+     * @var array<string,ReflectionParameter[]>
+     */
+    protected $expected = array();
+
+    /**
+     * Actual parameters of the same methods or functions as in $this->expected
+     * @var array<string,ezcReflectionParameter[]>
+     */
+    protected $actual = array();
+
+    /**#@+
+     * @var ezcReflectionParameter
+     * @deprecated
+     */
+    protected $actualParamsOfM1;
+    protected $actualParamsOf_TestMethods_m3;
+    protected $actualParamsOf_ezcReflectionApi_setReflectionTypeFactory;
+    protected $actualParamsOf_functionWithTypeHint;
+    /**#@-*/
+
     public function setUp() {
         // function with three parameters that have type annotations but no type hints
         //$this->expectedFunctionM1 = new ReflectionFunction( 'm1' );
         //$this->expectedParamsOfM1 = $this->expectedFunctionM1->getParameters();
-        $this->actualFunctionM1   = new ezcReflectionFunction( 'm1' );
-        $this->actualParamsOfM1   = $this->actualFunctionM1->getParameters();
 
         // method with one undocumented parameter
         //$this->expectedMethod_TestMethods_m3 = new ReflectionMethod( 'TestMethods', 'm3' );
         //$this->expectedParamsOfMethod_TestMethods_m3 = $this->expectedMethod_TestMethods_m3->getParameters();
-        $this->actualMethod_TestMethods_m3   = new ezcReflectionMethod( 'TestMethods', 'm3' );
-        $this->actualParamsOf_TestMethods_m3 = $this->actualMethod_TestMethods_m3->getParameters();
+
+        $this->setUpFixtures();
+        $this->actual['m1'] = $this->actualParamsOfM1;
+        $this->actual['TestMethods::m3'] = $this->actualParamsOf_TestMethods_m3;
+        $this->actual['ezcReflectionApi::setReflectionTypeFactory'] = $this->actualParamsOf_ezcReflectionApi_setReflectionTypeFactory;
+        $this->actual['functionWithTypeHint'] = $this->actualParamsOf_functionWithTypeHint;
+    }
+
+    public function setUpFixtures() {
+        // function with undocumented parameter $t that has default value 'foo'
+        $this->actual['mmm'][0] = new ezcReflectionParameter( 'mmm', 0 );
+
+        // function with three parameters that have type annotations but no type hints
+        //$this->actualFunctionM1   = new ezcReflectionFunction( 'm1' );
+        $this->actualParamsOfM1[]   = new ezcReflectionParameter( 'm1', 0 );
+        $this->actualParamsOfM1[]   = new ezcReflectionParameter( 'm1', 1 );
+        $this->actualParamsOfM1[]   = new ezcReflectionParameter( 'm1', 2 );
+
+        // method with one undocumented parameter
+        //$this->actualMethod_TestMethods_m3   = new ezcReflectionMethod( 'TestMethods', 'm3' );
+        $this->actualParamsOf_TestMethods_m3[] = new ezcReflectionParameter( array( 'TestMethods', 'm3' ), 0 );
 
         // method with parameter that has type hint
-        $this->actualMethod_ezcReflectionApi_setReflectionTypeFactory
-            = new ezcReflectionMethod( 'ezcReflectionApi', 'setReflectionTypeFactory' );
-        $this->actualParamsOf_ezcReflectionApi_setReflectionTypeFactory
-            = $this->actualMethod_ezcReflectionApi_setReflectionTypeFactory->getParameters();
+        //$this->actualMethod_ezcReflectionApi_setReflectionTypeFactory
+        //    = new ezcReflectionMethod( 'ezcReflectionApi', 'setReflectionTypeFactory' );
+        $this->actualParamsOf_ezcReflectionApi_setReflectionTypeFactory[]
+            = new ezcReflectionParameter( array( 'ezcReflectionApi', 'setReflectionTypeFactory' ), 0 );
 
         // function with parameter that has type hint only
-        $this->actualFunction_functionWithTypeHint = new ezcReflectionFunction( 'functionWithTypeHint' );
-        $this->actualParamsOf_functionWithTypeHint = $this->actualFunction_functionWithTypeHint->getParameters();
+        //$this->actualFunction_functionWithTypeHint = new ezcReflectionFunction( 'functionWithTypeHint' );
+        $this->actualParamsOf_functionWithTypeHint = new ezcReflectionParameter( 'functionWithTypeHint', 0 );
     }
 
     public function testGetType() {
@@ -70,8 +110,7 @@ class ezcReflectionParameterTest extends ezcTestCase
     }
 
     public function testGetDeclaringFunction() {
-        $func = new ezcReflectionFunction('m1');
-        $params = $func->getParameters();
+        $params = $this->actualParamsOfM1;
 
 		$decFunc = $params[0]->getDeclaringFunction();
 		self::assertTrue($decFunc instanceof ezcReflectionFunction);
@@ -79,8 +118,7 @@ class ezcReflectionParameterTest extends ezcTestCase
     }
 
     public function testGetDeclaringClass() {
-        $method = new ezcReflectionMethod('TestMethods', 'm3');
-        $params = $method->getParameters();
+        $params = $this->actualParamsOf_TestMethods_m3;
 
         $class = $params[0]->getDeclaringClass();
 		self::assertTrue($class instanceof ezcReflectionClass);
@@ -94,45 +132,36 @@ class ezcReflectionParameterTest extends ezcTestCase
 	}
 
     public function testIsPassedByReference() {
-		$func = new ezcReflectionFunction('m1');
-        $params = $func->getParameters();
+        $params = $this->actualParamsOfM1;
 		self::assertFalse($params[0]->isPassedByReference());
 		self::assertTrue($params[2]->isPassedByReference());
 	}
 
     public function testIsArray() {
-		$func = new ezcReflectionFunction('m1');
-        $params = $func->getParameters();
+        $params = $this->actualParamsOfM1;
 		self::assertFalse($params[0]->isArray());
 	}
 
     public function testAllowsNull() {
-		$func = new ezcReflectionFunction('m1');
-        $params = $func->getParameters();
+        $params = $this->actualParamsOfM1;
 		self::assertTrue($params[0]->allowsNull());
 	}
 
     public function testIsOptional() {
-		$func = new ezcReflectionFunction('mmm');
-		$param = $func->getParameters();
-		$param = $param[0];
+		$param = $this->actual['mmm'][0];
 		self::assertTrue($param->isOptional());
 
-		$func = new ezcReflectionFunction('m1');
-		$param = $func->getParameters();
-		$param = $param[0];
+        $params = $this->actualParamsOfM1;
+		$param = $params[0];
 		self::assertFalse($param->isOptional());
 	}
 
 	public function testIsDefaultValueAvailable() {
-		$func = new ezcReflectionFunction('mmm');
-		$param = $func->getParameters();
-		$param = $param[0];
+		$param = $this->actual['mmm'][0];
 		self::assertTrue($param->isDefaultValueAvailable());
 
-		$func = new ezcReflectionFunction('m1');
-		$param = $func->getParameters();
-		$param = $param[0];
+        $params = $this->actualParamsOfM1;
+		$param = $params[0];
 		self::assertFalse($param->isDefaultValueAvailable());
 	}
 
@@ -140,26 +169,20 @@ class ezcReflectionParameterTest extends ezcTestCase
 	* @expectedException ReflectionException
 	*/
 	public function testGetDefaultValue() {
-		$func = new ezcReflectionFunction('mmm');
-		$param = $func->getParameters();
-		$param = $param[0];
+		$param = $this->actual['mmm'][0];
 		self::assertEquals('foo', $param->getDefaultValue());
 
-		$func = new ezcReflectionFunction('m1');
-		$param = $func->getParameters();
-		$param = $param[0];
+        $params = $this->actualParamsOfM1;
+		$param = $params[0];
 		self::assertEquals(null, $param->getDefaultValue()); //should throw exception
 	}
 
 	public function testGetPosition() {
-		$func = new ezcReflectionFunction('mmm');
-		$param = $func->getParameters();
-		$param = $param[0];
+		$param = $this->actual['mmm'][0];
 		self::assertEquals(0, $param->getPosition());
 
-		$func = new ezcReflectionFunction('m1');
-		$param = $func->getParameters();
-		$param = $param[1];
+        $params = $this->actualParamsOfM1;
+		$param = $params[1];
 		self::assertEquals(1, $param->getPosition());
 	}
 

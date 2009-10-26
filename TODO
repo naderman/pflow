@@ -15,6 +15,8 @@ Roadmap
       use their getParameters() method to retrieve an array of parameters."
     - Maybe reuse phpt test cases of the Reflection extension
 - Refactoring (Falko)
+    - Introduce a third optional parameter called 'type' to the constructor of ezcReflectionParameter
+    - Introduce a ezcReflectionReflector interface
     - Rename DocTag/Tag into Annotation in all class, interface, method, property, and parameter names, e.g., getAnnotations & isAnnotatedWith
     - Rename src/interfaces/parser.php into annotation_parser.php
     - Complete the adoption of the eZ Components coding standard
