@@ -104,11 +104,15 @@
             return call_user_func_array( array( $this->reflectionSource, $method ), $arguments );
         } else {
             //return call_user_func_array( array( parent, $method ), $arguments );
+            /*
             $argumentStrings = array();
             foreach ( array_keys( $arguments ) as $key ) {
                 $argumentStrings[] = '$arguments[' . var_export( $key, true ) . ']';
             }
             $cmd = 'return parent::$method( ' . implode( ', ', $argumentStrings ) . ' );';
+            /*/
+            $cmd = 'return parent::$method();';
+            //*/
             return eval( $cmd );
         }
     }
@@ -334,7 +338,7 @@
      * @return mixed
      */
     public static function export($function, $parameter, $return = false) {
-        return parent::export($function, $return);
+        return parent::export($function, $parameter, $return);
     }
 
 }
