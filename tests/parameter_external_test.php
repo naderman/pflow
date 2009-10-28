@@ -20,32 +20,43 @@ class ezcReflectionParameterExternalTest extends ezcReflectionParameterTest
 
         // function with three parameters that have type annotations but no type hints
         $this->expectedFunctionM1 = new ReflectionFunction( 'm1' );
-        $this->expectedParamsOfM1 = $this->expectedFunctionM1->getParameters();
+        $this->expected['m1'] = $this->expectedFunctionM1->getParameters();
         $paramTypes = array( 'string', 'ezcReflectionApi', 'ReflectionClass' );
-        foreach ( $this->expectedParamsOfM1 as $key => $param ) {
+        foreach ( $this->expected['m1'] as $key => $param ) {
             $this->actualParamsOfM1[] = new ezcReflectionParameter( $paramTypes[$key], $param );
         }
 
         // method with one undocumented parameter
         $this->expectedMethod_TestMethods_m3 = new ReflectionMethod( 'TestMethods', 'm3' );
-        $this->expectedParamsOfMethod_TestMethods_m3 = $this->expectedMethod_TestMethods_m3->getParameters();
-        foreach ( $this->expectedParamsOfMethod_TestMethods_m3 as $param ) {
+        $this->expected['TestMethods::m3'] = $this->expectedMethod_TestMethods_m3->getParameters();
+        foreach ( $this->expected['TestMethods::m3'] as $param ) {
             $this->actualParamsOf_TestMethods_m3[] = new ezcReflectionParameter( null, $param );
         }
 
         // method with parameter that has type hint
         $this->expectedMethod_ezcReflectionApi_setReflectionTypeFactory
             = new ReflectionMethod( 'ezcReflectionApi', 'setReflectionTypeFactory' );
-        $this->expectedParamsOf_ezcReflectionApi_setReflectionTypeFactory
+        $this->expected['ezcReflectionApi::setReflectionTypeFactory']
             = $this->expectedMethod_ezcReflectionApi_setReflectionTypeFactory->getParameters();
-        foreach ( $this->expectedParamsOf_ezcReflectionApi_setReflectionTypeFactory as $param ) {
+        foreach ( $this->expected['ezcReflectionApi::setReflectionTypeFactory'] as $param ) {
             $this->actualParamsOf_ezcReflectionApi_setReflectionTypeFactory[] = new ezcReflectionParameter( 'ezcReflectionTypeFactory', $param );
         }
 
         // function with parameter that has type hint only
         $this->expectedFunction_functionWithTypeHint = new ReflectionFunction( 'functionWithTypeHint' );
-        $this->expectedParamsOf_functionWithTypeHint = $this->expectedFunction_functionWithTypeHint->getParameters();
-        $this->actualParamsOf_functionWithTypeHint[] = new ezcReflectionParameter( 'ReflectionClass', $this->expectedParamsOf_functionWithTypeHint[0] );
+        $this->expected['functionWithTypeHint'] = $this->expectedFunction_functionWithTypeHint->getParameters();
+        $this->actualParamsOf_functionWithTypeHint[] = new ezcReflectionParameter( 'ReflectionClass', $this->expected['functionWithTypeHint'][0] );
+
+        unset(
+            $this->expectedFunctionM1,
+            $this->expectedMethod_TestMethods_m3,
+            $this->expectedMethod_ezcReflectionApi_setReflectionTypeFactory,
+            $this->expectedFunction_functionWithTypeHint
+        );
+    }
+
+    public function testExport( $functionName = null, $paramKey = null ) {
+        // no need to test this again
     }
 
     public static function suite()

@@ -51,27 +51,43 @@ class ezcReflectionParameterTest extends ezcTestCase
 
     public function setUpFixtures() {
         // function with undocumented parameter $t that has default value 'foo'
+        $this->expected['mmm'][0] = new ReflectionParameter( 'mmm', 0 );
         $this->actual['mmm'][0] = new ezcReflectionParameter( 'mmm', 0 );
 
         // function with three parameters that have type annotations but no type hints
-        //$this->actualFunctionM1   = new ezcReflectionFunction( 'm1' );
-        $this->actualParamsOfM1[]   = new ezcReflectionParameter( 'm1', 0 );
-        $this->actualParamsOfM1[]   = new ezcReflectionParameter( 'm1', 1 );
-        $this->actualParamsOfM1[]   = new ezcReflectionParameter( 'm1', 2 );
+        for ( $i = 0; $i <= 2; ++$i ) {
+            $this->expected['m1'][$i] = new ReflectionParameter( 'm1', $i );
+            $this->actualParamsOfM1[$i] = new ezcReflectionParameter( 'm1', $i );
+        }
 
         // method with one undocumented parameter
-        //$this->actualMethod_TestMethods_m3   = new ezcReflectionMethod( 'TestMethods', 'm3' );
-        $this->actualParamsOf_TestMethods_m3[] = new ezcReflectionParameter( array( 'TestMethods', 'm3' ), 0 );
+        $this->expected['TestMethods::m3'][]
+            = new ReflectionParameter( array( 'TestMethods', 'm3' ), 0 );
+        $this->actualParamsOf_TestMethods_m3[]
+            = new ezcReflectionParameter( array( 'TestMethods', 'm3' ), 0 );
 
         // method with parameter that has type hint
-        //$this->actualMethod_ezcReflectionApi_setReflectionTypeFactory
-        //    = new ezcReflectionMethod( 'ezcReflectionApi', 'setReflectionTypeFactory' );
+        $this->expected['ezcReflectionApi::setReflectionTypeFactory'][]
+            = new ReflectionParameter( array( 'ezcReflectionApi', 'setReflectionTypeFactory' ), 0 );
         $this->actualParamsOf_ezcReflectionApi_setReflectionTypeFactory[]
             = new ezcReflectionParameter( array( 'ezcReflectionApi', 'setReflectionTypeFactory' ), 0 );
 
         // function with parameter that has type hint only
-        //$this->actualFunction_functionWithTypeHint = new ezcReflectionFunction( 'functionWithTypeHint' );
-        $this->actualParamsOf_functionWithTypeHint[] = new ezcReflectionParameter( 'functionWithTypeHint', 0 );
+        $this->expected['functionWithTypeHint'][]
+            = new ReflectionParameter( 'functionWithTypeHint', 0 );
+        $this->actualParamsOf_functionWithTypeHint[]
+            = new ezcReflectionParameter( 'functionWithTypeHint', 0 );
+    }
+
+    public function tearDown() {
+        $this->expected = array();
+        $this->actual = array();
+        unset(
+            $this->actualParamsOfM1,
+            $this->actualParamsOf_TestMethods_m3,
+            $this->actualParamsOf_ezcReflectionApi_setReflectionTypeFactory,
+            $this->actualParamsOf_functionWithTypeHint
+        );
     }
 
     public function testGetType() {
@@ -203,6 +219,84 @@ class ezcReflectionParameterTest extends ezcTestCase
 		$param = $params[1];
 		self::assertEquals(1, $param->getPosition());
 	}
+
+    public function getFunctionNamesAndParamKeys() {
+        $result = array();
+        $this->setUp();
+        foreach ( $this->expected as $functionName => $expParams ) {
+            foreach ( $expParams as $paramKey => $expParam ) {
+                $result[]
+                    = array( $functionName, $expParam->getPosition() );
+            }
+        }
+        $this->tearDown();
+        return $result;
+    }
+
+    /**
+     * @dataProvider getFunctionNamesAndParamKeys
+     */
+    public function testExport( $functionName = null, $paramKey = null ) {
+        if ( strpos( $functionName, '::' ) !== false ) {
+            $function = explode( '::', $functionName );
+        } else {
+            $function = $functionName;
+        }
+        self::assertEquals(
+            ReflectionParameter::export( $function, $paramKey, true ),
+            ezcReflectionParameter::export( $function, $paramKey, true )
+        );
+    }
+
+    public function getWrapperMethods() {
+        $wrapperMethods = array(
+            array( '__toString', array() ),
+            array( 'getName', array() ),
+
+            array( 'allowsNull', array() ),
+            array( 'isOptional', array() ),
+            array( 'isPassedByReference', array() ),
+            array( 'isArray', array() ),
+            array( 'isDefaultValueAvailable', array() ),
+            array( 'getPosition', array() ),
+            array( 'getDefaultValue', array() ),
+            array( 'getClass', array() ),
+            array( 'getDeclaringFunction', array() ),
+            array( 'getDeclaringClass', array() ),
+        );
+        return $wrapperMethods;
+    }
+
+    /**
+     * @dataProvider getWrapperMethods
+     */
+    public function testWrapperMethods( $method, $arguments ) {
+        foreach ( $this->expected as $functionName => $expParams ) {
+            foreach ( $expParams as $paramKey => $expParam ) {
+                try {
+                    $actual = call_user_func_array(
+                        array( $this->actual[ $functionName ][ $paramKey ], $method ), $arguments
+                    );
+                    $expected = call_user_func_array(
+                        array( $this->expected[ $functionName ][ $paramKey ], $method ), $arguments
+                    );
+                    if ( $expected instanceOf Reflector ) {
+                        self::assertEquals( (string) $expected, (string) $actual );
+                    } else {
+                        self::assertEquals( $expected, $actual );
+                    }
+                } catch ( ReflectionException $e ) {
+                    if ( !(
+                        $method == 'getDefaultValue'
+                        and $expParam->isDefaultValueAvailable() == false
+                        and $e->getMessage() == 'Parameter is not optional'
+                    ) ) {
+                        self::fail( 'Unexpected ReflectionException: ' . $e->getMessage() );
+                    }
+                }
+            }
+        }
+    }
 
     public static function suite()
     {
