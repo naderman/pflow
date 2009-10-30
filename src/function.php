@@ -97,7 +97,7 @@ class ezcReflectionFunction extends ReflectionFunction
     /**
      * Returns the parameters of the function as ezcReflectionParameter objects
      *
-     * @return ezcReflectionParameter[] Function parameters
+     * @return ezcReflectionParameter[] Parameters of the Function
      * @since PHP 5.1.0
      */
     function getParameters() {
@@ -109,22 +109,29 @@ class ezcReflectionFunction extends ReflectionFunction
             $apiParams = parent::getParameters();
         }
         foreach ($apiParams as $param) {
-            $found = false;
+            $type = null;
             foreach ($params as $tag) {
                 if (
                     $tag instanceof ezcReflectionDocTagparam
                     and $tag->getParamName() == $param->getName()
                 ) {
-                    $extParams[] = new ezcReflectionParameter(
-                        $tag->getType(),
-                        $param
-                    );
-                    $found = true;
+                    $type = $tag->getType();
                     break;
                 }
             }
-            if (!$found) {
-                $extParams[] = new ezcReflectionParameter(null, $param);
+            if ( $this->reflectionSource instanceof ReflectionFunction ) {
+                $extParams[] = new ezcReflectionParameter(
+                    null,
+                    $param,
+                    $type
+                );
+            } else {
+                // slightly increase performance and save some memory
+                $extParams[] = new ezcReflectionParameter(
+                    $this->getName(),
+                    $param->getPosition(),
+                    $type
+                );
             }
         }
         return $extParams;

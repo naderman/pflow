@@ -45,26 +45,27 @@
      *
      * If called with a ReflectionParameter instance as second argument the,
      * first argument should be a string identifying the type of the parameter.
-     * @param string|array<integer,string|object> $functionMethodOrType
+     * @param string|array<integer,string|object> $functionOrMethod
      *        The function, method or type of the parameter given as function
-     *        name, type name, array($classname, $method), or
-     *        array($object, $method)
+     *        name, array($classname, $method), or array($object, $method)
      * @param integer|string|ReflectionParameter $parameter
      *        Position (starting at 0), name, or ReflectionParameter instance
-     *        of the parameter to introspect
+     *        of the parameter to introspect.
+     * @param string $type
+     *        Type of the parameter given in form of the type name.
      * @throws ReflectionException
-     *         in case the given method or function does not exist
+     *         in case the given method or function does not exist.
      */
-    public function __construct($functionMethodOrType, $parameterPositionNameOrSource) {
-        // TODO a third optional parameter for the type might be easier to understand and is required for Instantiation without ReflectionParameter instance
-        if ($parameterPositionNameOrSource instanceof parent) {
+    public function __construct( $functionOrMethod, $parameterPositionNameOrSource, $type = null )
+    {
+        if ( $parameterPositionNameOrSource instanceof parent ) {
             $this->parameter = $parameterPositionNameOrSource; // source
             $this->reflectionSource = $parameterPositionNameOrSource;
-            $this->type = ezcReflectionApi::getTypeByName($functionMethodOrType); // type
         }
         else {
-            parent::__construct($functionMethodOrType, $parameterPositionNameOrSource);
+            parent::__construct( $functionOrMethod, $parameterPositionNameOrSource );
         }
+        $this->type = ezcReflectionApi::getTypeByName($type);
     }
 
     /**

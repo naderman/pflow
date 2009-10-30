@@ -110,7 +110,7 @@ class ezcReflectionMethod extends ReflectionMethod
     }
 
     /**
-     * Returns the parameters of the method
+     * Returns the parameters of the method as ezcReflectionParameter objects
      *
      * @return ezcReflectionParameter[] Parameters of the method
      * @since PHP 5.1.0
@@ -118,26 +118,38 @@ class ezcReflectionMethod extends ReflectionMethod
     function getParameters() {
         $params = $this->docParser->getParamTags();
         $extParams = array();
-        if ( $this->reflectionSource ) {
+        if ( $this->reflectionSource instanceof ReflectionMethod ) {
             $apiParams = $this->reflectionSource->getParameters();
         } else {
             $apiParams = parent::getParameters();
         }
         foreach ($apiParams as $param) {
-            $found = false;
+            $type = null;
             foreach ($params as $tag) {
                 if (
                     $tag instanceof ezcReflectionDocTagparam
-            	    and $tag->getParamName() == $param->getName()
+                    and $tag->getParamName() == $param->getName()
                 ) {
-            	   $extParams[] = new ezcReflectionParameter($tag->getType(),
-            	                                             $param);
-            	   $found = true;
-            	   break;
-            	}
+                    $type = $tag->getType();
+                    break;
+                }
             }
-            if (!$found) {
-                $extParams[] = new ezcReflectionParameter(null, $param);
+            if ( $this->reflectionSource instanceof ReflectionMethod ) {
+                $extParams[] = new ezcReflectionParameter(
+                    null,
+                    $param,
+                    $type
+                );
+            } else {
+                // slightly increase performance and save some memory
+                $extParams[] = new ezcReflectionParameter(
+                    array(
+                        $this->getDeclaringClass()->getName(),
+                        $this->getName()
+                    ),
+                    $param->getPosition(),
+                    $type
+                );
             }
         }
         return $extParams;

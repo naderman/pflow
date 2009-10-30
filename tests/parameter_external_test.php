@@ -23,7 +23,8 @@ class ezcReflectionParameterExternalTest extends ezcReflectionParameterTest
         $this->expected['m1'] = $this->expectedFunctionM1->getParameters();
         $paramTypes = array( 'string', 'ezcReflectionApi', 'ReflectionClass' );
         foreach ( $this->expected['m1'] as $key => $param ) {
-            $this->actualParamsOfM1[] = new ezcReflectionParameter( $paramTypes[$key], $param );
+            $this->actualParamsOfM1[] =
+                new ezcReflectionParameter( null, $param, $paramTypes[$key] );
         }
 
         // method with one undocumented parameter
@@ -39,7 +40,7 @@ class ezcReflectionParameterExternalTest extends ezcReflectionParameterTest
         $this->expected['ezcReflectionApi::setReflectionTypeFactory']
             = $this->expectedMethod_ezcReflectionApi_setReflectionTypeFactory->getParameters();
         foreach ( $this->expected['ezcReflectionApi::setReflectionTypeFactory'] as $param ) {
-            $this->actualParamsOf_ezcReflectionApi_setReflectionTypeFactory[] = new ezcReflectionParameter( 'ezcReflectionTypeFactory', $param );
+            $this->actualParamsOf_ezcReflectionApi_setReflectionTypeFactory[] = new ezcReflectionParameter( null, $param, 'ezcReflectionTypeFactory' );
         }
 
         // function with parameter that has type hint only

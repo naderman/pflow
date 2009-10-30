@@ -9,13 +9,8 @@ Roadmap
         enables Dependency Injection (only in case of static methods)
 - Fix Tests
 - Test Coverage (Sebastian)
-    - Test ezcReflectionParameter::__construct, since PHP Manual states:
-      "To introspect function parameters, you will first have to create an
-      instance of the ReflectionFunction or ReflectionMethod classes and then
-      use their getParameters() method to retrieve an array of parameters."
     - Maybe reuse phpt test cases of the Reflection extension
 - Refactoring (Falko)
-    - Introduce a third optional parameter called 'type' to the constructor of ezcReflectionParameter
     - Introduce a ezcReflectionReflector interface
     - Rename DocTag/Tag into Annotation in all class, interface, method, property, and parameter names, e.g., getAnnotations & isAnnotatedWith
     - Rename src/interfaces/parser.php into annotation_parser.php

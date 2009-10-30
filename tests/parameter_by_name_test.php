@@ -18,9 +18,12 @@ class ezcReflectionParameterByNameTest extends ezcReflectionParameterTest
 
         // function with three parameters that have type annotations but no type hints
         $paramNames = array( 'test', 'test2', 'test3' );
+        $paramTypes = array( 'string', 'ezcReflectionApi', 'ReflectionClass' );
         for ( $i = 0; $i <= 2; ++$i ) {
-            $this->expected['m1'][$i] = new ReflectionParameter( 'm1', $paramNames[$i] );
-            $this->actualParamsOfM1[$i] = new ezcReflectionParameter( 'm1', $paramNames[$i] );
+            $this->expected['m1'][$i]
+                = new ReflectionParameter( 'm1', $paramNames[$i] );
+            $this->actualParamsOfM1[$i]
+                = new ezcReflectionParameter( 'm1', $paramNames[$i], $paramTypes[$i] );
         }
 
         // method with one undocumented parameter
@@ -33,13 +36,13 @@ class ezcReflectionParameterByNameTest extends ezcReflectionParameterTest
         $this->expected['ezcReflectionApi::setReflectionTypeFactory'][]
             = new ReflectionParameter( array( 'ezcReflectionApi', 'setReflectionTypeFactory' ), 'factory' );
         $this->actualParamsOf_ezcReflectionApi_setReflectionTypeFactory[]
-            = new ezcReflectionParameter( array( 'ezcReflectionApi', 'setReflectionTypeFactory' ), 'factory' );
+            = new ezcReflectionParameter( array( 'ezcReflectionApi', 'setReflectionTypeFactory' ), 'factory', 'ezcReflectionTypeFactory' );
 
         // function with parameter that has type hint only
         $this->expected['functionWithTypeHint'][]
             = new ReflectionParameter( 'functionWithTypeHint', 'paramWithTypeHintOnly' );
         $this->actualParamsOf_functionWithTypeHint[]
-            = new ezcReflectionParameter( 'functionWithTypeHint', 'paramWithTypeHintOnly' );
+            = new ezcReflectionParameter( 'functionWithTypeHint', 'paramWithTypeHintOnly', 'ReflectionClass' );
     }
 
     public function getFunctionNamesAndParamKeys() {
