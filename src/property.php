@@ -32,7 +32,7 @@ class ezcReflectionProperty extends ReflectionProperty
 	protected $reflectionSource;
 
     /**
-     * Constructs a new ezcReflectionParameter object
+     * Constructs a new ezcReflectionProperty object
      *
      * Throws an Exception in case the given property does not exist
      * @param string|object|ReflectionProperty $class
