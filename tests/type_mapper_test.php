@@ -57,6 +57,14 @@ class ezcReflectionTypeMapperTest extends ezcTestCase
         }
     }
 
+    public function testGetXmlTypeWithNonStandardTypeName() {
+        self::assertEquals( 'int', ezcReflectionTypeMapper::getInstance()->getXmlType( 'int' ) );
+    }
+
+    public function testGetXmlTypeWithNonExistingType() {
+        self::assertNull( ezcReflectionTypeMapper::getInstance()->getXmlType( 'NonExistingType' ) );
+    }
+
     public static function suite()
     {
          return new PHPUnit_Framework_TestSuite( "ezcReflectionTypeMapperTest" );
