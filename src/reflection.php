@@ -46,7 +46,7 @@ class ezcReflectionApi {
      */
     public static function getDocParserInstance()
     {
-    	if (self::$docParser == null) {
+    	if ( !( self::$docParser instanceof ezcReflectionDocParser ) ) {
     		self::$docParser = new ezcReflectionPhpDocParser();
     	}
     	return clone self::$docParser;
@@ -70,7 +70,7 @@ class ezcReflectionApi {
      */
     public static function getReflectionTypeFactory()
     {
-        if (self::$reflectionTypeFactory == null) {
+        if ( !( self::$reflectionTypeFactory instanceof ezcReflectionTypeFactory ) ) {
             self::$reflectionTypeFactory = new ezcReflectionTypeFactoryImpl();
         }
     	return clone self::$reflectionTypeFactory;
