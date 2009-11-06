@@ -25,6 +25,8 @@ require_once 'parameters_from_function_test.php';
 require_once 'parameter_external_test.php';
 require_once 'parser_test.php';
 require_once 'property_test.php';
+require_once 'property_from_class_test.php';
+require_once 'properties_from_class_test.php';
 require_once 'tag_factory_test.php';
 require_once 'type_factory_test.php';
 require_once 'type_mapper_test.php';
@@ -74,6 +76,8 @@ class ezcReflectionSuite extends PHPUnit_Framework_TestSuite
         $this->addTest( ezcReflectionParametersFromFunctionTest::suite() );
         $this->addTest( ezcReflectionParameterExternalTest::suite() );
         $this->addTest( ezcReflectionPropertyTest::suite() );
+        $this->addTest( ezcReflectionPropertyFromClassTest::suite() );
+        $this->addTest( ezcReflectionPropertiesFromClassTest::suite() );
         $this->addTest( ezcReflectionDocParserTest::suite() );
         $this->addTest( ezcReflectionDocTagFactoryTest::suite() );
         $this->addTest( ezcReflectionTypeFactoryTest::suite() );

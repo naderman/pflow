@@ -10,26 +10,23 @@
 
 class ezcReflectionPropertyTest extends ezcTestCase
 {
-    /**
+    /**#@+
      * @var ezcReflectionProperty
      */
     protected $refProp;
+    protected $publicPropertyName;
+    /**#@-*/
 
     public function setUp() {
-        $class = new ezcReflectionClass('SomeClass');
 		$this->refPropName = 'fields';
-		$this->refProp = $class->getProperty($this->refPropName);
         $this->publicPropertyName = 'publicProperty';
-        $this->publicProperty = $class->getProperty($this->publicPropertyName);
         $this->instanceOfSomeClass = new SomeClass();
-        /*
-        foreach ( $class->getProperties() as $property ) {
-            if ( $property->getName() == 'fields' ) {
-		        $this->refProp = $property;
-                break;
-            }
-        }
-        */
+        $this->setUpFixtures();
+    }
+
+    public function setUpFixtures() {
+		$this->refProp = new ezcReflectionProperty( 'SomeClass', $this->refPropName );
+        $this->publicProperty = new ezcReflectionProperty( 'SomeClass', $this->publicPropertyName );
     }
 
     public function tearDown() {
@@ -134,4 +131,3 @@ class ezcReflectionPropertyTest extends ezcTestCase
          return new PHPUnit_Framework_TestSuite( "ezcReflectionPropertyTest" );
     }
 }
-?>
