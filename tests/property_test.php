@@ -11,15 +11,34 @@
 class ezcReflectionPropertyTest extends ezcTestCase
 {
     /**#@+
+     * @var string
+     */
+	protected $refPropName;
+	protected $publicPropertyName;
+	protected $undocumentedPropertyName;
+	/**#@-*/
+	
+	/**#@+
      * @var ezcReflectionProperty
      */
     protected $refProp;
-    protected $publicPropertyName;
+    protected $publicProperty;
     /**#@-*/
 
+    /**
+     * @var array( string => array( string => ReflectionProperty ) )
+     */
+    protected $expected;
+    
+    /**
+     * @var array( string => array( string => ezcReflectionProperty ) )
+     */
+    protected $actual;
+    
     public function setUp() {
 		$this->refPropName = 'fields';
         $this->publicPropertyName = 'publicProperty';
+        $this->undocumentedPropertyName = 'undocumentedProperty';
         $this->instanceOfSomeClass = new SomeClass();
         $this->setUpFixtures();
     }
@@ -27,6 +46,7 @@ class ezcReflectionPropertyTest extends ezcTestCase
     public function setUpFixtures() {
 		$this->refProp = new ezcReflectionProperty( 'SomeClass', $this->refPropName );
         $this->publicProperty = new ezcReflectionProperty( 'SomeClass', $this->publicPropertyName );
+        $this->actual['SomeClass']['undocumentedProperty'] = new ezcReflectionProperty( 'SomeClass', $this->undocumentedPropertyName );
     }
 
     public function tearDown() {
@@ -37,6 +57,8 @@ class ezcReflectionPropertyTest extends ezcTestCase
         $type = $this->refProp->getType();
         self::assertType('ezcReflectionArrayType', $type);
         self::assertEquals('integer[]', $type->toString());
+        
+        self::assertNull( $this->actual['SomeClass']['undocumentedProperty']->getType() );
     }
 
     public function testGetDeclaringClass() {

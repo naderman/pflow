@@ -16,6 +16,7 @@ class ezcReflectionPropertyFromClassTest extends ezcReflectionPropertyTest
         $class = new ezcReflectionClass( 'SomeClass' );
 		$this->refProp = $class->getProperty( $this->refPropName );
         $this->publicProperty = $class->getProperty( $this->publicPropertyName );
+        $this->actual['SomeClass']['undocumentedProperty'] = $class->getProperty( $this->undocumentedPropertyName );
     }
 
     public static function suite()

@@ -15,11 +15,14 @@ class ezcReflectionPropertiesFromClassTest extends ezcReflectionPropertyTest
     {
         $class = new ezcReflectionClass( 'SomeClass' );
         foreach ( $class->getProperties() as $property ) {
-            if ( $property->getName() == $this->refPropName ) {
+        	$name = $property->getName();
+            if ( $name == $this->refPropName ) {
 		        $this->refProp = $property;
             }
-            elseif ( $property->getName() == $this->publicPropertyName ) {
+            elseif ( $name == $this->publicPropertyName ) {
                 $this->publicProperty = $property;
+            } elseif ( $name == $this->undocumentedPropertyName ) {
+            	$this->actual['SomeClass']['undocumentedProperty'] = $property;
             }
         }
     }
