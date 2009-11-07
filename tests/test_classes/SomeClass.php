@@ -15,6 +15,8 @@ class SomeClass extends BaseClass implements IInterface {
      * @var SomeClass
      */
     public $publicProperty;
+    
+    protected $undocumentedProperty;
 
     public function __construct() {
         // echo "New SomeClass instance created.\n";
