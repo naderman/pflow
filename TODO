@@ -13,7 +13,6 @@ Roadmap
         - Rename src/interfaces/parser.php into annotation_parser.php
     - Missing Features (Falko)
         - Add support for mixed type
-        - support for annotation grouping especially for properties (has to be supported by PHP, maybe a feature for StaticReflection)
         - throw ezcReflectionUnknownTypeException during XML Schema generation
     - See todo annotations in the source code, e.g., using 'grep -inor todo.* --exclude-dir=.svn .'
     - Documentation about available annotations (?)
@@ -27,6 +26,7 @@ Roadmap
     - Parse comments on demand to save CPU time and memory, when creating large amounts of reflection objects
     - Introduce a ezcReflectionReflector interface
     - Add support for pipe notation in type definitions, i.e. @param datatype1|datatype2 $paramname description
+    - support for annotation grouping especially for properties (has to be supported by PHP, maybe a feature for StaticReflection)
     - obtain type information for internal functions from PHP's source code
     - Maybe create instances of ezcReflectionClassType through type factory
     - Integration of Toby's annotation parser? (Toby?)
