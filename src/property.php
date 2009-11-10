@@ -109,12 +109,6 @@ class ezcReflectionProperty extends ReflectionProperty
      */
     public function getType()
     {
-        if ( $this->docParser == null )
-        {
-            return 'unknown (ReflectionProperty::getDocComment was introduced'.
-                   ' in PHP version 5.1)';
-        }
-
         $vars = $this->docParser->getVarTags();
         if ( isset( $vars[0] ) )
         {
