@@ -717,7 +717,7 @@ class ezcReflectionObject extends ReflectionObject
      * the parent class (ReflectionObject::export()).
      * @param ReflectionObject $object ReflectionClass instance of the object
      * @param boolean $return
-     *        Wether to return (TRUE) or print (FALSE) the output
+     *        Whether to return (TRUE) or print (FALSE) the output
      * @return mixed
      */
     public static function export($object, $return = false) {

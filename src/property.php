@@ -272,7 +272,7 @@ class ezcReflectionProperty extends ReflectionProperty
     }
 
 	/**
-     * Returns wether the property is a default property defined in the class.
+     * Returns whether the property is a default property defined in the class.
      *
 	 * A default property is defined in the class definition.
 	 * A non-default property is an instance specific state.
@@ -358,7 +358,7 @@ class ezcReflectionProperty extends ReflectionProperty
      * @param ReflectionProperty|string $property
      *        ReflectionProperty object or name of the class
      * @param boolean $return
-     *        Wether to return (TRUE) or print (FALSE) the output
+     *        Whether to return (TRUE) or print (FALSE) the output
      * @return mixed
      */
     public static function export($class, $property, $return = false) {

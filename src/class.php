@@ -721,7 +721,7 @@ class ezcReflectionClass extends ReflectionClass
      * @param ReflectionClass|string $class
      *        ReflectionClass object or name of the class
      * @param boolean $return
-     *        Wether to return (TRUE) or print (FALSE) the output
+     *        Whether to return (TRUE) or print (FALSE) the output
      * @return mixed
      */
     public static function export($class, $return = false) {

@@ -781,7 +781,7 @@ class ezcReflectionMethod extends ReflectionMethod
      * @param string $name
      *        Name of the method
      * @param boolean $return
-     *        Wether to return (TRUE) or print (FALSE) the output
+     *        Whether to return (TRUE) or print (FALSE) the output
      * @return mixed
      */
     public static function export($class, $name, $return = false) {

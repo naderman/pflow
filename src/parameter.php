@@ -335,7 +335,7 @@
      * @param mixed $function Function or Method
      * @param mixed $parameter Parameter
      * @param boolean $return
-     *        Wether to return (TRUE) or print (FALSE) the output
+     *        Whether to return (TRUE) or print (FALSE) the output
      * @return mixed
      */
     public static function export($function, $parameter, $return = false) {

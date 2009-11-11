@@ -202,7 +202,7 @@ class ezcReflectionExtension extends ReflectionExtension {
      * @param ReflectionExtension|string $extension
      *        ReflectionExtension object or name of the extension
      * @param boolean $return
-     *        Wether to return (TRUE) or print (FALSE) the output
+     *        Whether to return (TRUE) or print (FALSE) the output
      * @return mixed
      */
     public static function export($extension, $return = false) {

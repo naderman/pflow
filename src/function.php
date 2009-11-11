@@ -563,7 +563,7 @@ class ezcReflectionFunction extends ReflectionFunction
      * the parent class (ReflectionFunction::export()).
      * @param string $function Name of the function
      * @param boolean $return
-     *        Wether to return (TRUE) or print (FALSE) the output
+     *        Whether to return (TRUE) or print (FALSE) the output
      * @return mixed
      */
     public static function export($function, $return = false) {
