@@ -318,7 +318,7 @@ class ezcReflectionProperty extends ReflectionProperty
      * @param mixed $value Value of the property
      * @return void
      */
-    public function setValue( $object = null, $value )
+    public function setValue( $object, $value = null )
     {
         return $this->forwardCallToReflectionSource( __FUNCTION__, array( $object, $value ) );
     }
@@ -353,14 +353,16 @@ class ezcReflectionProperty extends ReflectionProperty
      * Returns the output if TRUE is specified for return, printing it otherwise.
      * This is purely a wrapper method, which calls the corresponding method of
      * the parent class.
+     * @param ReflectionClass|string $class
+     *        ReflectionClass object or name of the class
      * @param ReflectionProperty|string $property
      *        ReflectionProperty object or name of the class
      * @param boolean $return
      *        Wether to return (TRUE) or print (FALSE) the output
      * @return mixed
      */
-    public static function export($property, $return = false) {
-        return parent::export($property, $return);
+    public static function export($class, $property, $return = false) {
+        return parent::export($class, $property, $return);
     }
 
 }
