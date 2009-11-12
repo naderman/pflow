@@ -33,5 +33,6 @@ return array(
     'ezcReflectionTypeFactoryImpl' => 'Reflection/type_factory.php',
     'ezcReflectionTypeMapper'      => 'Reflection/type_mapper.php',
     'ezcReflectionObject'          => 'Reflection/object.php',
+    'ezcReflectionCallToUndefinedMethodException' => 'Reflection/exceptions/call_to_undefined_method.php',
 );
 ?>

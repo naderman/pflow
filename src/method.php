@@ -80,7 +80,7 @@ class ezcReflectionMethod extends ReflectionMethod
         }
         else
         {
-            throw new Exception( 'Call to undefined method ' . __CLASS__ . '::' . $method );
+            throw new ezcReflectionCallToUndefinedMethodException( __CLASS__, $method );
         }
     }
 

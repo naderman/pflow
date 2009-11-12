@@ -18,6 +18,8 @@ class SomeClass extends BaseClass implements IInterface {
     
     protected $undocumentedProperty;
 
+    const CLASS_CONSTANT = 'ConstantValue';
+
     public function __construct() {
         // echo "New SomeClass instance created.\n";
     }

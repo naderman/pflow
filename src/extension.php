@@ -189,7 +189,7 @@ class ezcReflectionExtension extends ReflectionExtension {
         if ( $this->reflectionSource ) {
             return call_user_func_array( array($this->reflectionSource, $method), $arguments );
         } else {
-            throw new Exception( 'Call to undefined method ' . __CLASS__ . '::' . $method );
+            throw new ezcReflectionCallToUndefinedMethodException( __CLASS__, $method );
         }
     }
 

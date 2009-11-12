@@ -50,6 +50,13 @@ class ezcReflectionClassTest extends ezcTestCase
         unset($this->class);
     }
 
+    /**
+     * @expectedException ezcReflectionCallToUndefinedMethodException
+     */
+    public function testCall() {
+        $this->class->undefinedMethod();
+    }
+
     public function testGetName() {
         self::assertEquals('SomeClass', $this->class->getName());
     }
@@ -173,6 +180,11 @@ class ezcReflectionClassTest extends ezcTestCase
     public function testGetExtensionName() {
         self::assertEquals( 'Reflection', $this->classReflectionFunction->getExtensionName() );
         self::assertEquals( '', $this->class->getExtensionName() );
+    }
+    
+    public function testGetConstant() {
+    	self::assertEquals( 'ConstantValue', $this->actual['SomeClass']->getConstant( 'CLASS_CONSTANT' ) );
+    	self::assertEquals( '', $this->actual['SomeClass']->getConstant( 'NON_EXISTING_CLASS_CONSTANT' ) );
     }
 
     public function testExport() {
