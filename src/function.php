@@ -232,6 +232,11 @@ class ezcReflectionFunction extends ReflectionFunction
             $length = $end - $start + 1;
             
             $lines = array_slice( file( $filename ), $offset, $length );
+
+            if ( strpos( trim( $lines[0] ), 'function' ) !== 0 ) {
+                $lines[0] = substr( $lines[0], strpos( $lines[0], 'function' ) );
+            }
+
             $code = implode( '', $lines );
         }
         return $code;
