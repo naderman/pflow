@@ -106,7 +106,11 @@ class ezcReflectionClass extends ReflectionClass
      */
     public function getMethod( $name ) {
         $method = $this->forwardCallToReflectionSource( __FUNCTION__, array( $name ) );
-        return new ezcReflectionMethod( $method );
+        if ( $this->reflectionSource instanceof parent ) {
+            return new ezcReflectionMethod( $this, $method );
+        } else {
+            return new ezcReflectionMethod( $this, $method->name );
+        }
     }
 
     /**
@@ -117,7 +121,11 @@ class ezcReflectionClass extends ReflectionClass
     public function getConstructor() {
         $constructor = $this->forwardCallToReflectionSource( __FUNCTION__ );
         if ($constructor != null) {
-            return new ezcReflectionMethod($constructor);
+            if ( $this->reflectionSource instanceof parent ) {
+                return new ezcReflectionMethod( $this, $constructor );
+            } else {
+                return new ezcReflectionMethod( $this, $constructor->name );
+            }
         } else {
             return null;
         }
@@ -140,7 +148,11 @@ class ezcReflectionClass extends ReflectionClass
         $methods = $this->forwardCallToReflectionSource( __FUNCTION__, array( $filter ) );
         $extMethods = array();
         foreach ( $methods as $method ) {
-            $extMethods[] = new ezcReflectionMethod( $method );
+            if ( $this->reflectionSource instanceof parent ) {
+                $extMethods[] = new ezcReflectionMethod( $this, $method );
+            } else {
+                $extMethods[] = new ezcReflectionMethod( $this, $method->name );
+            }
         }
         return $extMethods;
     }

@@ -40,22 +40,48 @@ class ezcReflectionMethod extends ReflectionMethod
     /**
      * Constructs an new ezcReflectionMethod
      *
+     * Usage Examples:
+     * <code>
+     * new ezcReflectionMethod( 'SomeClass',                        'someMethod' );
+     * new ezcReflectionMethod( new ReflectionClass( 'SomeClass' ), 'someMethod' );
+     * new ezcReflectionMethod( 'SomeClass',                        new ReflectionMethod( 'SomeClass', 'someMethod' ) );
+     * new ezcReflectionMethod( new ReflectionClass( 'SomeClass' ), new ReflectionMethod( 'SomeClass', 'someMethod' ) );
+     * </code>
+     * 
+     * The following way of creating an ezcReflectionMethod results in the
+     * current class being the declaring class, i.e., isInherited() and
+     * isIntroduced() may not return the expected results:
+     * <code>
+     * new ezcReflectionMethod( new ReflectionMethod( 'SomeClass', 'someMethod' ) );
+     * </code>
+     * 
      * @param string|ReflectionClass|ReflectionMethod $classOrSource
-     *        Name of class, ReflectionClass, or ReflectionMethod
-     * @param string $name
+     *        Name of class, ReflectionClass, or ReflectionMethod of the method
+     *        to be reflected
+     * @param string|ReflectionMethod $nameOrSource
+     *        Name or ReflectionMethod instance of the method to be reflected
      *        Optional if $classOrSource is an instance of ReflectionMethod
      */
-    public function __construct($classOrSource, $name = null) {
-    	if ( $classOrSource instanceof ReflectionMethod ) {
+    public function __construct( $classOrSource, $nameOrSource = null ) {
+        if ( $nameOrSource instanceOf parent ) {
+            $this->reflectionSource = $nameOrSource;
+            if ( $classOrSource instanceof ReflectionClass ) {
+                $this->currentClass = $classOrSource;
+            }
+            else {
+                $this->currentClass = new ReflectionClass( (string) $classOrSource );
+            }
+        }
+        elseif ( $classOrSource instanceof parent ) {
     		$this->reflectionSource = $classOrSource;
             $this->currentClass = new ReflectionClass( $this->reflectionSource->class );
     	}
-		elseif ($classOrSource instanceof ReflectionClass) {
-			parent::__construct($classOrSource->getName(), $name);
+		elseif ( $classOrSource instanceof ReflectionClass ) {
+			parent::__construct( $classOrSource->getName(), $nameOrSource );
             $this->currentClass = $classOrSource;
         }
         else {
-			parent::__construct( $classOrSource, $name );
+			parent::__construct( $classOrSource, $nameOrSource );
             $this->currentClass = new ReflectionClass( (string) $classOrSource );
         }
 
@@ -282,6 +308,16 @@ class ezcReflectionMethod extends ReflectionMethod
      */
     function isIntroduced() {
         return !$this->isInherited() and !$this->isOverridden();
+    }
+
+    /**
+     * Returns the class of the reflected method, which is not necesarily the
+     * declaring class.
+     *
+     * @return ezcReflectionClassType Class of the reflected method
+     */
+    function getCurrentClass() {
+        return $this->currentClass;
     }
 
     /**
