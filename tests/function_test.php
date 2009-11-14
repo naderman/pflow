@@ -46,6 +46,13 @@ class ezcReflectionFunctionTest extends ezcTestCase
         unset($this->fctM3);
     }
 
+    /**
+     * @expectedException ezcReflectionCallToUndefinedMethodException
+     */
+    public function testCall() {
+        $this->fctM1->undefinedMethod();
+    }
+
     public function testGetTags() {
         $func = $this->fctM1;
         $tags = $func->getTags();

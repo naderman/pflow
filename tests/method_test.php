@@ -270,6 +270,32 @@ class ezcReflectionMethodTest extends ezcReflectionFunctionTest
         );
     }
 
+    public function getGetClasses() {
+        return array(
+            array( 'fctM1', 'TestMethods' ),
+            array( 'fctM2', 'TestMethods' ),
+            array( 'fctM3', 'TestMethods' ),
+            array( 'fctM4', 'TestMethods' ),
+            array( 'fct_method_exists', 'ReflectionClass' ),
+            array( 'ezc_TestMethods2_m1', 'TestMethods2' ),
+            array( 'ezc_TestMethods2_m2', 'TestMethods2' ),
+            array( 'ezc_TestMethods2_m3', 'TestMethods2' ),
+            array( 'ezc_TestMethods2_m4', 'TestMethods2' ),
+            array( 'ezc_TestMethods2_newMethod', 'TestMethods2' ),
+            array( 'ezc_ReflectionMethod_isInternal', 'ReflectionMethod' ),
+            array( 'ezc_ezcReflectionMethod_isInternal', 'ezcReflectionMethod' ),
+            array( 'ezc_ezcReflectionMethod_isInherited', 'ezcReflectionMethod' ),
+            array( 'ezc_ezcReflectionMethod_getTags', 'ezcReflectionMethod' ),
+        );
+    }
+
+    /**
+     * @dataProvider getGetClasses
+     */
+    public function testGetClass( $method, $expectedClassName ) {
+        self::assertEquals( $expectedClassName, $this->$method->getCurrentClass()->getName() );
+    }
+
     public function getGetDeclaringClasses() {
         return array(
             array( 'fctM1', 'TestMethods' ),
@@ -292,7 +318,7 @@ class ezcReflectionMethodTest extends ezcReflectionFunctionTest
     /**
      * @dataProvider getGetDeclaringClasses
      */
-    public function testGetDeclaringClass( $method, $expectedDeclaringClassName) {
+    public function testGetDeclaringClass( $method, $expectedDeclaringClassName ) {
         $declaringClass = $this->$method->getDeclaringClass();
         self::assertType( 'ezcReflectionClassType', $declaringClass );
         self::assertEquals( $expectedDeclaringClassName, $declaringClass->getName() );
