@@ -42,6 +42,7 @@ class ezcReflectionParameterTest extends ezcTestCase
         //$this->expectedMethod_TestMethods_m3 = new ReflectionMethod( 'TestMethods', 'm3' );
         //$this->expectedParamsOfMethod_TestMethods_m3 = $this->expectedMethod_TestMethods_m3->getParameters();
 
+        $this->expected = $this->getExpectedFixtures(); 
         $this->setUpFixtures();
         $this->actual['m1'] = $this->actualParamsOfM1;
         $this->actual['TestMethods::m3'] = $this->actualParamsOf_TestMethods_m3;
@@ -51,35 +52,54 @@ class ezcReflectionParameterTest extends ezcTestCase
 
     public function setUpFixtures() {
         // function with undocumented parameter $t that has default value 'foo'
-        $this->expected['mmm'][0] = new ReflectionParameter( 'mmm', 0 );
         $this->actual['mmm'][0] = new ezcReflectionParameter( 'mmm', 0 );
 
         // function with three parameters that have type annotations but no type hints
         $paramTypes = array( 'string', 'ezcReflectionApi', 'ReflectionClass' );
         for ( $i = 0; $i <= 2; ++$i ) {
-            $this->expected['m1'][$i]
-                = new ReflectionParameter( 'm1', $i );
             $this->actualParamsOfM1[$i]
                 = new ezcReflectionParameter( 'm1', $i, $paramTypes[$i] );
         }
 
         // method with one undocumented parameter
-        $this->expected['TestMethods::m3'][]
-            = new ReflectionParameter( array( 'TestMethods', 'm3' ), 0 );
         $this->actualParamsOf_TestMethods_m3[]
             = new ezcReflectionParameter( array( 'TestMethods', 'm3' ), 0 );
 
         // method with parameter that has type hint
-        $this->expected['ezcReflectionApi::setReflectionTypeFactory'][]
-            = new ReflectionParameter( array( 'ezcReflectionApi', 'setReflectionTypeFactory' ), 0 );
         $this->actualParamsOf_ezcReflectionApi_setReflectionTypeFactory[]
             = new ezcReflectionParameter( array( 'ezcReflectionApi', 'setReflectionTypeFactory' ), 0, 'ezcReflectionTypeFactory' );
 
         // function with parameter that has type hint only
-        $this->expected['functionWithTypeHint'][]
-            = new ReflectionParameter( 'functionWithTypeHint', 0 );
         $this->actualParamsOf_functionWithTypeHint[]
             = new ezcReflectionParameter( 'functionWithTypeHint', 0, 'ReflectionClass' );
+    }
+    
+    public function getExpectedFixtures() {
+        $expected = array();
+
+        // function with undocumented parameter $t that has default value 'foo'
+        $expected['mmm'][0] = new ReflectionParameter( 'mmm', 0 );
+
+        // function with three parameters that have type annotations but no type hints
+        $paramTypes = array( 'string', 'ezcReflectionApi', 'ReflectionClass' );
+        for ( $i = 0; $i <= 2; ++$i ) {
+            $expected['m1'][$i]
+                = new ReflectionParameter( 'm1', $i );
+        }
+
+        // method with one undocumented parameter
+        $expected['TestMethods::m3'][]
+            = new ReflectionParameter( array( 'TestMethods', 'm3' ), 0 );
+
+        // method with parameter that has type hint
+        $expected['ezcReflectionApi::setReflectionTypeFactory'][]
+            = new ReflectionParameter( array( 'ezcReflectionApi', 'setReflectionTypeFactory' ), 0 );
+
+        // function with parameter that has type hint only
+        $expected['functionWithTypeHint'][]
+            = new ReflectionParameter( 'functionWithTypeHint', 0 );
+
+        return $expected;
     }
 
     public function tearDown() {
@@ -225,14 +245,12 @@ class ezcReflectionParameterTest extends ezcTestCase
 
     public function getFunctionNamesAndParamKeys() {
         $result = array();
-        $this->setUp();
-        foreach ( $this->expected as $functionName => $expParams ) {
+        foreach ( $this->getExpectedFixtures() as $functionName => $expParams ) {
             foreach ( $expParams as $paramKey => $expParam ) {
                 $result[]
                     = array( $functionName, $expParam->getPosition() );
             }
         }
-        $this->tearDown();
         return $result;
     }
 
