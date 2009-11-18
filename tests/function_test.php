@@ -67,6 +67,17 @@ class ezcReflectionFunctionTest extends ezcTestCase
         ReflectionTestHelper::expectedTags($expectedTags, $tags, $this);
     }
 
+    public function testGetTagsByName( $fixtureName = 'fctM1' ) {
+        $annotationName = 'param';
+        $annotations = $this->$fixtureName->getTags( $annotationName );
+        self::assertTrue( is_array( $annotations ) );
+        self::assertEquals( 3, count( $annotations ) );
+        foreach ( $annotations as $annotation ) {
+            $this->assertType( 'ezcReflectionDocTag', $annotation );
+            $this->assertContains( $annotation->getName(), $annotationName );
+        }
+    }
+
     public function testIsTagged() {
         $func = $this->fctM1;
         self::assertFalse($func->isTagged('licence'));

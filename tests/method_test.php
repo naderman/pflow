@@ -65,6 +65,10 @@ class ezcReflectionMethodTest extends ezcReflectionFunctionTest
         ReflectionTestHelper::expectedTags($expectedTags, $tags, $this);
     }
 
+    public function testGetTagsByName( $fixtureName = 'fctM4' ) {
+        parent::testGetTagsByName( $fixtureName );
+    }
+
     public function testIsTagged() {
         self::assertTrue($this->fctM4->isTagged('webmethod'));
         self::assertFalse($this->fctM4->isTagged('fooobaaar'));

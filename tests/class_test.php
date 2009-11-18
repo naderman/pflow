@@ -71,6 +71,16 @@ class ezcReflectionClassTest extends ezcTestCase
         $method = $this->class->getConstructor();
         self::assertType('ezcReflectionMethod', $method);
         self::assertEquals('__construct', $method->getName());
+        self::assertEquals('SomeClass', $method->getDeclaringClass()->getName());
+        
+        $method = $this->classReflectionFunction->getConstructor();
+        self::assertType('ezcReflectionMethod', $method);
+        self::assertEquals('__construct', $method->getName());
+        self::assertEquals('ReflectionFunction', $method->getDeclaringClass()->getName());
+    }
+
+    public function testGetConstructorReturnsNull() {
+        self::assertNull( $this->classTestWebservice->getConstructor() );
     }
 
 	public function testGetInterfaces() {
@@ -166,6 +176,16 @@ class ezcReflectionClassTest extends ezcTestCase
         $expectedTags = array('webservice', 'foobar');
         $tags = $this->classTestWebservice->getTags();
         ReflectionTestHelper::expectedTags($expectedTags, $tags, $this);
+    }
+
+    public function testGetTagsByName() {
+        $annotations = $this->class->getTags( 'licence' );
+        self::assertTrue( is_array( $annotations ) );
+        self::assertEquals( 1, count( $annotations ) );
+        foreach ( $annotations as $annotation ) {
+            $this->assertType( 'ezcReflectionDocTag', $annotation );
+            $this->assertContains( $annotation->getName(), 'licence' );
+        }
     }
 
     public function testGetExtension() {
