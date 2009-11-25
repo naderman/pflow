@@ -5,7 +5,7 @@
  * This is the long description with may be additional infos and much more lines
  * of text.
  *
- * Empty lines are valide to.
+ * Empty lines are valid, too.
  *
  * foo bar
  *

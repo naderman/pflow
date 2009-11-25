@@ -157,7 +157,7 @@ class ezcReflectionClassTest extends ezcTestCase
     public function testGetLongDescription() {
         $desc = $this->classTestWebservice->getLongDescription();
 
-        $expected = "This is the long description with may be additional infos and much more lines\nof text.\n\nEmpty lines are valide to.\n\nfoo bar";
+        $expected = "This is the long description with may be additional infos and much more lines\nof text.\n\nEmpty lines are valid, too.\n\nfoo bar";
         self::assertEquals($expected, $desc);
     }
 

@@ -90,7 +90,7 @@ class ezcReflectionMethodTest extends ezcReflectionFunctionTest
 
     public function testGetReturnDescription() {
         $desc = $this->fctM4->getReturnDescription();
-        self::assertEquals('Hello World', $desc);
+        self::assertEquals("Hello\nWorld!", $desc);
     }
 
     public function testGetReturnType() {

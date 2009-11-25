@@ -82,12 +82,15 @@ class ezcReflectionPhpDocParser implements ezcReflectionDocParser {
         $lines = explode("\n", $this->docComment);
 
         foreach ($lines as $line) {
-            $line = trim($line);
-            $line = $this->stripDocPrefix($line);
+            $line = $this->extractContentFromDocCommentLine($line);
 
             // in some states we need to do something
             if (!empty($line)) {
-                if ($line{0} == '@' or $this->state == self::TAGS) {
+                if ($line[0] == '@') {
+                    $this->state = self::TAGS;
+                    $this->parseTag($line);
+                }
+                elseif ($this->state == self::TAGS) {
                     $this->parseTag($line);
                 }
                 else {
@@ -115,8 +118,12 @@ class ezcReflectionPhpDocParser implements ezcReflectionDocParser {
      * @param string $line
      * @return string
      */
-    protected function stripDocPrefix($line) {
-        while (strlen($line) > 0 and ($line{0} == '/' or $line{0} == '*')) {
+    protected function extractContentFromDocCommentLine($line) {
+        $line = trim($line);
+        if (substr($line, -2) == '*/') {
+            $line = substr($line, 0, -2);
+        }
+        while (strlen($line) > 0 and ($line[0] == '/' or $line[0] == '*')) {
             $line = substr($line, 1);
         }
 
@@ -212,12 +219,7 @@ class ezcReflectionPhpDocParser implements ezcReflectionDocParser {
      * @return string Short description
      */
     public function getShortDescription() {
-        if (substr($this->shortDesc, -2) == '*/') {
-            $shortDescription = substr($this->shortDesc, 0, -2);
-        } else {
-            $shortDescription = $this->shortDesc;
-        }
-        return trim($shortDescription);
+        return $this->shortDesc;
     }
 
     /**

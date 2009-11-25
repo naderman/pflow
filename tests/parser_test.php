@@ -105,6 +105,31 @@ class ezcReflectionDocParserTest extends ezcTestCase
 
         self::assertEquals('test3', $tags[2]->getParamName());
         self::assertEquals('NonExistingType', $tags[2]->getType());
+        
+        
+        $parser = ezcReflectionApi::getDocParserInstance();
+        $m2 = new ezcReflectionFunction( 'm2' );
+        $parser->parse( $m2->getDocComment() );
+        $tags = $parser->getParamTags();
+        self::assertEquals(2, count($tags));
+        self::assertEquals('DocuFlaw', $tags[0]->getParamName());
+        self::assertEquals('void', $tags[0]->getType());
+        self::assertEquals( array( 'void', 'DocuFlaw' ), $tags[0]->getParams() );
+        // testAddDescriptionLine
+        $originalDescription = $tags[0]->getDescription();
+        $additionalDescriptionLine
+            = 'This is an additional line of description.';
+        $tags[0]->addDescriptionLine( $additionalDescriptionLine );
+        self::assertEquals(
+            $originalDescription . "\n" . $additionalDescriptionLine,
+            $tags[0]->getDescription()
+        );
+        
+
+        self::assertNull($tags[1]->getParamName());
+        self::assertEquals('boolean', $tags[1]->getType());
+        self::assertEquals( array( 'boolean' ), $tags[1]->getParams() );
+        
     }
 
     public function testGetVarTags() {
@@ -116,7 +141,32 @@ EOF;
         $parser = ezcReflectionApi::getDocParserInstance();
         $parser->parse($comment);
 		$tags = $parser->getVarTags();
-        self::assertEquals('string', $tags[0]->getType());
+		self::assertEquals(1, count($tags));
+		self::assertType('ezcReflectionDocTagVar', $tags[0]);
+		self::assertEquals('string', $tags[0]->getType());
+		self::assertEquals('', $tags[0]->getDescription());
+        
+        $comment = <<<EOF
+   /**
+    * @var bool[] An array of
+    *      boolean values.
+    */
+EOF;
+        $parser = ezcReflectionApi::getDocParserInstance();
+        $parser->parse($comment);
+		$tags = $parser->getVarTags();
+		self::assertEquals(1, count($tags));
+		self::assertType('ezcReflectionDocTagVar', $tags[0]);
+        self::assertEquals("An array of\nboolean values.", $tags[0]->getDescription());
+        self::assertEquals('bool[]', $tags[0]->getType());
+        $type = ezcReflectionApi::getReflectionTypeFactory()->getType($tags[0]->getType());
+		self::assertType('ezcReflectionArrayType', $type);
+        self::assertTrue($type->isArray());
+        $arrayType = $type->getArrayType();
+		self::assertType('ezcReflectionPrimitiveType', $arrayType);
+        self::assertTrue($arrayType->isPrimitive());
+        self::assertTrue($arrayType->isStandardType());
+        self::assertEquals('boolean', $arrayType->toString());
     }
 
     public function testGetReturnTags() {
@@ -124,7 +174,7 @@ EOF;
         $parser->parse(self::$docs[6]);
         $tags = $parser->getReturnTags();
 
-        self::assertEquals('Hello World', $tags[0]->getDescription());
+        self::assertEquals("Hello\nWorld!", $tags[0]->getDescription());
         self::assertEquals('string', $tags[0]->getType());
     }
 
@@ -151,7 +201,7 @@ EOF;
         $parser->parse($doc);
         $desc = $parser->getLongDescription();
 
-        $expected = "This is the long description with may be additional infos and much more lines\nof text.\n\nEmpty lines are valide to.\n\nfoo bar";
+        $expected = "This is the long description with may be additional infos and much more lines\nof text.\n\nEmpty lines are valid, too.\n\nfoo bar";
         self::assertEquals($expected, $desc);
     }
 

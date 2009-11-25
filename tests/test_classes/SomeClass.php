@@ -7,7 +7,7 @@
  */
 class SomeClass extends BaseClass implements IInterface {
     /**
-     * @var int[]
+     * @var int[] An array of integers
      */
     private $fields;
 

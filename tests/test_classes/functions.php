@@ -17,6 +17,7 @@ function mmm($t = 'foo') {}
 
 /**
  * @param void $DocuFlaw
+ * @param boolean
  * @author flaw joe
 weird coding standards should also be supported: */function m2() {
 

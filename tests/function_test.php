@@ -63,7 +63,7 @@ class ezcReflectionFunctionTest extends ezcTestCase
 
         $func = $this->fctM2;
         $tags = $func->getTags();
-        $expectedTags = array('param', 'author');
+        $expectedTags = array('param', 'param', 'author');
         ReflectionTestHelper::expectedTags($expectedTags, $tags, $this);
     }
 
@@ -123,7 +123,7 @@ class ezcReflectionFunctionTest extends ezcTestCase
 
         $func = $this->fctM2;
         $desc = $func->getShortDescription();
-        $expected = 'weird coding standards should also be supported:';
+        $expected = '';
         self::assertEquals($expected, $desc);
 
         $func = $this->fctM3;
@@ -228,6 +228,7 @@ class ezcReflectionFunctionTest extends ezcTestCase
     public function testGetDocComment() {
     	self::assertEquals("/**
  * @param void \$DocuFlaw
+ * @param boolean
  * @author flaw joe
 weird coding standards should also be supported: */", $this->fctM2->getDocComment());
     }

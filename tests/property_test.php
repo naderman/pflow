@@ -144,7 +144,7 @@ class ezcReflectionPropertyTest extends ezcTestCase
 
 	public function testGetDocComment() {
 		self::assertEquals("/**
-     * @var int[]
+     * @var int[] An array of integers
      */", $this->refProp->getDocComment($this->instanceOfSomeClass));
 	}
 
