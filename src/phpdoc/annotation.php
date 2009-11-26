@@ -1,6 +1,6 @@
 <?php
 /**
- * File containing the ezcReflectionDocTag class.
+ * File containing the ezcReflectionAnnotation class.
  *
  * @package Reflection
  * @version //autogen//
@@ -9,10 +9,10 @@
  */
 
 /**
- * Represents a doc tag in the php source code comment.
+ * Represents a annotation in the php source code comment.
  *
  * This class is used as standard implementation for representing
- * annotations. It is only used if no specialized tag class could be
+ * annotations. It is only used if no specialized annotation class could be
  * found deriving from this class.
  *
  * The comment line is tokenized by at spaces and if no further structure is recognized,
@@ -22,11 +22,11 @@
  * @version //autogen//
  * @author Stefan Marr <mail@stefan-marr.de>
  */
-class ezcReflectionDocTag {
+class ezcReflectionAnnotation {
     /**
     * @var string
     */
-    protected $tagName;
+    protected $annotationName;
 
     /**
     * @var string[]
@@ -43,7 +43,7 @@ class ezcReflectionDocTag {
     * @param string[] $line Array of words
     */
     public function __construct($line) {
-        $this->tagName = $line[0];
+        $this->annotationName = $line[0];
 
         if (count($line) == 4) {
             $this->params[] = $line[1];
@@ -80,7 +80,7 @@ class ezcReflectionDocTag {
     * @return string
     */
     public function getName() {
-        return $this->tagName;
+        return $this->annotationName;
     }
 
     /**

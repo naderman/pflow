@@ -26,28 +26,28 @@ class ReflectionTestHelper {
     }
 
     /**
-     * Checks if all expected tags and only these are set
+     * Checks if all expected annotations and only these are set
      *
-     * @param string[] $expectedTags
-     * @param ezcReflectionDocTag[] $tags
+     * @param string[] $expectedAnnotations
+     * @param ezcReflectionAnnotation[] $annotations
      * @param ezcTestCase $test
      */
-    static public function expectedTags($expectedTags, $tags, $test) {
-        foreach ($tags as $tag) {
-            $test->assertType('ezcReflectionDocTag', $tag);
-            $test->assertContains($tag->getName(), $expectedTags);
+    static public function expectedAnnotations($expectedAnnotations, $annotations, $test) {
+        foreach ($annotations as $annotation) {
+            $test->assertType('ezcReflectionAnnotation', $annotation);
+            $test->assertContains($annotation->getName(), $expectedAnnotations);
 
-            self::deleteFromArray($tag->getName(), $expectedTags);
+            self::deleteFromArray($annotation->getName(), $expectedAnnotations);
         }
-        $test->assertEquals(0, count($expectedTags));
+        $test->assertEquals(0, count($expectedAnnotations));
     }
 
 
     /**
      * Checks if all expected parameters and only these are set
      *
-     * @param string[] $expectedTags
-     * @param ezcReflectionDocTag[] $tags
+     * @param string[] $expectedAnnotations
+     * @param ezcReflectionAnnotation[] $annotations
      * @param ezcTestCase $test
      */
     static public function expectedParams($expectedParams, $params, $test) {

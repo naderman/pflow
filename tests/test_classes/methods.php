@@ -3,7 +3,7 @@
 class TestMethods {
 
     /**
-     * @onetagonly
+     * @oneannotationonly
      */
     public function __construct() {
 
@@ -42,7 +42,7 @@ class TestMethods {
 
 
     /**
-     * To check whether a tag was used
+     * To check whether an annotation was used
      * @restmethod POST /\/(.*?)\/m4\//
      * @restin XbelSerializer
      * @restout XbelSerializer

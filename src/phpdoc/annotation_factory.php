@@ -1,6 +1,6 @@
 <?php
 /**
- * File containing the ezcReflectionDocTagFactory class.
+ * File containing the ezcReflectionAnnotationFactory class.
  *
  * @package Reflection
  * @version //autogen//
@@ -9,13 +9,13 @@
  */
 
 /**
- * Creates a ezcReflectionDocTag object be the given doctag
+ * Creates a ezcReflectionAnnotation object be the given annotation
  *
  * @package Reflection
  * @version //autogen//
  * @author Stefan Marr <mail@stefan-marr.de>
  */
-class ezcReflectionDocTagFactory
+class ezcReflectionAnnotationFactory
 {
 
 	/**
@@ -28,18 +28,18 @@ class ezcReflectionDocTagFactory
     /**
      * @param string $type
      * @param string[] $line array of words
-     * @return ezcReflectionDocTag
+     * @return ezcReflectionAnnotation
      */
-    static public function createTag($type, $line) {
-        $tagClassName = 'ezcReflectionDocTag' . ucfirst($type);
-        $tag = null;
-        if (!empty($type) and class_exists($tagClassName)) {
-            $tag = new $tagClassName($line);
+    static public function createAnnotation($type, $line) {
+        $annotationClassName = 'ezcReflectionAnnotation' . ucfirst($type);
+        $annotation = null;
+        if (!empty($type) and class_exists($annotationClassName)) {
+            $annotation = new $annotationClassName($line);
         }
         else {
-            $tag = new ezcReflectionDocTag($line);
+            $annotation = new ezcReflectionAnnotation($line);
         }
-        return $tag;
+        return $annotation;
     }
 }
 ?>

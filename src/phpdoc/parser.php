@@ -24,7 +24,7 @@ class ezcReflectionPhpDocParser implements ezcReflectionDocParser {
 	const BEGINNING  = 10;
 	const SHORT_DESC = 0;
 	const LONG_DESC  = 1;
-	const TAGS 		 = 2;
+	const ANNOTATIONS 		 = 2;
 
     /**
      * @var string
@@ -44,18 +44,18 @@ class ezcReflectionPhpDocParser implements ezcReflectionDocParser {
     							  self::BEGINNING  => self::BEGINNING,
                                   self::SHORT_DESC => self::LONG_DESC,
                                   self::LONG_DESC  => self::LONG_DESC,
-                                  self::TAGS       => self::TAGS),
+                                  self::ANNOTATIONS       => self::ANNOTATIONS),
 
                                 false => array ( // non empty lines
     							  self::BEGINNING  => self::SHORT_DESC,
                                   self::SHORT_DESC => self::SHORT_DESC,
                                   self::LONG_DESC  => self::LONG_DESC,
-                                  self::TAGS       => self::TAGS)
+                                  self::ANNOTATIONS       => self::ANNOTATIONS)
                                   );
     /**
-     * @var ezcReflectionDocTag
+     * @var ezcReflectionAnnotation
      */
-    protected $lastTag = null;
+    protected $lastAnnotation = null;
 
     /**
      * @var string
@@ -68,12 +68,12 @@ class ezcReflectionPhpDocParser implements ezcReflectionDocParser {
     protected $longDesc;
 
     /**
-     * @var ezcReflectionDocTag[]
+     * @var ezcReflectionAnnotation[]
      */
-    protected $tags;
+    protected $annotations;
 
     public function __construct() {
-        $this->tags = array();
+        $this->annotations = array();
     }
 
     public function parse($docComment) {
@@ -87,11 +87,11 @@ class ezcReflectionPhpDocParser implements ezcReflectionDocParser {
             // in some states we need to do something
             if (!empty($line)) {
                 if ($line[0] == '@') {
-                    $this->state = self::TAGS;
-                    $this->parseTag($line);
+                    $this->state = self::ANNOTATIONS;
+                    $this->parseAnnotation($line);
                 }
-                elseif ($this->state == self::TAGS) {
-                    $this->parseTag($line);
+                elseif ($this->state == self::ANNOTATIONS) {
+                    $this->parseAnnotation($line);
                 }
                 else {
                     if ($this->state == self::SHORT_DESC
@@ -134,19 +134,19 @@ class ezcReflectionPhpDocParser implements ezcReflectionDocParser {
      * @param string $line
      * @return void
      */
-    protected function parseTag($line) {
+    protected function parseAnnotation($line) {
         if (strlen($line) > 0) {
             if ($line[0] == '@') {
                 $line = substr($line, 1);
                 $words = preg_split('/(?<!,)\s+/', $line, 4); // split the line separated by whitespace (not preceded by a comma) into up to 4 parts
-                $tag = ezcReflectionDocTagFactory::createTag($words[0], $words);
-                $this->tags[$tag->getName()][] = $tag;
-                $this->lastTag = $tag;
+                $annotation = ezcReflectionAnnotationFactory::createAnnotation($words[0], $words);
+                $this->annotations[$annotation->getName()][] = $annotation;
+                $this->lastAnnotation = $annotation;
             }
             else {
                 //no leading @, it is assumed a description is multiline
-                if ($this->lastTag != null) {
-                    $this->lastTag->addDescriptionLine($line);
+                if ($this->lastAnnotation != null) {
+                    $this->lastAnnotation->addDescriptionLine($line);
                 }
             }
         }
@@ -156,11 +156,11 @@ class ezcReflectionPhpDocParser implements ezcReflectionDocParser {
      * Returns an array of annotations with a given name
      *
      * @param string $name
-     * @return ezcReflectionDocTag[]
+     * @return ezcReflectionAnnotation[]
      */
-    public function getTagsByName($name) {
-        if (isset($this->tags[$name])) {
-            return $this->tags[$name];
+    public function getAnnotationsByName($name) {
+        if (isset($this->annotations[$name])) {
+            return $this->annotations[$name];
         }
         else {
             return array();
@@ -168,39 +168,39 @@ class ezcReflectionPhpDocParser implements ezcReflectionDocParser {
     }
 
     /**
-     * @return ezcReflectionDocTag[]
+     * @return ezcReflectionAnnotation[]
      */
-    public function getTags() {
+    public function getAnnotations() {
         $result = array();
-        foreach ($this->tags as $tags) {
-            foreach ($tags as $tag) {
-                $result[] = $tag;
+        foreach ($this->annotations as $annotations) {
+            foreach ($annotations as $annotation) {
+                $result[] = $annotation;
             }
         }
         return $result;
     }
 
     /**
-     * @return ezcReflectionDocTagParam[]
+     * @return ezcReflectionAnnotationParam[]
      */
-    public function getParamTags() {
-        return $this->getTagsByName('param');
+    public function getParamAnnotations() {
+        return $this->getAnnotationsByName('param');
     }
 
     /**
-     * @return ezcReflectionDocTagVar[]
+     * @return ezcReflectionAnnotationVar[]
      */
-    public function getVarTags() {
-        return $this->getTagsByName('var');
+    public function getVarAnnotations() {
+        return $this->getAnnotationsByName('var');
     }
 
     /**
      * Return an array of return annotations
      *
-     * @return ezcReflectionDocTagReturn[]
+     * @return ezcReflectionAnnotationReturn[]
      */
-    public function getReturnTags() {
-        return $this->getTagsByName('return');
+    public function getReturnAnnotations() {
+        return $this->getAnnotationsByName('return');
     }
 
     /**
@@ -209,8 +209,8 @@ class ezcReflectionPhpDocParser implements ezcReflectionDocParser {
      * @param string $with name of used annotation
      * @return boolean
      */
-    public function isTagged($with) {
-        return isset($this->tags[$with]);
+    public function hasAnnotation($with) {
+        return isset($this->annotations[$with]);
     }
 
     /**

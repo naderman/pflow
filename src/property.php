@@ -109,7 +109,7 @@ class ezcReflectionProperty extends ReflectionProperty
      */
     public function getType()
     {
-        $vars = $this->docParser->getVarTags();
+        $vars = $this->docParser->getVarAnnotations();
         if ( isset( $vars[0] ) )
         {
             return ezcReflectionApi::getTypeByName( $vars[0]->getType() );
@@ -145,23 +145,23 @@ class ezcReflectionProperty extends ReflectionProperty
      * @return boolean
      * @since PHP 5.1.0
      */
-    public function isTagged($annotation) {
-        return $this->docParser->isTagged($annotation);
+    public function hasAnnotation($annotation) {
+        return $this->docParser->hasAnnotation($annotation);
     }
 
     /**
      * Returns an array of annotations (optinally only annotations of a given name)
      *
      * @param string $name Name of the annotations
-     * @return ezcReflectionDocTag[] Annotations
+     * @return ezcReflectionAnnotation[] Annotations
      * @since PHP 5.1.0
      */
-    public function getTags($name = '') {
+    public function getAnnotations($name = '') {
         if ($name == '') {
-            return $this->docParser->getTags();
+            return $this->docParser->getAnnotations();
         }
         else {
-            return $this->docParser->getTagsByName($name);
+            return $this->docParser->getAnnotationsByName($name);
         }
     }
 

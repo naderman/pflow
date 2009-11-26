@@ -1,6 +1,6 @@
 <?php
 /**
- * File containing the ezcReflectionDocTagReturn class.
+ * File containing the ezcReflectionAnnotationReturn class.
  *
  * @package Reflection
  * @version //autogen//
@@ -9,19 +9,19 @@
  */
 
 /**
- * Represents a return doc tag in the php source code comment.
+ * Represents a return annotation in the php source code comment.
  *
  * @package Reflection
  * @version //autogen//
  * @author Stefan Marr <mail@stefan-marr.de>
  */
-class ezcReflectionDocTagReturn extends ezcReflectionDocTag {
+class ezcReflectionAnnotationReturn extends ezcReflectionAnnotation {
 
 	/**
     * @param string[] $line array of words
     */
     public function __construct($line) {
-        $this->tagName = $line[0];
+        $this->annotationName = $line[0];
 
         if (isset($line[1])) {
             $this->params[0] = ezcReflectionTypeMapper::getInstance()->getType($line[1]);

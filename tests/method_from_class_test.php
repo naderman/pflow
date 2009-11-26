@@ -30,7 +30,7 @@ class ezcReflectionMethodFromClassTest extends ezcReflectionMethodTest
         $classEzcReflectionMethod = new ezcReflectionClass( 'ezcReflectionMethod' );
         $this->ezc_ezcReflectionMethod_isInternal = $classEzcReflectionMethod->getMethod( 'isInternal' );
         $this->ezc_ezcReflectionMethod_isInherited = $classEzcReflectionMethod->getMethod( 'isInherited' );
-        $this->ezc_ezcReflectionMethod_getTags = $classEzcReflectionMethod->getMethod( 'getTags' );
+        $this->ezc_ezcReflectionMethod_getAnnotations = $classEzcReflectionMethod->getMethod( 'getAnnotations' );
     }
 
     public static function suite()

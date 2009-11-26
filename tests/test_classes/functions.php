@@ -1,7 +1,7 @@
 <?php
 
 /**
- * To check whether a tag was used
+ * To check whether an annotation was used
  * @webmethod
  * @author
  * @param string $test

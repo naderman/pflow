@@ -142,7 +142,7 @@ class ezcReflectionMethod extends ReflectionMethod
      * @since PHP 5.1.0
      */
     function getParameters() {
-        $params = $this->docParser->getParamTags();
+        $params = $this->docParser->getParamAnnotations();
         $extParams = array();
         if ( $this->reflectionSource instanceof ReflectionMethod ) {
             $apiParams = $this->reflectionSource->getParameters();
@@ -151,12 +151,12 @@ class ezcReflectionMethod extends ReflectionMethod
         }
         foreach ($apiParams as $param) {
             $type = null;
-            foreach ($params as $tag) {
+            foreach ($params as $annotation) {
                 if (
-                    $tag instanceof ezcReflectionDocTagparam
-                    and $tag->getParamName() == $param->getName()
+                    $annotation instanceof ezcReflectionAnnotationparam
+                    and $annotation->getParamName() == $param->getName()
                 ) {
-                    $type = $tag->getType();
+                    $type = $annotation->getType();
                     break;
                 }
             }
@@ -182,27 +182,27 @@ class ezcReflectionMethod extends ReflectionMethod
     }
 
     /**
-     * Returns the type defined in PHPDoc tags
+     * Returns the type defined in PHPDoc annotations
      *
      * @return ezcReflectionType
      * @since PHP 5.1.0
      */
     function getReturnType() {
-        $re = $this->docParser->getReturnTags();
-        if (count($re) == 1 and isset($re[0]) and $re[0] instanceof ezcReflectionDocTagReturn) {
+        $re = $this->docParser->getReturnAnnotations();
+        if (count($re) == 1 and isset($re[0]) and $re[0] instanceof ezcReflectionAnnotationReturn) {
             return ezcReflectionApi::getTypeByName($re[0]->getType());
         }
         return null;
     }
 
     /**
-     * Returns the description after a PHPDoc tag
+     * Returns the description after a PHPDoc annotation
      *
      * @return string
      * @since PHP 5.1.0
      */
     function getReturnDescription() {
-        $re = $this->docParser->getReturnTags();
+        $re = $this->docParser->getReturnAnnotations();
         if (count($re) == 1 and isset($re[0])) {
             return $re[0]->getDescription();
         }
@@ -236,23 +236,23 @@ class ezcReflectionMethod extends ReflectionMethod
      * @return boolean True if the annotation exists for this method
      * @since PHP 5.1.0
      */
-    public function isTagged($annotation) {
-        return $this->docParser->isTagged($annotation);
+    public function hasAnnotation($annotation) {
+        return $this->docParser->hasAnnotation($annotation);
     }
 
     /**
      * Returns an array of annotations (optinally only annotations of a given name)
      *
      * @param string $name Name of the annotations
-     * @return ezcReflectionDocTag[] Annotations
+     * @return ezcReflectionAnnotation[] Annotations
      * @since PHP 5.1.0
      */
-    public function getTags($name = '') {
+    public function getAnnotations($name = '') {
         if ($name == '') {
-            return $this->docParser->getTags();
+            return $this->docParser->getAnnotations();
         }
         else {
-            return $this->docParser->getTagsByName($name);
+            return $this->docParser->getAnnotationsByName($name);
         }
     }
 

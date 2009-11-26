@@ -67,19 +67,19 @@ class ezcReflectionPropertyTest extends ezcTestCase
         self::assertEquals('SomeClass', $class->toString());
     }
 
-    public function testIsTagged() {
-        self::assertTrue($this->refProp->isTagged('var'));
-        self::assertFalse($this->refProp->isTagged('nonExistingAnnotation'));
+    public function testHasAnnotation() {
+        self::assertTrue($this->refProp->hasAnnotation('var'));
+        self::assertFalse($this->refProp->hasAnnotation('nonExistingAnnotation'));
     }
 
-    public function testGetTags() {
-        $expectedTags = array('var');
+    public function testGetAnnotations() {
+        $expectedAnnotations = array('var');
 
-        $tags = $this->refProp->getTags();
-        ReflectionTestHelper::expectedTags($expectedTags, $tags, $this);
+        $annotations = $this->refProp->getAnnotations();
+        ReflectionTestHelper::expectedAnnotations($expectedAnnotations, $annotations, $this);
 
-        $tags = $this->refProp->getTags('var');
-        ReflectionTestHelper::expectedTags($expectedTags, $tags, $this);
+        $annotations = $this->refProp->getAnnotations('var');
+        ReflectionTestHelper::expectedAnnotations($expectedAnnotations, $annotations, $this);
     }
 
 	public function testGetName() {

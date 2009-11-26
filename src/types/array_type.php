@@ -113,7 +113,7 @@ class ezcReflectionArrayType extends ezcReflectionAbstractType {
         $pos = strrpos($this->typeName, '[');
         //there seams to be an array
         if ($pos !== false) {
-            //proof there is no array map tag around
+            //proof there is no array map annotation around
             $posm = strrpos($this->typeName, '>');
             if ($posm !== false) {
                 if ($posm < $pos) {

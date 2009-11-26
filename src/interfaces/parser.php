@@ -27,48 +27,48 @@ interface ezcReflectionDocParser {
     public function parse($docComment);
 
     /**
-     * Return all found tags with the given name.
+     * Return all found annotations with the given name.
      *
      * @param string $name
-     * @return ezcReflectionDocTag[]
+     * @return ezcReflectionAnnotation[]
      */
-    public function getTagsByName($name);
+    public function getAnnotationsByName($name);
 
     /**
-     * Retrieve all found tags
+     * Retrieve all found annotations
      *
-     * @return ezcReflectionDocTag[]
+     * @return ezcReflectionAnnotation[]
      */
-    public function getTags();
+    public function getAnnotations();
 
     /**
-     * Retrieve all param tags
+     * Retrieve all param annotations
      *
-     * @return ezcReflectionDocTagParam[]
+     * @return ezcReflectionAnnotationParam[]
      */
-    public function getParamTags();
+    public function getParamAnnotations();
 
     /**
-     * Retrieve all var tags
+     * Retrieve all var annotations
      *
-     * @return ezcReflectionDocTagVar[]
+     * @return ezcReflectionAnnotationVar[]
      */
-    public function getVarTags();
+    public function getVarAnnotations();
 
     /**
-     * Retrieve all return tags
+     * Retrieve all return annotations
      *
-     * @return ezcReflectionDocTagReturn[]
+     * @return ezcReflectionAnnotationReturn[]
      */
-    public function getReturnTags();
+    public function getReturnAnnotations();
 
     /**
-    * Checks whether a tag was used in the parsed documentation fragment
+    * Checks whether an annotation was used in the parsed documentation fragment
     *
-    * @param string $with name of used tag
+    * @param string $with name of used annotation
     * @return boolean
     */
-    public function isTagged($with);
+    public function hasAnnotation($with);
 
     /**
      * Returns short description

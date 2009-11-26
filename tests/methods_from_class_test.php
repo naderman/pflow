@@ -49,8 +49,8 @@ class ezcReflectionMethodsFromClassTest extends ezcReflectionMethodTest
             if ( $method->getName() == 'isInherited' ) {
                 $this->ezc_ezcReflectionMethod_isInherited = $method;
             }
-            if ( $method->getName() == 'getTags' ) {
-                $this->ezc_ezcReflectionMethod_getTags = $method;
+            if ( $method->getName() == 'getAnnotations' ) {
+                $this->ezc_ezcReflectionMethod_getAnnotations = $method;
             }
         }
     }

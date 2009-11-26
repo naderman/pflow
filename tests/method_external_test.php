@@ -25,7 +25,7 @@ class ezcReflectionMethodExternalTest extends ezcReflectionMethodTest
         $this->ezc_ReflectionMethod_isInternal = new ezcReflectionMethod( 'ReflectionMethod', new MyReflectionMethod( 'ReflectionMethod', 'isInternal' ) );
         $this->ezc_ezcReflectionMethod_isInternal = new ezcReflectionMethod( 'ezcReflectionMethod', new MyReflectionMethod( 'ezcReflectionMethod', 'isInternal' ) );
         $this->ezc_ezcReflectionMethod_isInherited = new ezcReflectionMethod( 'ezcReflectionMethod', new MyReflectionMethod( 'ezcReflectionMethod', 'isInherited' ) );
-        $this->ezc_ezcReflectionMethod_getTags = new ezcReflectionMethod( 'ezcReflectionMethod', new MyReflectionMethod( 'ezcReflectionMethod', 'getTags' ) );
+        $this->ezc_ezcReflectionMethod_getAnnotations = new ezcReflectionMethod( 'ezcReflectionMethod', new MyReflectionMethod( 'ezcReflectionMethod', 'getAnnotations' ) );
     }
     
 	public function testCall() {

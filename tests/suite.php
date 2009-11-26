@@ -28,7 +28,7 @@ require_once 'parser_test.php';
 require_once 'property_test.php';
 require_once 'property_from_class_test.php';
 require_once 'properties_from_class_test.php';
-require_once 'tag_factory_test.php';
+require_once 'annotation_factory_test.php';
 require_once 'type_factory_test.php';
 require_once 'type_mapper_test.php';
 require_once 'abstract_type_test.php';
@@ -82,7 +82,7 @@ class ezcReflectionSuite extends PHPUnit_Framework_TestSuite
         $this->addTest( ezcReflectionPropertyFromClassTest::suite() );
         $this->addTest( ezcReflectionPropertiesFromClassTest::suite() );
         $this->addTest( ezcReflectionDocParserTest::suite() );
-        $this->addTest( ezcReflectionDocTagFactoryTest::suite() );
+        $this->addTest( ezcReflectionAnnotationFactoryTest::suite() );
         $this->addTest( ezcReflectionTypeFactoryTest::suite() );
         $this->addTest( ezcReflectionTypeMapperTest::suite() );
         $this->addTest( ezcReflectionAbstractTypeTest::suite() );

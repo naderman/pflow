@@ -161,29 +161,29 @@ class ezcReflectionClassTest extends ezcTestCase
         self::assertEquals($expected, $desc);
     }
 
-    public function testIsTagged() {
-        self::assertFalse($this->class->isTagged('foobar'));
+    public function testHasAnnotation() {
+        self::assertFalse($this->class->hasAnnotation('foobar'));
 
-        self::assertTrue($this->classTestWebservice->isTagged('foobar'));
+        self::assertTrue($this->classTestWebservice->hasAnnotation('foobar'));
     }
 
-    public function testGetTags() {
-        $tags = $this->class->getTags();
+    public function testGetAnnotations() {
+        $annotations = $this->class->getAnnotations();
 
-        $expectedTags = array('licence', 'donotdocument', 'testclass', 'ignore');
-        ReflectionTestHelper::expectedTags($expectedTags, $tags, $this);
+        $expectedAnnotations = array('licence', 'donotdocument', 'testclass', 'ignore');
+        ReflectionTestHelper::expectedAnnotations($expectedAnnotations, $annotations, $this);
 
-        $expectedTags = array('webservice', 'foobar');
-        $tags = $this->classTestWebservice->getTags();
-        ReflectionTestHelper::expectedTags($expectedTags, $tags, $this);
+        $expectedAnnotations = array('webservice', 'foobar');
+        $annotations = $this->classTestWebservice->getAnnotations();
+        ReflectionTestHelper::expectedAnnotations($expectedAnnotations, $annotations, $this);
     }
 
-    public function testGetTagsByName() {
-        $annotations = $this->class->getTags( 'licence' );
+    public function testGetAnnotationsByName() {
+        $annotations = $this->class->getAnnotations( 'licence' );
         self::assertTrue( is_array( $annotations ) );
         self::assertEquals( 1, count( $annotations ) );
         foreach ( $annotations as $annotation ) {
-            $this->assertType( 'ezcReflectionDocTag', $annotation );
+            $this->assertType( 'ezcReflectionAnnotation', $annotation );
             $this->assertContains( $annotation->getName(), 'licence' );
         }
     }

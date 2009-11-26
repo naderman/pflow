@@ -53,35 +53,35 @@ class ezcReflectionFunctionTest extends ezcTestCase
         $this->fctM1->undefinedMethod();
     }
 
-    public function testGetTags() {
+    public function testGetAnnotations() {
         $func = $this->fctM1;
-        $tags = $func->getTags();
+        $annotations = $func->getAnnotations();
 
-        $expectedTags = array('webmethod', 'author', 'param', 'param', 'param', 'return');
-        ReflectionTestHelper::expectedTags($expectedTags, $tags, $this);
+        $expectedAnnotations = array('webmethod', 'author', 'param', 'param', 'param', 'return');
+        ReflectionTestHelper::expectedAnnotations($expectedAnnotations, $annotations, $this);
 
 
         $func = $this->fctM2;
-        $tags = $func->getTags();
-        $expectedTags = array('param', 'param', 'author');
-        ReflectionTestHelper::expectedTags($expectedTags, $tags, $this);
+        $annotations = $func->getAnnotations();
+        $expectedAnnotations = array('param', 'param', 'author');
+        ReflectionTestHelper::expectedAnnotations($expectedAnnotations, $annotations, $this);
     }
 
-    public function testGetTagsByName( $fixtureName = 'fctM1' ) {
+    public function testGetAnnotationsByName( $fixtureName = 'fctM1' ) {
         $annotationName = 'param';
-        $annotations = $this->$fixtureName->getTags( $annotationName );
+        $annotations = $this->$fixtureName->getAnnotations( $annotationName );
         self::assertTrue( is_array( $annotations ) );
         self::assertEquals( 3, count( $annotations ) );
         foreach ( $annotations as $annotation ) {
-            $this->assertType( 'ezcReflectionDocTag', $annotation );
+            $this->assertType( 'ezcReflectionAnnotation', $annotation );
             $this->assertContains( $annotation->getName(), $annotationName );
         }
     }
 
-    public function testIsTagged() {
+    public function testHasAnnotation() {
         $func = $this->fctM1;
-        self::assertFalse($func->isTagged('licence'));
-        self::assertTrue($func->isTagged('webmethod'));
+        self::assertFalse($func->hasAnnotation('licence'));
+        self::assertTrue($func->hasAnnotation('webmethod'));
     }
 
     public function testGetLongDescription() {
@@ -118,7 +118,7 @@ class ezcReflectionFunctionTest extends ezcTestCase
     public function testGetShortDescription() {
         $func = $this->fctM1;
         $desc = $func->getShortDescription();
-        $expected = 'To check whether a tag was used';
+        $expected = 'To check whether an annotation was used';
         self::assertEquals($expected, $desc);
 
         $func = $this->fctM2;

@@ -35,7 +35,7 @@ class ezcReflectionMethodTest extends ezcReflectionFunctionTest
         $this->ezc_ReflectionMethod_isInternal = new ezcReflectionMethod('ReflectionMethod', 'isInternal');
         $this->ezc_ezcReflectionMethod_isInternal = new ezcReflectionMethod('ezcReflectionMethod', 'isInternal');
         $this->ezc_ezcReflectionMethod_isInherited = new ezcReflectionMethod('ezcReflectionMethod', 'isInherited');
-        $this->ezc_ezcReflectionMethod_getTags = new ezcReflectionMethod('ezcReflectionMethod', 'getTags');
+        $this->ezc_ezcReflectionMethod_getAnnotations = new ezcReflectionMethod('ezcReflectionMethod', 'getAnnotations');
     }
 
     public function testIsMagic() {
@@ -45,33 +45,33 @@ class ezcReflectionMethodTest extends ezcReflectionFunctionTest
         self::assertTrue($class->getConstructor()->isMagic());
     }
 
-    public function testGetTags() {
+    public function testGetAnnotations() {
         $class = new ezcReflectionClass('ezcReflectionClass');
         $method = $class->getMethod('getMethod');
-        $tags = $method->getTags();
-        self::assertEquals(3, count($tags));
+        $annotations = $method->getAnnotations();
+        self::assertEquals(3, count($annotations));
 
-        $tags = $this->fctM4->getTags();
-        $expectedTags = array('webmethod', 'restmethod', 'restin', 'restout', 'author', 'param', 'param', 'param', 'return');
-        ReflectionTestHelper::expectedTags($expectedTags, $tags, $this);
+        $annotations = $this->fctM4->getAnnotations();
+        $expectedAnnotations = array('webmethod', 'restmethod', 'restin', 'restout', 'author', 'param', 'param', 'param', 'return');
+        ReflectionTestHelper::expectedAnnotations($expectedAnnotations, $annotations, $this);
 
-        $tags = $this->fctM4->getTags('param');
-        $expectedTags = array('param', 'param', 'param');
-        ReflectionTestHelper::expectedTags($expectedTags, $tags, $this);
+        $annotations = $this->fctM4->getAnnotations('param');
+        $expectedAnnotations = array('param', 'param', 'param');
+        ReflectionTestHelper::expectedAnnotations($expectedAnnotations, $annotations, $this);
 
         $method = $this->fctM1;
-        $tags = $method->getTags();
-        $expectedTags = array('param', 'author');
-        ReflectionTestHelper::expectedTags($expectedTags, $tags, $this);
+        $annotations = $method->getAnnotations();
+        $expectedAnnotations = array('param', 'author');
+        ReflectionTestHelper::expectedAnnotations($expectedAnnotations, $annotations, $this);
     }
 
-    public function testGetTagsByName( $fixtureName = 'fctM4' ) {
-        parent::testGetTagsByName( $fixtureName );
+    public function testGetAnnotationsByName( $fixtureName = 'fctM4' ) {
+        parent::testGetAnnotationsByName( $fixtureName );
     }
 
-    public function testIsTagged() {
-        self::assertTrue($this->fctM4->isTagged('webmethod'));
-        self::assertFalse($this->fctM4->isTagged('fooobaaar'));
+    public function testHasAnnotation() {
+        self::assertTrue($this->fctM4->hasAnnotation('webmethod'));
+        self::assertFalse($this->fctM4->hasAnnotation('fooobaaar'));
     }
 
     public function testGetLongDescription() {
@@ -100,7 +100,7 @@ class ezcReflectionMethodTest extends ezcReflectionFunctionTest
     }
 
     public function testGetParameters() {
-        $params = $this->ezc_ezcReflectionMethod_getTags->getParameters();
+        $params = $this->ezc_ezcReflectionMethod_getAnnotations->getParameters();
 
         $expectedParams = array('name');
         foreach ($params as $param) {
@@ -289,7 +289,7 @@ class ezcReflectionMethodTest extends ezcReflectionFunctionTest
             array( 'ezc_ReflectionMethod_isInternal', 'ReflectionMethod' ),
             array( 'ezc_ezcReflectionMethod_isInternal', 'ezcReflectionMethod' ),
             array( 'ezc_ezcReflectionMethod_isInherited', 'ezcReflectionMethod' ),
-            array( 'ezc_ezcReflectionMethod_getTags', 'ezcReflectionMethod' ),
+            array( 'ezc_ezcReflectionMethod_getAnnotations', 'ezcReflectionMethod' ),
         );
     }
 
@@ -315,7 +315,7 @@ class ezcReflectionMethodTest extends ezcReflectionFunctionTest
             array( 'ezc_ReflectionMethod_isInternal', 'ReflectionFunctionAbstract' ),
             array( 'ezc_ezcReflectionMethod_isInternal', 'ezcReflectionMethod' ),
             array( 'ezc_ezcReflectionMethod_isInherited', 'ezcReflectionMethod' ),
-            array( 'ezc_ezcReflectionMethod_getTags', 'ezcReflectionMethod' ),
+            array( 'ezc_ezcReflectionMethod_getAnnotations', 'ezcReflectionMethod' ),
         );
     }
 
