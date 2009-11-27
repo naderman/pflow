@@ -15,11 +15,12 @@
  * @package Reflection
  * @version //autogen//
  * @author Stefan Marr <mail@stefan-marr.de>
+ * @author Falko Menge <mail@falko-menge.de>
  */
 abstract class ezcReflectionAbstractType implements ezcReflectionType
 {
     /**
-     * Returns type of array items or null
+     * Return type of elements in an array type or null if is not an array
      *
      * @return ezcReflectionType
      */
@@ -51,28 +52,32 @@ abstract class ezcReflectionAbstractType implements ezcReflectionType
     /**
      * @return boolean
      */
-    public function isArray() {
+    public function isArray()
+    {
         return false;
     }
 
     /**
      * @return boolean
      */
-    public function isClass() {
+    public function isClass()
+    {
         return false;
     }
 
     /**
      * @return boolean
      */
-    public function isPrimitive() {
+    public function isPrimitive()
+    {
         return false;
     }
 
     /**
      * @return boolean
      */
-    public function isMap() {
+    public function isMap()
+    {
         return false;
     }
 }

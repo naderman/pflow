@@ -96,7 +96,7 @@ class ezcReflectionMethodTest extends ezcReflectionFunctionTest
     public function testGetReturnType() {
         $type = $this->fctM4->getReturnType();
         self::assertType('ezcReflectionType', $type);
-        self::assertEquals('string', $type->toString());
+        self::assertEquals('string', $type->getTypeName());
     }
 
     public function testGetParameters() {

@@ -166,7 +166,7 @@ EOF;
 		self::assertType('ezcReflectionPrimitiveType', $arrayType);
         self::assertTrue($arrayType->isPrimitive());
         self::assertTrue($arrayType->isStandardType());
-        self::assertEquals('boolean', $arrayType->toString());
+        self::assertEquals('boolean', $arrayType->getTypeName());
     }
 
     public function testGetReturnAnnotations() {

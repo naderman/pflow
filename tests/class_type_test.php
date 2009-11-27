@@ -54,7 +54,7 @@ class ezcReflectionClassTypeTest extends ezcReflectionClassTest
 
     public function testToString()
     {
-        $this->assertEquals( 'SomeClass', $this->class->toString() );
+        $this->assertEquals( 'SomeClass', $this->class->getTypeName() );
     }
 
     public function testIsStandardType()

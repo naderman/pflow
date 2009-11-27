@@ -34,21 +34,24 @@ class ezcReflectionPrimitiveType extends ezcReflectionAbstractType {
     /**
      * @return boolean
      */
-    public function isPrimitive() {
+    public function isPrimitive()
+    {
         return true;
     }
 
     /**
      * @return string
      */
-    public function toString() {
+    public function getTypeName()
+    {
         return $this->typeName;
     }
 
     /**
      * @return boolean
      */
-    function isStandardType() {
+    function isStandardType()
+    {
         if ($this->typeName != 'mixed' and $this->typeName != 'void') {
             return true;
         }

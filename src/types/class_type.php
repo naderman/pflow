@@ -19,66 +19,79 @@
 class ezcReflectionClassType extends ezcReflectionClass implements ezcReflectionType {
 
     /**
+     * Returns type of array items or null
+     *
      * @return ezcReflectionType
      */
-    public function getArrayType() {
+    public function getArrayType()
+    {
         return null;
     }
 
     /**
+     * Returns key type of map items or null
+     *
      * @return ezcReflectionType
      */
-    function getMapIndexType() {
+    public function getMapIndexType()
+    {
         return null;
     }
 
     /**
+     * Returns value type of map items or null
+     *
      * @return ezcReflectionType
      */
-    function getMapValueType() {
+    public function getMapValueType()
+    {
         return null;
     }
 
     /**
      * @return boolean
      */
-    function isArray() {
+    public function isArray() {
         return false;
     }
 
     /**
      * @return boolean
      */
-    function isClass() {
+    public function isClass()
+    {
         return true;
     }
 
     /**
      * @return boolean
      */
-    function isPrimitive() {
+    public function isPrimitive()
+    {
         return false;
     }
 
     /**
      * @return boolean
      */
-    function isMap() {
+    public function isMap()
+    {
         return false;
     }
 
     /**
      * @return string
      */
-    function toString() {
+    function getTypeName()
+    {
         return $this->getName();
     }
-
 
     /**
      * @return boolean
      */
-    function isStandardType() {
+    function isStandardType()
+    {
         return false;
     }
 
@@ -145,30 +158,5 @@ class ezcReflectionClassType extends ezcReflectionClass implements ezcReflection
         return $schema;
     }
 
-    /**
-        <xs:schema xmlns:tns="http://tele-task.de/model/" xmlns:ttm="http://tele-task.de/model/" elementFormDefault="qualified" targetNamespace="http://tele-task.de/model/" xmlns:xs="http://www.w3.org/2001/XMLSchema">
-           <xs:complexType name="Item" />
-
-           <xs:complexType name="Lecture">
-              <xs:complexContent mixed="false">
-                 <xs:extension base="tns:Item">
-                    <xs:sequence>
-                       <xs:element minOccurs="1" maxOccurs="1" name="id" type="xs:int" />
-                       <xs:element minOccurs="0" maxOccurs="1" name="name" type="xs:string" />
-                       <xs:element minOccurs="0" maxOccurs="1" name="duration" type="xs:int" />
-                       <xs:element minOccurs="0" maxOccurs="1" name="namehtml" type="xs:string" />
-                       <xs:element minOccurs="0" maxOccurs="1" name="streamurldsl" type="xs:string" />
-                       <xs:element minOccurs="0" maxOccurs="1" name="abstract" type="xs:string" />
-                       <xs:element minOccurs="0" maxOccurs="1" name="languagesId" type="xs:int" nillable="true" />
-                       <xs:element minOccurs="0" maxOccurs="1" name="logo" type="xs:int" nillable="true" />
-                       <xs:element minOccurs="0" maxOccurs="1" name="time" type="xs:int" nillable="true" />
-                       <xs:element minOccurs="0" maxOccurs="1" name="sortdate" type="xs:string" />
-                    </xs:sequence>
-                 </xs:extension>
-              </xs:complexContent>
-           </xs:complexType>
-        </xs:schema>
-
-     */
 }
 ?>

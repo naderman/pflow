@@ -61,9 +61,8 @@ interface ezcReflectionType {
      * Return the name of this type as string
      *
      * @return string
-     * @todo approve name, may be getName is better
      */
-    public function toString();
+    public function getTypeName();
 
     /**
      * @return boolean

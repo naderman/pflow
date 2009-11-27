@@ -151,7 +151,7 @@ class ezcReflectionFunctionTest extends ezcTestCase
         $func = new ezcReflectionFunction('m1');
         $type = $func->getReturnType();
         self::assertType('ezcReflectionType', $type);
-        self::assertEquals('string', $type->toString());
+        self::assertEquals('string', $type->getTypeName());
 
         $func = new ezcReflectionFunction('m4');
         self::assertNull($func->getReturnType());

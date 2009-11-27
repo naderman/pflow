@@ -50,6 +50,7 @@ class ezcReflectionArrayType extends ezcReflectionAbstractType {
 
     /**
      * Returns type of array items or null
+     *
      * @return ezcReflectionType
      */
     public function getArrayType()
@@ -59,6 +60,7 @@ class ezcReflectionArrayType extends ezcReflectionAbstractType {
 
     /**
      * Returns key type of map items or null
+     *
      * @return ezcReflectionType
      */
     public function getMapIndexType()
@@ -67,7 +69,8 @@ class ezcReflectionArrayType extends ezcReflectionAbstractType {
     }
 
     /**
-     * Returns key type of map items or null
+     * Returns value type of map items or null
+     *
      * @return ezcReflectionType
      */
     public function getMapValueType()
@@ -154,18 +157,18 @@ class ezcReflectionArrayType extends ezcReflectionAbstractType {
 
     /**
      * @return string
-     * @todo change toString output for map types
+     * @todo change getTypeName output for map types
      */
-    public function toString()
+    public function getTypeName()
     {
         if ($this->isArray()) {
-            return $this->arrayType->toString().'[]';
+            return $this->arrayType->getTypeName().'[]';
         }
         else if ($this->isMap()) {
-            return 'array<'.$this->mapKeyType->toString()
-                        .','.$this->mapValueType->toString().'>';
+            return 'array<'.$this->mapKeyType->getTypeName()
+                        .','.$this->mapValueType->getTypeName().'>';
         }
-        return null;
+        return $this->typeName;
     }
 
     /**
