@@ -25,7 +25,7 @@ class ezcReflectionApi {
 	protected static $reflectionTypeFactory = null;
 
 	/**
-	 * @var ezcReflectionDocParser
+	 * @var ezcReflectionDocCommentParser
      *      Current documentation parser used by all ezcReflection classes
 	 */
 	protected static $docParser = null;
@@ -37,17 +37,17 @@ class ezcReflectionApi {
     private function __construct() {}
     // @codeCoverageIgnoreEnd
 
-    // TODO: rename getDocParserInstance() to getDocParser()
+    // TODO: rename getDocCommentParserInstance() to getDocCommentParser()
     /**
      * Returns a copy of the current documentation parser used by all
      * ezcReflection classes
      *
-     * @return ezcReflectionDocParser
+     * @return ezcReflectionDocCommentParser
      */
-    public static function getDocParserInstance()
+    public static function getDocCommentParserInstance()
     {
-    	if ( !( self::$docParser instanceof ezcReflectionDocParser ) ) {
-    		self::$docParser = new ezcReflectionPhpDocParser();
+    	if ( !( self::$docParser instanceof ezcReflectionDocCommentParser ) ) {
+    		self::$docParser = new ezcReflectionDocCommentParserImpl();
     	}
     	return clone self::$docParser;
     }
@@ -55,10 +55,10 @@ class ezcReflectionApi {
     /**
      * Sets the documentation parser used by all ezcReflection classes
      *
-     * @param ezcReflectionDocParser $docParser Parser for documentation blocks
+     * @param ezcReflectionDocCommentParser $docParser Parser for documentation blocks
      * @return void
      */
-    public static function setDocParser(ezcReflectionDocParser $docParser)
+    public static function setDocCommentParser(ezcReflectionDocCommentParser $docParser)
     {
     	self::$docParser = $docParser;
     }

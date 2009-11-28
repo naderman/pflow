@@ -1,6 +1,6 @@
 <?php
 /**
- * File containing the ezcReflectionDocParser interface.
+ * File containing the ezcReflectionDocCommentParser interface.
  *
  * @package Reflection
  * @version //autogen//
@@ -16,7 +16,7 @@
  * @author Stefan Marr <mail@stefan-marr.de>
  * @author Falko Menge <mail@falko-menge.de>
  */
-interface ezcReflectionDocParser {
+interface ezcReflectionDocCommentParser {
 
     /**
      * Initialize parsing of the given documentation fragment.

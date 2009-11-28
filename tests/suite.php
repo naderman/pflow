@@ -81,7 +81,7 @@ class ezcReflectionSuite extends PHPUnit_Framework_TestSuite
         $this->addTest( ezcReflectionPropertyTest::suite() );
         $this->addTest( ezcReflectionPropertyFromClassTest::suite() );
         $this->addTest( ezcReflectionPropertiesFromClassTest::suite() );
-        $this->addTest( ezcReflectionDocParserTest::suite() );
+        $this->addTest( ezcReflectionDocCommentParserTest::suite() );
         $this->addTest( ezcReflectionAnnotationFactoryTest::suite() );
         $this->addTest( ezcReflectionTypeFactoryTest::suite() );
         $this->addTest( ezcReflectionTypeMapperTest::suite() );

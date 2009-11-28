@@ -20,7 +20,7 @@
 class ezcReflectionObject extends ReflectionObject
 {
     /**
-     * @var ezcReflectionDocParser Parser for source code annotations
+     * @var ezcReflectionDocCommentParser Parser for source code annotations
      */
     protected $docParser;
 
@@ -44,7 +44,7 @@ class ezcReflectionObject extends ReflectionObject
         }
         $this->reflectionSource = $argument;
         // TODO: Parse comment on demand to save CPU time and memory
-        $this->docParser = ezcReflectionApi::getDocParserInstance();
+        $this->docParser = ezcReflectionApi::getDocCommentParserInstance();
         $this->docParser->parse( $this->getDocComment() );
     }
 

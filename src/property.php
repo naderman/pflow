@@ -20,7 +20,7 @@ class ezcReflectionProperty extends ReflectionProperty
 {
 
 	/**
-     * @var ezcReflectionDocParser Parser for source code annotations
+     * @var ezcReflectionDocCommentParser Parser for source code annotations
      */
     protected $docParser;
 
@@ -51,7 +51,7 @@ class ezcReflectionProperty extends ReflectionProperty
         }
         $this->reflectionSource = $class;
 
-        $this->docParser = ezcReflectionApi::getDocParserInstance();
+        $this->docParser = ezcReflectionApi::getDocCommentParserInstance();
         $this->docParser->parse( $this->getDocComment() );
     }
 

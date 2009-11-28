@@ -20,7 +20,7 @@
 class ezcReflectionFunction extends ReflectionFunction
 {
     /**
-     * @var ezcReflectionDocParser Parser for source code annotations
+     * @var ezcReflectionDocCommentParser Parser for source code annotations
      */
     protected $docParser;
 
@@ -44,7 +44,7 @@ class ezcReflectionFunction extends ReflectionFunction
         }
         $this->reflectionSource = $function;
 
-        $this->docParser = ezcReflectionApi::getDocParserInstance();
+        $this->docParser = ezcReflectionApi::getDocCommentParserInstance();
         $this->docParser->parse( $this->getDocComment() );
     }
 

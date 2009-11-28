@@ -20,7 +20,7 @@
 class ezcReflectionMethod extends ReflectionMethod
 {
     /**
-     * @var ezcReflectionDocParser
+     * @var ezcReflectionDocCommentParser
      */
     protected $docParser;
 
@@ -85,7 +85,7 @@ class ezcReflectionMethod extends ReflectionMethod
             $this->currentClass = new ReflectionClass( (string) $classOrSource );
         }
 
-		$this->docParser = ezcReflectionApi::getDocParserInstance();
+		$this->docParser = ezcReflectionApi::getDocCommentParserInstance();
         $this->docParser->parse($this->getDocComment());
     }
 

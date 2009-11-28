@@ -114,14 +114,14 @@ class ezcReflectionTest extends ezcTestCase
         }
     }
 
-    public function testGetDocParser() {
-        self::assertType( 'ezcReflectionDocParser', ezcReflectionApi::getDocParserInstance() );
+    public function testGetDocCommentParser() {
+        self::assertType( 'ezcReflectionDocCommentParser', ezcReflectionApi::getDocCommentParserInstance() );
     }
 
-    public function testSetDocParser() {
-        $annotationParser = new ezcReflectionPhpDocParser();
-        ezcReflectionApi::setDocParser( $annotationParser );
-        self::assertEquals( $annotationParser, ezcReflectionApi::getDocParserInstance() );
+    public function testSetDocCommentParser() {
+        $annotationParser = new ezcReflectionDocCommentParserImpl();
+        ezcReflectionApi::setDocCommentParser( $annotationParser );
+        self::assertEquals( $annotationParser, ezcReflectionApi::getDocCommentParserInstance() );
     }
 
     public function testGetReflectionTypeFactory() {

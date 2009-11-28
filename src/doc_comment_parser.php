@@ -1,6 +1,6 @@
 <?php
 /**
- * File containing the ezcReflectionPhpDocParser class.
+ * File containing the ezcReflectionDocCommentParserImpl class.
  *
  * @package Reflection
  * @version //autogen//
@@ -19,7 +19,7 @@
  * @author Stefan Marr <mail@stefan-marr.de>
  * @author Falko Menge <mail@falko-menge.de>
  */
-class ezcReflectionPhpDocParser implements ezcReflectionDocParser {
+class ezcReflectionDocCommentParserImpl implements ezcReflectionDocCommentParser {
 
 	const BEGINNING  = 10;
 	const SHORT_DESC = 0;
