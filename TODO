@@ -2,8 +2,6 @@ Roadmap
 =======
 
 - Issues for 1.0
-    - Missing Features (Falko)
-        - throw ezcReflectionUnknownTypeException during XML Schema generation
     - See todo annotations in the source code, e.g., using 'grep -inor todo.* --exclude-dir=.svn .'
     - Dependency Injection (Falko)
         - Write tests for wrapper methods

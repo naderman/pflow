@@ -228,10 +228,6 @@ class ezcReflectionArrayType extends ezcReflectionAbstractType {
             throw new Exception('XML Schema mapping is not supported for map-types');
         }
 
-        if (!$this->isArray()) {
-            return null;
-        }
-
         $schema = $dom->createElementNS($namespaceXMLSchema, 'xsd:complexType');
         $schema->setAttribute('name', $this->getXmlName(false));
 
