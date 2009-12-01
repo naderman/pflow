@@ -306,7 +306,6 @@
         }
 
 		if (!empty($class)) {
-            //TODO: this changes the semantic of the return value (PHP's Reflection API returns a ReflectionClass)
 		    return new ezcReflectionClassType($class->getName());
 		}
 		else {
