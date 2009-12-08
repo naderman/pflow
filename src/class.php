@@ -61,10 +61,12 @@ class ezcReflectionClass extends ReflectionClass
      */
     public function __call( $method, $arguments )
     {
-        if ( $this->reflectionSource instanceof parent )
+        $callback = array( $this->reflectionSource, $method );  
+        if ( $this->reflectionSource instanceof parent
+             and is_callable( $callback ) )
         {
             // query external reflection object
-            return call_user_func_array( array( $this->reflectionSource, $method ), $arguments );
+            return call_user_func_array( $callback, $arguments );
         }
         else
         {
@@ -192,7 +194,7 @@ class ezcReflectionClass extends ReflectionClass
      *
      * @param string $name Name of the property
      * @return ezcReflectionProperty
-     * @throws RelectionException if property doesn't exists
+     * @throws RelectionException if property doesn't exist
      */
     public function getProperty($name) {
         $prop = $this->forwardCallToReflectionSource( __FUNCTION__, array( $name ) );
