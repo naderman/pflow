@@ -20,11 +20,6 @@
 class ezcReflectionArrayType extends ezcReflectionAbstractType {
 
     /**
-     * @var string
-     */
-    private $typeName = null;
-
-    /**
      * @var ezcReflectionType
      */
     private $arrayType = null;
@@ -84,22 +79,6 @@ class ezcReflectionArrayType extends ezcReflectionAbstractType {
     public function isArray()
     {
         return ($this->arrayType != null);
-    }
-
-    /**
-     * @return boolean
-     */
-    public function isClass()
-    {
-        return false;
-    }
-
-    /**
-     * @return boolean
-     */
-    public function isPrimitive()
-    {
-        return false;
     }
 
     /**
@@ -169,14 +148,6 @@ class ezcReflectionArrayType extends ezcReflectionAbstractType {
                         .','.$this->mapValueType->getTypeName().'>';
         }
         return $this->typeName;
-    }
-
-    /**
-     * @return boolean
-     */
-    function isStandardType()
-    {
-        return false;
     }
 
     /**

@@ -20,31 +20,11 @@
 class ezcReflectionPrimitiveType extends ezcReflectionAbstractType {
 
     /**
-     * @var string
-     */
-    private $typeName;
-
-    /**
-     * @param string $typeName
-     */
-    public function __construct($typeName) {
-        $this->typeName = $typeName;
-    }
-
-    /**
      * @return boolean
      */
     public function isPrimitive()
     {
         return true;
-    }
-
-    /**
-     * @return string
-     */
-    public function getTypeName()
-    {
-        return $this->typeName;
     }
 
     /**
@@ -58,30 +38,4 @@ class ezcReflectionPrimitiveType extends ezcReflectionAbstractType {
         return false;
     }
 
-    /**
-     * Returns name of the correspondent XML Schema datatype
-     *
-     * The prefix `xsd' is comonly used to refer to the
-     * XML Schema namespace.
-     *
-     * @param boolean $usePrefix augments common prefix `xsd:' to the name
-     * @return string
-     */
-    function getXmlName($usePrefix = true) {
-        if ($usePrefix) {
-            $prefix = 'xsd:';
-        } else {
-            $prefix = '';
-        }
-        return $prefix . ezcReflectionTypeMapper::getInstance()->getXmlType($this->typeName);
-    }
-
-    /**
-     * @param  DOMDocument $dom
-     * @return DOMElement
-     */
-    function getXmlSchema(DOMDocument $dom) {
-        return null;
-    }
 }
-?>

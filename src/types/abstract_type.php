@@ -19,6 +19,28 @@
  */
 abstract class ezcReflectionAbstractType implements ezcReflectionType
 {
+
+    /**
+     * @var string
+     */
+    protected $typeName = null;
+
+    /**
+     * @param string $typeName
+     */
+    public function __construct( $typeName )
+    {
+        $this->typeName = $typeName;
+    }
+
+    /**
+     * @return string
+     */
+    public function getTypeName()
+    {
+        return $this->typeName;
+    }
+
     /**
      * Return type of elements in an array type or null if is not an array
      *
@@ -80,6 +102,39 @@ abstract class ezcReflectionAbstractType implements ezcReflectionType
     {
         return false;
     }
-}
 
-?>
+    /**
+     * @return boolean
+     */
+    function isStandardType()
+    {
+        return false;
+    }
+
+    /**
+     * Returns name of the correspondent XML Schema datatype
+     *
+     * The prefix `xsd' is comonly used to refer to the
+     * XML Schema namespace.
+     *
+     * @param boolean $usePrefix augments common prefix `xsd:' to the name
+     * @return string
+     */
+    function getXmlName($usePrefix = true) {
+        if ($usePrefix) {
+            $prefix = 'xsd:';
+        } else {
+            $prefix = '';
+        }
+        return $prefix . ezcReflectionTypeMapper::getInstance()->getXmlType($this->typeName);
+    }
+
+    /**
+     * @param  DOMDocument $dom
+     * @return DOMElement
+     */
+    function getXmlSchema(DOMDocument $dom) {
+        return null;
+    }
+
+}
