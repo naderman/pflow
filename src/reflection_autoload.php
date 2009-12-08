@@ -29,6 +29,7 @@ return array(
     'ezcReflectionParameter'       => 'Reflection/parameter.php',
     'ezcReflectionDocCommentParserImpl'    => 'Reflection/doc_comment_parser.php',
     'ezcReflectionPrimitiveType'   => 'Reflection/types/primitive_type.php',
+    'ezcReflectionMixedType'       => 'Reflection/types/mixed_type.php',
     'ezcReflectionProperty'        => 'Reflection/property.php',
     'ezcReflectionTypeFactoryImpl' => 'Reflection/type_factory.php',
     'ezcReflectionTypeMapper'      => 'Reflection/type_mapper.php',

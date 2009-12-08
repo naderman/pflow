@@ -91,9 +91,9 @@ class ezcReflectionTypeMapper
 
         /*
         XML Schema Part 2 - Datatypes Second Edition (24 Oktober 2004):
-            boolean has the ·value space· required to support the mathematical
+            boolean has the 'value space' required to support the mathematical
             concept of binary-valued logic: {true, false}.
-            An instance of a datatype that is defined as ·boolean· can have the
+            An instance of a datatype that is defined as 'boolean' can have the
             following legal literals {true, false, 1, 0}.
         */
         $this->xmlMappingTable[$boolean] = 'boolean';
@@ -111,8 +111,8 @@ class ezcReflectionTypeMapper
             [...]
             boundaries of integer (usually +/- 2.15e+9 = 2^31)
         XML Schema Part 2 - Datatypes Second Edition (24 Oktober 2004):
-            int is ·derived· from long by setting the value of ·maxInclusive·
-            to be 2147483647 and ·minInclusive· to be -2147483648.
+            int is 'derived' from long by setting the value of 'maxInclusive'
+            to be 2147483647 and 'minInclusive' to be -2147483648.
         */
         $this->xmlMappingTable[$integer] = 'int';
 
@@ -136,6 +136,8 @@ class ezcReflectionTypeMapper
             The string datatype represents character strings in XML.
         */
         $this->xmlMappingTable[$string]  = 'string';
+
+        $this->xmlMappingTable[$mixed]   = 'any';
     }
 
     /**
@@ -181,15 +183,19 @@ class ezcReflectionTypeMapper
      * @return boolean
      */
     public function isPrimitive($type) {
-        if ($this->getType($type) != 'array' and
-                isset($this->mappingTable[strtolower($type)])) {
+        if (
+            $this->getType($type) != 'array'
+            and $this->getType($type) != 'mixed'
+            and isset($this->mappingTable[strtolower($type)])
+        )
+        {
             return true;
         }
         return false;
     }
 
     /**
-     * Test whether the given type is an array or array map
+     * Test whether the given type is an array or hash map
      * @param string $type
      * @return boolean
      */
@@ -214,6 +220,20 @@ class ezcReflectionTypeMapper
             elseif (preg_match('/(.*)(\((.*?)(=>(.*?))?\))/', $type)) {
                 return true;
             }
+        }
+        return false;
+    }
+
+    /**
+     * Test whether the given type is an array or hash map
+     * @param string $type
+     * @return boolean
+     */
+    public function isMixed( $type )
+    {
+        if ( $this->getType( $type ) == $this->mappingTable['mixed'] )
+        {
+            return true;
         }
         return false;
     }

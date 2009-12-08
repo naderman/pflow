@@ -32,7 +32,7 @@ class ezcReflectionPrimitiveType extends ezcReflectionAbstractType {
      */
     function isStandardType()
     {
-        if ($this->typeName != 'mixed' and $this->typeName != 'void') {
+        if ( $this->typeName != 'void' ) {
             return true;
         }
         return false;

@@ -32,7 +32,7 @@ class ezcReflectionPrimitiveTypeTest extends ezcTestCase
 
     public function testIsStandardType2()
     {
-        $this->type = new ezcReflectionPrimitiveType( 'mixed' );
+        $this->type = new ezcReflectionPrimitiveType( 'void' );
 
         $this->assertFalse( $this->type->isStandardType() );
     }

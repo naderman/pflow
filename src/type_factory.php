@@ -37,19 +37,24 @@ class ezcReflectionTypeFactoryImpl implements ezcReflectionTypeFactory {
      */
     public function getType($typeName) {
         $typeName = trim($typeName);
-        //For void null is returned
+        // For void null is returned
         if ($typeName == null or strlen($typeName) < 1 or strtolower($typeName) == 'void') {
             return null;
         }
-        //First check whether it is an primitive type
+        // First check whether it is a primitive type
         if ($this->mapper->isPrimitive($typeName)) {
             return new ezcReflectionPrimitiveType($this->mapper->getType($typeName));
         }
-        //then check whether it is an array type
+        // then check whether it is an array type
         elseif ($this->mapper->isArray($typeName)) {
             return new ezcReflectionArrayType($typeName);
         }
-        //else it has to be a user class
+        // then check whether it is a mixed type
+        elseif ( $this->mapper->isMixed( $typeName ) )
+        {
+            return new ezcReflectionMixedType( $typeName );
+        }
+        // otherwhise it has to be a user class
 		else {
             return new ezcReflectionClassType($typeName);
         }
