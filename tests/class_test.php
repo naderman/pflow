@@ -252,7 +252,7 @@ class ezcReflectionClassTest extends ezcTestCase
      */
     public function testWrapperMethods( $method, $arguments ) {
         foreach ( array_keys( $this->expected ) as $fixtureName ) {
-            try {
+            //try {
                 $actual = call_user_func_array(
                     array( $this->actual[ $fixtureName ], $method ), $arguments
                 );
@@ -264,6 +264,7 @@ class ezcReflectionClassTest extends ezcTestCase
                 } else {
                     self::assertEquals( $expected, $actual );
                 }
+            /*
             } catch ( ReflectionException $e ) {
                 if ( !(
                     $this->$php_fixtureName instanceOf ReflectionMethod
@@ -273,6 +274,7 @@ class ezcReflectionClassTest extends ezcTestCase
                     self::fail( 'Unexpected ReflectionException: ' . $e->getMessage() );
                 }
             }
+            */
         }
     }
 
