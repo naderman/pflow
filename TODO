@@ -27,6 +27,7 @@ Roadmap
     - Add ezcReflectionParameter::getDescription() and ezcReflectionProperty::::getDescription()
     - Add ezcReflectionType::isString(), ezcReflectionType::isBoolean(), ezcReflectionType::isInteger(), ezcReflectionType::isFloat(), ezcReflectionType::isVoid()(), ezcReflectionType::isMixed()
     - Throw an ezcReflectionNewerPhpVersionRequiredException in methods that require a PHP version greater than 5.2.0
+    - Implement support for resource and callback
 
 
 Depending Projects
