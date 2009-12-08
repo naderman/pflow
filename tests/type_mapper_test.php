@@ -31,8 +31,8 @@ class ezcReflectionTypeMapperTest extends ezcTestCase
         	self::assertTrue(ezcReflectionTypeMapper::getInstance()->isArray($type));
         }
 
-        $arrayDefs = array('array<int, string>', 'array<string, ReflectionClass>',
-                           'array<ReflectionClass, float>');
+        $arrayDefs = array('array(int => string)', 'array(string => ReflectionClass)',
+                           'array(ReflectionClass => float)');
         foreach ($arrayDefs as $type) {
         	self::assertTrue(ezcReflectionTypeMapper::getInstance()->isArray($type));
         }

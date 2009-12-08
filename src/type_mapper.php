@@ -206,18 +206,20 @@ class ezcReflectionTypeMapper
             if ($type{strlen($type)-1} == ']') {
                 return true;
             }
-            //my be the author just wrote 'array'
+            //may be the author just wrote 'array'
             if ($type == 'array') {
                 return true;
             }
 
             //test for array map types array<int,int>
             //@TODO Remove support for array<int, int> definitions
+            /*
             elseif (preg_match('/(.*)(<(.*?)(,(.*?))?>)/', $type)) {
                 return true;
             }
+            */
         	//test for array map types array(int=>int)
-            elseif (preg_match('/(.*)(\((.*?)(=>(.*?))?\))/', $type)) {
+            elseif (preg_match(ezcReflectionArrayType::TYPE_NAME_REGEXP, $type)) {
                 return true;
             }
         }

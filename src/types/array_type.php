@@ -20,6 +20,11 @@
 class ezcReflectionArrayType extends ezcReflectionAbstractType {
 
     /**
+     * @var string
+     */
+    const TYPE_NAME_REGEXP = '/(.*)(\((.*?)(=>(.*?))?\))/';
+    
+    /**
      * @var ezcReflectionType
      */
     private $arrayType = null;
@@ -96,7 +101,7 @@ class ezcReflectionArrayType extends ezcReflectionAbstractType {
         //there seams to be an array
         if ($pos !== false) {
             //proof there is no array map annotation around
-            $posm = strrpos($this->typeName, '>');
+            $posm = strrpos($this->typeName, ')');
             if ($posm !== false) {
                 if ($posm < $pos) {
                     $typeName = substr($this->typeName, 0, $pos);
@@ -111,14 +116,14 @@ class ezcReflectionArrayType extends ezcReflectionAbstractType {
             }
         }
         //TODO: add support for array(integer => mixed)
-        if (preg_match('/(.*)(<(.*?)(,(.*?))?>)/', $this->typeName, $matches)) {
+        if (preg_match(self::TYPE_NAME_REGEXP, $this->typeName, $matches)) {
             $type1 = null;
             $type2 = null;
             if (isset($matches[3])) {
                 $type1 = ezcReflectionApi::getTypeByName($matches[3]);
             }
             if (isset($matches[5])) {
-                $type2 = ezcReflectionApi::getTypeByName($matches[3]);
+                $type2 = ezcReflectionApi::getTypeByName($matches[5]);
             }
 
             if ($type1 == null and $type2 != null) {
@@ -144,8 +149,8 @@ class ezcReflectionArrayType extends ezcReflectionAbstractType {
             return $this->arrayType->getTypeName().'[]';
         }
         else if ($this->isMap()) {
-            return 'array<'.$this->mapKeyType->getTypeName()
-                        .','.$this->mapValueType->getTypeName().'>';
+            return 'array('.$this->mapKeyType->getTypeName()
+                        .' => '.$this->mapValueType->getTypeName().')';
         }
         return $this->typeName;
     }
