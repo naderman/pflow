@@ -1,0 +1,19 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project name="staticReflection" default="build" basedir=".">
+
+    <!--
+        Include local project properties.
+    -->
+    <property file="build.properties" />
+    
+    <!--
+        Import common build targets
+    -->
+    <import file="${basedir}/setup/build.common.xml" />
+
+    <!--
+        Main build
+    -->
+    <target name="build" depends="test" description="Primary build: StaticReflection component" />
+
+</project>
