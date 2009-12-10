@@ -40,7 +40,7 @@ set_include_path(
 require 'SplClassLoader.php';
 
 // pFlow's autoloader
-$pFlowClassLoader = new SplClassLoader('\pFlow');
+$pFlowClassLoader = new SplClassLoader('pFlow');
 $pFlowClassLoader->register();
 
 // eZ Components' autoloader
@@ -59,9 +59,9 @@ spl_autoload_register(array('ezcBase', 'autoload'));
 
 
 // static-reflection's autoloader
-//require_once 'static-reflection/source/Autoloader.php';
-//spl_autoload_register(array(new org\pdepend\reflection\Autoloader, 'autoload'));
+require_once 'static-reflection/source/Autoloader.php';
+spl_autoload_register(array(new org\pdepend\reflection\Autoloader, 'autoload'));
 
 // static-reflection via SplClassLoader
-$staticReflectionClassLoader = new SplClassLoader('\org\pdepend\reflection', 'static-reflection/source/');
-$staticReflectionClassLoader->register();
+//$staticReflectionClassLoader = new SplClassLoader('org\pdepend\reflection', 'static-reflection/source/');
+//$staticReflectionClassLoader->register();
