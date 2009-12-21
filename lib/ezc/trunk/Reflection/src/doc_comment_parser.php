@@ -21,10 +21,10 @@
  */
 class ezcReflectionDocCommentParserImpl implements ezcReflectionDocCommentParser {
 
-	const BEGINNING  = 10;
-	const SHORT_DESC = 0;
-	const LONG_DESC  = 1;
-	const ANNOTATIONS 		 = 2;
+    const BEGINNING   = 10;
+    const SHORT_DESC  = 0;
+    const LONG_DESC   = 1;
+    const ANNOTATIONS = 2;
 
     /**
      * @var string
@@ -37,21 +37,23 @@ class ezcReflectionDocCommentParserImpl implements ezcReflectionDocCommentParser
     protected $state = self::BEGINNING;
 
     /**
-     * @var array<int,int>
+     * @var array(int=>int)
      */
     protected $stateTable = array(
-    							true => array ( // empty lines
-    							  self::BEGINNING  => self::BEGINNING,
-                                  self::SHORT_DESC => self::LONG_DESC,
-                                  self::LONG_DESC  => self::LONG_DESC,
-                                  self::ANNOTATIONS       => self::ANNOTATIONS),
+        true => array ( // empty lines
+            self::BEGINNING   => self::BEGINNING,
+            self::SHORT_DESC  => self::LONG_DESC,
+            self::LONG_DESC   => self::LONG_DESC,
+            self::ANNOTATIONS => self::ANNOTATIONS
+        ),
+        false => array ( // non empty lines
+            self::BEGINNING   => self::SHORT_DESC,
+            self::SHORT_DESC  => self::SHORT_DESC,
+            self::LONG_DESC   => self::LONG_DESC,
+            self::ANNOTATIONS => self::ANNOTATIONS
+        )
+    );
 
-                                false => array ( // non empty lines
-    							  self::BEGINNING  => self::SHORT_DESC,
-                                  self::SHORT_DESC => self::SHORT_DESC,
-                                  self::LONG_DESC  => self::LONG_DESC,
-                                  self::ANNOTATIONS       => self::ANNOTATIONS)
-                                  );
     /**
      * @var ezcReflectionAnnotation
      */
@@ -138,7 +140,7 @@ class ezcReflectionDocCommentParserImpl implements ezcReflectionDocCommentParser
         if (strlen($line) > 0) {
             if ($line[0] == '@') {
                 $line = substr($line, 1);
-                $words = preg_split('/(?<!,)\s+/', $line, 4); // split the line separated by whitespace (not preceded by a comma) into up to 4 parts
+                $words = preg_split('/\s+/', $line, 4); // split the line by whitespace into up to 4 parts
                 $annotation = ezcReflectionAnnotationFactory::createAnnotation($words[0], $words);
                 $this->annotations[$annotation->getName()][] = $annotation;
                 $this->lastAnnotation = $annotation;
