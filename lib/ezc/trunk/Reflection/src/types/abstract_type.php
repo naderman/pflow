@@ -30,7 +30,7 @@ abstract class ezcReflectionAbstractType implements ezcReflectionType
      */
     public function __construct( $typeName )
     {
-        $this->typeName = $typeName;
+        $this->typeName = ezcReflectionTypeMapper::getInstance()->getTypeName( $typeName );
     }
 
     /**
@@ -39,36 +39,6 @@ abstract class ezcReflectionAbstractType implements ezcReflectionType
     public function getTypeName()
     {
         return $this->typeName;
-    }
-
-    /**
-     * Return type of elements in an array type or null if is not an array
-     *
-     * @return ezcReflectionType
-     */
-    public function getArrayType()
-    {
-        return null;
-    }
-
-    /**
-     * Returns key type of map items or null
-     *
-     * @return ezcReflectionType
-     */
-    public function getMapIndexType()
-    {
-        return null;
-    }
-
-    /**
-     * Returns value type of map items or null
-     *
-     * @return ezcReflectionType
-     */
-    public function getMapValueType()
-    {
-        return null;
     }
 
     /**
@@ -82,7 +52,7 @@ abstract class ezcReflectionAbstractType implements ezcReflectionType
     /**
      * @return boolean
      */
-    public function isClass()
+    public function isObject()
     {
         return false;
     }
@@ -104,9 +74,14 @@ abstract class ezcReflectionAbstractType implements ezcReflectionType
     }
 
     /**
+     * Returns whether this type is one of integer, float, string, or boolean.
+     * 
+     * Types array, object, resource, NULL, mixed, number, and callback are not
+     * scalar.
+     * 
      * @return boolean
      */
-    function isStandardType()
+    function isScalarType()
     {
         return false;
     }

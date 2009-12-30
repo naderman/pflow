@@ -51,7 +51,7 @@ class ezcReflectionProperty extends ReflectionProperty
         }
         $this->reflectionSource = $class;
 
-        $this->docParser = ezcReflectionApi::getDocCommentParserInstance();
+        $this->docParser = ezcReflection::getDocCommentParser();
         $this->docParser->parse( $this->getDocComment() );
     }
 
@@ -65,10 +65,12 @@ class ezcReflectionProperty extends ReflectionProperty
      */
     public function __call( $method, $arguments )
     {
-        if ( $this->reflectionSource instanceof parent )
+        $callback = array( $this->reflectionSource, $method );  
+        if ( $this->reflectionSource instanceof parent
+             and is_callable( $callback ) )
         {
             // query external reflection object
-            return call_user_func_array( array( $this->reflectionSource, $method ), $arguments );
+            return call_user_func_array( $callback, $arguments );
         }
         else
         {
@@ -112,7 +114,7 @@ class ezcReflectionProperty extends ReflectionProperty
         $vars = $this->docParser->getVarAnnotations();
         if ( isset( $vars[0] ) )
         {
-            return ezcReflectionApi::getTypeByName( $vars[0]->getType() );
+            return ezcReflection::getTypeByName( $vars[0]->getTypeName() );
         }
         else
         {
@@ -123,18 +125,18 @@ class ezcReflectionProperty extends ReflectionProperty
     /**
      * Returns the declaring class.
      *
-     * @return ezcReflectionClassType
+     * @return ezcReflectionClass
      */
     public function getDeclaringClass()
     {
 		if ( $this->reflectionSource instanceof ReflectionProperty )
         {
-            return new ezcReflectionClassType( $this->reflectionSource->getDeclaringClass() );
+            return new ezcReflectionClass( $this->reflectionSource->getDeclaringClass() );
         }
         else
         {
             $class = parent::getDeclaringClass();
-            return new ezcReflectionClassType( $class->getName() );
+            return new ezcReflectionClass( $class->getName() );
         }
     }
 

@@ -44,7 +44,7 @@ class ezcReflectionObject extends ReflectionObject
         }
         $this->reflectionSource = $argument;
         // TODO: Parse comment on demand to save CPU time and memory
-        $this->docParser = ezcReflectionApi::getDocCommentParserInstance();
+        $this->docParser = ezcReflection::getDocCommentParser();
         $this->docParser->parse( $this->getDocComment() );
     }
 
@@ -58,10 +58,12 @@ class ezcReflectionObject extends ReflectionObject
      */
     public function __call( $method, $arguments )
     {
-        if ( $this->reflectionSource instanceof parent )
+        $callback = array( $this->reflectionSource, $method );  
+        if ( $this->reflectionSource instanceof parent
+             and is_callable( $callback ) )
         {
             // query external reflection object
-            return call_user_func_array( array( $this->reflectionSource, $method ), $arguments );
+            return call_user_func_array( $callback, $arguments );
         }
         else
         {
@@ -103,7 +105,11 @@ class ezcReflectionObject extends ReflectionObject
      */
     public function getMethod( $name ) {
         $method = $this->forwardCallToReflectionSource( __FUNCTION__, array( $name ) );
-        return new ezcReflectionMethod( $method );
+        if ( $this->reflectionSource instanceof parent ) {
+            return new ezcReflectionMethod( $this, $method );
+        } else {
+            return new ezcReflectionMethod( $this, $method->name );
+        }
     }
 
     /**
@@ -114,7 +120,11 @@ class ezcReflectionObject extends ReflectionObject
     public function getConstructor() {
         $constructor = $this->forwardCallToReflectionSource( __FUNCTION__ );
         if ($constructor != null) {
-            return new ezcReflectionMethod($constructor);
+            if ( $this->reflectionSource instanceof parent ) {
+                return new ezcReflectionMethod( $this, $constructor );
+            } else {
+                return new ezcReflectionMethod( $this, $constructor->name );
+            }
         } else {
             return null;
         }
@@ -137,7 +147,11 @@ class ezcReflectionObject extends ReflectionObject
         $methods = $this->forwardCallToReflectionSource( __FUNCTION__, array( $filter ) );
         $extMethods = array();
         foreach ( $methods as $method ) {
-            $extMethods[] = new ezcReflectionMethod( $method );
+            if ( $this->reflectionSource instanceof parent ) {
+                $extMethods[] = new ezcReflectionMethod( $this, $method );
+            } else {
+                $extMethods[] = new ezcReflectionMethod( $this, $method->name );
+            }
         }
         return $extMethods;
     }
@@ -151,7 +165,7 @@ class ezcReflectionObject extends ReflectionObject
         $ifaces = $this->forwardCallToReflectionSource( __FUNCTION__ );
     	$result = array();
     	foreach ($ifaces as $i) {
-    		$result[] = new ezcReflectionClassType($i); //TODO: Shouldn't this be eczReflectionClass
+    		$result[] = new ezcReflectionClass( $i );
     	}
     	return $result;
     }
@@ -159,13 +173,13 @@ class ezcReflectionObject extends ReflectionObject
     /**
      * Returns the class' parent class, or, if none exists, FALSE
      *
-     * @return ezcReflectionClassType|boolean
+     * @return ezcReflectionClass|boolean
      */
     public function getParentClass()
     {
         $parentClass = $this->forwardCallToReflectionSource( __FUNCTION__ );
         if ( is_object( $parentClass ) ) {
-            return new ezcReflectionClassType( $parentClass );
+            return new ezcReflectionClass( $parentClass );
         }
         else {
             return false;
@@ -177,16 +191,11 @@ class ezcReflectionObject extends ReflectionObject
      *
      * @param string $name Name of the property
      * @return ezcReflectionProperty
-     * @throws RelectionException if property doesn't exists
+     * @throws RelectionException if property doesn't exist
      */
     public function getProperty($name) {
         $prop = $this->forwardCallToReflectionSource( __FUNCTION__, array( $name ) );
-		if (is_object($prop) && !($prop instanceof ezcReflectionProperty)) {
-			return new ezcReflectionProperty($prop, $name);
-        } else {
-			// TODO: may be we should throw an exception here
-            return $prop;
-        }
+        return new ezcReflectionProperty($prop, $name);
     }
 
     /**
@@ -639,8 +648,8 @@ class ezcReflectionObject extends ReflectionObject
      * @since PHP 5.1.3
      */
     public function newInstanceArgs( array $arguments = null ) {
-        return $this->forwardCallToReflectionSource( __FUNCTION__, $arguments );
-    }
+          return $this->forwardCallToReflectionSource( __FUNCTION__, array( $arguments ) );
+  }
 
     /**
      * Sets the value of a static property

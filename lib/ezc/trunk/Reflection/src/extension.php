@@ -41,6 +41,29 @@ class ezcReflectionExtension extends ReflectionExtension {
     }
 
     /**
+     * Use overloading to call additional methods
+     * of the ReflectionException instance given to the constructor.
+     *
+     * @param string $method Method to be called
+     * @param array  $arguments Arguments that were passed
+     * @return mixed
+     */
+    public function __call( $method, $arguments )
+    {
+        $callback = array( $this->reflectionSource, $method );  
+        if ( $this->reflectionSource instanceof parent
+             and is_callable( $callback ) )
+        {
+            // query external reflection object
+            return call_user_func_array( $callback, $arguments );
+        }
+        else
+        {
+            throw new ezcReflectionCallToUndefinedMethodException( __CLASS__, $method );
+        }
+    }
+
+    /**
      * Returns an array of this extension's fuctions
      * @return ezcReflectionFunction[]
      */
@@ -59,9 +82,9 @@ class ezcReflectionExtension extends ReflectionExtension {
     }
 
     /**
-     * Returns an array containing ezcReflectionClassType objects for all
+     * Returns an array containing ezcReflectionClass objects for all
      * classes of this extension
-     * @return ezcReflectionClassType[]
+     * @return ezcReflectionClass[]
      */
     public function getClasses() {
         if ( $this->reflectionSource ) {
@@ -72,7 +95,7 @@ class ezcReflectionExtension extends ReflectionExtension {
 
         $result = array();
         foreach ($classes as $class) {
-            $result[] = new ezcReflectionClassType($class);
+            $result[] = new ezcReflectionClass($class);
         }
         return $result;
     }
@@ -173,23 +196,6 @@ class ezcReflectionExtension extends ReflectionExtension {
             $this->reflectionSource->info();
         } else {
             parent::info();
-        }
-    }
-
-    /**
-     * Use overloading to call additional methods
-     * of the reflection instance given to the constructor
-     *
-     * @param string $method Method to be called
-     * @param array $arguments Arguments that were passed
-     * @return mixed
-     */
-    public function __call( $method, $arguments )
-    {
-        if ( $this->reflectionSource ) {
-            return call_user_func_array( array($this->reflectionSource, $method), $arguments );
-        } else {
-            throw new ezcReflectionCallToUndefinedMethodException( __CLASS__, $method );
         }
     }
 

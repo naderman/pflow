@@ -8,7 +8,7 @@
  * @subpackage Tests
  */
 
-class ezcReflectionArrayTypeTest extends ezcTestCase
+class ezcReflectionArrayTypeTest extends ezcReflectionPrimitiveTypeTest
 {
     /**
      * @var ezcReflectionArrayType
@@ -20,34 +20,19 @@ class ezcReflectionArrayTypeTest extends ezcTestCase
         $this->type = new ezcReflectionArrayType( 'string[]' );
     }
 
-    public function testGetArrayType()
+    public function testGetGetKeyType()
     {
-        $this->assertEquals( new ezcReflectionPrimitiveType( 'string' ), $this->type->getArrayType() );
+        $this->assertEquals( new ezcReflectionPrimitiveType( 'integer' ), $this->type->getKeyType() );
     }
 
-    public function testGetMapIndexType()
+    public function testGetValueType()
     {
-        $this->assertNull( $this->type->getMapIndexType() );
-    }
-
-    public function testGetMapValueType()
-    {
-        $this->assertNull( $this->type->getMapValueType() );
+        $this->assertEquals( new ezcReflectionPrimitiveType( 'string' ), $this->type->getValueType() );
     }
 
     public function testIsArray()
     {
         $this->assertTrue( $this->type->isArray() );
-    }
-
-    public function testIsClass()
-    {
-        $this->assertFalse( $this->type->isClass() );
-    }
-
-    public function testIsPrimitive()
-    {
-        $this->assertFalse( $this->type->isPrimitive() );
     }
 
     public function testIsMap()
@@ -59,9 +44,9 @@ class ezcReflectionArrayTypeTest extends ezcTestCase
     {
     }
 
-    public function testIsStandardType()
+    public function testIsScalarType()
     {
-        $this->assertFalse( $this->type->isStandardType() );
+        $this->assertFalse( $this->type->isScalarType() );
     }
 
     public function testGetXmlNameWithPrefix()

@@ -65,7 +65,7 @@
         else {
             parent::__construct( $functionOrMethod, $parameterPositionNameOrSource );
         }
-        $this->type = ezcReflectionApi::getTypeByName($type);
+        $this->type = ezcReflection::getTypeByName( $type );
     }
 
     /**
@@ -78,10 +78,12 @@
      */
     public function __call( $method, $arguments )
     {
-        if ( $this->reflectionSource instanceof parent )
+        $callback = array( $this->reflectionSource, $method );  
+        if ( $this->reflectionSource instanceof parent
+             and is_callable( $callback ) )
         {
             // query external reflection object
-            return call_user_func_array( array( $this->reflectionSource, $method ), $arguments );
+            return call_user_func_array( $callback, $arguments );
         }
         else
         {
@@ -132,7 +134,7 @@
             $typeHint = null;
         }
         if ( $typeHint instanceOf ReflectionClass ) {
-            return new ezcReflectionClassType( $typeHint );
+            return ezcReflection::getTypeByName( $typeHint );
         } else {
             return $this->type;
         }
@@ -266,7 +268,7 @@
     public function getClass() {
         $class = $this->forwardCallToReflectionSource( __FUNCTION__ );
         if ( $class instanceOf ReflectionClass ) {
-            return new ezcReflectionClassType( $class );
+            return new ezcReflectionClass( $class );
         } else {
             return $class;
         }
@@ -295,7 +297,7 @@
 
     /**
      * Returns in which class this parameter is defined (not the type hint of the parameter)
-     * @return ezcReflectionClassType
+     * @return ezcReflectionClass
      */
     function getDeclaringClass() {
         if ($this->parameter != null) {
@@ -306,7 +308,7 @@
         }
 
 		if (!empty($class)) {
-		    return new ezcReflectionClassType($class->getName());
+		    return new ezcReflectionClass($class->getName());
 		}
 		else {
 		    return null;

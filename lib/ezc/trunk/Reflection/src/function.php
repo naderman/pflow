@@ -44,7 +44,7 @@ class ezcReflectionFunction extends ReflectionFunction
         }
         $this->reflectionSource = $function;
 
-        $this->docParser = ezcReflectionApi::getDocCommentParserInstance();
+        $this->docParser = ezcReflection::getDocCommentParser();
         $this->docParser->parse( $this->getDocComment() );
     }
 
@@ -58,10 +58,12 @@ class ezcReflectionFunction extends ReflectionFunction
      */
     public function __call( $method, $arguments )
     {
-        if ( $this->reflectionSource instanceof parent )
+        $callback = array( $this->reflectionSource, $method );  
+        if ( $this->reflectionSource instanceof parent
+             and is_callable( $callback ) )
         {
             // query external reflection object
-            return call_user_func_array( array( $this->reflectionSource, $method ), $arguments );
+            return call_user_func_array( $callback, $arguments );
         }
         else
         {
@@ -112,10 +114,10 @@ class ezcReflectionFunction extends ReflectionFunction
             $type = null;
             foreach ($params as $annotation) {
                 if (
-                    $annotation instanceof ezcReflectionAnnotationparam
+                    $annotation instanceof ezcReflectionAnnotationParam
                     and $annotation->getParamName() == $param->getName()
                 ) {
-                    $type = $annotation->getType();
+                    $type = $annotation->getTypeName();
                     break;
                 }
             }
@@ -146,7 +148,7 @@ class ezcReflectionFunction extends ReflectionFunction
     function getReturnType() {
         $re = $this->docParser->getReturnAnnotations();
         if (count($re) == 1 and isset($re[0]) and $re[0] instanceof ezcReflectionAnnotationReturn) {
-            return ezcReflectionApi::getTypeByName($re[0]->getType());
+            return ezcReflection::getTypeByName($re[0]->getTypeName());
         }
         return null;
     }

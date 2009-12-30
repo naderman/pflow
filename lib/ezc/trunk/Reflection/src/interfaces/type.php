@@ -16,26 +16,6 @@
  * @author Stefan Marr <mail@stefan-marr.de>
  */
 interface ezcReflectionType {
-    /**
-     * Return type of elements in an array type or null if is not an array
-     *
-     * @return ezcReflectionType
-     */
-    public function getArrayType();
-
-    /**
-     * Returns type of key used in a map
-     *
-     * @return ezcReflectionType
-     */
-    public function getMapIndexType();
-
-    /**
-     * Returns type of values used in a map
-     *
-     * @return ezcReflectionType
-     */
-    public function getMapValueType();
 
     /**
      * @return boolean
@@ -45,7 +25,7 @@ interface ezcReflectionType {
     /**
      * @return boolean
      */
-    public function isClass();
+    public function isObject();
 
     /**
      * @return boolean
@@ -65,9 +45,14 @@ interface ezcReflectionType {
     public function getTypeName();
 
     /**
+     * Returns whether this type is one of integer, float, string, or boolean.
+     * 
+     * Types array, object, resource, NULL, mixed, number, and callback are not
+     * scalar.
+     * 
      * @return boolean
      */
-    public function isStandardType();
+    public function isScalarType();
 
     /**
      * Returns the name to be used in a xml schema for this type

@@ -47,7 +47,7 @@ class ezcReflectionClass extends ReflectionClass
         }
         $this->reflectionSource = $argument;
         // TODO: Parse comment on demand to save CPU time and memory
-        $this->docParser = ezcReflectionApi::getDocCommentParserInstance();
+        $this->docParser = ezcReflection::getDocCommentParser();
         $this->docParser->parse( $this->getDocComment() );
     }
 
@@ -168,7 +168,7 @@ class ezcReflectionClass extends ReflectionClass
         $ifaces = $this->forwardCallToReflectionSource( __FUNCTION__ );
     	$result = array();
     	foreach ($ifaces as $i) {
-    		$result[] = new ezcReflectionClassType($i); //TODO: Shouldn't this be eczReflectionClass
+    		$result[] = new ezcReflectionClass( $i );
     	}
     	return $result;
     }
@@ -176,13 +176,13 @@ class ezcReflectionClass extends ReflectionClass
     /**
      * Returns the class' parent class, or, if none exists, FALSE
      *
-     * @return ezcReflectionClassType|boolean
+     * @return ezcReflectionClass|boolean
      */
     public function getParentClass()
     {
         $parentClass = $this->forwardCallToReflectionSource( __FUNCTION__ );
         if ( is_object( $parentClass ) ) {
-            return new ezcReflectionClassType( $parentClass );
+            return new ezcReflectionClass( $parentClass );
         }
         else {
             return false;
@@ -198,12 +198,7 @@ class ezcReflectionClass extends ReflectionClass
      */
     public function getProperty($name) {
         $prop = $this->forwardCallToReflectionSource( __FUNCTION__, array( $name ) );
-		if (is_object($prop) && !($prop instanceof ezcReflectionProperty)) {
-			return new ezcReflectionProperty($prop, $name);
-        } else {
-			// TODO: may be we should throw an exception here
-            return $prop;
-        }
+        return new ezcReflectionProperty($prop, $name);
     }
 
     /**
@@ -656,7 +651,7 @@ class ezcReflectionClass extends ReflectionClass
      * @since PHP 5.1.3
      */
     public function newInstanceArgs( array $arguments = null ) {
-        return $this->forwardCallToReflectionSource( __FUNCTION__, $arguments );
+        return $this->forwardCallToReflectionSource( __FUNCTION__, array( $arguments ) );
     }
 
     /**

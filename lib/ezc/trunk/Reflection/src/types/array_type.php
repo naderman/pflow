@@ -17,85 +17,132 @@
  * @author Falko Menge <mail@falko-menge.de>
  * @todo add support for ArrayAccess stuff from http://www.php.net/~helly/php/ext/spl/
  */
-class ezcReflectionArrayType extends ezcReflectionAbstractType {
+class ezcReflectionArrayType extends ezcReflectionPrimitiveType {
 
-    /**
-     * @var string
+    /**#@+
+     * @var ezcReflectionType
      */
-    const TYPE_NAME_REGEXP = '/(.*)(\((.*?)(=>(.*?))?\))/';
+//    protected $arrayType;
+//    protected $mapKeyType;
+//    protected $mapValueType;
+    protected $keyType;
+    protected $valueType;
+	/**#@-*/
+
+    /**#@+
+     * @var boolean
+     */
+    protected $isList = false;
+	/**#@-*/
     
-    /**
-     * @var ezcReflectionType
-     */
-    private $arrayType = null;
-
-    /**
-     * @var ezcReflectionType
-     */
-    private $mapKeyType = null;
-
-    /**
-     * @var ezcReflectionType
-     */
-    private $mapValueType = null;
-
     /**
      * @param string $typeName
      */
     public function __construct($typeName)
     {
-        $this->typeName = $typeName;
+        parent::__construct($typeName);
         $this->_parseTypeName();
     }
 
     /**
-     * Returns type of array items or null
+     * Returns true if this array has been documented as a list, i.e., using
+     * the notation of any type name followed by a pair of square brakets.
+     * 
+     * Examples of list types include mixed[], stdClass[], sting[][], or
+     * array(mixed=>mixed)[].
+     * 
+     * @return boolean True this array has been documented as a list.
+     */
+    public function isList ()
+    {
+        return $this->isList;
+    }
+    
+
+    /**
+     * Returns key type of the array
      *
      * @return ezcReflectionType
      */
-    public function getArrayType()
+    public function getKeyType()
     {
-        return $this->arrayType;
+        return $this->keyType;
     }
 
     /**
-     * Returns key type of map items or null
+     * Returns value type of the array
      *
      * @return ezcReflectionType
      */
-    public function getMapIndexType()
+    public function getValueType()
     {
-        return $this->mapKeyType;
+        return $this->valueType;
     }
-
-    /**
-     * Returns value type of map items or null
-     *
-     * @return ezcReflectionType
-     */
-    public function getMapValueType()
-    {
-        return $this->mapValueType;
-    }
-
+    
     /**
      * @return boolean
      */
     public function isArray()
     {
-        return ($this->arrayType != null);
+        return true;
     }
 
     /**
+     * Returns wether this array is documented as 'array(mixed=>mixed)' or
+     * simply 'array'.
+     * 
      * @return boolean
      */
     public function isMap()
     {
-        return ($this->mapKeyType != null);
+        return !$this->isList();
     }
 
+    /**
+     * Internal method for parsing array type names.
+     * 
+     * @return void
+     */
     protected function _parseTypeName()
     {
+        //*
+        if ( strlen( $this->typeName ) > 0 )
+        {
+            // last two chars are [], thus it should be something like string[]
+            //if ( strlen( $this->typeName ) > 2 and substr( $this->typeName, -2 ) == '[]' )
+            if ( preg_match( ezcReflectionTypeMapper::REGEXP_TYPE_NAME_LIST, $this->typeName, $matches ) )
+            {
+                $this->isList = true;
+                $this->isMap  = false;
+                $this->keyType
+                    = ezcReflection::getTypeByName( ezcReflectionTypeMapper::CANONICAL_NAME_INTEGER );
+                $this->valueType
+                   = ezcReflection::getTypeByName( $matches[1] );
+            }
+            
+            // may be the author just wrote 'array'
+            elseif ( $this->typeName == ezcReflectionTypeMapper::CANONICAL_NAME_ARRAY )
+            {
+                $this->isList = false;
+                $this->isMap  = true;
+                $this->keyType
+                    = ezcReflection::getTypeByName( ezcReflectionTypeMapper::CANONICAL_NAME_MIXED );
+                $this->valueType
+                    = ezcReflection::getTypeByName( ezcReflectionTypeMapper::CANONICAL_NAME_MIXED );
+            }
+
+        	// test for array map types array(int=>float)
+            elseif ( preg_match( ezcReflectionTypeMapper::REGEXP_TYPE_NAME_MAP, $this->typeName, $matches ) )
+            {
+                $this->isList = false;
+                $this->isMap  = true;
+                $this->keyType
+                    = ezcReflection::getTypeByName( $matches[1] );
+                $this->valueType
+                    = ezcReflection::getTypeByName( $matches[2] );
+            }
+        }
+        /*/
         $seamsToBeMap = false;
         $pos = strrpos($this->typeName, '[');
         //there seams to be an array
@@ -106,24 +153,24 @@ class ezcReflectionArrayType extends ezcReflectionAbstractType {
                 if ($posm < $pos) {
                     $typeName = substr($this->typeName, 0, $pos);
                     $this->arrayType
-                       = ezcReflectionApi::getTypeByName($typeName);
+                       = ezcReflection::getTypeByName($typeName);
                 }
             }
             else {
                 $typeName = substr($this->typeName, 0, $pos);
                 $this->arrayType
-                   = ezcReflectionApi::getTypeByName($typeName);
+                   = ezcReflection::getTypeByName($typeName);
             }
         }
-        //TODO: add support for array(integer => mixed)
+        // TO BE DONE: add support for array(integer => mixed)
         if (preg_match(self::TYPE_NAME_REGEXP, $this->typeName, $matches)) {
             $type1 = null;
             $type2 = null;
             if (isset($matches[3])) {
-                $type1 = ezcReflectionApi::getTypeByName($matches[3]);
+                $type1 = ezcReflection::getTypeByName($matches[3]);
             }
             if (isset($matches[5])) {
-                $type2 = ezcReflectionApi::getTypeByName($matches[5]);
+                $type2 = ezcReflection::getTypeByName($matches[5]);
             }
 
             if ($type1 == null and $type2 != null) {
@@ -137,22 +184,26 @@ class ezcReflectionArrayType extends ezcReflectionAbstractType {
                 $this->mapValueType = $type2;
             }
         }
+        //*/
     }
 
     /**
-     * @return string
-     * @todo change getTypeName output for map types
+     * Returns the canonical name for this array, which can be used in type
+     * annotations.
+     * 
+     * @return string Canonical name for this array
      */
     public function getTypeName()
     {
-        if ($this->isArray()) {
-            return $this->arrayType->getTypeName().'[]';
+        if ( $this->isList() )
+        {
+            return $this->getValueType()->getTypeName().'[]';
         }
-        else if ($this->isMap()) {
-            return 'array('.$this->mapKeyType->getTypeName()
-                        .' => '.$this->mapValueType->getTypeName().')';
+        else
+        {
+            return 'array(' . $this->getKeyType()->getTypeName()
+                   . '=>' . $this->getValueType()->getTypeName() . ')';
         }
-        return $this->typeName;
     }
 
     /**
@@ -164,17 +215,20 @@ class ezcReflectionArrayType extends ezcReflectionAbstractType {
      * @param boolean $usePrefix augments common prefix `tns:' to the name
      * @return string
      */
-    function getXmlName($usePrefix = true) {
-        if ($usePrefix) {
+    function getXmlName( $usePrefix = true )
+    {
+        if ( $usePrefix ) {
             $prefix = 'tns:';
         } else {
             $prefix = '';
         }
-        if ($this->isArray()) {
-            return $prefix . 'ArrayOf'.$this->arrayType->getXmlName(false);
+        if ( $this->isList() )
+        {
+            return $prefix . 'ArrayOf' . $this->getValueType()->getXmlName( false );
         }
-        elseif ($this->isMap()) {
-            throw new Exception('XML Schema mapping is not supported for map-types');
+        else
+        {
+            throw new Exception( 'XML Schema mapping is not supported for map-types' );
         }
     }
 
@@ -200,7 +254,8 @@ class ezcReflectionArrayType extends ezcReflectionAbstractType {
      * @return DOMElement
      */
     function getXmlSchema(DOMDocument $dom, $namespaceXMLSchema = 'http://www.w3.org/2001/XMLSchema') {
-        if ($this->isMap()) {
+        if ( !$this->isList() )
+        {
             throw new Exception('XML Schema mapping is not supported for map-types');
         }
 
@@ -216,8 +271,8 @@ class ezcReflectionArrayType extends ezcReflectionAbstractType {
         $elm->setAttribute('maxOccurs', 'unbounded');
         $elm->setAttribute('nillable', 'true');
 
-        $elm->setAttribute('name', $this->arrayType->getXmlName(false));
-        $elm->setAttribute('type', $this->arrayType->getXmlName(true));
+        $elm->setAttribute( 'name', $this->getValueType()->getXmlName( false ) );
+        $elm->setAttribute( 'type', $this->getValueType()->getXmlName( true ) );
 
         return $schema;
     }
