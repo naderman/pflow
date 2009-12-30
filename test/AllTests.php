@@ -28,6 +28,7 @@ namespace pFlow;
 require_once 'PHPUnit/Framework.php';
 
 require_once __DIR__ . '/AnalyzerTest.php';
+require_once __DIR__ . '/CliTest.php';
 
 /**
  * Main component test suite
@@ -53,6 +54,7 @@ class AllTests extends \PHPUnit_Framework_TestSuite
         );
 
         $this->addTestSuite( '\pFlow\AnalyzerTest' );
+        $this->addTestSuite( '\pFlow\CliTest' );
     }
 
     /**

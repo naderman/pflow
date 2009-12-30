@@ -1,8 +1,5 @@
-#!/usr/bin/env php
 <?php
 /**
- * Console front-end to use pFlow from the command line
- *
  * This file is part of pFlow.
  *
  * pFlow is free software; you can redistribute it and/or modify
@@ -26,11 +23,39 @@
  *             GNU Lesser General Public License
  */
 
-// configure autoloading
-require_once realpath(dirname(__FILE__) . '/../src/autoload.php');
+namespace pFlow;
 
-// run command line interface
-$analyzer = new pFlow\Analyzer();
-$input = new ezcConsoleInput();
-$cli = new pFlow\Cli($analyzer, $input);
-$cli->run();
+require_once __DIR__ . '/BaseTest.php';
+
+/**
+ * Test case for the pFlow CLI.
+ *
+ * @package    pFlow
+ * @author     Falko Menge <fakko at users dot sourceforge dot net>
+ * @author     Nils Adermann <naderman at naderman dot de>
+ * @copyright  2009 Falko Menge, Nils Adermann
+ * @license    http://www.gnu.org/licenses/lgpl.txt
+ *             GNU Lesser General Public License
+ */
+class CliTest extends BaseTest
+{
+    /**
+     * @return void
+     * @covers \pFlow\Cli<extended>
+     * @group pflow
+     * @group unittest
+     */
+    public function testRun()
+    {
+        $_SERVER['argv'] = array('pflow', '--recursive', 'some_path');
+
+        $analyzerMock = $this->getMock('\pFlow\AnalyzerInterface');
+
+        $analyzerMock->expects($this->once())
+            ->method('setSources')
+            ->with($this->equalTo(array('some_path')), $this->isTrue());
+
+        $cli = new Cli($analyzerMock, new \ezcConsoleInput);
+        $cli->run();
+    }
+}

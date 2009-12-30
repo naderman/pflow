@@ -40,20 +40,64 @@ namespace pFlow;
  */
 class Cli
 {
+    const VERSION = '0.1';
+
     /**
      * @var \pFlow\AnalyzerInterface
      */
     protected $analyzer;
 
     /**
+     * @var \ezcConsoleInput
+     */
+    protected $input;
+
+    /**
      * Constructor which requires an analyzer which is configured with the cli
      * options.
      * @param  \pFlow\AnalyzerInterface $analyzer
+     * @param  \ezcConsoleInput         $input
      * @return Cli
      */
-    public function __construct(AnalyzerInterface $analyzer)
+    public function __construct(AnalyzerInterface $analyzer, \ezcConsoleInput $input)
     {
         $this->analyzer = $analyzer;
+        $this->input = $input;
+    }
+
+    /**
+     * Sets up the CLI option & argument definitions on the ezcConsoleInput member.
+     * @return void
+     */
+    protected function setupInput()
+    {
+        $this->input->registerOption(
+            new \ezcConsoleOption(
+                'r',
+                'recursive',
+                \ezcConsoleInput::TYPE_NONE
+            )
+        );
+        $this->input->getOption('recursive')->shorthelp = 'Analyze directories recursively';
+
+        $this->input->registerOption(
+            new \ezcConsoleOption(
+                'h',
+                'help'
+            )
+        );
+        $this->input->getOption('help')->isHelpOption = true; // if parameter is set, all options marked as mandatory may be skipped
+        $this->input->getOption('help')->shorthelp = 'Display help';
+
+        $this->input->argumentDefinition = new \ezcConsoleArguments();
+        $this->input->argumentDefinition[0] = new \ezcConsoleArgument(
+            'sources',
+            \ezcConsoleInput::TYPE_STRING,
+            'Files and/or directories to analyze',
+            '',
+            true,
+            true
+        );
     }
 
     /**
@@ -62,60 +106,32 @@ class Cli
      */
     public function run()
     {
-        $input = new ezcConsoleInput();
-
-        $recursiveOption = $input->registerOption(
-            new ezcConsoleOption(
-                'r',
-                'recursive',
-                ezcConsoleInput::TYPE_NONE
-            )
-        );
-        $recursiveOption->shorthelp = 'Analyze directories recursively';
-
-        $helpOption = $input->registerOption(
-            new ezcConsoleOption(
-                'h',
-                'help'
-            )
-        );
-        $helpOption->isHelpOption = true; // if parameter is set, all options marked as mandatory may be skipped
-        $helpOption->shorthelp = 'Display help';
-
-        $input->argumentDefinition = new ezcConsoleArguments();
-        $input->argumentDefinition[0] = new ezcConsoleArgument(
-            'sources',
-            ezcConsoleInput::TYPE_STRING,
-            'Files and/or directories to analyze',
-            '',
-            true,
-            true
-        );
+        $this->setupInput();
 
         try
         {
-            $input->process();
+            $this->input->process();
         }
-        catch (ezcConsoleOptionException $e)
+        catch (\ezcConsoleOptionException $e)
         {
             die($e->getMessage() . "\nTry option -h to get a list of available options.\n");
         }
-        catch (ezcConsoleArgumentMandatoryViolationException $e)
+        catch (\ezcConsoleArgumentMandatoryViolationException $e)
         {
             die($e->getMessage() . "\nTry option -h to get a list of available options.\n");
         }
 
-        if ($helpOption->value === true)
+        if ($this->input->helpOptionSet())
         {
-            echo $input->getHelpText(
-                 "\npFlow v" . pFlow\pFlow::VERSION . "\n\n"
+            echo $this->input->getHelpText(
+                 "\npFlow v" . VERSION . "\n\n"
                  . "A tool for analysing control and data flow in PHP applications."
             );
         }
         else
         {
             // start generation
-            $this->analyzer->setSources($input->getArguments(), $recursiveOption->value);
+            $this->analyzer->setSources($this->input->getArguments(), $this->input->getOption('recursive')->value);
         }
     }
 }
