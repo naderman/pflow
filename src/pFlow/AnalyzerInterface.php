@@ -53,10 +53,7 @@ interface AnalyzerInterface
      * @param  string $path Absolute or relative path or filename.
      * @return void
      */
-    public function addFile($path)
-    {
-        $this->files[] = realpath($path);
-    }
+    public function addFile($path);
 
     /**
      * Retrieve the list of files that will be or have been analyzed.
