@@ -28,7 +28,7 @@ namespace pFlow;
 require_once __DIR__ . '/BaseTest.php';
 
 /**
- * Test case for the reflection autoloader.
+ * Test case for the pFlow analyzer.
  *
  * @package    pFlow
  * @author     Falko Menge <fakko at users dot sourceforge dot net>
