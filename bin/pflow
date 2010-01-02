@@ -34,3 +34,4 @@ $analyzer = new pFlow\Analyzer();
 $input = new ezcConsoleInput();
 $cli = new pFlow\Cli($analyzer, $input);
 $cli->run();
+$analyzer->analyze();
