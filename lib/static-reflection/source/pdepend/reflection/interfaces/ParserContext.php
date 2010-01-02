@@ -73,6 +73,30 @@ interface ParserContext
      * @return \ReflectionClass
      */
     function getClassReference( $className );
+
+    /**
+     * Returns a previous registered <b>\ReflectionClass</b> instance that
+     * matches the given class name. Or throws a reflection exception when no
+     * matching class exists.
+     *
+     * @param string $className Full qualified name of the request class.
+     *
+     * @return \ReflectionClass
+     * @throws \ReflectionException When no matching class or interface for the
+     *         given name exists.
+     */
+    function getClass( $className );
+
+    /**
+     * This method can/should be called by the parser whenever the source of a
+     * class or interface has been completed.
+     *
+     * @param \ReflectionClass $class A reflection class or interface instance
+     *        that was processed by the parser.
+     *
+     * @return void
+     */
+    function addClass( \ReflectionClass $class );
 }
 
 // @codeCoverageIgnoreEnd

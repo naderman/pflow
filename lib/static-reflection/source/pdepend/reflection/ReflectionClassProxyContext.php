@@ -71,6 +71,14 @@ class ReflectionClassProxyContext implements ParserContext
     private $_session = null;
 
     /**
+     * A simple cache class which holds already parsed and created reflection
+     * class instances.
+     *
+     * @var \pdepend\reflection\factories\ReflectionClassCache
+     */
+    private $_classCache = null;
+
+    /**
      * Constructs a new parser context instance.
      *
      * @param \pdepend\reflection\ReflectionSession $session The currently
@@ -80,6 +88,8 @@ class ReflectionClassProxyContext implements ParserContext
     public function __construct( ReflectionSession $session )
     {
         $this->_session = $session;
+        
+        $this->_classCache = new ReflectionClassCache();
     }
 
     /**
@@ -92,6 +102,44 @@ class ReflectionClassProxyContext implements ParserContext
      */
     public function getClassReference( $className )
     {
-        return new ReflectionClassProxy( $this->_session, $className );
+        if ( $this->_classCache->has( $className ) )
+        {
+            return $this->_classCache->restore( $className );
+        }
+        return new ReflectionClassProxy( $this, $className );
+    }
+
+    /**
+     * Returns a previous registered <b>\ReflectionClass</b> instance that
+     * matches the given class name. Or throws a reflection exception when no
+     * matching class exists.
+     *
+     * @param string $className Full qualified name of the request class.
+     *
+     * @return \ReflectionClass
+     * @throws \ReflectionException When no matching class or interface for the
+     *         given name exists.
+     */
+    public function getClass( $className )
+    {
+        if ( $this->_classCache->has( $className ) )
+        {
+            return $this->_classCache->restore( $className );
+        }
+        return $this->_session->getClass( $className );
+    }
+
+    /**
+     * This method can/should be called by the parser whenever the source of a
+     * class or interface has been completed.
+     *
+     * @param \ReflectionClass $class A reflection class or interface instance
+     *        that was processed by the parser.
+     *
+     * @return void
+     */
+    public function addClass( \ReflectionClass $class )
+    {
+        $this->_classCache->store( $class );
     }
 }

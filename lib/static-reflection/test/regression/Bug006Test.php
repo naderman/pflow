@@ -37,7 +37,7 @@
  * POSSIBILITY OF SUCH DAMAGE.
  *
  * @category  PHP
- * @package   pdepend\reflection
+ * @package   pdepend\reflection\regression
  * @author    Manuel Pichler <mapi@pdepend.org>
  * @copyright 2009-2010 Manuel Pichler. All rights reserved.
  * @license   http://www.opensource.org/licenses/bsd-license.php  BSD License
@@ -45,75 +45,77 @@
  * @link      http://pdepend.org/
  */
 
-namespace pdepend\reflection;
+namespace pdepend\reflection\regression;
 
-require_once 'PHPUnit/Framework.php';
+use pdepend\reflection\ReflectionSession;
+use pdepend\reflection\queries\ReflectionFileQuery;
+use pdepend\reflection\queries\ReflectionDirectoryQuery;
 
-require_once __DIR__ . '/api/AllTests.php';
-require_once __DIR__ . '/factories/AllTests.php';
-require_once __DIR__ . '/parser/AllTests.php';
-require_once __DIR__ . '/queries/AllTests.php';
-require_once __DIR__ . '/resolvers/AllTests.php';
-
-require_once __DIR__ . '/AutoloaderTest.php';
-require_once __DIR__ . '/ReflectionSessionTest.php';
-require_once __DIR__ . '/ReflectionSessionInstanceTest.php';
-require_once __DIR__ . '/ReflectionClassCacheTest.php';
-require_once __DIR__ . '/ReflectionClassProxyTest.php';
-require_once __DIR__ . '/ReflectionClassProxyContextTest.php';
-
-require_once __DIR__ . '/integration/AllTests.php';
-require_once __DIR__ . '/regression/AllTests.php';
+require_once 'BaseTest.php';
 
 /**
- * Main component test suite
+ * Test case for ticket #6
+ *
+ * http://tracker.pdepend.org/static_reflection/issue_tracker/issue/6
  *
  * @category  PHP
- * @package   pdepend\reflection
+ * @package   pdepend\reflection\regression
  * @author    Manuel Pichler <mapi@pdepend.org>
  * @copyright 2009-2010 Manuel Pichler. All rights reserved.
  * @license   http://www.opensource.org/licenses/bsd-license.php  BSD License
  * @version   Release: @package_version@
  * @link      http://pdepend.org/
  */
-class AllTests extends \PHPUnit_Framework_TestSuite
+class Bug006Test extends \pdepend\reflection\BaseTest
 {
     /**
-     * Constructs a new test suite instance.
+     * testFileQueryResolvesReferenceToInterfaceInSameFile
+     *
+     * @return void
+     * @covers \stdClass
+     * @group reflection
+     * @group reflection::regression
+     * @group regressiontest
      */
-    public function __construct()
+    public function testFileQueryResolvesReferenceToInterfaceInSameFile()
     {
-        $this->setName( 'org::pdepend::reflection::AllTests' );
+        $path = $this->getPathnameForClass( 'Bug006_1' );
 
-        \PHPUnit_Util_Filter::addDirectoryToWhitelist(
-            realpath( dirname( __FILE__ ) . '/../source/' )
-        );
-
-        $this->addTestSuite( '\pdepend\reflection\AutoloaderTest' );
-        $this->addTestSuite( '\pdepend\reflection\ReflectionClassProxyTest' );
-        $this->addTestSuite( '\pdepend\reflection\ReflectionClassCacheTest' );
-        $this->addTestSuite( '\pdepend\reflection\ReflectionClassProxyContextTest' );
-
-        $this->addTest( api\AllTests::suite() );
-        $this->addTest( factories\AllTests::suite() );
-        $this->addTest( parser\AllTests::suite() );
-        $this->addTest( queries\AllTests::suite() );
-        $this->addTest( resolvers\AllTests::suite() );
-
-        $this->addTestSuite( '\pdepend\reflection\ReflectionSessionTest' );
-        $this->addTestSuite( '\pdepend\reflection\ReflectionSessionInstanceTest' );
-
-        $this->addTest( integration\AllTests::suite() );
-        $this->addTest( regression\AllTests::suite() );
+        $session = new ReflectionSession();
+        $query   = $session->createFileQuery();
+        foreach ( $query->find( $path ) as $class )
+        {
+            if ( $class->getName() === 'Bug006_1' )
+            {
+                $this->assertEquals(
+                    array( 'Bug006_1_Interface' ),
+                    $class->getInterfaceNames()
+                );
+            }
+        }
     }
 
     /**
-     * Returns a test suite instance.
+     * testDirectoryQueryResolvesReferenceToParentClass
      *
-     * @return PHPUnit_Framework_TestSuite
+     * @return void
+     * @covers \stdClass
+     * @group reflection
+     * @group reflection::regression
+     * @group regressiontest
      */
-    public static function suite()
+    public function testDirectoryQueryResolvesReferenceToParentClass()
     {
-        return new AllTests();
+        $path = dirname( $this->getPathnameForClass( 'Bug006_2' ) );
+
+        $session = new ReflectionSession();
+        $query   = $session->createDirectoryQuery();
+        foreach ( $query->find( $path ) as $class )
+        {
+            if ( $class->getName() === 'Bug006_2' )
+            {
+                $this->assertType( '\ReflectionClass', $class->getParentClass() );
+            }
+        }
     }
 }

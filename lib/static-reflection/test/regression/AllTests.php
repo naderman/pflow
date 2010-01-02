@@ -50,6 +50,7 @@ namespace pdepend\reflection\regression;
 require_once 'PHPUnit/Framework.php';
 
 require_once 'Bug005Test.php';
+require_once 'Bug006Test.php';
 
 /**
  * Main test suite.
@@ -76,6 +77,7 @@ class AllTests extends \PHPUnit_Framework_TestSuite
         );
 
         $this->addTestSuite( '\pdepend\reflection\regression\Bug005Test' );
+        $this->addTestSuite( '\pdepend\reflection\regression\Bug006Test' );
     }
 
     /**

@@ -47,7 +47,6 @@
 
 namespace pdepend\reflection\factories;
 
-use pdepend\reflection\ReflectionClassCache;
 use pdepend\reflection\parser\Parser;
 use pdepend\reflection\interfaces\ParserContext;
 use pdepend\reflection\interfaces\SourceResolver;
@@ -83,14 +82,6 @@ class StaticReflectionClassFactory implements ReflectionClassFactory
     private $_resolver = null;
 
     /**
-     * A simple cache class which holds already parsed and created reflection
-     * class instances.
-     *
-     * @var \pdepend\reflection\factories\ReflectionClassCache
-     */
-    private $_classCache = null;
-
-    /**
      * Constructs a new static reflection factory.
      *
      * @param \pdepend\reflection\interfaces\ParserContext  $context  Current
@@ -104,8 +95,6 @@ class StaticReflectionClassFactory implements ReflectionClassFactory
     {
         $this->_context  = $context;
         $this->_resolver = $resolver;
-
-        $this->_classCache = new ReflectionClassCache();
     }
 
     /**
@@ -118,10 +107,6 @@ class StaticReflectionClassFactory implements ReflectionClassFactory
      */
     public function hasClass( $className )
     {
-        if ( $this->_classCache->has( $className ) )
-        {
-            return true;
-        }
         return $this->_resolver->hasPathnameForClass( $className );
     }
 
@@ -137,10 +122,6 @@ class StaticReflectionClassFactory implements ReflectionClassFactory
      */
     public function createClass( $className )
     {
-        if ( $this->_classCache->has( $className ) )
-        {
-            return $this->_classCache->restore( $className );
-        }
         return $this->_createClass( $className );
     }
 
@@ -155,10 +136,12 @@ class StaticReflectionClassFactory implements ReflectionClassFactory
      */
     private function _createClass( $className )
     {
-        $this->_parseFileForClass( $className );
-        if ( $this->_classCache->has( $className ) )
+        foreach ( $this->_parseFileForClass( $className ) as $class )
         {
-            return $this->_classCache->restore( $className );
+            if ( strcasecmp( ltrim( $className, '\\' ), $class->getName() ) === 0 )
+            {
+                return $class;
+            }
         }
         throw new \ReflectionException( 'Class ' . $className . ' does not exist' );
     }
@@ -174,11 +157,7 @@ class StaticReflectionClassFactory implements ReflectionClassFactory
      */
     private function _parseFileForClass( $className )
     {
-        $parser  = new Parser( $this->_context );
-        $classes = $parser->parseFile( $this->_resolver->getPathnameForClass( $className ) );
-        foreach ( $classes as $class )
-        {
-            $this->_classCache->store( $class );
-        }
+        $parser = new Parser( $this->_context );
+        return $parser->parseFile( $this->_resolver->getPathnameForClass( $className ) );
     }
 }
