@@ -25,7 +25,7 @@
 
 namespace pFlow;
 
-use org\pdepend\reflection\ReflectionSession;
+use pdepend\reflection\ReflectionSession;
 
 /**
  * Source code analyzer.
@@ -116,8 +116,14 @@ class Analyzer implements AnalyzerInterface
      */
     public function analyze()
     {
-        $staticReflection = new ReflectionSession;
-        //$query->createDirectoryQuery();
-        //$query->createFileQuery();
+        $staticReflection = ReflectionSession::createStaticSession(new \pdepend\reflection\resolvers\NullNamingResolver());
+
+        $fileSetQuery = $staticReflection->createFileSetQuery();
+        $topLevelItems = $fileSetQuery->find($this->files);
+
+        foreach ($topLevelItems as $item)
+        {
+            // analyze item
+        }
     }
 }
