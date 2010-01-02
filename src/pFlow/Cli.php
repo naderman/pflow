@@ -124,7 +124,7 @@ class Cli
         if ($this->input->helpOptionSet())
         {
             echo $this->input->getHelpText(
-                 "\npFlow v" . VERSION . "\n\n"
+                 "\npFlow version " . self::VERSION . "\n\n"
                  . "A tool for analysing control and data flow in PHP applications."
             );
         }
