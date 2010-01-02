@@ -4,7 +4,8 @@
  *
  * PHP Version 5
  *
- * Copyright (c) 2009-2010, Manuel Pichler <mapi@pdepend.org>.
+ * Copyright (c) 2009-2010, Manuel Pichler <mapi@pdepend.org>.,
+ *                          Nils Adermann  <naderman@naderman.de>.
  * All rights reserved.
  *
  * Redistribution and use in source and binary forms, with or without
@@ -39,7 +40,8 @@
  * @category  PHP
  * @package   pdepend\reflection\resolvers
  * @author    Manuel Pichler <mapi@pdepend.org>
- * @copyright 2009-2010 Manuel Pichler. All rights reserved.
+ * @author    Nils Adermann <naderman@naderman.de>
+ * @copyright 2009-2010 Manuel Pichler, Nils Adermann. All rights reserved.
  * @license   http://www.opensource.org/licenses/bsd-license.php  BSD License
  * @version   SVN: $Id$
  * @link      http://pdepend.org/
@@ -47,48 +49,47 @@
 
 namespace pdepend\reflection\resolvers;
 
-require_once 'PHPUnit/Framework.php';
-
-require_once __DIR__ . '/AutoloadArrayResolverTest.php';
-require_once __DIR__ . '/PearNamingResolverTest.php';
-require_once __DIR__ . '/NullNamingResolverTest.php';
+use pdepend\reflection\interfaces\SourceResolver;
+use pdepend\reflection\exceptions\PathnameNotFoundException;
 
 /**
- * Main test suite.
+ * This file resolver implementation does not resolve any names.
+ *
  *
  * @category  PHP
  * @package   pdepend\reflection\resolvers
  * @author    Manuel Pichler <mapi@pdepend.org>
- * @copyright 2009-2010 Manuel Pichler. All rights reserved.
+ * @author    Nils Adermann <naderman@naderman.de>
+ * @copyright 2009-2010 Manuel Pichler, Nils Adermann. All rights reserved.
  * @license   http://www.opensource.org/licenses/bsd-license.php  BSD License
  * @version   Release: @package_version@
  * @link      http://pdepend.org/
  */
-class AllTests extends \PHPUnit_Framework_TestSuite
+class NullNamingResolver implements SourceResolver
 {
     /**
-     * Constructs a new test suite instance.
+     * Always returns false.
+     *
+     * @param string $className Name of the searched class.
+     *
+     * @return boolean
      */
-    public function __construct()
+    public function hasPathnameForClass( $className )
     {
-        $this->setName( 'org::pdepend::reflection::resolvers::AllTests' );
-
-        \PHPUnit_Util_Filter::addDirectoryToWhitelist(
-            realpath( dirname( __FILE__ ) . '/../../source/' )
-        );
-
-        $this->addTestSuite( '\pdepend\reflection\resolvers\AutoloadArrayResolverTest' );
-        $this->addTestSuite( '\pdepend\reflection\resolvers\PearNamingResolverTest' );
-        $this->addTestSuite( '\pdepend\reflection\resolvers\NullNamingResolverTest' );
+        return false;
     }
 
     /**
-     * Returns a test suite instance.
+     * Always returns an exception.
      *
-     * @return PHPUnit_Framework_TestSuite
+     * @param string $className Name of the searched class.
+     *
+     * @return string
+     * @throws \pdepend\reflection\exceptions\PathnameNotFoundException Is
+     *         always thrown.
      */
-    public static function suite()
+    public function getPathnameForClass( $className )
     {
-        return new AllTests();
+        throw new PathnameNotFoundException( $className );
     }
 }
