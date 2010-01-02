@@ -4,7 +4,7 @@
  *
  * PHP Version 5
  *
- * Copyright (c) 2008-2009, Manuel Pichler <mapi@pdepend.org>.
+ * Copyright (c) 2009-2010, Manuel Pichler <mapi@pdepend.org>.
  * All rights reserved.
  *
  * Redistribution and use in source and binary forms, with or without
@@ -37,15 +37,15 @@
  * POSSIBILITY OF SUCH DAMAGE.
  *
  * @category  PHP
- * @package   org\pdepend\reflection\queries
+ * @package   pdepend\reflection\queries
  * @author    Manuel Pichler <mapi@pdepend.org>
- * @copyright 2008-2009 Manuel Pichler. All rights reserved.
+ * @copyright 2009-2010 Manuel Pichler. All rights reserved.
  * @license   http://www.opensource.org/licenses/bsd-license.php  BSD License
  * @version   SVN: $Id$
  * @link      http://pdepend.org/
  */
 
-namespace org\pdepend\reflection\queries;
+namespace pdepend\reflection\queries;
 
 require_once 'PHPUnit/Framework.php';
 
@@ -57,9 +57,9 @@ require_once 'ReflectionFileQueryTest.php';
  * Main test suite.
  *
  * @category  PHP
- * @package   org\pdepend\reflection\queries
+ * @package   pdepend\reflection\queries
  * @author    Manuel Pichler <mapi@pdepend.org>
- * @copyright 2008-2009 Manuel Pichler. All rights reserved.
+ * @copyright 2009-2010 Manuel Pichler. All rights reserved.
  * @license   http://www.opensource.org/licenses/bsd-license.php  BSD License
  * @version   Release: @package_version@
  * @link      http://pdepend.org/
@@ -77,9 +77,9 @@ class AllTests extends \PHPUnit_Framework_TestSuite
             realpath( dirname( __FILE__ ) . '/../../source/' )
         );
 
-        $this->addTestSuite( '\org\pdepend\reflection\queries\ReflectionClassQueryTest' );
-        $this->addTestSuite( '\org\pdepend\reflection\queries\ReflectionDirectoryQueryTest' );
-        $this->addTestSuite( '\org\pdepend\reflection\queries\ReflectionFileQueryTest' );
+        $this->addTestSuite( '\pdepend\reflection\queries\ReflectionClassQueryTest' );
+        $this->addTestSuite( '\pdepend\reflection\queries\ReflectionDirectoryQueryTest' );
+        $this->addTestSuite( '\pdepend\reflection\queries\ReflectionFileQueryTest' );
     }
 
     /**

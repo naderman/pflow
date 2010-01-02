@@ -4,7 +4,7 @@
  *
  * PHP Version 5
  *
- * Copyright (c) 2008-2009, Manuel Pichler <mapi@pdepend.org>.
+ * Copyright (c) 2009-2010, Manuel Pichler <mapi@pdepend.org>.
  * All rights reserved.
  *
  * Redistribution and use in source and binary forms, with or without
@@ -37,15 +37,15 @@
  * POSSIBILITY OF SUCH DAMAGE.
  *
  * @category  PHP
- * @package   org\pdepend\reflection\queries
+ * @package   pdepend\reflection\queries
  * @author    Manuel Pichler <mapi@pdepend.org>
- * @copyright 2008-2009 Manuel Pichler. All rights reserved.
+ * @copyright 2009-2010 Manuel Pichler. All rights reserved.
  * @license   http://www.opensource.org/licenses/bsd-license.php  BSD License
  * @version   SVN: $Id$
  * @link      http://pdepend.org/
  */
 
-namespace org\pdepend\reflection\queries;
+namespace pdepend\reflection\queries;
 
 require_once 'BaseTest.php';
 
@@ -53,18 +53,18 @@ require_once 'BaseTest.php';
  * Test cases for the reflection class query.
  *
  * @category  PHP
- * @package   org\pdepend\reflection\queries
+ * @package   pdepend\reflection\queries
  * @author    Manuel Pichler <mapi@pdepend.org>
- * @copyright 2008-2009 Manuel Pichler. All rights reserved.
+ * @copyright 2009-2010 Manuel Pichler. All rights reserved.
  * @license   http://www.opensource.org/licenses/bsd-license.php  BSD License
  * @version   Release: @package_version@
  * @link      http://pdepend.org/
  */
-class ReflectionClassQueryTest extends \org\pdepend\reflection\BaseTest
+class ReflectionClassQueryTest extends \pdepend\reflection\BaseTest
 {
     /**
      * @return void
-     * @covers \org\pdepend\reflection\queries\ReflectionClassQuery
+     * @covers \pdepend\reflection\queries\ReflectionClassQuery
      * @group reflection
      * @group reflection::queries
      * @group unittest
@@ -87,7 +87,7 @@ class ReflectionClassQueryTest extends \org\pdepend\reflection\BaseTest
 
     /**
      * @return void
-     * @covers \org\pdepend\reflection\queries\ReflectionClassQuery
+     * @covers \pdepend\reflection\queries\ReflectionClassQuery
      * @group reflection
      * @group reflection::queries
      * @group unittest
@@ -112,7 +112,7 @@ class ReflectionClassQueryTest extends \org\pdepend\reflection\BaseTest
 
     /**
      * @return void
-     * @covers \org\pdepend\reflection\queries\ReflectionClassQuery
+     * @covers \pdepend\reflection\queries\ReflectionClassQuery
      * @group reflection
      * @group reflection::queries
      * @group unittest

@@ -4,7 +4,7 @@
  *
  * PHP Version 5
  *
- * Copyright (c) 2008-2009, Manuel Pichler <mapi@pdepend.org>.
+ * Copyright (c) 2009-2010, Manuel Pichler <mapi@pdepend.org>.
  * All rights reserved.
  *
  * Redistribution and use in source and binary forms, with or without
@@ -37,15 +37,15 @@
  * POSSIBILITY OF SUCH DAMAGE.
  *
  * @category  PHP
- * @package   org\pdepend\reflection\factories
+ * @package   pdepend\reflection\factories
  * @author    Manuel Pichler <mapi@pdepend.org>
- * @copyright 2008-2009 Manuel Pichler. All rights reserved.
+ * @copyright 2009-2010 Manuel Pichler. All rights reserved.
  * @license   http://www.opensource.org/licenses/bsd-license.php  BSD License
  * @version   SVN: $Id$
  * @link      http://pdepend.org/
  */
 
-namespace org\pdepend\reflection\factories;
+namespace pdepend\reflection\factories;
 
 require_once 'BaseTest.php';
 
@@ -53,18 +53,18 @@ require_once 'BaseTest.php';
  * Test cases for the internal reflection factory.
  *
  * @category  PHP
- * @package   org\pdepend\reflection\factories
+ * @package   pdepend\reflection\factories
  * @author    Manuel Pichler <mapi@pdepend.org>
- * @copyright 2008-2009 Manuel Pichler. All rights reserved.
+ * @copyright 2009-2010 Manuel Pichler. All rights reserved.
  * @license   http://www.opensource.org/licenses/bsd-license.php  BSD License
  * @version   Release: @package_version@
  * @link      http://pdepend.org/
  */
-class InternalReflectionClassFactoryTest extends \org\pdepend\reflection\BaseTest
+class InternalReflectionClassFactoryTest extends \pdepend\reflection\BaseTest
 {
     /**
      * @return void
-     * @covers \org\pdepend\reflection\factories\InternalReflectionClassFactory
+     * @covers \pdepend\reflection\factories\InternalReflectionClassFactory
      * @group reflection
      * @group reflection::factories
      * @group unittest
@@ -77,7 +77,7 @@ class InternalReflectionClassFactoryTest extends \org\pdepend\reflection\BaseTes
 
     /**
      * @return void
-     * @covers \org\pdepend\reflection\factories\InternalReflectionClassFactory
+     * @covers \pdepend\reflection\factories\InternalReflectionClassFactory
      * @group reflection
      * @group reflection::factories
      * @group unittest
@@ -90,7 +90,7 @@ class InternalReflectionClassFactoryTest extends \org\pdepend\reflection\BaseTes
 
     /**
      * @return void
-     * @covers \org\pdepend\reflection\factories\InternalReflectionClassFactory
+     * @covers \pdepend\reflection\factories\InternalReflectionClassFactory
      * @group reflection
      * @group reflection::factories
      * @group unittest
@@ -103,7 +103,7 @@ class InternalReflectionClassFactoryTest extends \org\pdepend\reflection\BaseTes
 
     /**
      * @return void
-     * @covers \org\pdepend\reflection\factories\InternalReflectionClassFactory
+     * @covers \pdepend\reflection\factories\InternalReflectionClassFactory
      * @group reflection
      * @group reflection::factories
      * @group unittest
@@ -118,7 +118,7 @@ class InternalReflectionClassFactoryTest extends \org\pdepend\reflection\BaseTes
 
     /**
      * @return void
-     * @covers \org\pdepend\reflection\factories\InternalReflectionClassFactory
+     * @covers \pdepend\reflection\factories\InternalReflectionClassFactory
      * @group reflection
      * @group reflection::factories
      * @group unittest

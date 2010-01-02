@@ -5,7 +5,7 @@
  *
  * PHP Version 5
  *
- * Copyright (c) 2008-2009, Manuel Pichler <mapi@pdepend.org>.
+ * Copyright (c) 2009-2010, Manuel Pichler <mapi@pdepend.org>.
  * All rights reserved.
  *
  * Redistribution and use in source and binary forms, with or without
@@ -38,20 +38,20 @@
  * POSSIBILITY OF SUCH DAMAGE.
  *
  * @category  PHP
- * @package   org\pdepend\reflection\examples
+ * @package   pdepend\reflection\examples
  * @author    Manuel Pichler <mapi@pdepend.org>
- * @copyright 2008-2009 Manuel Pichler. All rights reserved.
+ * @copyright 2009-2010 Manuel Pichler. All rights reserved.
  * @license   http://www.opensource.org/licenses/bsd-license.php  BSD License
  * @version   SVN: $Id$
  * @link      http://pdepend.org/
  */
 
-use org\pdepend\reflection\Autoloader;
-use org\pdepend\reflection\ReflectionSession;
-use org\pdepend\reflection\factories\StaticReflectionClassFactory;
-use org\pdepend\reflection\resolvers\PearNamingResolver;
+use pdepend\reflection\Autoloader;
+use pdepend\reflection\ReflectionSession;
+use pdepend\reflection\factories\StaticReflectionClassFactory;
+use pdepend\reflection\resolvers\PearNamingResolver;
 
-include_once __DIR__ . '/../../source/Autoloader.php';
+include_once __DIR__ . '/../../source/pdepend/reflection/Autoloader.php';
 
 spl_autoload_register( array( new Autoloader(), 'autoload' ) );
 

@@ -4,7 +4,7 @@
  *
  * PHP Version 5
  *
- * Copyright (c) 2008-2009, Manuel Pichler <mapi@pdepend.org>.
+ * Copyright (c) 2009-2010, Manuel Pichler <mapi@pdepend.org>.
  * All rights reserved.
  *
  * Redistribution and use in source and binary forms, with or without
@@ -37,15 +37,15 @@
  * POSSIBILITY OF SUCH DAMAGE.
  *
  * @category  PHP
- * @package   org\pdepend\reflection
+ * @package   pdepend\reflection
  * @author    Manuel Pichler <mapi@pdepend.org>
- * @copyright 2008-2009 Manuel Pichler. All rights reserved.
+ * @copyright 2009-2010 Manuel Pichler. All rights reserved.
  * @license   http://www.opensource.org/licenses/bsd-license.php  BSD License
  * @version   SVN: $Id$
  * @link      http://pdepend.org/
  */
 
-namespace org\pdepend\reflection;
+namespace pdepend\reflection;
 
 require_once 'BaseTest.php';
 
@@ -53,9 +53,9 @@ require_once 'BaseTest.php';
  * Test case for the reflection proxy parser context.
  *
  * @category  PHP
- * @package   org\pdepend\reflection
+ * @package   pdepend\reflection
  * @author    Manuel Pichler <mapi@pdepend.org>
- * @copyright 2008-2009 Manuel Pichler. All rights reserved.
+ * @copyright 2009-2010 Manuel Pichler. All rights reserved.
  * @license   http://www.opensource.org/licenses/bsd-license.php  BSD License
  * @version   Release: @package_version@
  * @link      http://pdepend.org/
@@ -64,13 +64,13 @@ class ReflectionClassProxyContextTest extends BaseTest
 {
     /**
      * @return void
-     * @covers \org\pdepend\reflection\ReflectionClassProxyContext
+     * @covers \pdepend\reflection\ReflectionClassProxyContext
      * @group reflection
      * @group unittest
      */
     public function testGetClassReturnsProxyReflectionClassInstance()
     {
         $context = new ReflectionClassProxyContext( $this->createSession() );
-        $this->assertType( ReflectionClassProxy::TYPE, $context->getClass( 'Foo' ) );
+        $this->assertType( ReflectionClassProxy::TYPE, $context->getClassReference( 'Foo' ) );
     }
 }

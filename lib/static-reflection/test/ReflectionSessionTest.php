@@ -4,7 +4,7 @@
  *
  * PHP Version 5
  *
- * Copyright (c) 2008-2009, Manuel Pichler <mapi@pdepend.org>.
+ * Copyright (c) 2009-2010, Manuel Pichler <mapi@pdepend.org>.
  * All rights reserved.
  *
  * Redistribution and use in source and binary forms, with or without
@@ -37,15 +37,15 @@
  * POSSIBILITY OF SUCH DAMAGE.
  *
  * @category  PHP
- * @package   org\pdepend\reflection
+ * @package   pdepend\reflection
  * @author    Manuel Pichler <mapi@pdepend.org>
- * @copyright 2008-2009 Manuel Pichler. All rights reserved.
+ * @copyright 2009-2010 Manuel Pichler. All rights reserved.
  * @license   http://www.opensource.org/licenses/bsd-license.php  BSD License
  * @version   SVN: $Id$
  * @link      http://pdepend.org/
  */
 
-namespace org\pdepend\reflection;
+namespace pdepend\reflection;
 
 require_once __DIR__ . '/BaseTest.php';
 
@@ -53,9 +53,9 @@ require_once __DIR__ . '/BaseTest.php';
  * Test case for the reflection session class.
  *
  * @category  PHP
- * @package   org\pdepend\reflection
+ * @package   pdepend\reflection
  * @author    Manuel Pichler <mapi@pdepend.org>
- * @copyright 2008-2009 Manuel Pichler. All rights reserved.
+ * @copyright 2009-2010 Manuel Pichler. All rights reserved.
  * @license   http://www.opensource.org/licenses/bsd-license.php  BSD License
  * @version   Release: @package_version@
  * @link      http://pdepend.org/
@@ -64,7 +64,7 @@ class ReflectionSessionTest extends BaseTest
 {
     /**
      * @return void
-     * @covers \org\pdepend\reflection\ReflectionSession
+     * @covers \pdepend\reflection\ReflectionSession
      * @group reflection
      * @group unittest
      */
@@ -81,7 +81,7 @@ class ReflectionSessionTest extends BaseTest
 
     /**
      * @return void
-     * @covers \org\pdepend\reflection\ReflectionSession
+     * @covers \pdepend\reflection\ReflectionSession
      * @group reflection
      * @group unittest
      */
@@ -97,7 +97,7 @@ class ReflectionSessionTest extends BaseTest
 
     /**
      * @return void
-     * @covers \org\pdepend\reflection\ReflectionSession
+     * @covers \pdepend\reflection\ReflectionSession
      * @group reflection
      * @group unittest
      */
@@ -113,7 +113,7 @@ class ReflectionSessionTest extends BaseTest
 
     /**
      * @return void
-     * @covers \org\pdepend\reflection\ReflectionSession
+     * @covers \pdepend\reflection\ReflectionSession
      * @group reflection
      * @group unittest
      */
@@ -130,7 +130,7 @@ class ReflectionSessionTest extends BaseTest
 
     /**
      * @return void
-     * @covers \org\pdepend\reflection\ReflectionSession
+     * @covers \pdepend\reflection\ReflectionSession
      * @group reflection
      * @group unittest
      */
@@ -146,7 +146,7 @@ class ReflectionSessionTest extends BaseTest
 
     /**
      * @return void
-     * @covers \org\pdepend\reflection\ReflectionSession
+     * @covers \pdepend\reflection\ReflectionSession
      * @group reflection
      * @group unittest
      */
@@ -162,7 +162,7 @@ class ReflectionSessionTest extends BaseTest
 
     /**
      * @return void
-     * @covers \org\pdepend\reflection\ReflectionSession
+     * @covers \pdepend\reflection\ReflectionSession
      * @group reflection
      * @group unittest
      * @expectedException \ReflectionException
@@ -177,13 +177,13 @@ class ReflectionSessionTest extends BaseTest
 
     /**
      * @return void
-     * @covers \org\pdepend\reflection\ReflectionSession
+     * @covers \pdepend\reflection\ReflectionSession
      * @group reflection
      * @group unittest
      */
     public function testGetClassExecutesConfiguredReflectionClassFactory()
     {
-        $factory = $this->getMock( '\org\pdepend\reflection\interfaces\ReflectionClassFactory' );
+        $factory = $this->getMock( '\pdepend\reflection\interfaces\ReflectionClassFactory' );
         $factory->expects( $this->once() )
             ->method( 'hasClass' )
             ->with( $this->equalTo( __CLASS__ ) )
@@ -201,13 +201,13 @@ class ReflectionSessionTest extends BaseTest
 
     /**
      * @return void
-     * @covers \org\pdepend\reflection\ReflectionSession
+     * @covers \pdepend\reflection\ReflectionSession
      * @group reflection
      * @group unittest
      */
     public function testGetClassExecutesConfiguredReflectionClassFactoriesInAddOrder()
     {
-        $factory1 = $this->getMock( '\org\pdepend\reflection\interfaces\ReflectionClassFactory' );
+        $factory1 = $this->getMock( '\pdepend\reflection\interfaces\ReflectionClassFactory' );
         $factory1->expects( $this->once() )
             ->method( 'hasClass' )
             ->with( $this->equalTo( __CLASS__ ) )
@@ -215,7 +215,7 @@ class ReflectionSessionTest extends BaseTest
         $factory1->expects( $this->never() )
             ->method( 'createClass' );
 
-        $factory2 = $this->getMock( '\org\pdepend\reflection\interfaces\ReflectionClassFactory' );
+        $factory2 = $this->getMock( '\pdepend\reflection\interfaces\ReflectionClassFactory' );
         $factory2->expects( $this->once() )
             ->method( 'hasClass' )
             ->with( $this->equalTo( __CLASS__ ) )
@@ -234,7 +234,7 @@ class ReflectionSessionTest extends BaseTest
 
     /**
      * @return void
-     * @covers \org\pdepend\reflection\ReflectionSession
+     * @covers \pdepend\reflection\ReflectionSession
      * @group reflection
      * @group unittest
      */
@@ -246,7 +246,7 @@ class ReflectionSessionTest extends BaseTest
 
     /**
      * @return void
-     * @covers \org\pdepend\reflection\ReflectionSession
+     * @covers \pdepend\reflection\ReflectionSession
      * @group reflection
      * @group unittest
      */
@@ -258,7 +258,7 @@ class ReflectionSessionTest extends BaseTest
 
     /**
      * @return void
-     * @covers \org\pdepend\reflection\ReflectionSession
+     * @covers \pdepend\reflection\ReflectionSession
      * @group reflection
      * @group unittest
      */
@@ -271,7 +271,7 @@ class ReflectionSessionTest extends BaseTest
     /**
      * Creates a mocked source resolver instance.
      *
-     * @return \org\pdepend\reflection\interfaces\SourceResolver
+     * @return \pdepend\reflection\interfaces\SourceResolver
      */
     protected function createResolver()
     {
