@@ -262,6 +262,18 @@ class ReflectionSessionTest extends BaseTest
      * @group reflection
      * @group unittest
      */
+    public function testCreateFileSetQueryReturnsAnObjectOfExpectedType()
+    {
+        $session = new ReflectionSession();
+        $this->assertType( queries\ReflectionFileSetQuery::TYPE, $session->createFileSetQuery() );
+    }
+
+    /**
+     * @return void
+     * @covers \pdepend\reflection\ReflectionSession
+     * @group reflection
+     * @group unittest
+     */
     public function testCreateDirectoryQueryReturnsAnObjectOfExpectedType()
     {
         $session = new ReflectionSession();
