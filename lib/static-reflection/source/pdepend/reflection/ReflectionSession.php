@@ -82,7 +82,7 @@ class ReflectionSession
      * Finally this version of the reflection session will fallback to a null
      * implementation for requested classes that act like a placeholder for the
      * missing class/interface.
-     * 
+     *
      * This solution should provide the best mix between speed and flexibility
      * without poluting the class scope with uneccessary class definitions.
      *
@@ -217,5 +217,16 @@ class ReflectionSession
     public function createDirectoryQuery()
     {
         return new queries\ReflectionDirectoryQuery( new ReflectionClassProxyContext( $this ) );
+    }
+
+    /**
+     * This method creates a file set query instance which allows access to all
+     * classes and interfaces declared in all of the given files.
+     *
+     * @return \pdepend\reflection\queries\ReflectionFileSetQuery
+     */
+    public function createFileSetQuery()
+    {
+        return new queries\ReflectionFileSetQuery( new ReflectionClassProxyContext( $this ) );
     }
 }

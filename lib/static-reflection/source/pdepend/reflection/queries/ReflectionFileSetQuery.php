@@ -4,7 +4,8 @@
  *
  * PHP Version 5
  *
- * Copyright (c) 2009-2010, Manuel Pichler <mapi@pdepend.org>.
+ * Copyright (c) 2009-2010, Manuel Pichler <mapi@pdepend.org>,
+ *                          Nils Adermann  <naderman@naderman.de>.
  * All rights reserved.
  *
  * Redistribution and use in source and binary forms, with or without
@@ -39,7 +40,8 @@
  * @category  PHP
  * @package   pdepend\reflection\queries
  * @author    Manuel Pichler <mapi@pdepend.org>
- * @copyright 2009-2010 Manuel Pichler. All rights reserved.
+ * @author    Nils Adermann <naderman@naderman.de>
+ * @copyright 2009-2010 Manuel Pichler, Nils Adermann. All rights reserved.
  * @license   http://www.opensource.org/licenses/bsd-license.php  BSD License
  * @version   SVN: $Id$
  * @link      http://pdepend.org/
@@ -47,50 +49,66 @@
 
 namespace pdepend\reflection\queries;
 
-require_once 'PHPUnit/Framework.php';
-
-require_once 'ReflectionClassQueryTest.php';
-require_once 'ReflectionDirectoryQueryTest.php';
-require_once 'ReflectionFileQueryTest.php';
-require_once 'ReflectionFileSetQueryTest.php';
-
 /**
- * Main test suite.
+ * This query class allows access to reflection class instances for all classes
+ * and interfaces declared in the given files.
+ *
+ * <code>
+ * $query   = $session->createDirectoryQuery();
+ * $classes = $query->find( array(
+ *                __DIR__ . '/source/A.php',
+ *                __DIR__ . '/source/B.php'
+ *            ) );
+ *
+ * foreach ( $classes as $class )
+ * {
+ *     echo 'Class: ', $class->getShortName(), PHP_EOL,
+ *          'File:  ', $class->getFileName(), PHP_EOL,
+ *          '-- ', PHP_EOL;
+ * }
+ * </code>
  *
  * @category  PHP
  * @package   pdepend\reflection\queries
  * @author    Manuel Pichler <mapi@pdepend.org>
- * @copyright 2009-2010 Manuel Pichler. All rights reserved.
+ * @author    Nils Adermann <naderman@naderman.de>
+ * @copyright 2009-2010 Manuel Pichler, Nils Adermann. All rights reserved.
  * @license   http://www.opensource.org/licenses/bsd-license.php  BSD License
  * @version   Release: @package_version@
  * @link      http://pdepend.org/
  */
-class AllTests extends \PHPUnit_Framework_TestSuite
+class ReflectionFileSetQuery extends ReflectionQuery
 {
     /**
-     * Constructs a new test suite instance.
+     * The type of this class.
      */
-    public function __construct()
-    {
-        $this->setName( 'org::pdepend::reflection::queries::AllTests' );
-
-        \PHPUnit_Util_Filter::addDirectoryToWhitelist(
-            realpath( dirname( __FILE__ ) . '/../../source/' )
-        );
-
-        $this->addTestSuite( '\pdepend\reflection\queries\ReflectionClassQueryTest' );
-        $this->addTestSuite( '\pdepend\reflection\queries\ReflectionDirectoryQueryTest' );
-        $this->addTestSuite( '\pdepend\reflection\queries\ReflectionFileQueryTest' );
-        $this->addTestSuite( '\pdepend\reflection\queries\ReflectionFileSetQueryTest' );
-    }
+    const TYPE = __CLASS__;
 
     /**
-     * Returns a test suite instance.
+     * This method will create reflection class instances for all interfaces
+     * and classes that can be found in the given source code files.
      *
-     * @return PHPUnit_Framework_TestSuite
+     * @param string $pathnames The source directory that is the target of the
+     *        class search.
+     *
+     * @return Iterator
      */
-    public static function suite()
+    public function find( array $paths )
     {
-        return new AllTests();
+        $classes = array();
+
+        foreach ( $paths as $path )
+        {
+            if ( file_exists( $path ) === false || !is_file( $path ) )
+            {
+                throw new \LogicException( 'Invalid or nonexistent file ' . $path );
+            }
+            $fileInfo = new \SplFileInfo($path);
+
+            $fileClasses = $this->parseFile( $fileInfo->getRealpath() );
+            $classes = array_merge( $classes, $fileClasses );
+        }
+
+        return new \ArrayIterator( $classes );
     }
 }

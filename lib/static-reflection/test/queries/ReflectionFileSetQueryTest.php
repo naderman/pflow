@@ -4,7 +4,8 @@
  *
  * PHP Version 5
  *
- * Copyright (c) 2009-2010, Manuel Pichler <mapi@pdepend.org>.
+ * Copyright (c) 2009-2010, Manuel Pichler <mapi@pdepend.org>,
+ *                          Nils Adermann  <naderman@naderman.de>.
  * All rights reserved.
  *
  * Redistribution and use in source and binary forms, with or without
@@ -39,7 +40,8 @@
  * @category  PHP
  * @package   pdepend\reflection\queries
  * @author    Manuel Pichler <mapi@pdepend.org>
- * @copyright 2009-2010 Manuel Pichler. All rights reserved.
+ * @author    Nils Adermann <naderman@naderman.de>
+ * @copyright 2009-2010 Manuel Pichler, Nils Adermann. All rights reserved.
  * @license   http://www.opensource.org/licenses/bsd-license.php  BSD License
  * @version   SVN: $Id$
  * @link      http://pdepend.org/
@@ -47,50 +49,67 @@
 
 namespace pdepend\reflection\queries;
 
-require_once 'PHPUnit/Framework.php';
-
-require_once 'ReflectionClassQueryTest.php';
-require_once 'ReflectionDirectoryQueryTest.php';
-require_once 'ReflectionFileQueryTest.php';
-require_once 'ReflectionFileSetQueryTest.php';
+require_once 'ReflectionQueryTest.php';
 
 /**
- * Main test suite.
+ * Test cases for the reflection file set query.
  *
  * @category  PHP
  * @package   pdepend\reflection\queries
  * @author    Manuel Pichler <mapi@pdepend.org>
- * @copyright 2009-2010 Manuel Pichler. All rights reserved.
+ * @author    Nils Adermann <naderman@naderman.de>
+ * @copyright 2009-2010 Manuel Pichler, Nils Adermann. All rights reserved.
  * @license   http://www.opensource.org/licenses/bsd-license.php  BSD License
  * @version   Release: @package_version@
  * @link      http://pdepend.org/
  */
-class AllTests extends \PHPUnit_Framework_TestSuite
+class ReflectionFileSetQueryTest extends ReflectionQueryTest
 {
     /**
-     * Constructs a new test suite instance.
+     * @return void
+     * @covers \pdepend\reflection\queries\ReflectionQuery
+     * @covers \pdepend\reflection\queries\ReflectionFileSetQuery
+     * @group reflection
+     * @group reflection::queries
+     * @group unittest
      */
-    public function __construct()
+    public function testfindReturnsExpectedIteratorOfClasses()
     {
-        $this->setName( 'org::pdepend::reflection::queries::AllTests' );
+        $query  = new ReflectionFileSetQuery( $this->createContext() );
+        $result = $query->find( array( $this->getPathnameForClass( 'QueryClass' ) ) );
 
-        \PHPUnit_Util_Filter::addDirectoryToWhitelist(
-            realpath( dirname( __FILE__ ) . '/../../source/' )
-        );
-
-        $this->addTestSuite( '\pdepend\reflection\queries\ReflectionClassQueryTest' );
-        $this->addTestSuite( '\pdepend\reflection\queries\ReflectionDirectoryQueryTest' );
-        $this->addTestSuite( '\pdepend\reflection\queries\ReflectionFileQueryTest' );
-        $this->addTestSuite( '\pdepend\reflection\queries\ReflectionFileSetQueryTest' );
+        $this->assertEquals( 1, count( $result ) );
     }
 
     /**
-     * Returns a test suite instance.
-     *
-     * @return PHPUnit_Framework_TestSuite
+     * @return void
+     * @covers \pdepend\reflection\queries\ReflectionQuery
+     * @covers \pdepend\reflection\queries\ReflectionFileSetQuery
+     * @group reflection
+     * @group reflection::queries
+     * @group unittest
      */
-    public static function suite()
+    public function testfindReturnsExpectedEmptyIterator()
     {
-        return new AllTests();
+        $query = new ReflectionFileSetQuery( $this->createContext() );
+
+        $result = $query->find( array() );
+
+        $this->assertEquals( 0, count( $result ) );
+    }
+
+    /**
+     * @return void
+     * @covers \pdepend\reflection\queries\ReflectionQuery
+     * @covers \pdepend\reflection\queries\ReflectionFileSetQuery
+     * @group reflection
+     * @group reflection::queries
+     * @group unittest
+     * @expectedException \LogicException
+     */
+    public function testfindThrowsExceptionWhenGivenFileSetNotExists()
+    {
+        $query  = new ReflectionFileSetQuery( $this->createContext() );
+        $query->find( array( __DIR__ . '/foobar' ) );
     }
 }
