@@ -42,6 +42,9 @@ require 'SplClassLoader.php';
 // pFlow's autoloader
 $pFlowClassLoader = new SplClassLoader('pFlow');
 $pFlowClassLoader->register();
+// static-reflection
+$staticReflectionClassLoader = new SplClassLoader('pdepend\reflection', 'static-reflection/source/');
+$staticReflectionClassLoader->register();
 
 // eZ Components' autoloader
 // try to find an SVN, Release or PEAR version of base.php
@@ -57,11 +60,3 @@ unset($ezcBaseFileToInclude);
 
 spl_autoload_register(array('ezcBase', 'autoload'));
 
-
-// static-reflection's autoloader
-require_once 'static-reflection/source/Autoloader.php';
-spl_autoload_register(array(new org\pdepend\reflection\Autoloader, 'autoload'));
-
-// static-reflection via SplClassLoader
-//$staticReflectionClassLoader = new SplClassLoader('org\pdepend\reflection', 'static-reflection/source/');
-//$staticReflectionClassLoader->register();
